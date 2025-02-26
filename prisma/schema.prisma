@@ -2,7 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-inits
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
   provider = "prisma-client-js"
 }
 
@@ -20,13 +22,14 @@ model User {
  
 model Zap {
 id String  @id @default(uuid())
-
+triggerId  String
+trigger    Trigger? 
 }
 
 model Trigger {
   id      String @id @default(uuid())
-  zapId   String 
-  zap     Zap     @relation(fields: [zapId],references: [id])
+  zap     Zap                  @relation(fields: [zapId],references: [id])
+  zapId   String               @unique
   type    AvailableTriggers    @relation(fields: [typeId], references: [id])
   typeId  String    
 }
