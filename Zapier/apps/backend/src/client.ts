@@ -1,12 +1,9 @@
-import {PrismaClient} from "@prisma/client";
-class PrismaSingleton {
-    private static instance: PrismaClient;
-    private constructor() { 
-    }
-    public static getInstance() {
-        if(!PrismaSingleton.instance){
-            PrismaSingleton.instance = new PrismaClient()
-        }
-    }
-}
-export const prisma = PrismaSingleton.getInstance(); 
+// lib/prisma.ts
+import { PrismaClient } from "@prisma/client";
+
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
+
+export const prisma =
+  globalForPrisma.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

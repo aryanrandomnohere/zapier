@@ -7,8 +7,10 @@ import PrimaryButton from "../components/PrimaryButton";
 
 export default function page() {
     const [email,setEmail] = useState("")
+    const [firstname,setFirstname] = useState("")
+    const [lastname,setLastname] = useState("")
   return (
-    <div className="flex justify-center items-center mt-10 gap-20 ">
+    <div className="flex justify-center items-center mt-[100px] gap-20 ">
     <div className="flex flex-col  max-w-[400px] gap-5"> <div className="text-3xl font-bold leading-10">Join millions worldwide who automate their work using Zapier.</div>
     <div> <div className="flex gap-2 items-center text-sm font-medium">
         <TbCircleCheckFilled className="text-green-700 text-xl " /> Easy setup, no coding required</div>
@@ -34,8 +36,8 @@ export default function page() {
 </div>
 <div className="text-sm">* Indicates a required field.</div>
 <Input value={email} onChange={setEmail} label="* Work email" placeholder=""/>
-<Input value={email} onChange={setEmail} label="* First name" placeholder=""/>
-<Input value={email} onChange={setEmail} label="* Last name" placeholder=""/>
+<Input value={firstname} onChange={setFirstname} label="* First name" placeholder=""/>
+<Input value={lastname} onChange={setLastname} label="* Last name" placeholder=""/>
 <div className="text-sm font-medium">By signing up, you agree to Zapier's <a className="text-blue-700 underline" href="https://zapier.com/legal">terms of service and privacy policy.</a></div>
 <PrimaryButton size="small"> Get started for free</PrimaryButton>
 <div className="text-sm font-medium text-center">Already have an account? <a className="text-blue-700 underline">Log in</a></div>
