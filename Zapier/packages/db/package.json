@@ -1,14 +1,15 @@
 {
-  "name": "@repo/prismaclient",
-  "exports":{
-    ".":"./dist/index.js"
+  "name": "@repo/db",
+  "exports": {
+    ".": "./src/index.ts"
   },
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsc --watch --preserveWatchOutput",
-    "build": "tsc"
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev --skip-generate",
+    "db:deploy": "npx prisma migrate deploy"
   },
   "keywords": [],
   "author": "",

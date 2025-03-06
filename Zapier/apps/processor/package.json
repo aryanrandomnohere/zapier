@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"tsc -b && node dist/index.js",
+    "db:generate":"npx prisma generate",
+    "db:migrate":"npx prisma migrate dev --skip-generate"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +15,9 @@
   "description": "",
   "devDependencies": {
     "@repo/typescript-config": "*"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4",
+    "@repo/db":"*"
   }
 }

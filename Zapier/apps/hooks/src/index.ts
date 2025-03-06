@@ -1,4 +1,4 @@
-import {prisma} from "@repo/prismaclient"
+import {prisma} from "./client"
 import express, {Request, Response} from "express"
 
 const app = express()
@@ -8,7 +8,8 @@ const userId = req.params.userId;
 const zapId = req.params.zapId;
 const body = req.body;
 console.log(body,zapId);
-prisma.$transaction(async tx => {
+if(!zapId) return
+prisma.$transaction(async (tx) => {
 const zapRun = await tx.zapRun.create({
     data:{
         zapId:zapId,

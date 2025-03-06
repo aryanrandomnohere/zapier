@@ -1,0 +1,15 @@
+import { AiOutlineAppstoreAdd } from "react-icons/ai";
+import LinkButton from "./LinkButton";
+import PrimaryButton from "./PrimaryButton";
+import zap from "./zap.png";
+import { SlArrowDown } from "react-icons/sl";
+
+export default function Navbar() {
+    return (
+      <div className=" w-full border-b bg:stone-50 border-b-black/10 pl-8 pr-10" style={{backgroundColor: "#FFFDF9"}}><div className="flex w-full justify-between items-center my-1.5 "><div className="flex gap-3 justify-center items-center"><img src={zap.src} alt="LOGO" className="max-w-32"/><LinkButton size="small">Products <SlArrowDown className=" ml-1.5 text-xs" /></LinkButton><LinkButton size="small">Solutions<SlArrowDown className=" ml-1.5 text-xs" /></LinkButton><LinkButton size="small">Resources <SlArrowDown className=" ml-1.5 text-xs" /></LinkButton><LinkButton size="small">Enterprise </LinkButton><LinkButton size="small">Pricing</LinkButton></div>
+       <div className="flex   items-center  gap-4"><LinkButton size="small"><AiOutlineAppstoreAdd className="text-xl mr-1" />Explore Apps</LinkButton><LinkButton size="small">Contact sales</LinkButton><LinkButton size="small">Log in</LinkButton><div><PrimaryButton size="small" >Sign up</PrimaryButton></div></div>
+      </div>
+     </div>
+    )
+  }
+  
