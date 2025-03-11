@@ -13,6 +13,7 @@ if(!parsedData.success){
     })
     return
 }
+try{
 const user = await prisma.user.findFirst({
     where:{
         email:parsedData.data.email
@@ -40,13 +41,20 @@ res.status(200).json({
     msg:"SignIn Successful"
 })
 return
-
+}catch(error) {
+    console.error(error);
+    res.status(400).json({
+        error,
+        msg:"Error Db cannot be reached"
+    })
+}
 })
 userRouter.post("login",async (req:Request,res:Response)=>{
 const parsedData = logInSchema.safeParse(req.body)
 if(!parsedData.success) {
     res.status(400).json({msg:parsedData.error})
 }
+try {
 const user = await prisma.user.findFirst({
     where:{
         email:parsedData.data?.email
@@ -63,6 +71,13 @@ if(!user){
 const token = jwt.sign(user,JWT_SECRET)
 res.status(200).json({token,msg:"Login Successful"})
 return
+}catch(error) {
+    console.error(error);
+    res.status(400).json({
+        error,
+        msg:"Error Db cannot be reached"
+    })
+}
 })
 
 export {userRouter};
