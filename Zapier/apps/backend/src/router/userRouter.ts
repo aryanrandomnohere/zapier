@@ -5,7 +5,8 @@ import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../JWT_SECRET"
 
 const userRouter = express.Router()
-userRouter.post("signin",async (req:Request,res:Response)=>{
+userRouter.post("/signin",async (req:Request,res:Response)=>{
+    console.log(req.body);
 const parsedData = signUpSchema.safeParse(req.body)
 if(!parsedData.success){
     res.status(400).json({
@@ -17,6 +18,9 @@ try{
 const user = await prisma.user.findFirst({
     where:{
         email:parsedData.data.email
+    },
+    select:{
+        id:true
     }
 })
 if(user){
@@ -49,7 +53,7 @@ return
     })
 }
 })
-userRouter.post("login",async (req:Request,res:Response)=>{
+userRouter.post("/login",async (req:Request,res:Response)=>{
 const parsedData = logInSchema.safeParse(req.body)
 if(!parsedData.success) {
     res.status(400).json({msg:parsedData.error})
