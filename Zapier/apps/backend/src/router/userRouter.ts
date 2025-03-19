@@ -39,7 +39,7 @@ const newUser = await prisma.user.create({
         email:true,
     }
 })
-const token = jwt.sign(newUser, JWT_SECRET)
+const token = jwt.sign({userId:newUser.id, email:newUser.email}, JWT_SECRET)
 res.status(200).json({
     token,
     msg:"SignIn Successful"
@@ -72,7 +72,7 @@ if(!user){
     res.status(400).json({msg:"Email does not exists"})
     return
 }
-const token = jwt.sign(user,JWT_SECRET)
+const token = jwt.sign({userId:user.id, email:user.email},JWT_SECRET)
 res.status(200).json({token,msg:"Login Successful"})
 return
 }catch(error) {

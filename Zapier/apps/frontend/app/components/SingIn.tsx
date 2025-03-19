@@ -2,33 +2,34 @@
 import { FormEvent, useState } from "react";
 import Input from "../components/Input";
 import { FcGoogle } from "react-icons/fc";
-import PrimaryButton from "../components/PrimaryButton";
+import PrimaryButton from "./buttons/PrimaryButton";
 import { IoArrowBack } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
-import { log } from "console";
+import { useRouter } from "next/navigation";
 export default function SingIn() {
     const [email, setEmail] = useState("");
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [nextField, setNextField] = useState(false);
     const [password, setPassword] = useState("");
-
+    const router = useRouter();
     async function handleOnSubmit(e: FormEvent) {
         e.preventDefault();
         if (!nextField) {
             setNextField(true);
             return;
         }
-
+            console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
         try {
-          const response = await axios.post('http://localhost:3001/api/v1/signin', {
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/signin`, {
             email,
             firstname,
             lastname,
             password
           });
           localStorage.setItem("token",response.data.token)
+          router.push("/dashboard")
           console.log('Response:', response.data);
         } catch (error) {
           //@ts-ignore

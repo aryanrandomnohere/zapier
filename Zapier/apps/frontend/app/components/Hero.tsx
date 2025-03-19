@@ -1,6 +1,6 @@
 import hero from "./homepage-hero.png"
 import { GoArrowRight } from "react-icons/go";
-import PrimaryButton from "./PrimaryButton";
+import PrimaryButton from "./buttons/PrimaryButton";
 import { FcGoogle } from "react-icons/fc";
 export default function Hero() {
   return (

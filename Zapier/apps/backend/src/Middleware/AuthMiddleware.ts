@@ -1,4 +1,4 @@
-import { NextFunction,Request,Response } from "express";
+    import { NextFunction,Request,Response } from "express";
 import { verify } from "jsonwebtoken";
 import { JWT_SECRET } from "../JWT_SECRET";
 interface extendedRequest extends Request {
@@ -13,9 +13,10 @@ export function AuthMiddleware(req:extendedRequest,res:Response,next:NextFunctio
         return
      }
      const data =  verify(jwt, JWT_SECRET)
-    console.log(data);
     //@ts-ignore
-    req.userId = Number(data.id)
+    req.userId = data.userId
+    console.log(req.userId);
+    
     next()
 } catch (error) {
     // Return "Invalid request" if token verification fails
