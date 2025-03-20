@@ -1,6 +1,6 @@
 "use client"
 import { FormEvent, useState } from "react";
-import Input from "../components/Input";
+import Input from "./Input";
 import { FcGoogle } from "react-icons/fc";
 import PrimaryButton from "./buttons/PrimaryButton";
 import { IoArrowBack } from "react-icons/io5";

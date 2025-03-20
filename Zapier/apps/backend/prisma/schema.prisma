@@ -51,14 +51,14 @@ model Action {
   zapId String
   zap   Zap     @relation(fields: [zapId],references: [id])
   actionDetails AvailableActions  @relation(fields: [actionId],references: [id])
-  actionId  String    @unique
+  actionId  String    
   sortingOrder Int   @default(0)
 }
 
 model AvailableActions {
   id    String    @id @default(uuid())
   name  String        
-  actions Action?
+  actions Action[]
 }
 
 model ZapRun {
