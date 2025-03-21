@@ -1,4 +1,5 @@
-import { useState } from "react";
+"use client";
+import { use, useState } from "react";
 import { zapInterface } from "../types";
 import ToggleButton from "./buttons/ToggleButton";
 import { IoIosArrowForward } from "react-icons/io";

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import SecondaryButton from "../components/buttons/SecondaryButton";
 import { AiOutlinePlus } from "react-icons/ai";
 import ZapTable from "../components/ZapTable";

@@ -7,6 +7,7 @@ import zap from "./zap.png";
 import { SlArrowDown } from "react-icons/sl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Navbar() {
   const router = useRouter();
@@ -22,12 +23,14 @@ export default function Navbar() {
 
   return (
     <div
-      className="w-full border-b bg:stone-50 border-b-black/10 pl-8 pr-10"
+      className="w-full border-b bg-stone-50 border-b-black/10 pl-8 pr-10"
       style={{ backgroundColor: "#FFFDF9" }}
     >
       <div className="flex w-full justify-between items-center my-1.5">
         <div className="flex gap-3 justify-center items-center">
-          <img
+          <Image
+          width={100}
+          height={100}
             src={zap.src}
             onClick={() => {
               router.push("/");

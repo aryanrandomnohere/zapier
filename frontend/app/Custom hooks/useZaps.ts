@@ -1,5 +1,6 @@
+"use client";
 import axios from "axios";
-import { use, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { zapInterface } from "../types";
 
     

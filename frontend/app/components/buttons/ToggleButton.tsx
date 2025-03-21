@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 export default function ToggleButton({isChecked,setIsChecked}:{isChecked:boolean,setIsChecked:React.Dispatch<React.SetStateAction<boolean>>}) {
 
