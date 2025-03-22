@@ -5,7 +5,6 @@
   --foreground: #171717;
 }
 
-
 .dot-background {
   background-color: white; /* Base color */
   background-image: radial-gradient(rgb(220, 188, 117) 10%, transparent 10%);

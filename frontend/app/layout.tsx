@@ -26,10 +26,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-      style={{backgroundColor: "#FFFDF9"}}
+        style={{ backgroundColor: "#FFFDF9" }}
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-           <Navbar/>
+        <Navbar />
         {children}
       </body>
     </html>

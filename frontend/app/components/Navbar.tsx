@@ -16,7 +16,7 @@ export default function Navbar() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Check authentication after the component mounts
-      const token = Boolean(window.localStorage.getItem("token"))
+      const token = Boolean(window.localStorage.getItem("token"));
       setIsAuthenticated(token);
     }
   }, []);
@@ -29,8 +29,8 @@ export default function Navbar() {
       <div className="flex w-full justify-between items-center my-1.5">
         <div className="flex gap-3 justify-center items-center">
           <Image
-          width={100}
-          height={100}
+            width={100}
+            height={100}
             src={zap.src}
             onClick={() => {
               router.push("/");

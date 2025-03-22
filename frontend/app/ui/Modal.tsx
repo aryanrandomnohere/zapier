@@ -1,4 +1,11 @@
-import { ReactElement, ReactNode, cloneElement, createContext, useContext, useState } from "react";
+import {
+  ReactElement,
+  ReactNode,
+  cloneElement,
+  createContext,
+  useContext,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,13 +41,15 @@ export default function Modal({ children }: { children: ReactNode }) {
   const open = (name: string) => setOpenName(name);
   const close = () => setOpenName("");
   return (
-    <ModalContext.Provider value={{ openName, open, close }}>{children}</ModalContext.Provider>
+    <ModalContext.Provider value={{ openName, open, close }}>
+      {children}
+    </ModalContext.Provider>
   );
 }
 
 function Window({ children, name }: WindowProps) {
   const { openName, close } = useModal();
-  
+
   // Using framer-motion's AnimatePresence for smooth enter/exit animations
   return createPortal(
     <AnimatePresence mode="wait">
@@ -54,13 +63,13 @@ function Window({ children, name }: WindowProps) {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             onClick={close}
           >
-            <motion.div 
+            <motion.div
               className="flex flex-col w-auto h-auto max-w-full max-h-full bg-zinc-100 rounded-lg shadow-xl overflow-auto"
-              initial={{ scale: 0.90, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.90, opacity: 0 }}
-              transition={{ 
-                duration: 0.4, 
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{
+                duration: 0.4,
                 ease: [0.16, 1, 0.3, 1], // Custom bezier curve for a smoother feel
               }}
               onClick={(e) => e.stopPropagation()}
@@ -68,10 +77,10 @@ function Window({ children, name }: WindowProps) {
               {/* <div
                 className="self-end p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full text-2xl cursor-pointer transition-colors duration-200"
                 onClick={close}
-              >
+              >\
                 <HiXMark />
               </div> */}
-              <div className="px-2.5 py-2.5">
+              <div className="px-5 py-4">
                 {cloneElement(children as React.ReactElement)}
               </div>
             </motion.div>
@@ -79,7 +88,7 @@ function Window({ children, name }: WindowProps) {
         </>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 }
 

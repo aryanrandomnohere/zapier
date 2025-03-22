@@ -1,6 +1,10 @@
-
-export default function ToggleButton({isChecked,setIsChecked}:{isChecked:boolean,setIsChecked:React.Dispatch<React.SetStateAction<boolean>>}) {
-
+export default function ToggleButton({
+  isChecked,
+  setIsChecked,
+}: {
+  isChecked: boolean;
+  setIsChecked: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
     <div>
       <label className="inline-flex items-center  cursor-pointer">

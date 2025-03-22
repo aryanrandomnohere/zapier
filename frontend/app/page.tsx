@@ -4,9 +4,8 @@ export default function page() {
   return (
     <main>
       <div className="flex">
-     
-      <Hero/>
-       </div>
-       </main>
-  )
+        <Hero />
+      </div>
+    </main>
+  );
 }
