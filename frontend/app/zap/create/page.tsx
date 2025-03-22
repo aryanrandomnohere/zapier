@@ -2,6 +2,8 @@
 import ZapCell from "@/app/components/ZapCell";
 import {  MouseEvent, useEffect, useRef, useState } from "react"
 import AddCell from "../../components/AddCell"
+import Modal from "../../ui/Modal";
+import SelectItem from "@/app/components/SelectItem";
 interface ActionType {
     ActionTitle:string;
     ActionSubtitle:string;
@@ -71,7 +73,21 @@ export default function Page1() {
       >
       
         <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-1/2 -translate-y-3/4 ">
-        <div><ZapCell title={selectedTrigger?.TriggerTitle || "Trigger" } subtitle={selectedTrigger?.TriggerSubtitle || "An event that starts your Zap"} order={1}  /></div>
+        <Modal>
+  <Modal.Open opens="select">
+    <div>
+      <ZapCell 
+        title={selectedTrigger?.TriggerTitle || "Trigger"} 
+        subtitle={selectedTrigger?.TriggerSubtitle || "An event that starts your Zap"} 
+        order={1} 
+      />
+    </div>
+  </Modal.Open>
+  
+  <Modal.Window name="select">
+    <SelectItem/>
+  </Modal.Window>
+</Modal>
        <AddCell handleClick={()=>addCell(2)} />
         {selectedActions.length>0 && selectedActions.map((action, index)=>(<div key={index} className="flex flex-col"><div className="zap-cell"> <ZapCell title={action.ActionTitle || "Action"} subtitle={action.ActionSubtitle || "The task your Zap performs "} order={index+2} /> </div> <AddCell handleClick={()=>addCell(index+2)}   /> </div>  ))}
         </div>

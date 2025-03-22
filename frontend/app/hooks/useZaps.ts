@@ -17,6 +17,8 @@ export default function useZaps() {
             console.log(response.data.zaps);
             setZaps(response.data.zaps);
             setLoading(false);
+        }).catch(error=>{
+          setError(error)
         })
     }
         ,[])

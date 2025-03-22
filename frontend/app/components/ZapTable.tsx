@@ -1,4 +1,4 @@
-import useZaps from "../Custom hooks/useZaps";
+import useZaps from "../hooks/useZaps";
 import ZapRow from "./ZapRow";
 import { RiArrowDownSFill } from "react-icons/ri";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
