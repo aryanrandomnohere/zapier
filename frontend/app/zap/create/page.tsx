@@ -110,13 +110,23 @@ export default function Page1() {
               <div key={index} className="flex flex-col">
                 <div className="zap-cell">
                   {" "}
+                  <Modal>
+            <Modal.Open opens="select">
+              <div>
                   <ZapCell
                     title={action.ActionTitle || "Action"}
                     subtitle={
                       action.ActionSubtitle || "The task your Zap performs "
                     }
                     order={index + 2}
-                  />{" "}
+                  />
+                  </div>
+            </Modal.Open>
+
+            <Modal.Window name="select">
+              <SelectItem />
+            </Modal.Window>
+          </Modal>
                 </div>{" "}
                 <AddCell handleClick={() => addCell(index + 2)} />{" "}
               </div>

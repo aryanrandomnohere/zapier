@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { BsHouseDoor } from "react-icons/bs";
-import { BsGrid } from "react-icons/bs";
-import { FaBolt } from "react-icons/fa";
-import { FaTools } from "react-icons/fa";
-import { BiSolidBot } from "react-icons/bi";
-
+import { BsHouseDoor, BsStars } from "react-icons/bs";
+import { AiOutlineAppstoreAdd } from "react-icons/ai";
+import { GoZap } from "react-icons/go";
+import { LiaToolsSolid } from "react-icons/lia";
 interface FilterOption {
   id: string;
   label: string;
@@ -18,27 +16,27 @@ const FilterItems: React.FC = () => {
     {
       id: "home",
       label: "",
-      icon: <BsHouseDoor className="text-lg" />,
+      icon: <BsHouseDoor />,
     },
     {
       id: "apps",
       label: "Apps",
-      icon: <BsGrid className="text-lg" />,
+      icon: <AiOutlineAppstoreAdd />,
     },
     {
       id: "zapier-products",
       label: "Zapier products",
-      icon: <FaBolt className="text-lg" />,
+      icon: <GoZap />,
     },
     {
       id: "built-in-tools",
       label: "Built-in tools",
-      icon: <FaTools className="text-lg" />,
+      icon: <LiaToolsSolid />,
     },
     {
       id: "ai",
       label: "AI",
-      icon: <BiSolidBot className="text-lg" />,
+      icon: <BsStars />,
     },
   ];
 
@@ -47,19 +45,19 @@ const FilterItems: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center gap-2 p-1 bg-gray-50 rounded-lg border border-gray-200 w-fit">
+    <div className="flex items-center gap-1 p-1 w-full">
       {filterOptions.map((option) => (
         <button
           key={option.id}
           onClick={() => handleFilterClick(option.id)}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md transition-colors duration-200 ${
+          className={`flex items-center gap-1.5 py-[3px] px-[4px] rounded transition-colors hover:cursor-pointer duration-200 border border-black/20 ${
             selectedFilter === option.id
-              ? "bg-blue-600 text-white"
+              ? "bg-blue-300/20 text-blue-600 "
               : "text-gray-700 hover:bg-gray-100"
           }`}
         >
           <span className="flex items-center justify-center">{option.icon}</span>
-          {option.label && <span className="text-sm font-medium">{option.label}</span>}
+          {option.label && <span className="text-xs font-bold">{option.label}</span>}
         </button>
       ))}
     </div>

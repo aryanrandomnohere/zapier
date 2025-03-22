@@ -28,4 +28,5 @@ export interface zapInterface {
 export interface itemInterface {
   id: string;
   name: string;
+  imagePath:string
 }
