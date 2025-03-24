@@ -83,7 +83,7 @@ const products = [{
 ]
 
 
-export default function Options({type}:{type:"actions" | "triggers"}) {
+export default function Options({type,setItem}:{type:"actions" | "triggers", setItem:()=>void}) {
     const {items,isLoading} = useItems(type)
     const extendedItems = [...items,{
         id:"schedule",
@@ -119,7 +119,7 @@ export default function Options({type}:{type:"actions" | "triggers"}) {
   return (
     <div className="flex h-full mt-5">
         <div className="w-1/2"><OptionList title="Your top apps" items={topApps} /></div>
-        <div className="flex flex-col w-1/2"><div className="min-h-2/3 "><OptionList title="Popular built-in tools (Working)" items={extendedItems} /></div><div className=""><OptionList title="New Zapier products" items={products} /></div></div>
+        <div className="flex flex-col w-1/2"><div className="min-h-2/3 "><OptionList title="Popular built-in tools (Working)"  setItem={()=>setItem(items,index)} items={extendedItems} /></div><div className=""><OptionList title="New Zapier products" items={products} /></div></div>
     </div>
   )
 }

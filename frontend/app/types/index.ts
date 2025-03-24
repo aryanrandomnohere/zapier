@@ -29,4 +29,12 @@ export interface itemInterface {
   id: string;
   name: string;
   imagePath:string
+  metaDate?:JSON
+}
+
+export interface ItemType {
+  id: string;
+  name: string;
+  imagePath:string;
+  metadate?: JSON;
 }
