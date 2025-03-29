@@ -1,4 +1,4 @@
-import {prisma} from "./client"
+import {prisma} from "@repo/db"
 import express, {Request, Response} from "express"
 
 const app = express()
