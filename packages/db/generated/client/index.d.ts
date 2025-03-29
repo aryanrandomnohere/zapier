@@ -1499,6 +1499,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    zap: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    zap?: boolean | UserCountOutputTypeCountZapArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountZapArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZapWhereInput
+  }
+
+
+  /**
    * Count Type ZapCountOutputType
    */
 
@@ -1570,6 +1601,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type AvailableActionsCountOutputType
+   */
+
+  export type AvailableActionsCountOutputType = {
+    actions: number
+  }
+
+  export type AvailableActionsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    actions?: boolean | AvailableActionsCountOutputTypeCountActionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AvailableActionsCountOutputType without action
+   */
+  export type AvailableActionsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AvailableActionsCountOutputType
+     */
+    select?: AvailableActionsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AvailableActionsCountOutputType without action
+   */
+  export type AvailableActionsCountOutputTypeCountActionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ActionWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -1595,21 +1657,24 @@ export namespace Prisma {
 
   export type UserMinAggregateOutputType = {
     id: number | null
-    name: string | null
+    firstname: string | null
+    lastname: string | null
     email: string | null
     password: string | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: number | null
-    name: string | null
+    firstname: string | null
+    lastname: string | null
     email: string | null
     password: string | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
-    name: number
+    firstname: number
+    lastname: number
     email: number
     password: number
     _all: number
@@ -1626,21 +1691,24 @@ export namespace Prisma {
 
   export type UserMinAggregateInputType = {
     id?: true
-    name?: true
+    firstname?: true
+    lastname?: true
     email?: true
     password?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
-    name?: true
+    firstname?: true
+    lastname?: true
     email?: true
     password?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
-    name?: true
+    firstname?: true
+    lastname?: true
     email?: true
     password?: true
     _all?: true
@@ -1734,7 +1802,8 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: number
-    name: string
+    firstname: string
+    lastname: string
     email: string
     password: string
     _count: UserCountAggregateOutputType | null
@@ -1760,40 +1829,55 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
+    firstname?: boolean
+    lastname?: boolean
     email?: boolean
     password?: boolean
+    zap?: boolean | User$zapArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
+    firstname?: boolean
+    lastname?: boolean
     email?: boolean
     password?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
+    firstname?: boolean
+    lastname?: boolean
     email?: boolean
     password?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
-    name?: boolean
+    firstname?: boolean
+    lastname?: boolean
     email?: boolean
     password?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstname" | "lastname" | "email" | "password", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    zap?: boolean | User$zapArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      zap: Prisma.$ZapPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      name: string
+      firstname: string
+      lastname: string
       email: string
       password: string
     }, ExtArgs["result"]["user"]>
@@ -2190,6 +2274,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    zap<T extends User$zapArgs<ExtArgs> = {}>(args?: Subset<T, User$zapArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2220,7 +2305,8 @@ export namespace Prisma {
    */ 
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'Int'>
-    readonly name: FieldRef<"User", 'String'>
+    readonly firstname: FieldRef<"User", 'String'>
+    readonly lastname: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
   }
@@ -2240,6 +2326,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -2258,6 +2348,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -2275,6 +2369,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -2324,6 +2422,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -2372,6 +2474,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -2414,6 +2520,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -2462,6 +2572,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -2529,6 +2643,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -2555,6 +2673,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -2575,6 +2697,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.zap
+   */
+  export type User$zapArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Zap
+     */
+    select?: ZapSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZapInclude<ExtArgs> | null
+    where?: ZapWhereInput
+    orderBy?: ZapOrderByWithRelationInput | ZapOrderByWithRelationInput[]
+    cursor?: ZapWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ZapScalarFieldEnum | ZapScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2586,6 +2732,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -2595,40 +2745,64 @@ export namespace Prisma {
 
   export type AggregateZap = {
     _count: ZapCountAggregateOutputType | null
+    _avg: ZapAvgAggregateOutputType | null
+    _sum: ZapSumAggregateOutputType | null
     _min: ZapMinAggregateOutputType | null
     _max: ZapMaxAggregateOutputType | null
+  }
+
+  export type ZapAvgAggregateOutputType = {
+    userId: number | null
+  }
+
+  export type ZapSumAggregateOutputType = {
+    userId: number | null
   }
 
   export type ZapMinAggregateOutputType = {
     id: string | null
     triggerId: string | null
+    userId: number | null
   }
 
   export type ZapMaxAggregateOutputType = {
     id: string | null
     triggerId: string | null
+    userId: number | null
   }
 
   export type ZapCountAggregateOutputType = {
     id: number
     triggerId: number
+    userId: number
     _all: number
   }
 
 
+  export type ZapAvgAggregateInputType = {
+    userId?: true
+  }
+
+  export type ZapSumAggregateInputType = {
+    userId?: true
+  }
+
   export type ZapMinAggregateInputType = {
     id?: true
     triggerId?: true
+    userId?: true
   }
 
   export type ZapMaxAggregateInputType = {
     id?: true
     triggerId?: true
+    userId?: true
   }
 
   export type ZapCountAggregateInputType = {
     id?: true
     triggerId?: true
+    userId?: true
     _all?: true
   }
 
@@ -2670,6 +2844,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ZapAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ZapSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ZapMinAggregateInputType
@@ -2700,6 +2886,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ZapCountAggregateInputType | true
+    _avg?: ZapAvgAggregateInputType
+    _sum?: ZapSumAggregateInputType
     _min?: ZapMinAggregateInputType
     _max?: ZapMaxAggregateInputType
   }
@@ -2707,7 +2895,10 @@ export namespace Prisma {
   export type ZapGroupByOutputType = {
     id: string
     triggerId: string
+    userId: number
     _count: ZapCountAggregateOutputType | null
+    _avg: ZapAvgAggregateOutputType | null
+    _sum: ZapSumAggregateOutputType | null
     _min: ZapMinAggregateOutputType | null
     _max: ZapMaxAggregateOutputType | null
   }
@@ -2729,6 +2920,8 @@ export namespace Prisma {
   export type ZapSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     triggerId?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     trigger?: boolean | Zap$triggerArgs<ExtArgs>
     actions?: boolean | Zap$actionsArgs<ExtArgs>
     zapRuns?: boolean | Zap$zapRunsArgs<ExtArgs>
@@ -2738,31 +2931,42 @@ export namespace Prisma {
   export type ZapSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     triggerId?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["zap"]>
 
   export type ZapSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     triggerId?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["zap"]>
 
   export type ZapSelectScalar = {
     id?: boolean
     triggerId?: boolean
+    userId?: boolean
   }
 
-  export type ZapOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "triggerId", ExtArgs["result"]["zap"]>
+  export type ZapOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "triggerId" | "userId", ExtArgs["result"]["zap"]>
   export type ZapInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     trigger?: boolean | Zap$triggerArgs<ExtArgs>
     actions?: boolean | Zap$actionsArgs<ExtArgs>
     zapRuns?: boolean | Zap$zapRunsArgs<ExtArgs>
     _count?: boolean | ZapCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ZapIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ZapIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ZapIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ZapIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $ZapPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Zap"
     objects: {
+      user: Prisma.$UserPayload<ExtArgs>
       trigger: Prisma.$TriggerPayload<ExtArgs> | null
       actions: Prisma.$ActionPayload<ExtArgs>[]
       zapRuns: Prisma.$ZapRunPayload<ExtArgs>[]
@@ -2770,6 +2974,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       triggerId: string
+      userId: number
     }, ExtArgs["result"]["zap"]>
     composites: {}
   }
@@ -3164,6 +3369,7 @@ export namespace Prisma {
    */
   export interface Prisma__ZapClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | Null, Null, ExtArgs, ClientOptions>
     trigger<T extends Zap$triggerArgs<ExtArgs> = {}>(args?: Subset<T, Zap$triggerArgs<ExtArgs>>): Prisma__TriggerClient<$Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
     actions<T extends Zap$actionsArgs<ExtArgs> = {}>(args?: Subset<T, Zap$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     zapRuns<T extends Zap$zapRunsArgs<ExtArgs> = {}>(args?: Subset<T, Zap$zapRunsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
@@ -3198,6 +3404,7 @@ export namespace Prisma {
   interface ZapFieldRefs {
     readonly id: FieldRef<"Zap", 'String'>
     readonly triggerId: FieldRef<"Zap", 'String'>
+    readonly userId: FieldRef<"Zap", 'Int'>
   }
     
 
@@ -3447,6 +3654,10 @@ export namespace Prisma {
      */
     data: ZapCreateManyInput | ZapCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZapIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3517,6 +3728,10 @@ export namespace Prisma {
      * Limit how many Zaps to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZapIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4724,16 +4939,19 @@ export namespace Prisma {
   export type AvailableTriggersMinAggregateOutputType = {
     id: string | null
     name: string | null
+    imagePath: string | null
   }
 
   export type AvailableTriggersMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    imagePath: string | null
   }
 
   export type AvailableTriggersCountAggregateOutputType = {
     id: number
     name: number
+    imagePath: number
     _all: number
   }
 
@@ -4741,16 +4959,19 @@ export namespace Prisma {
   export type AvailableTriggersMinAggregateInputType = {
     id?: true
     name?: true
+    imagePath?: true
   }
 
   export type AvailableTriggersMaxAggregateInputType = {
     id?: true
     name?: true
+    imagePath?: true
   }
 
   export type AvailableTriggersCountAggregateInputType = {
     id?: true
     name?: true
+    imagePath?: true
     _all?: true
   }
 
@@ -4829,6 +5050,7 @@ export namespace Prisma {
   export type AvailableTriggersGroupByOutputType = {
     id: string
     name: string
+    imagePath: string
     _count: AvailableTriggersCountAggregateOutputType | null
     _min: AvailableTriggersMinAggregateOutputType | null
     _max: AvailableTriggersMaxAggregateOutputType | null
@@ -4851,6 +5073,7 @@ export namespace Prisma {
   export type AvailableTriggersSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    imagePath?: boolean
     triggers?: boolean | AvailableTriggers$triggersArgs<ExtArgs>
     _count?: boolean | AvailableTriggersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["availableTriggers"]>
@@ -4858,19 +5081,22 @@ export namespace Prisma {
   export type AvailableTriggersSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    imagePath?: boolean
   }, ExtArgs["result"]["availableTriggers"]>
 
   export type AvailableTriggersSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    imagePath?: boolean
   }, ExtArgs["result"]["availableTriggers"]>
 
   export type AvailableTriggersSelectScalar = {
     id?: boolean
     name?: boolean
+    imagePath?: boolean
   }
 
-  export type AvailableTriggersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["availableTriggers"]>
+  export type AvailableTriggersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "imagePath", ExtArgs["result"]["availableTriggers"]>
   export type AvailableTriggersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     triggers?: boolean | AvailableTriggers$triggersArgs<ExtArgs>
     _count?: boolean | AvailableTriggersCountOutputTypeDefaultArgs<ExtArgs>
@@ -4886,6 +5112,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      imagePath: string
     }, ExtArgs["result"]["availableTriggers"]>
     composites: {}
   }
@@ -5312,6 +5539,7 @@ export namespace Prisma {
   interface AvailableTriggersFieldRefs {
     readonly id: FieldRef<"AvailableTriggers", 'String'>
     readonly name: FieldRef<"AvailableTriggers", 'String'>
+    readonly imagePath: FieldRef<"AvailableTriggers", 'String'>
   }
     
 
@@ -5748,46 +5976,70 @@ export namespace Prisma {
 
   export type AggregateAction = {
     _count: ActionCountAggregateOutputType | null
+    _avg: ActionAvgAggregateOutputType | null
+    _sum: ActionSumAggregateOutputType | null
     _min: ActionMinAggregateOutputType | null
     _max: ActionMaxAggregateOutputType | null
+  }
+
+  export type ActionAvgAggregateOutputType = {
+    sortingOrder: number | null
+  }
+
+  export type ActionSumAggregateOutputType = {
+    sortingOrder: number | null
   }
 
   export type ActionMinAggregateOutputType = {
     id: string | null
     zapId: string | null
     actionId: string | null
+    sortingOrder: number | null
   }
 
   export type ActionMaxAggregateOutputType = {
     id: string | null
     zapId: string | null
     actionId: string | null
+    sortingOrder: number | null
   }
 
   export type ActionCountAggregateOutputType = {
     id: number
     zapId: number
     actionId: number
+    sortingOrder: number
     _all: number
   }
 
+
+  export type ActionAvgAggregateInputType = {
+    sortingOrder?: true
+  }
+
+  export type ActionSumAggregateInputType = {
+    sortingOrder?: true
+  }
 
   export type ActionMinAggregateInputType = {
     id?: true
     zapId?: true
     actionId?: true
+    sortingOrder?: true
   }
 
   export type ActionMaxAggregateInputType = {
     id?: true
     zapId?: true
     actionId?: true
+    sortingOrder?: true
   }
 
   export type ActionCountAggregateInputType = {
     id?: true
     zapId?: true
     actionId?: true
+    sortingOrder?: true
     _all?: true
   }
 
@@ -5829,6 +6081,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ActionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ActionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ActionMinAggregateInputType
@@ -5859,6 +6123,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ActionCountAggregateInputType | true
+    _avg?: ActionAvgAggregateInputType
+    _sum?: ActionSumAggregateInputType
     _min?: ActionMinAggregateInputType
     _max?: ActionMaxAggregateInputType
   }
@@ -5867,7 +6133,10 @@ export namespace Prisma {
     id: string
     zapId: string
     actionId: string
+    sortingOrder: number
     _count: ActionCountAggregateOutputType | null
+    _avg: ActionAvgAggregateOutputType | null
+    _sum: ActionSumAggregateOutputType | null
     _min: ActionMinAggregateOutputType | null
     _max: ActionMaxAggregateOutputType | null
   }
@@ -5890,6 +6159,7 @@ export namespace Prisma {
     id?: boolean
     zapId?: boolean
     actionId?: boolean
+    sortingOrder?: boolean
     zap?: boolean | ZapDefaultArgs<ExtArgs>
     actionDetails?: boolean | AvailableActionsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["action"]>
@@ -5898,6 +6168,7 @@ export namespace Prisma {
     id?: boolean
     zapId?: boolean
     actionId?: boolean
+    sortingOrder?: boolean
     zap?: boolean | ZapDefaultArgs<ExtArgs>
     actionDetails?: boolean | AvailableActionsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["action"]>
@@ -5906,6 +6177,7 @@ export namespace Prisma {
     id?: boolean
     zapId?: boolean
     actionId?: boolean
+    sortingOrder?: boolean
     zap?: boolean | ZapDefaultArgs<ExtArgs>
     actionDetails?: boolean | AvailableActionsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["action"]>
@@ -5914,9 +6186,10 @@ export namespace Prisma {
     id?: boolean
     zapId?: boolean
     actionId?: boolean
+    sortingOrder?: boolean
   }
 
-  export type ActionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "zapId" | "actionId", ExtArgs["result"]["action"]>
+  export type ActionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "zapId" | "actionId" | "sortingOrder", ExtArgs["result"]["action"]>
   export type ActionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     zap?: boolean | ZapDefaultArgs<ExtArgs>
     actionDetails?: boolean | AvailableActionsDefaultArgs<ExtArgs>
@@ -5940,6 +6213,7 @@ export namespace Prisma {
       id: string
       zapId: string
       actionId: string
+      sortingOrder: number
     }, ExtArgs["result"]["action"]>
     composites: {}
   }
@@ -6368,6 +6642,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Action", 'String'>
     readonly zapId: FieldRef<"Action", 'String'>
     readonly actionId: FieldRef<"Action", 'String'>
+    readonly sortingOrder: FieldRef<"Action", 'Int'>
   }
     
 
@@ -6795,16 +7070,19 @@ export namespace Prisma {
   export type AvailableActionsMinAggregateOutputType = {
     id: string | null
     name: string | null
+    imagePath: string | null
   }
 
   export type AvailableActionsMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    imagePath: string | null
   }
 
   export type AvailableActionsCountAggregateOutputType = {
     id: number
     name: number
+    imagePath: number
     _all: number
   }
 
@@ -6812,16 +7090,19 @@ export namespace Prisma {
   export type AvailableActionsMinAggregateInputType = {
     id?: true
     name?: true
+    imagePath?: true
   }
 
   export type AvailableActionsMaxAggregateInputType = {
     id?: true
     name?: true
+    imagePath?: true
   }
 
   export type AvailableActionsCountAggregateInputType = {
     id?: true
     name?: true
+    imagePath?: true
     _all?: true
   }
 
@@ -6900,6 +7181,7 @@ export namespace Prisma {
   export type AvailableActionsGroupByOutputType = {
     id: string
     name: string
+    imagePath: string
     _count: AvailableActionsCountAggregateOutputType | null
     _min: AvailableActionsMinAggregateOutputType | null
     _max: AvailableActionsMaxAggregateOutputType | null
@@ -6922,27 +7204,33 @@ export namespace Prisma {
   export type AvailableActionsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    imagePath?: boolean
     actions?: boolean | AvailableActions$actionsArgs<ExtArgs>
+    _count?: boolean | AvailableActionsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["availableActions"]>
 
   export type AvailableActionsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    imagePath?: boolean
   }, ExtArgs["result"]["availableActions"]>
 
   export type AvailableActionsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    imagePath?: boolean
   }, ExtArgs["result"]["availableActions"]>
 
   export type AvailableActionsSelectScalar = {
     id?: boolean
     name?: boolean
+    imagePath?: boolean
   }
 
-  export type AvailableActionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["availableActions"]>
+  export type AvailableActionsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "imagePath", ExtArgs["result"]["availableActions"]>
   export type AvailableActionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     actions?: boolean | AvailableActions$actionsArgs<ExtArgs>
+    _count?: boolean | AvailableActionsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AvailableActionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
   export type AvailableActionsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6950,11 +7238,12 @@ export namespace Prisma {
   export type $AvailableActionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AvailableActions"
     objects: {
-      actions: Prisma.$ActionPayload<ExtArgs> | null
+      actions: Prisma.$ActionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      imagePath: string
     }, ExtArgs["result"]["availableActions"]>
     composites: {}
   }
@@ -7349,7 +7638,7 @@ export namespace Prisma {
    */
   export interface Prisma__AvailableActionsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    actions<T extends AvailableActions$actionsArgs<ExtArgs> = {}>(args?: Subset<T, AvailableActions$actionsArgs<ExtArgs>>): Prisma__ActionClient<$Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findUniqueOrThrow", ClientOptions> | null, null, ExtArgs, ClientOptions>
+    actions<T extends AvailableActions$actionsArgs<ExtArgs> = {}>(args?: Subset<T, AvailableActions$actionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findMany", ClientOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7381,6 +7670,7 @@ export namespace Prisma {
   interface AvailableActionsFieldRefs {
     readonly id: FieldRef<"AvailableActions", 'String'>
     readonly name: FieldRef<"AvailableActions", 'String'>
+    readonly imagePath: FieldRef<"AvailableActions", 'String'>
   }
     
 
@@ -7785,6 +8075,11 @@ export namespace Prisma {
      */
     include?: ActionInclude<ExtArgs> | null
     where?: ActionWhereInput
+    orderBy?: ActionOrderByWithRelationInput | ActionOrderByWithRelationInput[]
+    cursor?: ActionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ActionScalarFieldEnum | ActionScalarFieldEnum[]
   }
 
   /**
@@ -9892,7 +10187,8 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
-    name: 'name',
+    firstname: 'firstname',
+    lastname: 'lastname',
     email: 'email',
     password: 'password'
   };
@@ -9902,7 +10198,8 @@ export namespace Prisma {
 
   export const ZapScalarFieldEnum: {
     id: 'id',
-    triggerId: 'triggerId'
+    triggerId: 'triggerId',
+    userId: 'userId'
   };
 
   export type ZapScalarFieldEnum = (typeof ZapScalarFieldEnum)[keyof typeof ZapScalarFieldEnum]
@@ -9919,7 +10216,8 @@ export namespace Prisma {
 
   export const AvailableTriggersScalarFieldEnum: {
     id: 'id',
-    name: 'name'
+    name: 'name',
+    imagePath: 'imagePath'
   };
 
   export type AvailableTriggersScalarFieldEnum = (typeof AvailableTriggersScalarFieldEnum)[keyof typeof AvailableTriggersScalarFieldEnum]
@@ -9928,7 +10226,8 @@ export namespace Prisma {
   export const ActionScalarFieldEnum: {
     id: 'id',
     zapId: 'zapId',
-    actionId: 'actionId'
+    actionId: 'actionId',
+    sortingOrder: 'sortingOrder'
   };
 
   export type ActionScalarFieldEnum = (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum]
@@ -9936,7 +10235,8 @@ export namespace Prisma {
 
   export const AvailableActionsScalarFieldEnum: {
     id: 'id',
-    name: 'name'
+    name: 'name',
+    imagePath: 'imagePath'
   };
 
   export type AvailableActionsScalarFieldEnum = (typeof AvailableActionsScalarFieldEnum)[keyof typeof AvailableActionsScalarFieldEnum]
@@ -10060,16 +10360,20 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: IntFilter<"User"> | number
-    name?: StringFilter<"User"> | string
+    firstname?: StringFilter<"User"> | string
+    lastname?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    zap?: ZapListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
+    firstname?: SortOrder
+    lastname?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    zap?: ZapOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -10077,14 +10381,17 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
-    name?: StringFilter<"User"> | string
+    firstname?: StringFilter<"User"> | string
+    lastname?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    zap?: ZapListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
+    firstname?: SortOrder
+    lastname?: SortOrder
     email?: SortOrder
     password?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -10099,7 +10406,8 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"User"> | number
-    name?: StringWithAggregatesFilter<"User"> | string
+    firstname?: StringWithAggregatesFilter<"User"> | string
+    lastname?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
   }
@@ -10110,6 +10418,8 @@ export namespace Prisma {
     NOT?: ZapWhereInput | ZapWhereInput[]
     id?: StringFilter<"Zap"> | string
     triggerId?: StringFilter<"Zap"> | string
+    userId?: IntFilter<"Zap"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     trigger?: XOR<TriggerNullableScalarRelationFilter, TriggerWhereInput> | null
     actions?: ActionListRelationFilter
     zapRuns?: ZapRunListRelationFilter
@@ -10118,6 +10428,8 @@ export namespace Prisma {
   export type ZapOrderByWithRelationInput = {
     id?: SortOrder
     triggerId?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
     trigger?: TriggerOrderByWithRelationInput
     actions?: ActionOrderByRelationAggregateInput
     zapRuns?: ZapRunOrderByRelationAggregateInput
@@ -10129,6 +10441,8 @@ export namespace Prisma {
     OR?: ZapWhereInput[]
     NOT?: ZapWhereInput | ZapWhereInput[]
     triggerId?: StringFilter<"Zap"> | string
+    userId?: IntFilter<"Zap"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     trigger?: XOR<TriggerNullableScalarRelationFilter, TriggerWhereInput> | null
     actions?: ActionListRelationFilter
     zapRuns?: ZapRunListRelationFilter
@@ -10137,9 +10451,12 @@ export namespace Prisma {
   export type ZapOrderByWithAggregationInput = {
     id?: SortOrder
     triggerId?: SortOrder
+    userId?: SortOrder
     _count?: ZapCountOrderByAggregateInput
+    _avg?: ZapAvgOrderByAggregateInput
     _max?: ZapMaxOrderByAggregateInput
     _min?: ZapMinOrderByAggregateInput
+    _sum?: ZapSumOrderByAggregateInput
   }
 
   export type ZapScalarWhereWithAggregatesInput = {
@@ -10148,6 +10465,7 @@ export namespace Prisma {
     NOT?: ZapScalarWhereWithAggregatesInput | ZapScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Zap"> | string
     triggerId?: StringWithAggregatesFilter<"Zap"> | string
+    userId?: IntWithAggregatesFilter<"Zap"> | number
   }
 
   export type TriggerWhereInput = {
@@ -10204,12 +10522,14 @@ export namespace Prisma {
     NOT?: AvailableTriggersWhereInput | AvailableTriggersWhereInput[]
     id?: StringFilter<"AvailableTriggers"> | string
     name?: StringFilter<"AvailableTriggers"> | string
+    imagePath?: StringFilter<"AvailableTriggers"> | string
     triggers?: TriggerListRelationFilter
   }
 
   export type AvailableTriggersOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
     triggers?: TriggerOrderByRelationAggregateInput
   }
 
@@ -10219,12 +10539,14 @@ export namespace Prisma {
     OR?: AvailableTriggersWhereInput[]
     NOT?: AvailableTriggersWhereInput | AvailableTriggersWhereInput[]
     name?: StringFilter<"AvailableTriggers"> | string
+    imagePath?: StringFilter<"AvailableTriggers"> | string
     triggers?: TriggerListRelationFilter
   }, "id">
 
   export type AvailableTriggersOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
     _count?: AvailableTriggersCountOrderByAggregateInput
     _max?: AvailableTriggersMaxOrderByAggregateInput
     _min?: AvailableTriggersMinOrderByAggregateInput
@@ -10236,6 +10558,7 @@ export namespace Prisma {
     NOT?: AvailableTriggersScalarWhereWithAggregatesInput | AvailableTriggersScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AvailableTriggers"> | string
     name?: StringWithAggregatesFilter<"AvailableTriggers"> | string
+    imagePath?: StringWithAggregatesFilter<"AvailableTriggers"> | string
   }
 
   export type ActionWhereInput = {
@@ -10245,6 +10568,7 @@ export namespace Prisma {
     id?: StringFilter<"Action"> | string
     zapId?: StringFilter<"Action"> | string
     actionId?: StringFilter<"Action"> | string
+    sortingOrder?: IntFilter<"Action"> | number
     zap?: XOR<ZapScalarRelationFilter, ZapWhereInput>
     actionDetails?: XOR<AvailableActionsScalarRelationFilter, AvailableActionsWhereInput>
   }
@@ -10253,28 +10577,33 @@ export namespace Prisma {
     id?: SortOrder
     zapId?: SortOrder
     actionId?: SortOrder
+    sortingOrder?: SortOrder
     zap?: ZapOrderByWithRelationInput
     actionDetails?: AvailableActionsOrderByWithRelationInput
   }
 
   export type ActionWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    actionId?: string
     AND?: ActionWhereInput | ActionWhereInput[]
     OR?: ActionWhereInput[]
     NOT?: ActionWhereInput | ActionWhereInput[]
     zapId?: StringFilter<"Action"> | string
+    actionId?: StringFilter<"Action"> | string
+    sortingOrder?: IntFilter<"Action"> | number
     zap?: XOR<ZapScalarRelationFilter, ZapWhereInput>
     actionDetails?: XOR<AvailableActionsScalarRelationFilter, AvailableActionsWhereInput>
-  }, "id" | "actionId">
+  }, "id">
 
   export type ActionOrderByWithAggregationInput = {
     id?: SortOrder
     zapId?: SortOrder
     actionId?: SortOrder
+    sortingOrder?: SortOrder
     _count?: ActionCountOrderByAggregateInput
+    _avg?: ActionAvgOrderByAggregateInput
     _max?: ActionMaxOrderByAggregateInput
     _min?: ActionMinOrderByAggregateInput
+    _sum?: ActionSumOrderByAggregateInput
   }
 
   export type ActionScalarWhereWithAggregatesInput = {
@@ -10284,6 +10613,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Action"> | string
     zapId?: StringWithAggregatesFilter<"Action"> | string
     actionId?: StringWithAggregatesFilter<"Action"> | string
+    sortingOrder?: IntWithAggregatesFilter<"Action"> | number
   }
 
   export type AvailableActionsWhereInput = {
@@ -10292,13 +10622,15 @@ export namespace Prisma {
     NOT?: AvailableActionsWhereInput | AvailableActionsWhereInput[]
     id?: StringFilter<"AvailableActions"> | string
     name?: StringFilter<"AvailableActions"> | string
-    actions?: XOR<ActionNullableScalarRelationFilter, ActionWhereInput> | null
+    imagePath?: StringFilter<"AvailableActions"> | string
+    actions?: ActionListRelationFilter
   }
 
   export type AvailableActionsOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    actions?: ActionOrderByWithRelationInput
+    imagePath?: SortOrder
+    actions?: ActionOrderByRelationAggregateInput
   }
 
   export type AvailableActionsWhereUniqueInput = Prisma.AtLeast<{
@@ -10307,12 +10639,14 @@ export namespace Prisma {
     OR?: AvailableActionsWhereInput[]
     NOT?: AvailableActionsWhereInput | AvailableActionsWhereInput[]
     name?: StringFilter<"AvailableActions"> | string
-    actions?: XOR<ActionNullableScalarRelationFilter, ActionWhereInput> | null
+    imagePath?: StringFilter<"AvailableActions"> | string
+    actions?: ActionListRelationFilter
   }, "id">
 
   export type AvailableActionsOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
     _count?: AvailableActionsCountOrderByAggregateInput
     _max?: AvailableActionsMaxOrderByAggregateInput
     _min?: AvailableActionsMinOrderByAggregateInput
@@ -10324,6 +10658,7 @@ export namespace Prisma {
     NOT?: AvailableActionsScalarWhereWithAggregatesInput | AvailableActionsScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AvailableActions"> | string
     name?: StringWithAggregatesFilter<"AvailableActions"> | string
+    imagePath?: StringWithAggregatesFilter<"AvailableActions"> | string
   }
 
   export type ZapRunWhereInput = {
@@ -10415,47 +10750,58 @@ export namespace Prisma {
   }
 
   export type UserCreateInput = {
-    name: string
+    firstname: string
+    lastname: string
     email: string
     password: string
+    zap?: ZapCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: number
-    name: string
+    firstname: string
+    lastname: string
     email: string
     password: string
+    zap?: ZapUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
+    firstname?: StringFieldUpdateOperationsInput | string
+    lastname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    zap?: ZapUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
+    firstname?: StringFieldUpdateOperationsInput | string
+    lastname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    zap?: ZapUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: number
-    name: string
+    firstname: string
+    lastname: string
     email: string
     password: string
   }
 
   export type UserUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
+    firstname?: StringFieldUpdateOperationsInput | string
+    lastname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
+    firstname?: StringFieldUpdateOperationsInput | string
+    lastname?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
   }
@@ -10463,6 +10809,7 @@ export namespace Prisma {
   export type ZapCreateInput = {
     id?: string
     triggerId: string
+    user: UserCreateNestedOneWithoutZapInput
     trigger?: TriggerCreateNestedOneWithoutZapInput
     actions?: ActionCreateNestedManyWithoutZapInput
     zapRuns?: ZapRunCreateNestedManyWithoutZapInput
@@ -10471,6 +10818,7 @@ export namespace Prisma {
   export type ZapUncheckedCreateInput = {
     id?: string
     triggerId: string
+    userId: number
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput
@@ -10479,6 +10827,7 @@ export namespace Prisma {
   export type ZapUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutZapNestedInput
     trigger?: TriggerUpdateOneWithoutZapNestedInput
     actions?: ActionUpdateManyWithoutZapNestedInput
     zapRuns?: ZapRunUpdateManyWithoutZapNestedInput
@@ -10487,6 +10836,7 @@ export namespace Prisma {
   export type ZapUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput
@@ -10495,6 +10845,7 @@ export namespace Prisma {
   export type ZapCreateManyInput = {
     id?: string
     triggerId: string
+    userId: number
   }
 
   export type ZapUpdateManyMutationInput = {
@@ -10505,6 +10856,7 @@ export namespace Prisma {
   export type ZapUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type TriggerCreateInput = {
@@ -10550,44 +10902,52 @@ export namespace Prisma {
   export type AvailableTriggersCreateInput = {
     id?: string
     name: string
+    imagePath?: string
     triggers?: TriggerCreateNestedManyWithoutTypeInput
   }
 
   export type AvailableTriggersUncheckedCreateInput = {
     id?: string
     name: string
+    imagePath?: string
     triggers?: TriggerUncheckedCreateNestedManyWithoutTypeInput
   }
 
   export type AvailableTriggersUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
     triggers?: TriggerUpdateManyWithoutTypeNestedInput
   }
 
   export type AvailableTriggersUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
     triggers?: TriggerUncheckedUpdateManyWithoutTypeNestedInput
   }
 
   export type AvailableTriggersCreateManyInput = {
     id?: string
     name: string
+    imagePath?: string
   }
 
   export type AvailableTriggersUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type AvailableTriggersUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type ActionCreateInput = {
     id?: string
+    sortingOrder?: number
     zap: ZapCreateNestedOneWithoutActionsInput
     actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput
   }
@@ -10596,10 +10956,12 @@ export namespace Prisma {
     id?: string
     zapId: string
     actionId: string
+    sortingOrder?: number
   }
 
   export type ActionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
     zap?: ZapUpdateOneRequiredWithoutActionsNestedInput
     actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput
   }
@@ -10608,61 +10970,72 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     zapId?: StringFieldUpdateOperationsInput | string
     actionId?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type ActionCreateManyInput = {
     id?: string
     zapId: string
     actionId: string
+    sortingOrder?: number
   }
 
   export type ActionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type ActionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     zapId?: StringFieldUpdateOperationsInput | string
     actionId?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type AvailableActionsCreateInput = {
     id?: string
     name: string
-    actions?: ActionCreateNestedOneWithoutActionDetailsInput
+    imagePath?: string
+    actions?: ActionCreateNestedManyWithoutActionDetailsInput
   }
 
   export type AvailableActionsUncheckedCreateInput = {
     id?: string
     name: string
-    actions?: ActionUncheckedCreateNestedOneWithoutActionDetailsInput
+    imagePath?: string
+    actions?: ActionUncheckedCreateNestedManyWithoutActionDetailsInput
   }
 
   export type AvailableActionsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    actions?: ActionUpdateOneWithoutActionDetailsNestedInput
+    imagePath?: StringFieldUpdateOperationsInput | string
+    actions?: ActionUpdateManyWithoutActionDetailsNestedInput
   }
 
   export type AvailableActionsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    actions?: ActionUncheckedUpdateOneWithoutActionDetailsNestedInput
+    imagePath?: StringFieldUpdateOperationsInput | string
+    actions?: ActionUncheckedUpdateManyWithoutActionDetailsNestedInput
   }
 
   export type AvailableActionsCreateManyInput = {
     id?: string
     name: string
+    imagePath?: string
   }
 
   export type AvailableActionsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type AvailableActionsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type ZapRunCreateInput = {
@@ -10770,9 +11143,20 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type ZapListRelationFilter = {
+    every?: ZapWhereInput
+    some?: ZapWhereInput
+    none?: ZapWhereInput
+  }
+
+  export type ZapOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
+    firstname?: SortOrder
+    lastname?: SortOrder
     email?: SortOrder
     password?: SortOrder
   }
@@ -10783,14 +11167,16 @@ export namespace Prisma {
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
+    firstname?: SortOrder
+    lastname?: SortOrder
     email?: SortOrder
     password?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
+    firstname?: SortOrder
+    lastname?: SortOrder
     email?: SortOrder
     password?: SortOrder
   }
@@ -10833,6 +11219,11 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
   export type TriggerNullableScalarRelationFilter = {
     is?: TriggerWhereInput | null
     isNot?: TriggerWhereInput | null
@@ -10861,16 +11252,27 @@ export namespace Prisma {
   export type ZapCountOrderByAggregateInput = {
     id?: SortOrder
     triggerId?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type ZapAvgOrderByAggregateInput = {
+    userId?: SortOrder
   }
 
   export type ZapMaxOrderByAggregateInput = {
     id?: SortOrder
     triggerId?: SortOrder
+    userId?: SortOrder
   }
 
   export type ZapMinOrderByAggregateInput = {
     id?: SortOrder
     triggerId?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type ZapSumOrderByAggregateInput = {
+    userId?: SortOrder
   }
 
   export type ZapScalarRelationFilter = {
@@ -10914,16 +11316,19 @@ export namespace Prisma {
   export type AvailableTriggersCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
   }
 
   export type AvailableTriggersMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
   }
 
   export type AvailableTriggersMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
   }
 
   export type AvailableActionsScalarRelationFilter = {
@@ -10935,38 +11340,47 @@ export namespace Prisma {
     id?: SortOrder
     zapId?: SortOrder
     actionId?: SortOrder
+    sortingOrder?: SortOrder
+  }
+
+  export type ActionAvgOrderByAggregateInput = {
+    sortingOrder?: SortOrder
   }
 
   export type ActionMaxOrderByAggregateInput = {
     id?: SortOrder
     zapId?: SortOrder
     actionId?: SortOrder
+    sortingOrder?: SortOrder
   }
 
   export type ActionMinOrderByAggregateInput = {
     id?: SortOrder
     zapId?: SortOrder
     actionId?: SortOrder
+    sortingOrder?: SortOrder
   }
 
-  export type ActionNullableScalarRelationFilter = {
-    is?: ActionWhereInput | null
-    isNot?: ActionWhereInput | null
+  export type ActionSumOrderByAggregateInput = {
+    sortingOrder?: SortOrder
   }
 
   export type AvailableActionsCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
   }
 
   export type AvailableActionsMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
   }
 
   export type AvailableActionsMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    imagePath?: SortOrder
   }
   export type JsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -11059,8 +11473,36 @@ export namespace Prisma {
     zapRunId?: SortOrder
   }
 
+  export type ZapCreateNestedManyWithoutUserInput = {
+    create?: XOR<ZapCreateWithoutUserInput, ZapUncheckedCreateWithoutUserInput> | ZapCreateWithoutUserInput[] | ZapUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ZapCreateOrConnectWithoutUserInput | ZapCreateOrConnectWithoutUserInput[]
+    createMany?: ZapCreateManyUserInputEnvelope
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+  }
+
+  export type ZapUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ZapCreateWithoutUserInput, ZapUncheckedCreateWithoutUserInput> | ZapCreateWithoutUserInput[] | ZapUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ZapCreateOrConnectWithoutUserInput | ZapCreateOrConnectWithoutUserInput[]
+    createMany?: ZapCreateManyUserInputEnvelope
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type ZapUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ZapCreateWithoutUserInput, ZapUncheckedCreateWithoutUserInput> | ZapCreateWithoutUserInput[] | ZapUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ZapCreateOrConnectWithoutUserInput | ZapCreateOrConnectWithoutUserInput[]
+    upsert?: ZapUpsertWithWhereUniqueWithoutUserInput | ZapUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ZapCreateManyUserInputEnvelope
+    set?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+    disconnect?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+    delete?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+    update?: ZapUpdateWithWhereUniqueWithoutUserInput | ZapUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ZapUpdateManyWithWhereWithoutUserInput | ZapUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ZapScalarWhereInput | ZapScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -11069,6 +11511,26 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type ZapUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ZapCreateWithoutUserInput, ZapUncheckedCreateWithoutUserInput> | ZapCreateWithoutUserInput[] | ZapUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ZapCreateOrConnectWithoutUserInput | ZapCreateOrConnectWithoutUserInput[]
+    upsert?: ZapUpsertWithWhereUniqueWithoutUserInput | ZapUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ZapCreateManyUserInputEnvelope
+    set?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+    disconnect?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+    delete?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[]
+    update?: ZapUpdateWithWhereUniqueWithoutUserInput | ZapUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ZapUpdateManyWithWhereWithoutUserInput | ZapUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ZapScalarWhereInput | ZapScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutZapInput = {
+    create?: XOR<UserCreateWithoutZapInput, UserUncheckedCreateWithoutZapInput>
+    connectOrCreate?: UserCreateOrConnectWithoutZapInput
+    connect?: UserWhereUniqueInput
   }
 
   export type TriggerCreateNestedOneWithoutZapInput = {
@@ -11109,6 +11571,14 @@ export namespace Prisma {
     connectOrCreate?: ZapRunCreateOrConnectWithoutZapInput | ZapRunCreateOrConnectWithoutZapInput[]
     createMany?: ZapRunCreateManyZapInputEnvelope
     connect?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutZapNestedInput = {
+    create?: XOR<UserCreateWithoutZapInput, UserUncheckedCreateWithoutZapInput>
+    connectOrCreate?: UserCreateOrConnectWithoutZapInput
+    upsert?: UserUpsertWithoutZapInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutZapInput, UserUpdateWithoutZapInput>, UserUncheckedUpdateWithoutZapInput>
   }
 
   export type TriggerUpdateOneWithoutZapNestedInput = {
@@ -11285,36 +11755,46 @@ export namespace Prisma {
     update?: XOR<XOR<AvailableActionsUpdateToOneWithWhereWithoutActionsInput, AvailableActionsUpdateWithoutActionsInput>, AvailableActionsUncheckedUpdateWithoutActionsInput>
   }
 
-  export type ActionCreateNestedOneWithoutActionDetailsInput = {
-    create?: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput>
-    connectOrCreate?: ActionCreateOrConnectWithoutActionDetailsInput
-    connect?: ActionWhereUniqueInput
+  export type ActionCreateNestedManyWithoutActionDetailsInput = {
+    create?: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput> | ActionCreateWithoutActionDetailsInput[] | ActionUncheckedCreateWithoutActionDetailsInput[]
+    connectOrCreate?: ActionCreateOrConnectWithoutActionDetailsInput | ActionCreateOrConnectWithoutActionDetailsInput[]
+    createMany?: ActionCreateManyActionDetailsInputEnvelope
+    connect?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
   }
 
-  export type ActionUncheckedCreateNestedOneWithoutActionDetailsInput = {
-    create?: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput>
-    connectOrCreate?: ActionCreateOrConnectWithoutActionDetailsInput
-    connect?: ActionWhereUniqueInput
+  export type ActionUncheckedCreateNestedManyWithoutActionDetailsInput = {
+    create?: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput> | ActionCreateWithoutActionDetailsInput[] | ActionUncheckedCreateWithoutActionDetailsInput[]
+    connectOrCreate?: ActionCreateOrConnectWithoutActionDetailsInput | ActionCreateOrConnectWithoutActionDetailsInput[]
+    createMany?: ActionCreateManyActionDetailsInputEnvelope
+    connect?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
   }
 
-  export type ActionUpdateOneWithoutActionDetailsNestedInput = {
-    create?: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput>
-    connectOrCreate?: ActionCreateOrConnectWithoutActionDetailsInput
-    upsert?: ActionUpsertWithoutActionDetailsInput
-    disconnect?: ActionWhereInput | boolean
-    delete?: ActionWhereInput | boolean
-    connect?: ActionWhereUniqueInput
-    update?: XOR<XOR<ActionUpdateToOneWithWhereWithoutActionDetailsInput, ActionUpdateWithoutActionDetailsInput>, ActionUncheckedUpdateWithoutActionDetailsInput>
+  export type ActionUpdateManyWithoutActionDetailsNestedInput = {
+    create?: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput> | ActionCreateWithoutActionDetailsInput[] | ActionUncheckedCreateWithoutActionDetailsInput[]
+    connectOrCreate?: ActionCreateOrConnectWithoutActionDetailsInput | ActionCreateOrConnectWithoutActionDetailsInput[]
+    upsert?: ActionUpsertWithWhereUniqueWithoutActionDetailsInput | ActionUpsertWithWhereUniqueWithoutActionDetailsInput[]
+    createMany?: ActionCreateManyActionDetailsInputEnvelope
+    set?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
+    disconnect?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
+    delete?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
+    connect?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
+    update?: ActionUpdateWithWhereUniqueWithoutActionDetailsInput | ActionUpdateWithWhereUniqueWithoutActionDetailsInput[]
+    updateMany?: ActionUpdateManyWithWhereWithoutActionDetailsInput | ActionUpdateManyWithWhereWithoutActionDetailsInput[]
+    deleteMany?: ActionScalarWhereInput | ActionScalarWhereInput[]
   }
 
-  export type ActionUncheckedUpdateOneWithoutActionDetailsNestedInput = {
-    create?: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput>
-    connectOrCreate?: ActionCreateOrConnectWithoutActionDetailsInput
-    upsert?: ActionUpsertWithoutActionDetailsInput
-    disconnect?: ActionWhereInput | boolean
-    delete?: ActionWhereInput | boolean
-    connect?: ActionWhereUniqueInput
-    update?: XOR<XOR<ActionUpdateToOneWithWhereWithoutActionDetailsInput, ActionUpdateWithoutActionDetailsInput>, ActionUncheckedUpdateWithoutActionDetailsInput>
+  export type ActionUncheckedUpdateManyWithoutActionDetailsNestedInput = {
+    create?: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput> | ActionCreateWithoutActionDetailsInput[] | ActionUncheckedCreateWithoutActionDetailsInput[]
+    connectOrCreate?: ActionCreateOrConnectWithoutActionDetailsInput | ActionCreateOrConnectWithoutActionDetailsInput[]
+    upsert?: ActionUpsertWithWhereUniqueWithoutActionDetailsInput | ActionUpsertWithWhereUniqueWithoutActionDetailsInput[]
+    createMany?: ActionCreateManyActionDetailsInputEnvelope
+    set?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
+    disconnect?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
+    delete?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
+    connect?: ActionWhereUniqueInput | ActionWhereUniqueInput[]
+    update?: ActionUpdateWithWhereUniqueWithoutActionDetailsInput | ActionUpdateWithWhereUniqueWithoutActionDetailsInput[]
+    updateMany?: ActionUpdateManyWithWhereWithoutActionDetailsInput | ActionUpdateManyWithWhereWithoutActionDetailsInput[]
+    deleteMany?: ActionScalarWhereInput | ActionScalarWhereInput[]
   }
 
   export type ZapCreateNestedOneWithoutZapRunsInput = {
@@ -11469,6 +11949,77 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type ZapCreateWithoutUserInput = {
+    id?: string
+    triggerId: string
+    trigger?: TriggerCreateNestedOneWithoutZapInput
+    actions?: ActionCreateNestedManyWithoutZapInput
+    zapRuns?: ZapRunCreateNestedManyWithoutZapInput
+  }
+
+  export type ZapUncheckedCreateWithoutUserInput = {
+    id?: string
+    triggerId: string
+    trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput
+    actions?: ActionUncheckedCreateNestedManyWithoutZapInput
+    zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput
+  }
+
+  export type ZapCreateOrConnectWithoutUserInput = {
+    where: ZapWhereUniqueInput
+    create: XOR<ZapCreateWithoutUserInput, ZapUncheckedCreateWithoutUserInput>
+  }
+
+  export type ZapCreateManyUserInputEnvelope = {
+    data: ZapCreateManyUserInput | ZapCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ZapUpsertWithWhereUniqueWithoutUserInput = {
+    where: ZapWhereUniqueInput
+    update: XOR<ZapUpdateWithoutUserInput, ZapUncheckedUpdateWithoutUserInput>
+    create: XOR<ZapCreateWithoutUserInput, ZapUncheckedCreateWithoutUserInput>
+  }
+
+  export type ZapUpdateWithWhereUniqueWithoutUserInput = {
+    where: ZapWhereUniqueInput
+    data: XOR<ZapUpdateWithoutUserInput, ZapUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ZapUpdateManyWithWhereWithoutUserInput = {
+    where: ZapScalarWhereInput
+    data: XOR<ZapUpdateManyMutationInput, ZapUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ZapScalarWhereInput = {
+    AND?: ZapScalarWhereInput | ZapScalarWhereInput[]
+    OR?: ZapScalarWhereInput[]
+    NOT?: ZapScalarWhereInput | ZapScalarWhereInput[]
+    id?: StringFilter<"Zap"> | string
+    triggerId?: StringFilter<"Zap"> | string
+    userId?: IntFilter<"Zap"> | number
+  }
+
+  export type UserCreateWithoutZapInput = {
+    firstname: string
+    lastname: string
+    email: string
+    password: string
+  }
+
+  export type UserUncheckedCreateWithoutZapInput = {
+    id?: number
+    firstname: string
+    lastname: string
+    email: string
+    password: string
+  }
+
+  export type UserCreateOrConnectWithoutZapInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutZapInput, UserUncheckedCreateWithoutZapInput>
+  }
+
   export type TriggerCreateWithoutZapInput = {
     id?: string
     type: AvailableTriggersCreateNestedOneWithoutTriggersInput
@@ -11486,12 +12037,14 @@ export namespace Prisma {
 
   export type ActionCreateWithoutZapInput = {
     id?: string
+    sortingOrder?: number
     actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput
   }
 
   export type ActionUncheckedCreateWithoutZapInput = {
     id?: string
     actionId: string
+    sortingOrder?: number
   }
 
   export type ActionCreateOrConnectWithoutZapInput = {
@@ -11524,6 +12077,32 @@ export namespace Prisma {
   export type ZapRunCreateManyZapInputEnvelope = {
     data: ZapRunCreateManyZapInput | ZapRunCreateManyZapInput[]
     skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutZapInput = {
+    update: XOR<UserUpdateWithoutZapInput, UserUncheckedUpdateWithoutZapInput>
+    create: XOR<UserCreateWithoutZapInput, UserUncheckedCreateWithoutZapInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutZapInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutZapInput, UserUncheckedUpdateWithoutZapInput>
+  }
+
+  export type UserUpdateWithoutZapInput = {
+    firstname?: StringFieldUpdateOperationsInput | string
+    lastname?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserUncheckedUpdateWithoutZapInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    firstname?: StringFieldUpdateOperationsInput | string
+    lastname?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
   }
 
   export type TriggerUpsertWithoutZapInput = {
@@ -11570,6 +12149,7 @@ export namespace Prisma {
     id?: StringFilter<"Action"> | string
     zapId?: StringFilter<"Action"> | string
     actionId?: StringFilter<"Action"> | string
+    sortingOrder?: IntFilter<"Action"> | number
   }
 
   export type ZapRunUpsertWithWhereUniqueWithoutZapInput = {
@@ -11600,6 +12180,7 @@ export namespace Prisma {
   export type ZapCreateWithoutTriggerInput = {
     id?: string
     triggerId: string
+    user: UserCreateNestedOneWithoutZapInput
     actions?: ActionCreateNestedManyWithoutZapInput
     zapRuns?: ZapRunCreateNestedManyWithoutZapInput
   }
@@ -11607,6 +12188,7 @@ export namespace Prisma {
   export type ZapUncheckedCreateWithoutTriggerInput = {
     id?: string
     triggerId: string
+    userId: number
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput
   }
@@ -11619,11 +12201,13 @@ export namespace Prisma {
   export type AvailableTriggersCreateWithoutTriggersInput = {
     id?: string
     name: string
+    imagePath?: string
   }
 
   export type AvailableTriggersUncheckedCreateWithoutTriggersInput = {
     id?: string
     name: string
+    imagePath?: string
   }
 
   export type AvailableTriggersCreateOrConnectWithoutTriggersInput = {
@@ -11645,6 +12229,7 @@ export namespace Prisma {
   export type ZapUpdateWithoutTriggerInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutZapNestedInput
     actions?: ActionUpdateManyWithoutZapNestedInput
     zapRuns?: ZapRunUpdateManyWithoutZapNestedInput
   }
@@ -11652,6 +12237,7 @@ export namespace Prisma {
   export type ZapUncheckedUpdateWithoutTriggerInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput
   }
@@ -11670,11 +12256,13 @@ export namespace Prisma {
   export type AvailableTriggersUpdateWithoutTriggersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type AvailableTriggersUncheckedUpdateWithoutTriggersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type TriggerCreateWithoutTypeInput = {
@@ -11725,6 +12313,7 @@ export namespace Prisma {
   export type ZapCreateWithoutActionsInput = {
     id?: string
     triggerId: string
+    user: UserCreateNestedOneWithoutZapInput
     trigger?: TriggerCreateNestedOneWithoutZapInput
     zapRuns?: ZapRunCreateNestedManyWithoutZapInput
   }
@@ -11732,6 +12321,7 @@ export namespace Prisma {
   export type ZapUncheckedCreateWithoutActionsInput = {
     id?: string
     triggerId: string
+    userId: number
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput
   }
@@ -11744,11 +12334,13 @@ export namespace Prisma {
   export type AvailableActionsCreateWithoutActionsInput = {
     id?: string
     name: string
+    imagePath?: string
   }
 
   export type AvailableActionsUncheckedCreateWithoutActionsInput = {
     id?: string
     name: string
+    imagePath?: string
   }
 
   export type AvailableActionsCreateOrConnectWithoutActionsInput = {
@@ -11770,6 +12362,7 @@ export namespace Prisma {
   export type ZapUpdateWithoutActionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutZapNestedInput
     trigger?: TriggerUpdateOneWithoutZapNestedInput
     zapRuns?: ZapRunUpdateManyWithoutZapNestedInput
   }
@@ -11777,6 +12370,7 @@ export namespace Prisma {
   export type ZapUncheckedUpdateWithoutActionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput
   }
@@ -11795,21 +12389,25 @@ export namespace Prisma {
   export type AvailableActionsUpdateWithoutActionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type AvailableActionsUncheckedUpdateWithoutActionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type ActionCreateWithoutActionDetailsInput = {
     id?: string
+    sortingOrder?: number
     zap: ZapCreateNestedOneWithoutActionsInput
   }
 
   export type ActionUncheckedCreateWithoutActionDetailsInput = {
     id?: string
     zapId: string
+    sortingOrder?: number
   }
 
   export type ActionCreateOrConnectWithoutActionDetailsInput = {
@@ -11817,30 +12415,31 @@ export namespace Prisma {
     create: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput>
   }
 
-  export type ActionUpsertWithoutActionDetailsInput = {
-    update: XOR<ActionUpdateWithoutActionDetailsInput, ActionUncheckedUpdateWithoutActionDetailsInput>
-    create: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput>
-    where?: ActionWhereInput
+  export type ActionCreateManyActionDetailsInputEnvelope = {
+    data: ActionCreateManyActionDetailsInput | ActionCreateManyActionDetailsInput[]
+    skipDuplicates?: boolean
   }
 
-  export type ActionUpdateToOneWithWhereWithoutActionDetailsInput = {
-    where?: ActionWhereInput
+  export type ActionUpsertWithWhereUniqueWithoutActionDetailsInput = {
+    where: ActionWhereUniqueInput
+    update: XOR<ActionUpdateWithoutActionDetailsInput, ActionUncheckedUpdateWithoutActionDetailsInput>
+    create: XOR<ActionCreateWithoutActionDetailsInput, ActionUncheckedCreateWithoutActionDetailsInput>
+  }
+
+  export type ActionUpdateWithWhereUniqueWithoutActionDetailsInput = {
+    where: ActionWhereUniqueInput
     data: XOR<ActionUpdateWithoutActionDetailsInput, ActionUncheckedUpdateWithoutActionDetailsInput>
   }
 
-  export type ActionUpdateWithoutActionDetailsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    zap?: ZapUpdateOneRequiredWithoutActionsNestedInput
-  }
-
-  export type ActionUncheckedUpdateWithoutActionDetailsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    zapId?: StringFieldUpdateOperationsInput | string
+  export type ActionUpdateManyWithWhereWithoutActionDetailsInput = {
+    where: ActionScalarWhereInput
+    data: XOR<ActionUpdateManyMutationInput, ActionUncheckedUpdateManyWithoutActionDetailsInput>
   }
 
   export type ZapCreateWithoutZapRunsInput = {
     id?: string
     triggerId: string
+    user: UserCreateNestedOneWithoutZapInput
     trigger?: TriggerCreateNestedOneWithoutZapInput
     actions?: ActionCreateNestedManyWithoutZapInput
   }
@@ -11848,6 +12447,7 @@ export namespace Prisma {
   export type ZapUncheckedCreateWithoutZapRunsInput = {
     id?: string
     triggerId: string
+    userId: number
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput
   }
@@ -11884,6 +12484,7 @@ export namespace Prisma {
   export type ZapUpdateWithoutZapRunsInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutZapNestedInput
     trigger?: TriggerUpdateOneWithoutZapNestedInput
     actions?: ActionUpdateManyWithoutZapNestedInput
   }
@@ -11891,6 +12492,7 @@ export namespace Prisma {
   export type ZapUncheckedUpdateWithoutZapRunsInput = {
     id?: StringFieldUpdateOperationsInput | string
     triggerId?: StringFieldUpdateOperationsInput | string
+    userId?: IntFieldUpdateOperationsInput | number
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput
   }
@@ -11954,9 +12556,36 @@ export namespace Prisma {
     metaData?: JsonNullValueInput | InputJsonValue
   }
 
+  export type ZapCreateManyUserInput = {
+    id?: string
+    triggerId: string
+  }
+
+  export type ZapUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerId?: StringFieldUpdateOperationsInput | string
+    trigger?: TriggerUpdateOneWithoutZapNestedInput
+    actions?: ActionUpdateManyWithoutZapNestedInput
+    zapRuns?: ZapRunUpdateManyWithoutZapNestedInput
+  }
+
+  export type ZapUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerId?: StringFieldUpdateOperationsInput | string
+    trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput
+    actions?: ActionUncheckedUpdateManyWithoutZapNestedInput
+    zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput
+  }
+
+  export type ZapUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type ActionCreateManyZapInput = {
     id?: string
     actionId: string
+    sortingOrder?: number
   }
 
   export type ZapRunCreateManyZapInput = {
@@ -11966,17 +12595,20 @@ export namespace Prisma {
 
   export type ActionUpdateWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
     actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput
   }
 
   export type ActionUncheckedUpdateWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string
     actionId?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type ActionUncheckedUpdateManyWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string
     actionId?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
   }
 
   export type ZapRunUpdateWithoutZapInput = {
@@ -12014,6 +12646,30 @@ export namespace Prisma {
   export type TriggerUncheckedUpdateManyWithoutTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
     zapId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ActionCreateManyActionDetailsInput = {
+    id?: string
+    zapId: string
+    sortingOrder?: number
+  }
+
+  export type ActionUpdateWithoutActionDetailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
+    zap?: ZapUpdateOneRequiredWithoutActionsNestedInput
+  }
+
+  export type ActionUncheckedUpdateWithoutActionDetailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zapId?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ActionUncheckedUpdateManyWithoutActionDetailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zapId?: StringFieldUpdateOperationsInput | string
+    sortingOrder?: IntFieldUpdateOperationsInput | number
   }
 
 

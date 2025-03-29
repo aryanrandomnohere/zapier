@@ -1,3 +1,3 @@
-export {prisma} from "./client"
+export { prisma } from "./client.js"
 
-export * from "./../generated/client"
+export * from "@prisma/client"

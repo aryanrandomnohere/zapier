@@ -1,12 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "./../generated/client"
+  output   = "../generated/client"
 }
 
 datasource db {
@@ -15,15 +9,19 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String
-  password String
+  id        Int    @id @default(autoincrement())
+  firstname String
+  lastname  String
+  email     String
+  password  String
+  zap       Zap[]
 }
 
 model Zap {
   id        String   @id @default(uuid())
   triggerId String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
   trigger   Trigger?
   actions   Action[]
   zapRuns   ZapRun[]
@@ -38,9 +36,10 @@ model Trigger {
 }
 
 model AvailableTriggers {
-  id       String    @id @default(uuid())
-  name     String
-  triggers Trigger[]
+  id        String    @id @default(uuid())
+  name      String
+  imagePath String    @default("")
+  triggers  Trigger[]
 }
 
 model Action {
@@ -48,13 +47,15 @@ model Action {
   zapId         String
   zap           Zap              @relation(fields: [zapId], references: [id])
   actionDetails AvailableActions @relation(fields: [actionId], references: [id])
-  actionId      String           @unique
+  actionId      String
+  sortingOrder  Int              @default(0)
 }
 
 model AvailableActions {
-  id      String  @id @default(uuid())
-  name    String
-  actions Action?
+  id        String   @id @default(uuid())
+  name      String
+  imagePath String   @default("")
+  actions   Action[]
 }
 
 model ZapRun {

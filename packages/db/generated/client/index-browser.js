@@ -119,14 +119,16 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  firstname: 'firstname',
+  lastname: 'lastname',
   email: 'email',
   password: 'password'
 };
 
 exports.Prisma.ZapScalarFieldEnum = {
   id: 'id',
-  triggerId: 'triggerId'
+  triggerId: 'triggerId',
+  userId: 'userId'
 };
 
 exports.Prisma.TriggerScalarFieldEnum = {
@@ -137,18 +139,21 @@ exports.Prisma.TriggerScalarFieldEnum = {
 
 exports.Prisma.AvailableTriggersScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  name: 'name',
+  imagePath: 'imagePath'
 };
 
 exports.Prisma.ActionScalarFieldEnum = {
   id: 'id',
   zapId: 'zapId',
-  actionId: 'actionId'
+  actionId: 'actionId',
+  sortingOrder: 'sortingOrder'
 };
 
 exports.Prisma.AvailableActionsScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  name: 'name',
+  imagePath: 'imagePath'
 };
 
 exports.Prisma.ZapRunScalarFieldEnum = {
