@@ -13,7 +13,6 @@ const kafka = new Kafka({
     const pendingRows = await prisma.zapRunOutbox.findMany({
         take: 10
     })
-
     producer.send({
         topic:"zapier-events",
         messages: pendingRows.map((r:any)=> {return {value:r.zapRunId}})
