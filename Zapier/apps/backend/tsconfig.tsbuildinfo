@@ -1,1 +1,0 @@
-{"root":["./src/jwt_secret.ts","./src/client.ts","./src/index.ts","./src/middleware/authmiddleware.ts","./src/router/actionrouter.ts","./src/router/triggerrouter.ts","./src/router/userrouter.ts","./src/router/zaprouter.ts","./src/types/index.ts"],"version":"5.7.3"}
