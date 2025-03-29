@@ -13,7 +13,7 @@
       "cache": false
     },
     "build": {
-      "dependsOn": ["db:migrate","^db:generate","^build"],
+      "dependsOn": ["^db:generate","^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
@@ -24,7 +24,7 @@
       "dependsOn": ["^check-types"]
     },
     "dev": {
-      "dependsOn": ["db:migrate","^db:generate"],
+      "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true
     }
