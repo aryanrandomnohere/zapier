@@ -16,7 +16,7 @@ export function AuthMiddleware(req:extendedRequest,res:Response,next:NextFunctio
      const data =  verify(jwt, JWT_SECRET)
     //@ts-ignore
     req.userId = data.userId
-    console.log(req.userId);
+  
     
     next()
 } catch (error) {

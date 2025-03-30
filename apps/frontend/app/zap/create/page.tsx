@@ -6,10 +6,11 @@ import Modal from "../../ui/Modal";
 import SelectItem from "@/app/components/SelectItem";
 import { useRecoilState } from "recoil";
 import { zapCreateState } from "../../RecoilState/store/zapCreate";
+import axios from "axios";
+import { ItemType } from "@/app/types";
 
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
-  
   const canvasRef = useRef<HTMLDivElement | null>(null);
 
 
@@ -54,6 +55,23 @@ export default function Page1() {
     console.log(zapState.selectedCell)
   }
 
+  async function handlePublish(){
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap`,
+    {
+      triggerId: zapState.selectedItems[0].id,
+      triggerMetadata: zapState.selectedItems[0].metadata || {},
+      actions: zapState.selectedItems.slice(1).map((item:ItemType) => ({
+        actionId: item.id,
+        actionMetadata: item.metadata || {},
+      })),
+    },{
+      headers:{
+        authorization: `${localStorage.getItem("token")}`
+      }
+    })
+    console.log(response)
+  }
+
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
     window.addEventListener("mousemove", handleMouseMove);
@@ -64,7 +82,9 @@ export default function Page1() {
   }, [zapState.isDragging, zapState.initialPosition]);
 
   return (
-    <div className="min-w-screen min-h-screen overflow-hidden relative bg-stone-200 dot-background">
+    <div className="flex flex-col  min-w-screen min-h-screen overflow-hidden relative bg-stone-200 dot-background">
+      <div className="flex flex-col w-full h-10 bg-stone-50 justify-center"> <div className="self-end px-1.5 py-0.5 bg-black/10 text-sm rounded justify-center mr-4 font-semibold hover:bg-black/20 hover:cursor-pointer transition-all duration-300" onClick={handlePublish} >Publish</div></div>
+      
       <div
         className={`absolute w-screen h-screen ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}
         style={{ transform: `translate(${zapState.position.x}px, ${zapState.position.y}px)` }}
@@ -89,7 +109,7 @@ export default function Page1() {
               <SelectItem  type="triggers" />
             </Modal.Window>
           </Modal>
-          <AddCell handleClick={() => addCell(2)} />
+          <AddCell handleClick={addCell} index={1} />
           {zapState.selectedItems.length > 0 &&
             zapState.selectedItems.map((item, index) => { 
               if(index === 0) return null
@@ -114,7 +134,7 @@ export default function Page1() {
                     </Modal.Window>
                   </Modal>
                 </div>
-                <AddCell handleClick={() => addCell(index + 2)} />
+                <AddCell handleClick={addCell} index={index+1} />
               </div>
             )})}
         </div>

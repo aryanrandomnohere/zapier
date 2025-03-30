@@ -11,6 +11,7 @@ export interface zapInterface {
     sortingOrder: number;
     actionDetails: {
       id: string;
+      imagePath: string;
       name: string;
     };
   }[];
@@ -21,20 +22,24 @@ export interface zapInterface {
     type: {
       id: string;
       name: string;
+      imagePath: string;
     };
   };
 }
 
-export interface itemInterface {
-  id: string;
-  name: string;
-  imagePath:string
-  metaDate?:JSON
-}
 
 export interface ItemType {
   id: string;
   name: string;
   imagePath: string;
   metadata?: JSON;
+}
+
+export interface ZapCreateType {
+  triggerId: string;
+  triggerMetadata: JSON;
+  actions: {
+    actionId: string;
+    actionMetadata: JSON;
+  }[];
 }

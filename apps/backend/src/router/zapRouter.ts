@@ -43,7 +43,7 @@ zapRouter.post("/",AuthMiddleware,async (req:extendedRequest,res:Response)=>{
  const zapId = await prisma.$transaction(async tx =>{
     const zap = await tx.zap.create({
         data:{
-            userId:userId,
+            userId,
             triggerId:"", 
             actions:{
                 create: parsedData.data.actions.map((x,index)=>({

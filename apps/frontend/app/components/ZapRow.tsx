@@ -22,18 +22,19 @@ export default function ZapRow({ zaps }: { zaps: zapInterface[] }) {
           className="flex w-6/6 justify-between  border-b border-black/20 pr-10 py-4 items-center gap-1"
           key={zap.id}
         >
-          <div className="flex w-1/6 gap-2 items-center">
+          <div className="flex  w-fit gap-2 items-center">
             <input
               type="checkbox"
               defaultChecked
               className="min-w-5 min-h-5 rounded-md border-2 border-gray-400 bg-white checked:bg-blue-500 hover:cursor-pointer checked:border-blue-500 focus:ring-0 focus:ring-blue-300 transition duration-200"
             />
             <div>
-              <ActionIcon action={zap.trigger.type.name} />
+            
+              <img src={zap.trigger.type.imagePath} alt="trigger" className="w-8 h-8 border border-gray-400 rounded-md p-0.5" />
             </div>{" "}
             {zap.actions.map((action, i) => (
               <div key={action.id}>
-                <ActionIcon action={zap.actions[i].actionId} />
+              <img src={zap.actions[i].actionDetails.imagePath} alt="trigger" className="w-8 h-8 border border-gray-400 rounded-md p-0.5" />
               </div>
             ))}
           </div>
@@ -67,7 +68,7 @@ const ActionIcon = ({ action }: { action: string }) => {
     case "sheet":
       return <LuFileSpreadsheet className={IconStyle} />;
     case "webhook":
-      return <MdOutlineWebhook className={IconStyle} />;
+      return <MdOutlineWebhook className={IconStyle} />;g
     case "email":
       return <MdOutlineAttachEmail className={IconStyle} />;
     case "solana":
