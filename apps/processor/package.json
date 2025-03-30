@@ -1,21 +1,21 @@
 {
   "name": "processor",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"tsc -b && node dist/index.js"
+    "build": "tsc",
+    "dev": "tsc && node dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "description": "",
   "devDependencies": {
-    "@repo/typescript-config": "*"
+    "@repo/typescript-config": "*",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "kafkajs": "^2.2.4",
-    "@repo/db":"*"
+    "@repo/db": "*",
+    "kafkajs": "^2.2.4"
   }
 }

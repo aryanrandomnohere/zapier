@@ -1,7 +1,7 @@
 import express,{Request,Response} from "express"
-import { prisma } from "../client"
-import { AuthMiddleware } from "../Middleware/AuthMiddleware"
-import { ZapCreateSchema } from "../types"
+import { prisma } from "../client.js"
+import { AuthMiddleware } from "../Middleware/AuthMiddleware.js"
+import { ZapCreateSchema } from "../types/index.js"
 const zapRouter = express.Router()
 interface extendedRequest extends Request {
     userId?:number

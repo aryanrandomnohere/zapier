@@ -1,6 +1,6 @@
 import express from "express"
-import { AuthMiddleware } from "../Middleware/AuthMiddleware"
-import { prisma } from "../client"
+import { AuthMiddleware } from "../Middleware/AuthMiddleware.js"
+import { prisma } from "../client.js"
 const actionRouter = express.Router()
 
 actionRouter.get("/available",async (req,res)=>{

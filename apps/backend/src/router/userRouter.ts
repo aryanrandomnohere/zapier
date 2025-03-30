@@ -1,8 +1,8 @@
 import express,{Request,Response} from "express"
-import { logInSchema, signUpSchema } from "../types"
-import { prisma } from "../client"
+import { logInSchema, signUpSchema } from "../types/index.js"
+import { prisma } from "../client.js"
 import jwt from "jsonwebtoken"
-import { JWT_SECRET } from "../JWT_SECRET"
+import { JWT_SECRET } from "../JWT_SECRET.js"
 
 const userRouter = express.Router()
 userRouter.post("/signin",async (req:Request,res:Response)=>{

@@ -1,9 +1,9 @@
 import express from "express";
-import { zapRouter } from "./router/zapRouter";
-import { userRouter } from "./router/userRouter";
+import { zapRouter } from "./router/zapRouter.js";
+import { userRouter } from "./router/userRouter.js";
 import cors from "cors"
-import actionRouter from "./router/actionRouter";
-import triggerRouter from "./router/triggerRouter";
+import actionRouter from "./router/actionRouter.js";
+import triggerRouter from "./router/triggerRouter.js";
 const PORT = 3001;
 const app = express()
 app.use(cors());

@@ -1,6 +1,7 @@
     import { NextFunction,Request,Response } from "express";
-import { verify } from "jsonwebtoken";
-import { JWT_SECRET } from "../JWT_SECRET";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../JWT_SECRET.js";
+const {verify } = jwt;
 interface extendedRequest extends Request {
     userId?:number
 }

@@ -1,26 +1,19 @@
 {
   "name": "@repo/db",
-  "exports": {
-    ".": "./src/index.ts"
-  },
-  "version": "1.0.0",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "db:generate": "npx prisma generate",
-    "db:migrate": "npx prisma migrate dev --skip-generate",
-    "db:deploy": "npx prisma migrate deploy"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "version": "0.0.0",
+  "private": true,
   "type": "module",
-  "description": "",
-  "devDependencies": {
-    "@repo/typescript-config": "*",
-    "prisma": "^6.4.1"
+  "main": "./src/index.ts",
+"scripts": {
+    "build": "tsc",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev"
   },
   "dependencies": {
-    "@prisma/client": "^6.4.1"
+    "@prisma/client": "^5.10.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.10.2",
+    "typescript": "^5.3.3"
   }
 }
