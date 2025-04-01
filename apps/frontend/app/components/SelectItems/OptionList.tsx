@@ -1,10 +1,12 @@
 import {  ItemType } from "@/app/types";
 import { RiPushpinLine } from "react-icons/ri";
-import { useRecoilState} from "recoil";
+import { useRecoilState, useSetRecoilState} from "recoil";
 import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
+import { selectedItemMetaData } from "@/app/RecoilState/currentZap";
 
 export default function OptionList({items,title,onClose}:{items?:ItemType[],title:string,onClose:()=>void}) {
     const [Item,setItem] = useRecoilState(zapCreateState)
+    const setMetaData = useSetRecoilState(selectedItemMetaData);
   if(!items) return null  
   
   function handleClick(item:ItemType,index:number){ 
@@ -24,6 +26,7 @@ export default function OptionList({items,title,onClose}:{items?:ItemType[],titl
         selectedItems:[...zap.selectedItems.slice(0,Item.selectedCell),item,...zap.selectedItems.slice(Item.selectedCell+1,zap.selectedItems.length)]
     })
   })
+  setMetaData((prev)=>({index:Item.selectedCell,isOpen:true}))
   onClose();
   }
 

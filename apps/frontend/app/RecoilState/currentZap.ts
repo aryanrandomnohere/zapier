@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { ItemType } from "../types";
+import { ItemType, selectedItemMetaDataType } from "../types";
 
 
 
@@ -21,4 +21,13 @@ export const selectedAction = atom<ItemType[]>({
 export const currentZap = atom<null | number>({
     key:"currentZap",
     default: null
+})
+
+
+export const selectedItemMetaData = atom< selectedItemMetaDataType>({
+    key:"",
+    default:{
+        index:null,
+        isOpen:false
+    }
 })

@@ -43,3 +43,10 @@ export interface ZapCreateType {
     actionMetadata: JSON;
   }[];
 }
+
+export interface selectedItemMetaDataType {
+  index:number | null | undefined,
+  isOpen:boolean
+}
+
+

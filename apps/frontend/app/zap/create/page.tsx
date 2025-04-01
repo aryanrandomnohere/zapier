@@ -1,6 +1,6 @@
 "use client";
 import ZapCell from "@/app/components/ZapCell";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddCell from "../../components/AddCell";
 import Modal from "../../ui/Modal";
 import SelectItem from "@/app/components/SelectItem";
@@ -8,13 +8,12 @@ import { useRecoilState } from "recoil";
 import { zapCreateState } from "../../RecoilState/store/zapCreate";
 import axios from "axios";
 import { ItemType } from "@/app/types";
-
+import SideModal from "@/app/ui/SideModal";
+import {selectedItemMetaData} from "@/app/RecoilState/currentZap"
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
+  const [metaData, setMetaData] = useRecoilState(selectedItemMetaData)
   const canvasRef = useRef<HTMLDivElement | null>(null);
-
-
-
   const addCell = (order: number) => {
     setZapState(prev => {
       const updatedActions = [...prev.selectedItems];
@@ -72,6 +71,10 @@ export default function Page1() {
     console.log(response)
   }
 
+  function handleSetMetaData(index:number){
+  setMetaData((prev)=>({...prev,isOpen:true,index:index}))
+  }
+
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
     window.addEventListener("mousemove", handleMouseMove);
@@ -81,10 +84,16 @@ export default function Page1() {
     };
   }, [zapState.isDragging, zapState.initialPosition]);
 
+useEffect(()=>{
+
+},[zapState])
+
   return (
+    <>
+    <div className="flex flex-col w-full h-10 bg-stone-50 justify-center "> <div className="self-end px-1.5 py-0.5 bg-black/10 text-sm rounded justify-center mr-4 font-semibold hover:bg-black/20 hover:cursor-pointer transition-all duration-300" onClick={handlePublish} >Publish</div></div>
     <div className="flex flex-col  min-w-screen min-h-screen overflow-hidden relative bg-stone-200 dot-background">
-      <div className="flex flex-col w-full h-10 bg-stone-50 justify-center"> <div className="self-end px-1.5 py-0.5 bg-black/10 text-sm rounded justify-center mr-4 font-semibold hover:bg-black/20 hover:cursor-pointer transition-all duration-300" onClick={handlePublish} >Publish</div></div>
-      
+    {metaData.isOpen && <div className="w-full h-full flex justify-end transform-all duration-300 "><SideModal  /></div>}
+
       <div
         className={`absolute w-screen h-screen ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}
         style={{ transform: `translate(${zapState.position.x}px, ${zapState.position.y}px)` }}
@@ -92,7 +101,7 @@ export default function Page1() {
         onMouseDown={handleMouseDown}
       >
         <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-1/2 -translate-y-3/4">
-          <Modal>
+          { !zapState.selectedItems[0]?.imagePath && !zapState.selectedItems[0]?.name ? <Modal>
             <Modal.Open opens="select">
               <div >
                 <ZapCell
@@ -108,7 +117,14 @@ export default function Page1() {
             <Modal.Window name="select">
               <SelectItem  type="triggers" />
             </Modal.Window>
-          </Modal>
+          </Modal>: <div onClick={()=>handleSetMetaData(0)}> <ZapCell
+                  SelectCell={SelectCell}
+                  imagePath={zapState.selectedItems[0]?.imagePath}
+                  title={zapState.selectedItems[0]?.name || "Trigger"}
+                  subtitle="An event that starts your Zap"
+                  order={1}
+                /></div>
+                }
           <AddCell handleClick={addCell} index={1} />
           {zapState.selectedItems.length > 0 &&
             zapState.selectedItems.map((item, index) => { 
@@ -140,5 +156,6 @@ export default function Page1() {
         </div>
       </div>
     </div>
+    </>
   );
 }
