@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { zapInterface } from "../types";
+import { zapInterface } from "../../../../packages/types/src";
 
 export default function  useZaps() {
   const [loading, setLoading] = useState(false);

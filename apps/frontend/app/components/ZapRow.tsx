@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { zapInterface } from "../types";
+import { zapInterface } from "../../../../packages/types/src";
 import ToggleButton from "./buttons/ToggleButton";
 import { IoIosArrowForward } from "react-icons/io";
 import { useRouter } from "next/navigation";

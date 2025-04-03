@@ -7,7 +7,7 @@ import SelectItem from "@/app/components/SelectItem";
 import { useRecoilState } from "recoil";
 import { zapCreateState } from "../../RecoilState/store/zapCreate";
 import axios from "axios";
-import { ItemType } from "@/app/types";
+import { ItemType } from "@repo/types";
 import SideModal from "@/app/ui/SideModal";
 import {selectedItemMetaData} from "@/app/RecoilState/currentZap"
 export default function Page1() {
@@ -91,11 +91,11 @@ useEffect(()=>{
   return (
     <>
     <div className="flex flex-col w-full h-10 bg-stone-50 justify-center "> <div className="self-end px-1.5 py-0.5 bg-black/10 text-sm rounded justify-center mr-4 font-semibold hover:bg-black/20 hover:cursor-pointer transition-all duration-300" onClick={handlePublish} >Publish</div></div>
-    <div className="flex flex-col  min-w-screen min-h-screen overflow-hidden relative bg-stone-200 dot-background">
-    {metaData.isOpen && <div className="w-full h-full flex justify-end transform-all duration-300 "><SideModal  /></div>}
+    <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-stone-200 dot-background">
+    {metaData.isOpen && <div className="w-full h-full mb-44 mt-5 flex justify-end z-50 transform-all duration-300 "><SideModal  /></div>}
 
       <div
-        className={`absolute w-screen h-screen ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+        className={`absolute w-full h-full ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}
         style={{ transform: `translate(${zapState.position.x}px, ${zapState.position.y}px)` }}
         ref={canvasRef}
         onMouseDown={handleMouseDown}
@@ -131,7 +131,7 @@ useEffect(()=>{
               if(index === 0) return null
               return(
               <div key={index} className="flex flex-col">
-                <div className="zap-cell">
+                 { !zapState.selectedItems[index]?.imagePath && !zapState.selectedItems[index]?.name ? <div className="zap-cell">
                   <Modal>
                     <Modal.Open opens="select">
                       <div>
@@ -149,7 +149,14 @@ useEffect(()=>{
                       <SelectItem  type="actions" />
                     </Modal.Window>
                   </Modal>
-                </div>
+                </div>:<div onClick={()=>handleSetMetaData(index)}>  <ZapCell
+                          imagePath={item.imagePath}
+                          SelectCell={SelectCell}
+                          title={item.name|| "Action"}
+                          subtitle="The task your Zap performs"
+                          order={index + 1}
+                        />
+                      </div> }
                 <AddCell handleClick={addCell} index={index+1} />
               </div>
             )})}

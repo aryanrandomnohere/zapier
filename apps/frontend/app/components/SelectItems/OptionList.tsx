@@ -1,4 +1,4 @@
-import {  ItemType } from "@/app/types";
+import {  ItemType } from "@repo/types";
 import { RiPushpinLine } from "react-icons/ri";
 import { useRecoilState, useSetRecoilState} from "recoil";
 import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
@@ -44,7 +44,7 @@ export default function OptionList({items,title,onClose}:{items?:ItemType[],titl
     className="w-5 h-5 hover:cursor-pointer"
   />
   {item.name}</div>
-  <RiPushpinLine className="hidden group-hover:flex text-blue-400" />
+  <div className="hidden group-hover:flex text-blue-400"><RiPushpinLine size={16} /></div>
 </div>))}</div>
   )
 }

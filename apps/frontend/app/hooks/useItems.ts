@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { itemInterface } from "../types";
+import { itemInterface } from "../../../../packages/types/src";
 
 export default function useItems(type: "actions" | "triggers") {
   const [items, setItems] = useState<itemInterface[]>([]);
