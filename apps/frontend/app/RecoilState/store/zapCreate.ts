@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { ItemType } from "../../types";
+import { ItemType } from "../../../../../packages/types/src";
 
 export interface ZapCreateState {
   selectedItems: ItemType[];

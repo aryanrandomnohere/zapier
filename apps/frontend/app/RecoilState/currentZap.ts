@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { ItemType, selectedItemMetaDataType } from "../types";
+import { ItemType, selectedItemMetaDataType } from "../../../../packages/types/src";
 
 
 
