@@ -1,3 +1,4 @@
+"use client"
 import { useRecoilState} from "recoil"
 import { zapCreateState } from "../RecoilState/store/zapCreate"
 import { selectedItemMetaData } from "../RecoilState/currentZap"
@@ -7,14 +8,16 @@ import { FiEdit3 } from "react-icons/fi"
 import { BiSolidZap } from "react-icons/bi"
 import StepsStatus from "../components/MetaData/StepsStatus"
 import { IoIosArrowForward } from "react-icons/io"
-
+import AddMetaData from "../components/MetaData/AddMetaData"
+import { useState } from "react"
 // Mock data for when metadata is not available
 const mockSteps = [
   {
     stepName: "Setup",
     stepNumber: 1,
     stepDescription: "Select the app and trigger event.",
-    completed: true,
+    completed: false,
+    configurefiledRequired: true,
     fields: [
       {
         name: "app",
@@ -79,10 +82,17 @@ const mockSteps = [
     ]
   }
 ];
+const MockItem = {
+  id: "webhook",
+  name: "Webhook",
+  imagePath: "https://zapier-images.imgix.net/storage/services/6aafbb717d42f8b42f5be2e4e89e1a15.png?auto=format%2Ccompress&fit=crop&h=128&ixlib=python-3.0.0&q=50&w=128",
+  metadata: mockSteps
+} 
 
 export default function SideModal() {
   const [zap,setZapState] = useRecoilState(zapCreateState)
   const [metaData,setMetaData] = useRecoilState(selectedItemMetaData)
+  const [selectedStep,setSelectedStep] = useState<number>(0)
   const {index} = metaData;
   if(index == null) return null
   
@@ -104,13 +114,13 @@ export default function SideModal() {
       }} className="cursor-pointer"><RxCross2 size={20} /></div>
       </div>
     </div>
-    <div className="flex items-center justify-start gap-0.5 h-10 p-1 w-full">
-      {steps.map((step, i) => (<>
+    <div className="flex items-center justify-start gap-0.5 h-10 p-1 w-full border-b border-black/30">
+      {MockItem.metadata.map((step, i) => (<>
         <StepsStatus key={i} step={step} />
-        {i<steps.length-1 && <div className="text-gray-400"><IoIosArrowForward size={22} /></div>}
         </>
       ))}
     </div>
+   <div className="self-start p-2 w-full"> <AddMetaData key={selectedStep} item={MockItem} /></div>
     </div>
   )
 }
