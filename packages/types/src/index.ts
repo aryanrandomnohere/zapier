@@ -54,6 +54,7 @@ stepName:string,
 stepNumber:number,
 stepDescription?:string,
 completed:boolean | null,
+configurefiledRequired?:boolean,
 fields:{
   name:string,
   fieldInputType:string,
