@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
 import RecoilContextProvider from "./RecoilState/RecoilContextProvider";
 
 const inter = Inter({
@@ -26,7 +25,6 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased`}
       >
         <RecoilContextProvider>
-          <Navbar />
           {children}
         </RecoilContextProvider>
       </body>

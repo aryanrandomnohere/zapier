@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { itemInterface } from "../../../../packages/types/src";
+import { ItemType } from "../../../../packages/types/src";
 
 export default function useItems(type: "actions" | "triggers") {
-  const [items, setItems] = useState<itemInterface[]>([]);
+  const [items, setItems] = useState<ItemType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -11,6 +11,7 @@ export default function useItems(type: "actions" | "triggers") {
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${type}/available`)
       .then((response) => {
+        console.log(response.data.items)
         setItems(response.data.items);
         setIsLoading(false);
       })
@@ -18,6 +19,7 @@ export default function useItems(type: "actions" | "triggers") {
         setError(error);
       });
   }, [type]);
+  console.log(items)
   return {
     items,
     isLoading,

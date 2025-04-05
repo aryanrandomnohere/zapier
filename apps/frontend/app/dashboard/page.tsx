@@ -3,13 +3,15 @@ import SecondaryButton from "../components/buttons/SecondaryButton";
 import { AiOutlinePlus } from "react-icons/ai";
 import ZapTable from "../components/ZapTable";
 import { useRouter } from "next/navigation";
+import Navbar from "../components/Navbar";
 
 export default function Page() {
   const router = useRouter();
   function handleCreateZap() {
     router.push("/zap/create");
   }
-  return (
+  return (<>
+  <Navbar />
     <div className="flex justify-end w-full  items-center h-full">
       <div className="flex justify-between items-center mt-12 mr-5 min-w-7/12">
         <div className="w-full text-lg">
@@ -25,5 +27,6 @@ export default function Page() {
         </SecondaryButton>
       </div>
     </div>
+    </>
   );
 }

@@ -51,7 +51,6 @@ export default function Page1() {
 
   function SelectCell(index:number){
     setZapState(prev => ({ ...prev, selectedCell: index }));
-    console.log(zapState.selectedCell)
   }
 
   async function handlePublish(){
