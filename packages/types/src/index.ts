@@ -54,17 +54,70 @@ stepName:string,
 stepNumber:number,
 stepDescription?:string,
 completed:boolean | null,
-configurefiledRequired?:boolean,
-fields:{
-  name:string,
-  fieldInputType:string,
-  fieldLabel:string,
-  fieldPlaceholder:string,
-  fieldValue:string,
-  required:boolean,
-  options?:string[]
-}[]
+configureStepRequired?:boolean,
+fields:Field[]
 }
+
+export interface Field {
+  name: string
+  fieldInputType: string
+  fieldLabel: string
+  fieldPlaceholder: string
+  fieldValue: string | null
+  required: boolean
+  options?: FieldOption[]
+}
+
+export interface FieldOption {
+  id: string,
+  description: string,
+  type: string,
+}
+
+
+// const webhookJson: itemStepMetaData[] =[ {
+//   stepName: "Setup",
+//   stepNumber: 1,
+//   stepDescription: "Select the event.",
+//   completed: false,
+//   configureStepRequired: true,
+//   fields: [
+//     {
+//       name:"Choose Event",
+//       fieldInputType: "dropdown",
+//       fieldLabel: "Trigger event",
+//       fieldPlaceholder: "Choose an event",
+//       fieldValue: null,
+//       required: true,
+//       options: [{
+//         id: "Catch Hook",
+//         description:"Triggers when a POST, PUT, or GET request is made to the Zapier URL.",
+//         type: "instant"
+//       },{
+//         id: "Catch Raw Hook",
+//         description:"Triggers when a POST, PUT, or GET request is made to the Zapier URL. Givers the request body unparsed (max 2 MB) and also includes headers.",
+//         type: "instant"
+//       }]
+//     }
+//   ]
+// },
+// {
+//     stepName: "Configure",
+//     stepNumber: 2,
+//     stepDescription: "Configure the Zap.",
+//     completed: false,
+//     fields: [
+//       {
+//         name: "child-key",
+//         fieldInputType: "text",
+//         fieldLabel: "Pick off a Child Key",
+//         fieldPlaceholder: "Enter text..",
+//         fieldValue: null,
+//         required: false,
+//       }
+//     ]
+// }
+// ]
 
 
 
