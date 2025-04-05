@@ -1,16 +1,22 @@
 "use client"
 import {  ItemType } from "@repo/types";
 import ChangeItem from "./ChangeItem";
+import { useState } from "react";
+import MetaDataField from "./MetaDataField";
 
-export default function AddMetaData({item}: {item: ItemType}) {
-
+export default function AddMetaData({item,index,onFieldChange}: {item: ItemType,index: number,onFieldChange: (fieldName: string, value: string) => void}) {
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col justify-between h-full mb-8 w-full">
       <div className="flex flex-col w-full text-xs">
         <div className="flex gap-0.5 text-sm">App<div className="text-red-400">*</div></div>
         <ChangeItem item={item} />
       </div>
-      {/* {item.metadata?.map(step) */}
+
+      <div className="flex flex-col gap-6">{item.metadata && item.metadata[index].fields.map((field) => {
+        if(field.fieldInputType === "dropdown") {
+          return (
+          <div key={field.fieldLabel}><MetaDataField onFieldChange={onFieldChange} field={field} onChange={() => {}} /></div>
+          ) } })}</div>
     </div>
   )
 }
