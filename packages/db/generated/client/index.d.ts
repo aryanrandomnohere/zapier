@@ -4511,6 +4511,7 @@ export namespace Prisma {
   export type AvailableTriggersCountAggregateOutputType = {
     id: number
     name: number
+    metadata: number
     imagePath: number
     _all: number
   }
@@ -4531,6 +4532,7 @@ export namespace Prisma {
   export type AvailableTriggersCountAggregateInputType = {
     id?: true
     name?: true
+    metadata?: true
     imagePath?: true
     _all?: true
   }
@@ -4610,6 +4612,7 @@ export namespace Prisma {
   export type AvailableTriggersGroupByOutputType = {
     id: string
     name: string
+    metadata: JsonValue
     imagePath: string
     _count: AvailableTriggersCountAggregateOutputType | null
     _min: AvailableTriggersMinAggregateOutputType | null
@@ -4633,6 +4636,7 @@ export namespace Prisma {
   export type AvailableTriggersSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    metadata?: boolean
     imagePath?: boolean
     triggers?: boolean | AvailableTriggers$triggersArgs<ExtArgs>
     _count?: boolean | AvailableTriggersCountOutputTypeDefaultArgs<ExtArgs>
@@ -4641,12 +4645,14 @@ export namespace Prisma {
   export type AvailableTriggersSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    metadata?: boolean
     imagePath?: boolean
   }, ExtArgs["result"]["availableTriggers"]>
 
   export type AvailableTriggersSelectScalar = {
     id?: boolean
     name?: boolean
+    metadata?: boolean
     imagePath?: boolean
   }
 
@@ -4664,6 +4670,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      metadata: Prisma.JsonValue
       imagePath: string
     }, ExtArgs["result"]["availableTriggers"]>
     composites: {}
@@ -5061,6 +5068,7 @@ export namespace Prisma {
   interface AvailableTriggersFieldRefs {
     readonly id: FieldRef<"AvailableTriggers", 'String'>
     readonly name: FieldRef<"AvailableTriggers", 'String'>
+    readonly metadata: FieldRef<"AvailableTriggers", 'Json'>
     readonly imagePath: FieldRef<"AvailableTriggers", 'String'>
   }
     
@@ -6397,6 +6405,7 @@ export namespace Prisma {
     id: number
     name: number
     imagePath: number
+    metadata: number
     _all: number
   }
 
@@ -6417,6 +6426,7 @@ export namespace Prisma {
     id?: true
     name?: true
     imagePath?: true
+    metadata?: true
     _all?: true
   }
 
@@ -6496,6 +6506,7 @@ export namespace Prisma {
     id: string
     name: string
     imagePath: string
+    metadata: JsonValue
     _count: AvailableActionsCountAggregateOutputType | null
     _min: AvailableActionsMinAggregateOutputType | null
     _max: AvailableActionsMaxAggregateOutputType | null
@@ -6519,6 +6530,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     imagePath?: boolean
+    metadata?: boolean
     actions?: boolean | AvailableActions$actionsArgs<ExtArgs>
     _count?: boolean | AvailableActionsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["availableActions"]>
@@ -6527,12 +6539,14 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     imagePath?: boolean
+    metadata?: boolean
   }, ExtArgs["result"]["availableActions"]>
 
   export type AvailableActionsSelectScalar = {
     id?: boolean
     name?: boolean
     imagePath?: boolean
+    metadata?: boolean
   }
 
   export type AvailableActionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6550,6 +6564,7 @@ export namespace Prisma {
       id: string
       name: string
       imagePath: string
+      metadata: Prisma.JsonValue
     }, ExtArgs["result"]["availableActions"]>
     composites: {}
   }
@@ -6947,6 +6962,7 @@ export namespace Prisma {
     readonly id: FieldRef<"AvailableActions", 'String'>
     readonly name: FieldRef<"AvailableActions", 'String'>
     readonly imagePath: FieldRef<"AvailableActions", 'String'>
+    readonly metadata: FieldRef<"AvailableActions", 'Json'>
   }
     
 
@@ -9162,6 +9178,7 @@ export namespace Prisma {
   export const AvailableTriggersScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    metadata: 'metadata',
     imagePath: 'imagePath'
   };
 
@@ -9181,7 +9198,8 @@ export namespace Prisma {
   export const AvailableActionsScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    imagePath: 'imagePath'
+    imagePath: 'imagePath',
+    metadata: 'metadata'
   };
 
   export type AvailableActionsScalarFieldEnum = (typeof AvailableActionsScalarFieldEnum)[keyof typeof AvailableActionsScalarFieldEnum]
@@ -9460,6 +9478,7 @@ export namespace Prisma {
     NOT?: AvailableTriggersWhereInput | AvailableTriggersWhereInput[]
     id?: StringFilter<"AvailableTriggers"> | string
     name?: StringFilter<"AvailableTriggers"> | string
+    metadata?: JsonFilter<"AvailableTriggers">
     imagePath?: StringFilter<"AvailableTriggers"> | string
     triggers?: TriggerListRelationFilter
   }
@@ -9467,6 +9486,7 @@ export namespace Prisma {
   export type AvailableTriggersOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    metadata?: SortOrder
     imagePath?: SortOrder
     triggers?: TriggerOrderByRelationAggregateInput
   }
@@ -9477,6 +9497,7 @@ export namespace Prisma {
     OR?: AvailableTriggersWhereInput[]
     NOT?: AvailableTriggersWhereInput | AvailableTriggersWhereInput[]
     name?: StringFilter<"AvailableTriggers"> | string
+    metadata?: JsonFilter<"AvailableTriggers">
     imagePath?: StringFilter<"AvailableTriggers"> | string
     triggers?: TriggerListRelationFilter
   }, "id">
@@ -9484,6 +9505,7 @@ export namespace Prisma {
   export type AvailableTriggersOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    metadata?: SortOrder
     imagePath?: SortOrder
     _count?: AvailableTriggersCountOrderByAggregateInput
     _max?: AvailableTriggersMaxOrderByAggregateInput
@@ -9496,6 +9518,7 @@ export namespace Prisma {
     NOT?: AvailableTriggersScalarWhereWithAggregatesInput | AvailableTriggersScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AvailableTriggers"> | string
     name?: StringWithAggregatesFilter<"AvailableTriggers"> | string
+    metadata?: JsonWithAggregatesFilter<"AvailableTriggers">
     imagePath?: StringWithAggregatesFilter<"AvailableTriggers"> | string
   }
 
@@ -9561,6 +9584,7 @@ export namespace Prisma {
     id?: StringFilter<"AvailableActions"> | string
     name?: StringFilter<"AvailableActions"> | string
     imagePath?: StringFilter<"AvailableActions"> | string
+    metadata?: JsonFilter<"AvailableActions">
     actions?: ActionListRelationFilter
   }
 
@@ -9568,6 +9592,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imagePath?: SortOrder
+    metadata?: SortOrder
     actions?: ActionOrderByRelationAggregateInput
   }
 
@@ -9578,6 +9603,7 @@ export namespace Prisma {
     NOT?: AvailableActionsWhereInput | AvailableActionsWhereInput[]
     name?: StringFilter<"AvailableActions"> | string
     imagePath?: StringFilter<"AvailableActions"> | string
+    metadata?: JsonFilter<"AvailableActions">
     actions?: ActionListRelationFilter
   }, "id">
 
@@ -9585,6 +9611,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imagePath?: SortOrder
+    metadata?: SortOrder
     _count?: AvailableActionsCountOrderByAggregateInput
     _max?: AvailableActionsMaxOrderByAggregateInput
     _min?: AvailableActionsMinOrderByAggregateInput
@@ -9597,6 +9624,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"AvailableActions"> | string
     name?: StringWithAggregatesFilter<"AvailableActions"> | string
     imagePath?: StringWithAggregatesFilter<"AvailableActions"> | string
+    metadata?: JsonWithAggregatesFilter<"AvailableActions">
   }
 
   export type ZapRunWhereInput = {
@@ -9840,6 +9868,7 @@ export namespace Prisma {
   export type AvailableTriggersCreateInput = {
     id?: string
     name: string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: string
     triggers?: TriggerCreateNestedManyWithoutTypeInput
   }
@@ -9847,6 +9876,7 @@ export namespace Prisma {
   export type AvailableTriggersUncheckedCreateInput = {
     id?: string
     name: string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: string
     triggers?: TriggerUncheckedCreateNestedManyWithoutTypeInput
   }
@@ -9854,6 +9884,7 @@ export namespace Prisma {
   export type AvailableTriggersUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
     triggers?: TriggerUpdateManyWithoutTypeNestedInput
   }
@@ -9861,6 +9892,7 @@ export namespace Prisma {
   export type AvailableTriggersUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
     triggers?: TriggerUncheckedUpdateManyWithoutTypeNestedInput
   }
@@ -9868,18 +9900,21 @@ export namespace Prisma {
   export type AvailableTriggersCreateManyInput = {
     id?: string
     name: string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: string
   }
 
   export type AvailableTriggersUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type AvailableTriggersUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
   }
 
@@ -9934,6 +9969,7 @@ export namespace Prisma {
     id?: string
     name: string
     imagePath?: string
+    metadata?: JsonNullValueInput | InputJsonValue
     actions?: ActionCreateNestedManyWithoutActionDetailsInput
   }
 
@@ -9941,6 +9977,7 @@ export namespace Prisma {
     id?: string
     name: string
     imagePath?: string
+    metadata?: JsonNullValueInput | InputJsonValue
     actions?: ActionUncheckedCreateNestedManyWithoutActionDetailsInput
   }
 
@@ -9948,6 +9985,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
     actions?: ActionUpdateManyWithoutActionDetailsNestedInput
   }
 
@@ -9955,6 +9993,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
     actions?: ActionUncheckedUpdateManyWithoutActionDetailsNestedInput
   }
 
@@ -9962,18 +10001,21 @@ export namespace Prisma {
     id?: string
     name: string
     imagePath?: string
+    metadata?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
   }
 
   export type ZapRunCreateInput = {
@@ -10240,6 +10282,28 @@ export namespace Prisma {
     zapId?: SortOrder
     triggerId?: SortOrder
   }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type TriggerListRelationFilter = {
     every?: TriggerWhereInput
@@ -10254,6 +10318,7 @@ export namespace Prisma {
   export type AvailableTriggersCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    metadata?: SortOrder
     imagePath?: SortOrder
   }
 
@@ -10267,6 +10332,31 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imagePath?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type AvailableActionsRelationFilter = {
@@ -10307,6 +10397,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imagePath?: SortOrder
+    metadata?: SortOrder
   }
 
   export type AvailableActionsMaxOrderByAggregateInput = {
@@ -10319,28 +10410,6 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     imagePath?: SortOrder
-  }
-  export type JsonFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type ZapRunOutboxNullableRelationFilter = {
@@ -10362,31 +10431,6 @@ export namespace Prisma {
   export type ZapRunMinOrderByAggregateInput = {
     id?: SortOrder
     zapId?: SortOrder
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type ZapRunRelationFilter = {
@@ -11136,12 +11180,14 @@ export namespace Prisma {
   export type AvailableTriggersCreateWithoutTriggersInput = {
     id?: string
     name: string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: string
   }
 
   export type AvailableTriggersUncheckedCreateWithoutTriggersInput = {
     id?: string
     name: string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: string
   }
 
@@ -11191,12 +11237,14 @@ export namespace Prisma {
   export type AvailableTriggersUpdateWithoutTriggersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
   }
 
   export type AvailableTriggersUncheckedUpdateWithoutTriggersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
   }
 
@@ -11270,12 +11318,14 @@ export namespace Prisma {
     id?: string
     name: string
     imagePath?: string
+    metadata?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsUncheckedCreateWithoutActionsInput = {
     id?: string
     name: string
     imagePath?: string
+    metadata?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsCreateOrConnectWithoutActionsInput = {
@@ -11325,12 +11375,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsUncheckedUpdateWithoutActionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
+    metadata?: JsonNullValueInput | InputJsonValue
   }
 
   export type ActionCreateWithoutActionDetailsInput = {

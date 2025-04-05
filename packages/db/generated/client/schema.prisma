@@ -38,6 +38,7 @@ model Trigger {
 model AvailableTriggers {
   id        String    @id @default(uuid())
   name      String
+  metadata  Json      @default("{}")
   imagePath String    @default("")
   triggers  Trigger[]
 }
@@ -56,6 +57,7 @@ model AvailableActions {
   name      String
   imagePath String   @default("")
   actions   Action[]
+  metadata  Json     @default("{}")
 }
 
 model ZapRun {
