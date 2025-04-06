@@ -18,13 +18,14 @@ model User {
 }
 
 model Zap {
-  id        String   @id @default(uuid())
-  triggerId String
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  trigger   Trigger?
-  actions   Action[]
-  zapRuns   ZapRun[]
+  id              String   @id @default(uuid())
+  triggerId       String
+  triggerMetadata Json     @default("{}")
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  trigger         Trigger?
+  actions         Action[]
+  zapRuns         ZapRun[]
 }
 
 model Trigger {

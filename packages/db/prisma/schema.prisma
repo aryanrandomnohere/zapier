@@ -20,6 +20,7 @@ model User {
 model Zap {
 id String  @id @default(uuid())
 triggerId  String
+triggerMetadata Json   @default("{}")
 userId     Int
 user       User   @relation(fields: [userId],references: [id])
 trigger    Trigger? 
