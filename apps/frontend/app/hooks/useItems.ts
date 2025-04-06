@@ -11,7 +11,6 @@ export default function useItems(type: "actions" | "triggers") {
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${type}/available`)
       .then((response) => {
-        console.log(response.data.items)
         setItems(response.data.items);
         setIsLoading(false);
       })
@@ -19,7 +18,6 @@ export default function useItems(type: "actions" | "triggers") {
         setError(error);
       });
   }, [type]);
-  console.log(items)
   return {
     items,
     isLoading,

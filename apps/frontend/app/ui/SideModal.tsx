@@ -116,14 +116,64 @@ export default function SideModal() {
     });
   }, [StepIndex, zap.selectedItems[index]?.metadata]);
 
-  const handleFieldChange = (fieldName: string, value: string) => {
-    // This function is not being used currently
-    console.log("Field changed:", fieldName, value);
-  };
+  const handleFieldChange = (fieldNumber: number, value: string) => {
 
+    if(!zap.selectedItems[index]?.metadata) return;
+    setZapState(prev => {
+      // Create a deep copy of the previous state
+      const newState = {...prev};
+      const newSelectedItems = [...newState.selectedItems];
+      
+      // Create a deep copy of the item we're modifying
+      const updatedItem = {...newSelectedItems[index]};
+      if(!updatedItem.metadata) return;
+      const updatedMetadata = [...updatedItem.metadata];
+      const updatedStep = {...updatedMetadata[StepIndex]};
+      const updatedFields = [...updatedStep.fields];
+      
+      // Find and update the specific field
+    
+        updatedFields[fieldNumber] = {
+          ...updatedFields[fieldNumber],
+          fieldValue: value
+        };
+      
+  
+      // Reconstruct the state with our updates
+      updatedStep.fields = updatedFields;
+      updatedMetadata[StepIndex] = updatedStep;
+      updatedItem.metadata = updatedMetadata;
+      newSelectedItems[index] = updatedItem;
+      return {
+        ...newState,
+        selectedItems: newSelectedItems
+      };
+    });
+  };
   const handleContinue = () => {
     if (isCurrentStepValid) {
-      if (StepIndex < zap.selectedItems[index]?.metadata.length - 1) {
+      if (zap.selectedItems[index]?.metadata && StepIndex < zap.selectedItems[index]?.metadata.length - 1) {
+        setZapState(prev => {
+          // Create a deep copy of the state
+          const newSelectedItems = [...prev.selectedItems];
+          const updatedItem = JSON.parse(JSON.stringify(newSelectedItems[index]));
+          
+          if(!updatedItem?.metadata) return prev;
+          
+          // Update the completed status immutably
+          updatedItem.metadata[StepIndex] = {
+            ...updatedItem.metadata[StepIndex],
+            completed: true
+          };
+          
+          // Update the item in the array
+          newSelectedItems[index] = updatedItem;
+  
+          return {
+            ...prev,
+            selectedItems: newSelectedItems
+          };
+        });
         setStepIndex(StepIndex + 1);
       } else {
         // Handle completion
@@ -182,13 +232,13 @@ if (!zap.selectedItems[index]?.metadata) {
           <button 
             onClick={handleContinue}
             disabled={!isCurrentStepValid}
-            className={`w-full py-2 rounded text-sm font-bold text-center transition-all duration-200
+            className={`w-full py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer
               ${isCurrentStepValid 
                 ? 'bg-blue-700 text-white hover:bg-blue-800' 
                 : 'bg-black/10 text-black/40 cursor-not-allowed'
               } ${StepIndex === zap.selectedItems[index]?.metadata.length - 1 ? "!bg-blue-500" : ""}`}
           >
-            {StepIndex === zap.selectedItems[index]?.metadata.length - 1 ? 'Complete' : 'Continue'}
+            {isCurrentStepValid ? 'Continue' : 'To continue, choose an event'}
           </button>
         </div>
       </div>

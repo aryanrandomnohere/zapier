@@ -9,13 +9,13 @@ import { IoSearch } from "react-icons/io5"
 
 interface MetaDataFieldProps {
   field: Field
-  onChange: (value: string) => void
-  onFieldChange: (fieldName: string, value: string) => void
+  onFieldChange: (fieldNumber: number, value: string) => void
 }
 
-export default function MetaDataField({ field, onChange, onFieldChange }: MetaDataFieldProps) {
+export default function MetaDataField({ field, onFieldChange }: MetaDataFieldProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const [value, setValue] = useState(field.fieldValue || field.fieldPlaceholder)
 
   if (field.fieldInputType === "dropdown") {
     return (
@@ -52,15 +52,13 @@ export default function MetaDataField({ field, onChange, onFieldChange }: MetaDa
             <div className="max-h-60 overflow-y-auto">
               {field.options?.filter(option => 
                 option.id.toLowerCase().includes(searchTerm.toLowerCase())
-              ).map((option: FieldOption, index: number) => (<div className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium">
+              ).map((option: FieldOption, index: number) => (<div key={index}  onClick={() => {
+                onFieldChange(field.fieldNumber, option.id)
+                setIsOpen(false)
+              }} className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium">
                 <div
-                  key={index}
                   className="flex items-center gap-1 font-semibold"
-                  onClick={() => {
-                    onChange(option.id)
-                    onFieldChange("fieldValue", option.id)
-                    setIsOpen(false)
-                  }}
+                 
                 >
                   {option.id}<div className="flex items-center gap-1 text-xs font-semibold bg-yellow-500/20 rounded px-1"> <BiSolidZap className="border border-black rounded-full p-[0.5px]" size={11} />  {option.type}</div>
                 </div>
@@ -74,14 +72,33 @@ export default function MetaDataField({ field, onChange, onFieldChange }: MetaDa
     )
   }
 
+  if (field.fieldInputType === "text") {
+    return (
+      <div className="flex flex-col relative w-full">
+        <div className="flex gap-1 text-xs font-bold">{field.fieldLabel} <div className="text-red-400">*</div></div>
+      <input
+        type={field.fieldInputType}
+        placeholder={field.fieldPlaceholder}
+          defaultValue={field.fieldValue || undefined}
+          onChange={(e) => onFieldChange(field.fieldNumber, e.target.value)}
+          className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
+          required={field.required}
+        />
+      </div>
+    )
+  }
+  console.log(field)
   return (
+    <div className="flex flex-col relative w-full">
+      <div className="flex gap-1 text-xs font-bold">{field.fieldLabel} <div className="text-red-400">*</div></div>
     <input
       type={field.fieldInputType}
       placeholder={field.fieldPlaceholder}
-      defaultValue={field.fieldValue || undefined}
-      onChange={(e) => onChange(e.target.value)}
-      className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
-      required={field.required}
-    />
+        defaultValue={field.fieldValue || undefined}
+        onChange={(e) => onFieldChange(field.fieldNumber, e.target.value)}
+        className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
+        required={field.required}
+      />
+    </div>
   )
 }

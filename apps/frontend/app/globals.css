@@ -10,3 +10,8 @@
   background-image: radial-gradient(rgb(227, 217, 196) 10%, transparent 10%);
   background-size: 16px 16px; /* Adjust dot spacing */
 }
+* {
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}

@@ -45,6 +45,7 @@ zapRouter.post("/",AuthMiddleware,async (req:extendedRequest,res:Response)=>{
         data:{
             userId,
             triggerId:"", 
+            triggerMetadata:parsedData.data.triggerMetadata,
             actions:{
                 create: parsedData.data.actions.map((x,index)=>({
                 actionId:x.actionId,
@@ -69,7 +70,7 @@ zapRouter.post("/",AuthMiddleware,async (req:extendedRequest,res:Response)=>{
     })
     return zap.id;
 })
-res.status(400).json({
+res.status(200).json({
     zapId
 })
 })

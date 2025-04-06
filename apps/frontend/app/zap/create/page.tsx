@@ -91,7 +91,7 @@ useEffect(()=>{
     <>
     <div className="flex flex-col w-full h-10 bg-stone-50 justify-center "> <div className="self-end px-1.5 py-0.5 bg-black/10 text-sm rounded justify-center mr-4 font-semibold hover:bg-black/20 hover:cursor-pointer transition-all duration-300" onClick={handlePublish} >Publish</div></div>
     <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-stone-200 dot-background">
-    {metaData.isOpen && <div className="w-full h-full mb-44 mt-5 flex justify-end z-50 transform-all duration-300"><SideModal  /></div>}
+    {metaData.isOpen && <div className="w-full h-full mb-28 mt-5 flex justify-end z-50 transform-all duration-300"><SideModal  /></div>}
 
       <div
         className={`absolute w-full h-full ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}

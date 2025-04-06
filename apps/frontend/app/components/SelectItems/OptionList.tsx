@@ -10,7 +10,6 @@ export default function OptionList({items,title,onClose}:{items?:ItemType[],titl
   if(!items) return null  
   
   function handleClick(item:ItemType,index:number){ 
-    console.log(item,index,Item.selectedCell)
 
     if(Item.selectedCell === undefined) return
     setItem((zap)=>{ 
