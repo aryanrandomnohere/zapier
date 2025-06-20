@@ -86,11 +86,6 @@ export const extendedItems = [
         imagePath:"https://zapier-images.imgix.net/storage/developer_cli/ef225c9f6bbf656ffa1dffcb667f512b.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64"
     },
     {
-    id:"Email",
-    name:"Email",
-    imagePath:"https://zapier-images.imgix.net/storage/services/8e4d4d03bfde581f2550934c589fb077.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64"
-    },
-    {
         id:"RSS",
         name:"RSS",
         imagePath:"https://zapier-images.imgix.net/storage/services/aa4f3d27fda1e4ca2e1a64c3e62d3b7c.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64"

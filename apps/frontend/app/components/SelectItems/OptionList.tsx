@@ -11,7 +11,7 @@ export default function OptionList({items,title,onClose}:{items?:ItemType[],titl
   
   function handleClick(item:ItemType,index:number){ 
 
-    if(Item.selectedCell === undefined) return
+    if(Item.selectedCell === undefined) return;
     setItem((zap)=>{ 
       if(zap.selectedCell === null) return zap
       if(zap.selectedCell === 0) {

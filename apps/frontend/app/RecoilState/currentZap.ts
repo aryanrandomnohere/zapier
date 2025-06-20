@@ -23,6 +23,16 @@ export const currentZap = atom<null | number>({
     default: null
 })
 
+export const configureStepDetails = atom({
+    key:"configureStep",
+    default:{
+        configureStep:false,
+        fieldIndex:-1,
+        optionIndex:-1,
+    }
+
+})
+
 
 export const selectedItemMetaData = atom< selectedItemMetaDataType>({
     key:"",

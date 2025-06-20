@@ -186,7 +186,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/aryanrathore/Desktop/zapier/packages/db/generated/client",
+      "value": "/Users/aryanrathore/Documents/zapier/packages/db/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -200,7 +200,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/aryanrathore/Desktop/zapier/packages/db/prisma/schema.prisma",
+    "sourceFilePath": "/Users/aryanrathore/Documents/zapier/packages/db/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

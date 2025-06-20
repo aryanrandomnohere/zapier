@@ -9,7 +9,7 @@ import { IoSearch } from "react-icons/io5"
 
 interface MetaDataFieldProps {
   field: Field
-  onFieldChange: (fieldNumber: number, value: string) => void
+  onFieldChange: (fieldNumber: number, value: string,configureStep?:boolean ) => void
 }
 
 export default function MetaDataField({ field, onFieldChange }: MetaDataFieldProps) {
@@ -53,7 +53,7 @@ export default function MetaDataField({ field, onFieldChange }: MetaDataFieldPro
               {field.options?.filter(option => 
                 option.id.toLowerCase().includes(searchTerm.toLowerCase())
               ).map((option: FieldOption, index: number) => (<div key={index}  onClick={() => {
-                onFieldChange(field.fieldNumber, option.id)
+                onFieldChange(field.fieldNumber, option.id, option.configureStepRequired)
                 setIsOpen(false)
               }} className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium">
                 <div

@@ -18,49 +18,75 @@ const mockSteps: itemStepMetaData[] = [
     stepNumber: 1,
     stepDescription: "Select the app and trigger event.",
     completed: false,
-    configurefiledRequired: true,
     fields: [
       {
         name: "triggerEvent",
+        fieldNumber: 0,
         fieldInputType: "dropdown",
         fieldLabel: "Trigger Event",
         fieldPlaceholder: "Select a trigger event",
-        fieldValue: "Custom Frequency",
-        required: true,
-        options: [{id: "Every Day", description: "Every Day", type: "instant"}, {id: "Every Week", description: "Every Week", type: "instant"}, {id: "Custom Frequency", description: "Custom Frequency", type: "instant"}],
-      }
-    ]
-  },
-  {
-    stepName: "Configure",
-    stepNumber: 2,
-    stepDescription: "Define the scheduling frequency.",
-    completed: false,
-    fields: [
-      {
-        name: "interval",
-        fieldInputType: "number",
-        fieldLabel: "Interval",
-        fieldPlaceholder: "Enter interval in minutes",
-        fieldValue: "15",
-        required: true,
-      },
-      {
-        name: "timeZone",
-        fieldInputType: "dropdown",
-        fieldLabel: "Time Zone",
-        fieldPlaceholder: "Select a time zone",
-        fieldValue: "UTC",
+        fieldValue: "",
         required: true,
         options: [
-          { id: "UTC", description: "UTC", type: "timezone" },
-          { id: "PST", description: "PST", type: "timezone" },
-          { id: "EST", description: "EST", type: "timezone" },
-          { id: "IST", description: "IST", type: "timezone" },
+          {
+            id: "Catch Hook",
+            description: "Triggers when a POST, PUT, or GET request is made to a Zapier URL.",
+            type: "instant",
+            configureStepRequired: true,
+            configureStep: {
+              stepName: "Configure",
+              stepNumber: 2,
+              stepDescription: "Define the scheduling frequency.",
+              completed: false,
+              fields: [
+                {
+                  name: "Child Key",
+                  fieldNumber: 1,
+                  fieldInputType: "text",
+                  fieldLabel: "Pick off a Child Key",
+                  fieldPlaceholder: "Enter text..",
+                  fieldValue: "",
+                  required: false,
+                }
+              ]
+            },
+          },
+          {
+            id: "Catch Raw Hook",
+            description: "Triggers when a POST, PUT, or GET request is made to a Zapier URL. Gives the request body unparsed (max 2 MB) and also includes headers.",
+            type: "instant",
+            configureStepRequired:false,
+            
+          },
+          {
+            id: "Retrieve Poll",
+            description: "Triggers when a request to a URL returns new entries.",
+            type: "polling",
+            configureStepRequired:true,
+            configureStep:{
+              stepName: "Configure",
+              stepNumber: 2,
+              stepDescription: "Define the scheduling frequency.",
+              completed: false,
+              fields: [
+                {
+                  name: "Child Key",
+                  fieldNumber: 1,
+                  fieldInputType: "text",
+                  fieldLabel: "Pick off a Child Key",
+                  fieldPlaceholder: "Enter text..",
+                  fieldValue: "",
+                  required: false,
+                }
+              ]
+            }
+          }
         ]
+        ,
       }
     ]
   },
+  
   {
     stepName: "Test",
     stepNumber: 3,
@@ -69,14 +95,15 @@ const mockSteps: itemStepMetaData[] = [
     fields: [
       {
         name: "testRun",
+        fieldNumber: 3,
         fieldInputType: "dropdown",
         fieldLabel: "Run a test?",
         fieldPlaceholder: "Select Yes or No",
         fieldValue: "Yes",
         required: true,
         options: [
-          { id: "Yes", description: "Yes", type: "boolean" },
-          { id: "No", description: "No", type: "boolean" },
+          { id: "Yes", description: "Yes", type: "boolean", configureStepRequired:false },
+          { id: "No", description: "No", type: "boolean", configureStepRequired:false },
         ]
       }
     ]
@@ -95,11 +122,11 @@ export default function SideModal() {
   const [selectedStep, setSelectedStep] = useState<number>(0)
   const {index} = metaData;
   const [StepIndex, setStepIndex] = useState(0)
-
+  const [configureStepRequired, setConfigureStepRequired] = useState(false);
   if(index == null) return null
   
   const steps = zap.selectedItems[index]?.metadata && 
-                zap.selectedItems[index]?.metadata.length > 0 
+                zap.selectedItems[index]?.length > 0 
                 ? zap.selectedItems[index].metadata 
                 : mockSteps;
 
@@ -116,8 +143,12 @@ export default function SideModal() {
     });
   }, [StepIndex, zap.selectedItems[index]?.metadata]);
 
-  const handleFieldChange = (fieldNumber: number, value: string) => {
-
+  const handleFieldChange = (fieldNumber: number, value: string, configureStep?:boolean) => {
+    if(configureStep){
+      setConfigureStepRequired(configureStep)
+    }else{
+      setConfigureStepRequired(false);
+    }
     if(!zap.selectedItems[index]?.metadata) return;
     setZapState(prev => {
       // Create a deep copy of the previous state
@@ -213,10 +244,15 @@ if (!zap.selectedItems[index]?.metadata) {
             </div>
           </div>
         </div>
+      
+        {/* selectedField */}
         <div className="flex items-center justify-start gap-0.5 h-10 p-1 w-full border-b border-black/10">
-          {zap.selectedItems[index]?.metadata.map((step, i) => (
-            <StepsStatus key={i} stepIndex={StepIndex} unique={i} step={step} setIndex={setStepIndex} />
-          ))}
+     
+             <StepsStatus stepIndex={StepIndex} unique={0} step={zap.selectedItems[index]?.metadata[0]} setIndex={setStepIndex} />
+             {configureStepRequired && <StepsStatus stepIndex={StepIndex} unique={-1} step={zap.selectedItems[index]?.metadata[0].fields[0]?.options[0].configureStep}/>}
+             <StepsStatus stepIndex={StepIndex} unique={1} step={zap.selectedItems[index]?.metadata[1]} setIndex={setStepIndex} />
+             
+
         </div>
         <div className="self-start p-2 w-full">
           <AddMetaData 
