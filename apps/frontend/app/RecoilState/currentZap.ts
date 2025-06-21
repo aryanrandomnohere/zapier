@@ -26,13 +26,22 @@ export const currentZap = atom<null | number>({
 export const configureStepDetails = atom({
     key:"configureStep",
     default:{
-        configureStep:false,
+        isRequired:false,
         fieldIndex:-1,
         optionIndex:-1,
     }
 
 })
 
+export const OptionChanged = atom({
+    key:"optionChanged",
+    default:0
+})
+
+export const onStep = atom({
+    key:"OnStep",
+    default: 0
+})
 
 export const selectedItemMetaData = atom< selectedItemMetaDataType>({
     key:"",

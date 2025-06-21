@@ -1,22 +1,26 @@
 "use client"
+import { configureStepDetails, onStep, OptionChanged } from "@/app/RecoilState/currentZap"
 import { Field, FieldOption} from "@repo/types"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { BiSolidZap } from "react-icons/bi"
 import { FaArrowRightArrowLeft } from "react-icons/fa6"
 import { IoSearch } from "react-icons/io5"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
 
 
 interface MetaDataFieldProps {
   field: Field
-  onFieldChange: (fieldNumber: number, value: string,configureStep?:boolean ) => void
+  onFieldChange: (fieldNumber: number, value: string, type:string ) => void
 }
 
 export default function MetaDataField({ field, onFieldChange }: MetaDataFieldProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [value, setValue] = useState(field.fieldValue || field.fieldPlaceholder)
-
+  const [configureStepIndex, setConfigureStepIndex] = useRecoilState(configureStepDetails);
+  const setOptionChanged = useSetRecoilState(OptionChanged);
+  const stepIndex = useRecoilValue(onStep);
   if (field.fieldInputType === "dropdown") {
     return (
       <div className="flex flex-col relative w-full">
@@ -53,8 +57,12 @@ export default function MetaDataField({ field, onFieldChange }: MetaDataFieldPro
               {field.options?.filter(option => 
                 option.id.toLowerCase().includes(searchTerm.toLowerCase())
               ).map((option: FieldOption, index: number) => (<div key={index}  onClick={() => {
-                onFieldChange(field.fieldNumber, option.id, option.configureStepRequired)
+                
+                if(stepIndex == -1 )onFieldChange(field.fieldNumber, option.id, "configuration")
+                else onFieldChange(field.fieldNumber, option.id,"setup")
                 setIsOpen(false)
+                setOptionChanged((option)=>option++)
+                 if(stepIndex == 0)  setConfigureStepIndex({isRequired:option.configureStepRequired || false,fieldIndex:field.fieldNumber,optionIndex: option.optionIndex })
               }} className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium">
                 <div
                   className="flex items-center gap-1 font-semibold"
@@ -80,7 +88,11 @@ export default function MetaDataField({ field, onFieldChange }: MetaDataFieldPro
         type={field.fieldInputType}
         placeholder={field.fieldPlaceholder}
           defaultValue={field.fieldValue || undefined}
-          onChange={(e) => onFieldChange(field.fieldNumber, e.target.value)}
+          onChange={(e) =>{
+            if(stepIndex == -1) onFieldChange(field.fieldNumber, e.target.value, "configuration")
+            else onFieldChange(field.fieldNumber, e.target.value,"setup")
+            }}
+            
           className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
           required={field.required}
         />

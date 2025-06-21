@@ -50,7 +50,7 @@ export interface selectedItemMetaDataType {
 }
 
 export interface itemStepMetaData {
-stepName:string,
+stepName:string | undefined,
 stepNumber:number,
 stepDescription?:string,
 completed:boolean | null,
@@ -70,6 +70,7 @@ export interface Field {
 
 export interface FieldOption {
   id: string,
+   optionIndex:number,
   description: string,
   type: string,
   configureStepRequired:boolean,

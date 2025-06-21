@@ -1,13 +1,12 @@
 "use client"
-import { useRecoilState} from "recoil"
+import { useRecoilState, useRecoilValue} from "recoil"
 import { zapCreateState } from "../RecoilState/store/zapCreate"
-import { selectedItemMetaData } from "@/app/RecoilState/currentZap"
+import { configureStepDetails, onStep, OptionChanged, selectedItemMetaData } from "@/app/RecoilState/currentZap"
 import { SlSizeFullscreen } from "react-icons/sl"
 import { RxCross2 } from "react-icons/rx"
 import { FiEdit3 } from "react-icons/fi"
 import { BiSolidZap } from "react-icons/bi"
 import StepsStatus from "../components/MetaData/StepsStatus"
-import { IoIosArrowForward } from "react-icons/io"
 import AddMetaData from "../components/MetaData/AddMetaData"
 import { useState, useMemo } from "react"
 import { itemStepMetaData, selectedItemMetaDataType } from "@repo/types"
@@ -30,6 +29,7 @@ const mockSteps: itemStepMetaData[] = [
         options: [
           {
             id: "Catch Hook",
+            optionIndex:0,
             description: "Triggers when a POST, PUT, or GET request is made to a Zapier URL.",
             type: "instant",
             configureStepRequired: true,
@@ -41,7 +41,7 @@ const mockSteps: itemStepMetaData[] = [
               fields: [
                 {
                   name: "Child Key",
-                  fieldNumber: 1,
+                  fieldNumber: 0,
                   fieldInputType: "text",
                   fieldLabel: "Pick off a Child Key",
                   fieldPlaceholder: "Enter text..",
@@ -53,6 +53,7 @@ const mockSteps: itemStepMetaData[] = [
           },
           {
             id: "Catch Raw Hook",
+             optionIndex:1,
             description: "Triggers when a POST, PUT, or GET request is made to a Zapier URL. Gives the request body unparsed (max 2 MB) and also includes headers.",
             type: "instant",
             configureStepRequired:false,
@@ -60,25 +61,63 @@ const mockSteps: itemStepMetaData[] = [
           },
           {
             id: "Retrieve Poll",
+             optionIndex:2,
             description: "Triggers when a request to a URL returns new entries.",
             type: "polling",
             configureStepRequired:true,
             configureStep:{
               stepName: "Configure",
-              stepNumber: 2,
+              stepNumber: -1,
               stepDescription: "Define the scheduling frequency.",
               completed: false,
               fields: [
                 {
-                  name: "Child Key",
+                  name: "url",
+                  fieldNumber: 0,
+                  fieldInputType: "text",
+                  fieldLabel: "URL",
+                  fieldPlaceholder: "Enter text..",
+                  fieldValue: "",
+                  required: true,
+                },
+                {
+                  name: "key",
                   fieldNumber: 1,
                   fieldInputType: "text",
-                  fieldLabel: "Pick off a Child Key",
+                  fieldLabel: "Key",
+                  fieldPlaceholder: "Enter text..",
+                  fieldValue: "",
+                  required: false,
+                },
+                    {
+                  name: "deduplication_key",
+                  fieldNumber: 2,
+                  fieldInputType: "text",
+                  fieldLabel: "Deduplication Key",
+                  fieldPlaceholder: "Enter text..",
+                  fieldValue: "",
+                  required: false,
+                },
+                    {
+                  name: "xpath",
+                  fieldNumber: 1,
+                  fieldInputType: "text",
+                  fieldLabel: "Xpath",
+                  fieldPlaceholder: "Enter text..",
+                  fieldValue: "",
+                  required: false,
+                },
+                  {
+                  name: "basic_auth",
+                  fieldNumber: 1,
+                  fieldInputType: "text",
+                  fieldLabel: "Basic Auth",
                   fieldPlaceholder: "Enter text..",
                   fieldValue: "",
                   required: false,
                 }
               ]
+              
             }
           }
         ]
@@ -95,15 +134,15 @@ const mockSteps: itemStepMetaData[] = [
     fields: [
       {
         name: "testRun",
-        fieldNumber: 3,
+        fieldNumber: 0,
         fieldInputType: "dropdown",
         fieldLabel: "Run a test?",
         fieldPlaceholder: "Select Yes or No",
         fieldValue: "Yes",
         required: true,
         options: [
-          { id: "Yes", description: "Yes", type: "boolean", configureStepRequired:false },
-          { id: "No", description: "No", type: "boolean", configureStepRequired:false },
+          { id: "Yes", optionIndex:0, description: "Yes", type: "boolean", configureStepRequired:false },
+          { id: "No", optionIndex:1, description: "No", type: "boolean", configureStepRequired:false },
         ]
       }
     ]
@@ -121,8 +160,9 @@ export default function SideModal() {
   const [metaData, setMetaData] = useRecoilState<selectedItemMetaDataType>(selectedItemMetaData)
   const [selectedStep, setSelectedStep] = useState<number>(0)
   const {index} = metaData;
-  const [StepIndex, setStepIndex] = useState(0)
-  const [configureStepRequired, setConfigureStepRequired] = useState(false);
+  const [StepIndex, setStepIndex] = useRecoilState(onStep)
+  const configureStepRequired = useRecoilValue(configureStepDetails);
+  const optionChanged = useRecoilState(OptionChanged);
   if(index == null) return null
   
   const steps = zap.selectedItems[index]?.metadata && 
@@ -131,35 +171,37 @@ export default function SideModal() {
                 : mockSteps;
 
   const isCurrentStepValid = useMemo(() => {
-    const currentStep = steps[StepIndex];
-    if (!currentStep?.fields) return false;
+    const currentStep = StepIndex != -1 ? zap.selectedItems[index]?.metadata[StepIndex]: zap.selectedItems[index]?.metadata[0].fields[configureStepRequired.fieldIndex].options[configureStepRequired.optionIndex].configureStep
+    if (!currentStep?.fields) {
+      console.log("Field does not exist returnning")
+      return false;
+    }
 
     // Check if all required fields in the current step have values
+    console.log(currentStep)
     return currentStep.fields.every(field => {
       if (field.required) {
+        console.log("using some logic to check if it's valid or not", field.fieldValue)
         return field.fieldValue && field.fieldValue.trim() !== '';
       }
+      console.log('Its valid')
       return true;
     });
-  }, [StepIndex, zap.selectedItems[index]?.metadata]);
+  }, [StepIndex, optionChanged]);
 
-  const handleFieldChange = (fieldNumber: number, value: string, configureStep?:boolean) => {
-    if(configureStep){
-      setConfigureStepRequired(configureStep)
-    }else{
-      setConfigureStepRequired(false);
-    }
+  const handleFieldChange = (fieldNumber: number, value: string, type:string) => {
     if(!zap.selectedItems[index]?.metadata) return;
-    setZapState(prev => {
+   if(type != "configuration"){ setZapState(prev => {
       // Create a deep copy of the previous state
       const newState = {...prev};
       const newSelectedItems = [...newState.selectedItems];
       
       // Create a deep copy of the item we're modifying
       const updatedItem = {...newSelectedItems[index]};
-      if(!updatedItem.metadata) return;
+      if(!updatedItem.metadata) return prev;
       const updatedMetadata = [...updatedItem.metadata];
       const updatedStep = {...updatedMetadata[StepIndex]};
+      console.log("Field is not itterable", updatedStep.fields)
       const updatedFields = [...updatedStep.fields];
       
       // Find and update the specific field
@@ -179,39 +221,137 @@ export default function SideModal() {
         ...newState,
         selectedItems: newSelectedItems
       };
-    });
-  };
-  const handleContinue = () => {
-    if (isCurrentStepValid) {
-      if (zap.selectedItems[index]?.metadata && StepIndex < zap.selectedItems[index]?.metadata.length - 1) {
-        setZapState(prev => {
-          // Create a deep copy of the state
-          const newSelectedItems = [...prev.selectedItems];
-          const updatedItem = JSON.parse(JSON.stringify(newSelectedItems[index]));
-          
-          if(!updatedItem?.metadata) return prev;
-          
-          // Update the completed status immutably
-          updatedItem.metadata[StepIndex] = {
-            ...updatedItem.metadata[StepIndex],
-            completed: true
+    });} else if(configureStepRequired.isRequired && configureStepRequired.fieldIndex != -1 && configureStepRequired.optionIndex != -1 ){
+      setZapState(prev=> {
+          console.log('hi')
+          const newState = {...prev};
+          const newSelectedItems= [...newState.selectedItems]
+          const newUpdatedItem = {...newSelectedItems[index]}
+          if(!newUpdatedItem.metadata){ 
+            console.log("Metadata does not exist returninig")  
+            return prev
           };
-          
-          // Update the item in the array
-          newSelectedItems[index] = updatedItem;
-  
-          return {
-            ...prev,
-            selectedItems: newSelectedItems
+          const newUpdatedMetaData = [...newUpdatedItem.metadata]
+          const newUpdatedStep = {...newUpdatedMetaData[0]}
+          const newUpdatedFields = [...newUpdatedStep.fields]
+          const newUpdatedField = {...newUpdatedFields[configureStepRequired.fieldIndex]};
+          if(!newUpdatedField.options) return prev;
+          const newUpdatedOptions = [...newUpdatedField.options]
+          const newUpdatedOption = {...newUpdatedOptions[configureStepRequired.optionIndex]}
+          const newUpdatedConfigurationStep = {...newUpdatedOption.configureStep}
+          if(!newUpdatedConfigurationStep.fields) return prev;
+          const newUpdatedConfigurationStepField = [...newUpdatedConfigurationStep.fields]
+          if(!newUpdatedConfigurationStepField) return prev;
+          newUpdatedConfigurationStepField[fieldNumber] = {
+            ...newUpdatedConfigurationStepField[fieldNumber] ,
+            fieldValue:value
           };
-        });
-        setStepIndex(StepIndex + 1);
-      } else {
-        // Handle completion
-        setMetaData(prev => ({...prev, index: null, isOpen: false}));
+          console.log(newUpdatedConfigurationStepField)
+           //Reconstructing the state with our updates
+          newUpdatedConfigurationStep.fields = newUpdatedConfigurationStepField;
+          console.log( newUpdatedOption)
+          newUpdatedOption.configureStep = newUpdatedConfigurationStep;
+          newUpdatedOptions[configureStepRequired.optionIndex] = newUpdatedOption;
+          console.log( newUpdatedOptions[configureStepRequired.optionIndex])
+          newUpdatedField.options = newUpdatedOptions;
+          newUpdatedFields[configureStepRequired.fieldIndex] = newUpdatedField;
+          newUpdatedStep.fields = newUpdatedFields;
+          newUpdatedMetaData[0] = newUpdatedStep;
+          newUpdatedItem.metadata = newUpdatedMetaData;
+          newSelectedItems[index] = newUpdatedItem;
+          newState.selectedItems = newSelectedItems;
+          console.log(newState)
+          return newState;
+        })
       }
-    }
+
+    
   };
+ const handleContinue = () => {
+  if (!isCurrentStepValid) return;
+
+  if (StepIndex === -1) {
+    setZapState(prev => {
+      const newSelectedItems = [...prev.selectedItems];
+      const item = { ...newSelectedItems[index] };
+
+      if (
+        item?.metadata?.[0]?.fields?.[configureStepRequired.fieldIndex]?.options?.[configureStepRequired.optionIndex]?.configureStep
+      ) {
+        const metadata = [...item.metadata];
+        const step = { ...metadata[0] };
+
+        const fields = [...step.fields];
+        const field = { ...fields[configureStepRequired.fieldIndex] };
+
+        const options = [...field.options];
+        const option = { ...options[configureStepRequired.optionIndex] };
+
+        const configureStep = {
+          ...option.configureStep,
+          completed: true
+        };
+
+        option.configureStep = configureStep;
+        options[configureStepRequired.optionIndex] = option;
+        field.options = options;
+        fields[configureStepRequired.fieldIndex] = field;
+        step.fields = fields;
+        metadata[0] = step;
+        item.metadata = metadata;
+        newSelectedItems[index] = item;
+
+        return {
+          ...prev,
+          selectedItems: newSelectedItems
+        };
+      }
+
+      return prev;
+    });
+  } 
+  else if (
+    zap.selectedItems[index]?.metadata &&
+    StepIndex < zap.selectedItems[index].metadata.length - 1
+  ) {
+    setZapState(prev => {
+      const newSelectedItems = [...prev.selectedItems];
+      const item = { ...newSelectedItems[index] };
+
+      if (!item.metadata) return prev;
+
+      const metadata = [...item.metadata];
+      metadata[StepIndex] = {
+        ...metadata[StepIndex],
+        completed: true
+      };
+
+      item.metadata = metadata;
+      newSelectedItems[index] = item;
+
+      return {
+        ...prev,
+        selectedItems: newSelectedItems
+      };
+    });
+
+   
+  } 
+  else {
+    setMetaData(prev => ({
+      ...prev,
+      index: null,
+      isOpen: false
+    }));
+  }
+   if (StepIndex === 0) {
+      setStepIndex(-1);
+    } else if (StepIndex === -1) {
+      setStepIndex(1);
+    }
+};
+
+
 
 
 if (!zap.selectedItems[index]?.metadata) {
@@ -223,9 +363,9 @@ if (!zap.selectedItems[index]?.metadata) {
     </div>
   )
 }
-                
+      console.log(configureStepRequired)         
   return (
-    <div className="min-h-full flex flex-col items-center justify-between w-96 border-blue-700 border-1 z-20 mx-6 transform-all ease-in-out duration-300 bg-white">
+    <div className="min-h-full flex flex-col items-center justify-between w-96 border-blue-700 border-1 z-20  transform-all ease-in-out duration-300 bg-white">
       <div className="flex flex-col items-center w-full">
         <div className="flex justify-between w-full items-center bg-blue-300/10">
           <div className="flex items-center gap-1 text-sm font-bold"> 
@@ -239,7 +379,10 @@ if (!zap.selectedItems[index]?.metadata) {
           </div>
           <div className="flex items-center gap-2 m-2">
             <SlSizeFullscreen size={18} />
-            <div onClick={() => setMetaData(prev => ({...prev, index: null, isOpen: false}))} className="cursor-pointer">
+            <div onClick={() =>{ 
+              
+              setMetaData(prev => ({...prev, index: null, isOpen: false}))
+          }} className="cursor-pointer">
               <RxCross2 size={20} />
             </div>
           </div>
@@ -249,7 +392,7 @@ if (!zap.selectedItems[index]?.metadata) {
         <div className="flex items-center justify-start gap-0.5 h-10 p-1 w-full border-b border-black/10">
      
              <StepsStatus stepIndex={StepIndex} unique={0} step={zap.selectedItems[index]?.metadata[0]} setIndex={setStepIndex} />
-             {configureStepRequired && <StepsStatus stepIndex={StepIndex} unique={-1} step={zap.selectedItems[index]?.metadata[0].fields[0]?.options[0].configureStep}/>}
+             {configureStepRequired.isRequired  && <StepsStatus setIndex={setStepIndex} stepIndex={StepIndex} unique={-1} step={zap.selectedItems[index]?.metadata[0].fields[configureStepRequired.fieldIndex ]?.options[configureStepRequired.optionIndex].configureStep}/>}
              <StepsStatus stepIndex={StepIndex} unique={1} step={zap.selectedItems[index]?.metadata[1]} setIndex={setStepIndex} />
              
 
