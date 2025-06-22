@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { ItemType, selectedItemMetaDataType } from "../../../../packages/types/src";
+import { ItemType, onStepEnum, selectedItemMetaDataType } from "../../../../packages/types/src";
 
 
 
@@ -25,11 +25,7 @@ export const currentZap = atom<null | number>({
 
 export const configureStepDetails = atom({
     key:"configureStep",
-    default:{
-        isRequired:false,
-        fieldIndex:-1,
-        optionIndex:-1,
-    }
+    default:""
 
 })
 
@@ -38,9 +34,10 @@ export const OptionChanged = atom({
     default:0
 })
 
+
 export const onStep = atom({
     key:"OnStep",
-    default: 0
+    default: onStepEnum.SETUP
 })
 
 export const selectedItemMetaData = atom< selectedItemMetaDataType>({

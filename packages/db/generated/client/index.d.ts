@@ -4520,6 +4520,7 @@ export namespace Prisma {
     id: number
     name: number
     metadata: number
+    optionConfiguration: number
     imagePath: number
     _all: number
   }
@@ -4541,6 +4542,7 @@ export namespace Prisma {
     id?: true
     name?: true
     metadata?: true
+    optionConfiguration?: true
     imagePath?: true
     _all?: true
   }
@@ -4621,6 +4623,7 @@ export namespace Prisma {
     id: string
     name: string
     metadata: JsonValue
+    optionConfiguration: JsonValue
     imagePath: string
     _count: AvailableTriggersCountAggregateOutputType | null
     _min: AvailableTriggersMinAggregateOutputType | null
@@ -4645,6 +4648,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     metadata?: boolean
+    optionConfiguration?: boolean
     imagePath?: boolean
     triggers?: boolean | AvailableTriggers$triggersArgs<ExtArgs>
     _count?: boolean | AvailableTriggersCountOutputTypeDefaultArgs<ExtArgs>
@@ -4654,6 +4658,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     metadata?: boolean
+    optionConfiguration?: boolean
     imagePath?: boolean
   }, ExtArgs["result"]["availableTriggers"]>
 
@@ -4661,6 +4666,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     metadata?: boolean
+    optionConfiguration?: boolean
     imagePath?: boolean
   }
 
@@ -4679,6 +4685,7 @@ export namespace Prisma {
       id: string
       name: string
       metadata: Prisma.JsonValue
+      optionConfiguration: Prisma.JsonValue
       imagePath: string
     }, ExtArgs["result"]["availableTriggers"]>
     composites: {}
@@ -5077,6 +5084,7 @@ export namespace Prisma {
     readonly id: FieldRef<"AvailableTriggers", 'String'>
     readonly name: FieldRef<"AvailableTriggers", 'String'>
     readonly metadata: FieldRef<"AvailableTriggers", 'Json'>
+    readonly optionConfiguration: FieldRef<"AvailableTriggers", 'Json'>
     readonly imagePath: FieldRef<"AvailableTriggers", 'String'>
   }
     
@@ -6414,6 +6422,7 @@ export namespace Prisma {
     name: number
     imagePath: number
     metadata: number
+    optionConfiguration: number
     _all: number
   }
 
@@ -6435,6 +6444,7 @@ export namespace Prisma {
     name?: true
     imagePath?: true
     metadata?: true
+    optionConfiguration?: true
     _all?: true
   }
 
@@ -6515,6 +6525,7 @@ export namespace Prisma {
     name: string
     imagePath: string
     metadata: JsonValue
+    optionConfiguration: JsonValue
     _count: AvailableActionsCountAggregateOutputType | null
     _min: AvailableActionsMinAggregateOutputType | null
     _max: AvailableActionsMaxAggregateOutputType | null
@@ -6539,6 +6550,7 @@ export namespace Prisma {
     name?: boolean
     imagePath?: boolean
     metadata?: boolean
+    optionConfiguration?: boolean
     actions?: boolean | AvailableActions$actionsArgs<ExtArgs>
     _count?: boolean | AvailableActionsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["availableActions"]>
@@ -6548,6 +6560,7 @@ export namespace Prisma {
     name?: boolean
     imagePath?: boolean
     metadata?: boolean
+    optionConfiguration?: boolean
   }, ExtArgs["result"]["availableActions"]>
 
   export type AvailableActionsSelectScalar = {
@@ -6555,6 +6568,7 @@ export namespace Prisma {
     name?: boolean
     imagePath?: boolean
     metadata?: boolean
+    optionConfiguration?: boolean
   }
 
   export type AvailableActionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6573,6 +6587,7 @@ export namespace Prisma {
       name: string
       imagePath: string
       metadata: Prisma.JsonValue
+      optionConfiguration: Prisma.JsonValue
     }, ExtArgs["result"]["availableActions"]>
     composites: {}
   }
@@ -6971,6 +6986,7 @@ export namespace Prisma {
     readonly name: FieldRef<"AvailableActions", 'String'>
     readonly imagePath: FieldRef<"AvailableActions", 'String'>
     readonly metadata: FieldRef<"AvailableActions", 'Json'>
+    readonly optionConfiguration: FieldRef<"AvailableActions", 'Json'>
   }
     
 
@@ -9188,6 +9204,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     metadata: 'metadata',
+    optionConfiguration: 'optionConfiguration',
     imagePath: 'imagePath'
   };
 
@@ -9208,7 +9225,8 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     imagePath: 'imagePath',
-    metadata: 'metadata'
+    metadata: 'metadata',
+    optionConfiguration: 'optionConfiguration'
   };
 
   export type AvailableActionsScalarFieldEnum = (typeof AvailableActionsScalarFieldEnum)[keyof typeof AvailableActionsScalarFieldEnum]
@@ -9493,6 +9511,7 @@ export namespace Prisma {
     id?: StringFilter<"AvailableTriggers"> | string
     name?: StringFilter<"AvailableTriggers"> | string
     metadata?: JsonFilter<"AvailableTriggers">
+    optionConfiguration?: JsonFilter<"AvailableTriggers">
     imagePath?: StringFilter<"AvailableTriggers"> | string
     triggers?: TriggerListRelationFilter
   }
@@ -9501,6 +9520,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     metadata?: SortOrder
+    optionConfiguration?: SortOrder
     imagePath?: SortOrder
     triggers?: TriggerOrderByRelationAggregateInput
   }
@@ -9512,6 +9532,7 @@ export namespace Prisma {
     NOT?: AvailableTriggersWhereInput | AvailableTriggersWhereInput[]
     name?: StringFilter<"AvailableTriggers"> | string
     metadata?: JsonFilter<"AvailableTriggers">
+    optionConfiguration?: JsonFilter<"AvailableTriggers">
     imagePath?: StringFilter<"AvailableTriggers"> | string
     triggers?: TriggerListRelationFilter
   }, "id">
@@ -9520,6 +9541,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     metadata?: SortOrder
+    optionConfiguration?: SortOrder
     imagePath?: SortOrder
     _count?: AvailableTriggersCountOrderByAggregateInput
     _max?: AvailableTriggersMaxOrderByAggregateInput
@@ -9533,6 +9555,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"AvailableTriggers"> | string
     name?: StringWithAggregatesFilter<"AvailableTriggers"> | string
     metadata?: JsonWithAggregatesFilter<"AvailableTriggers">
+    optionConfiguration?: JsonWithAggregatesFilter<"AvailableTriggers">
     imagePath?: StringWithAggregatesFilter<"AvailableTriggers"> | string
   }
 
@@ -9599,6 +9622,7 @@ export namespace Prisma {
     name?: StringFilter<"AvailableActions"> | string
     imagePath?: StringFilter<"AvailableActions"> | string
     metadata?: JsonFilter<"AvailableActions">
+    optionConfiguration?: JsonFilter<"AvailableActions">
     actions?: ActionListRelationFilter
   }
 
@@ -9607,6 +9631,7 @@ export namespace Prisma {
     name?: SortOrder
     imagePath?: SortOrder
     metadata?: SortOrder
+    optionConfiguration?: SortOrder
     actions?: ActionOrderByRelationAggregateInput
   }
 
@@ -9618,6 +9643,7 @@ export namespace Prisma {
     name?: StringFilter<"AvailableActions"> | string
     imagePath?: StringFilter<"AvailableActions"> | string
     metadata?: JsonFilter<"AvailableActions">
+    optionConfiguration?: JsonFilter<"AvailableActions">
     actions?: ActionListRelationFilter
   }, "id">
 
@@ -9626,6 +9652,7 @@ export namespace Prisma {
     name?: SortOrder
     imagePath?: SortOrder
     metadata?: SortOrder
+    optionConfiguration?: SortOrder
     _count?: AvailableActionsCountOrderByAggregateInput
     _max?: AvailableActionsMaxOrderByAggregateInput
     _min?: AvailableActionsMinOrderByAggregateInput
@@ -9639,6 +9666,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"AvailableActions"> | string
     imagePath?: StringWithAggregatesFilter<"AvailableActions"> | string
     metadata?: JsonWithAggregatesFilter<"AvailableActions">
+    optionConfiguration?: JsonWithAggregatesFilter<"AvailableActions">
   }
 
   export type ZapRunWhereInput = {
@@ -9890,6 +9918,7 @@ export namespace Prisma {
     id?: string
     name: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: string
     triggers?: TriggerCreateNestedManyWithoutTypeInput
   }
@@ -9898,6 +9927,7 @@ export namespace Prisma {
     id?: string
     name: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: string
     triggers?: TriggerUncheckedCreateNestedManyWithoutTypeInput
   }
@@ -9906,6 +9936,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
     triggers?: TriggerUpdateManyWithoutTypeNestedInput
   }
@@ -9914,6 +9945,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
     triggers?: TriggerUncheckedUpdateManyWithoutTypeNestedInput
   }
@@ -9922,6 +9954,7 @@ export namespace Prisma {
     id?: string
     name: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: string
   }
 
@@ -9929,6 +9962,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
   }
 
@@ -9936,6 +9970,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
   }
 
@@ -9991,6 +10026,7 @@ export namespace Prisma {
     name: string
     imagePath?: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     actions?: ActionCreateNestedManyWithoutActionDetailsInput
   }
 
@@ -9999,6 +10035,7 @@ export namespace Prisma {
     name: string
     imagePath?: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     actions?: ActionUncheckedCreateNestedManyWithoutActionDetailsInput
   }
 
@@ -10007,6 +10044,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     actions?: ActionUpdateManyWithoutActionDetailsNestedInput
   }
 
@@ -10015,6 +10053,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     actions?: ActionUncheckedUpdateManyWithoutActionDetailsNestedInput
   }
 
@@ -10023,6 +10062,7 @@ export namespace Prisma {
     name: string
     imagePath?: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsUpdateManyMutationInput = {
@@ -10030,6 +10070,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsUncheckedUpdateManyInput = {
@@ -10037,6 +10078,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
   }
 
   export type ZapRunCreateInput = {
@@ -10366,6 +10408,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     metadata?: SortOrder
+    optionConfiguration?: SortOrder
     imagePath?: SortOrder
   }
 
@@ -10420,6 +10463,7 @@ export namespace Prisma {
     name?: SortOrder
     imagePath?: SortOrder
     metadata?: SortOrder
+    optionConfiguration?: SortOrder
   }
 
   export type AvailableActionsMaxOrderByAggregateInput = {
@@ -11208,6 +11252,7 @@ export namespace Prisma {
     id?: string
     name: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: string
   }
 
@@ -11215,6 +11260,7 @@ export namespace Prisma {
     id?: string
     name: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: string
   }
 
@@ -11267,6 +11313,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
   }
 
@@ -11274,6 +11321,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
     imagePath?: StringFieldUpdateOperationsInput | string
   }
 
@@ -11350,6 +11398,7 @@ export namespace Prisma {
     name: string
     imagePath?: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsUncheckedCreateWithoutActionsInput = {
@@ -11357,6 +11406,7 @@ export namespace Prisma {
     name: string
     imagePath?: string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsCreateOrConnectWithoutActionsInput = {
@@ -11409,6 +11459,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
   }
 
   export type AvailableActionsUncheckedUpdateWithoutActionsInput = {
@@ -11416,6 +11467,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     imagePath?: StringFieldUpdateOperationsInput | string
     metadata?: JsonNullValueInput | InputJsonValue
+    optionConfiguration?: JsonNullValueInput | InputJsonValue
   }
 
   export type ActionCreateWithoutActionDetailsInput = {

@@ -1,6 +1,6 @@
 "use client"
 import { configureStepDetails, onStep, OptionChanged } from "@/app/RecoilState/currentZap"
-import { Field, FieldOption} from "@repo/types"
+import { Field, FieldOption, onStepEnum} from "@repo/types"
 import { useMemo, useState } from "react"
 import { BiSolidZap } from "react-icons/bi"
 import { FaArrowRightArrowLeft } from "react-icons/fa6"
@@ -11,7 +11,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 
 interface MetaDataFieldProps {
   field: Field
-  onFieldChange: (fieldNumber: number, value: string, type:string ) => void
+  onFieldChange: (fieldNumber: number, value: string, type:onStepEnum ) => void
 }
 
 export default function MetaDataField({ field, onFieldChange }: MetaDataFieldProps) {
@@ -58,11 +58,11 @@ export default function MetaDataField({ field, onFieldChange }: MetaDataFieldPro
                 option.id.toLowerCase().includes(searchTerm.toLowerCase())
               ).map((option: FieldOption, index: number) => (<div key={index}  onClick={() => {
                 
-                if(stepIndex == -1 )onFieldChange(field.fieldNumber, option.id, "configuration")
-                else onFieldChange(field.fieldNumber, option.id,"setup")
+                if(stepIndex == onStepEnum.CONFIGURATION )onFieldChange(field.fieldNumber, option.id, onStepEnum.CONFIGURATION)
+                else onFieldChange(field.fieldNumber, option.id,onStepEnum.SETUP)
                 setIsOpen(false)
                 setOptionChanged((option)=>option++)
-                 if(stepIndex == 0)  setConfigureStepIndex({isRequired:option.configureStepRequired || false,fieldIndex:field.fieldNumber,optionIndex: option.optionIndex })
+                 if(stepIndex === onStepEnum.SETUP)  setConfigureStepIndex(option.id)
               }} className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium">
                 <div
                   className="flex items-center gap-1 font-semibold"
@@ -89,8 +89,8 @@ export default function MetaDataField({ field, onFieldChange }: MetaDataFieldPro
         placeholder={field.fieldPlaceholder}
           defaultValue={field.fieldValue || undefined}
           onChange={(e) =>{
-            if(stepIndex == -1) onFieldChange(field.fieldNumber, e.target.value, "configuration")
-            else onFieldChange(field.fieldNumber, e.target.value,"setup")
+            if(stepIndex == onStepEnum.CONFIGURATION) onFieldChange(field.fieldNumber, e.target.value, onStepEnum.CONFIGURATION)
+            else onFieldChange(field.fieldNumber, e.target.value,onStepEnum.SETUP)
             }}
             
           className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
@@ -107,7 +107,7 @@ export default function MetaDataField({ field, onFieldChange }: MetaDataFieldPro
       type={field.fieldInputType}
       placeholder={field.fieldPlaceholder}
         defaultValue={field.fieldValue || undefined}
-        onChange={(e) => onFieldChange(field.fieldNumber, e.target.value)}
+        onChange={(e) => onFieldChange(field.fieldNumber, e.target.value, onStepEnum.SETUP)}
         className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
         required={field.required}
       />

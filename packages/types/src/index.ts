@@ -32,7 +32,8 @@ export interface ItemType {
   id: string;
   name: string;
   imagePath: string;
-  metadata?: itemStepMetaData[];
+  optionConfiguration:optionConfiguration;
+  metadata?: itemStepMetaData;
 }
 
 export interface ZapCreateType {
@@ -42,6 +43,11 @@ export interface ZapCreateType {
     actionId: string;
     actionMetadata: JSON;
   }[];
+}
+ export enum onStepEnum {
+    SETUP,
+    CONFIGURATION,
+    TEST
 }
 
 export interface selectedItemMetaDataType {
@@ -55,6 +61,15 @@ stepNumber:number,
 stepDescription?:string,
 completed:boolean | null,
 fields:Field[]
+}
+
+export interface itemTestMetaData {
+  stepName:string,
+  stepNumber:number,
+  completed:boolean,
+  does:string,
+  aboutDoes:string,
+  type:string
 }
 
 export interface Field {
@@ -73,7 +88,12 @@ export interface FieldOption {
    optionIndex:number,
   description: string,
   type: string,
-  configureStepRequired:boolean,
-  configureStep?:itemStepMetaData,
+}
+
+export interface optionConfiguration {
+  [optionId:string]:{
+    configurationStep:itemStepMetaData | null,
+    testStep:itemTestMetaData
+  }
 }
 

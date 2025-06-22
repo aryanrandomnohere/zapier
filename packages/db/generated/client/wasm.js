@@ -147,6 +147,7 @@ exports.Prisma.AvailableTriggersScalarFieldEnum = {
   id: 'id',
   name: 'name',
   metadata: 'metadata',
+  optionConfiguration: 'optionConfiguration',
   imagePath: 'imagePath'
 };
 
@@ -161,7 +162,8 @@ exports.Prisma.AvailableActionsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   imagePath: 'imagePath',
-  metadata: 'metadata'
+  metadata: 'metadata',
+  optionConfiguration: 'optionConfiguration'
 };
 
 exports.Prisma.ZapRunScalarFieldEnum = {
