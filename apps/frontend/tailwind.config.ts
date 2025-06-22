@@ -93,7 +93,8 @@ const config: Config = {
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       animation: {
         "fade-in": "fade-in 0.5s ease-out",
@@ -119,4 +120,4 @@ const config: Config = {
   plugins: [],
 };
 
-export default config; 
+export default config;

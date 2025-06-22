@@ -1,40 +1,50 @@
-"use client"
-import { configureStepDetails, onStep, OptionChanged } from "@/app/RecoilState/currentZap"
-import { Field, FieldOption, onStepEnum} from "@repo/types"
-import { useMemo, useState } from "react"
-import { BiSolidZap } from "react-icons/bi"
-import { FaArrowRightArrowLeft } from "react-icons/fa6"
-import { IoSearch } from "react-icons/io5"
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-
-
+"use client";
+import {
+  configureStepDetails,
+  onStep,
+  OptionChanged,
+} from "@/app/RecoilState/currentZap";
+import { Field, FieldOption, onStepEnum } from "@repo/types";
+import { useMemo, useState } from "react";
+import { BiSolidZap } from "react-icons/bi";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { IoSearch } from "react-icons/io5";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 interface MetaDataFieldProps {
-  field: Field
-  onFieldChange: (fieldNumber: number, value: string, type:onStepEnum ) => void
+  field: Field;
+  onFieldChange: (fieldNumber: number, value: string, type: onStepEnum) => void;
 }
 
-export default function MetaDataField({ field, onFieldChange }: MetaDataFieldProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [value, setValue] = useState(field.fieldValue || field.fieldPlaceholder)
-  const [configureStepIndex, setConfigureStepIndex] = useRecoilState(configureStepDetails);
+export default function MetaDataField({
+  field,
+  onFieldChange,
+}: MetaDataFieldProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [value, setValue] = useState(
+    field.fieldValue || field.fieldPlaceholder,
+  );
+  const [configureStepIndex, setConfigureStepIndex] =
+    useRecoilState(configureStepDetails);
   const setOptionChanged = useSetRecoilState(OptionChanged);
   const stepIndex = useRecoilValue(onStep);
   if (field.fieldInputType === "dropdown") {
     return (
       <div className="flex flex-col relative w-full">
-        <div className="flex gap-1 text-xs font-bold">{field.fieldLabel} <div className="text-red-400">*</div></div>
-        <div 
-          onClick={() => setIsOpen(!isOpen)} 
+        <div className="flex gap-1 text-xs font-bold">
+          {field.fieldLabel} <div className="text-red-400">*</div>
+        </div>
+        <div
+          onClick={() => setIsOpen(!isOpen)}
           className="flex justify-between items-center px-3 py-2 border border-black/20 rounded hover:border-blue-500 cursor-pointer"
         >
           <div className="flex items-center gap-2 text-xs font-medium">
             {field.fieldValue || field.fieldPlaceholder}
           </div>
           <div className="text-xs text-gray-500">
-          <FaArrowRightArrowLeft className="text-black/50 rotate-90" />
-                      </div>
+            <FaArrowRightArrowLeft className="text-black/50 rotate-90" />
+          </div>
         </div>
 
         {isOpen && (
@@ -54,63 +64,100 @@ export default function MetaDataField({ field, onFieldChange }: MetaDataFieldPro
               </div>
             </div>
             <div className="max-h-60 overflow-y-auto">
-              {field.options?.filter(option => 
-                option.id.toLowerCase().includes(searchTerm.toLowerCase())
-              ).map((option: FieldOption, index: number) => (<div key={index}  onClick={() => {
-                
-                if(stepIndex == onStepEnum.CONFIGURATION )onFieldChange(field.fieldNumber, option.id, onStepEnum.CONFIGURATION)
-                else onFieldChange(field.fieldNumber, option.id,onStepEnum.SETUP)
-                setIsOpen(false)
-                setOptionChanged((option)=>option++)
-                 if(stepIndex === onStepEnum.SETUP)  setConfigureStepIndex(option.id)
-              }} className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium">
-                <div
-                  className="flex items-center gap-1 font-semibold"
-                 
-                >
-                  {option.id}<div className="flex items-center gap-1 text-xs font-semibold bg-yellow-500/20 rounded px-1"> <BiSolidZap className="border border-black rounded-full p-[0.5px]" size={11} />  {option.type}</div>
-                </div>
-                <div>{option.description}</div>
-                </div>
-              ))}
+              {field.options
+                ?.filter((option) =>
+                  option.id.toLowerCase().includes(searchTerm.toLowerCase()),
+                )
+                .map((option: FieldOption, index: number) => (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      if (stepIndex == onStepEnum.CONFIGURATION)
+                        onFieldChange(
+                          field.fieldNumber,
+                          option.id,
+                          onStepEnum.CONFIGURATION,
+                        );
+                      else
+                        onFieldChange(
+                          field.fieldNumber,
+                          option.id,
+                          onStepEnum.SETUP,
+                        );
+                      setIsOpen(false);
+                      setOptionChanged((option) => option++);
+                      if (stepIndex === onStepEnum.SETUP)
+                        setConfigureStepIndex(option.id);
+                    }}
+                    className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium"
+                  >
+                    <div className="flex items-center gap-1 font-semibold">
+                      {option.id}
+                      <div className="flex items-center gap-1 text-xs font-semibold bg-yellow-500/20 rounded px-1">
+                        {" "}
+                        <BiSolidZap
+                          className="border border-black rounded-full p-[0.5px]"
+                          size={11}
+                        />{" "}
+                        {option.type}
+                      </div>
+                    </div>
+                    <div>{option.description}</div>
+                  </div>
+                ))}
             </div>
           </div>
         )}
       </div>
-    )
+    );
   }
 
   if (field.fieldInputType === "text") {
     return (
       <div className="flex flex-col relative w-full">
-        <div className="flex gap-1 text-xs font-bold">{field.fieldLabel} <div className="text-red-400">*</div></div>
-      <input
-        type={field.fieldInputType}
-        placeholder={field.fieldPlaceholder}
+        <div className="flex gap-1 text-xs font-bold">
+          {field.fieldLabel} <div className="text-red-400">*</div>
+        </div>
+        <input
+          type={field.fieldInputType}
+          placeholder={field.fieldPlaceholder}
           defaultValue={field.fieldValue || undefined}
-          onChange={(e) =>{
-            if(stepIndex == onStepEnum.CONFIGURATION) onFieldChange(field.fieldNumber, e.target.value, onStepEnum.CONFIGURATION)
-            else onFieldChange(field.fieldNumber, e.target.value,onStepEnum.SETUP)
-            }}
-            
+          onChange={(e) => {
+            if (stepIndex == onStepEnum.CONFIGURATION)
+              onFieldChange(
+                field.fieldNumber,
+                e.target.value,
+                onStepEnum.CONFIGURATION,
+              );
+            else
+              onFieldChange(
+                field.fieldNumber,
+                e.target.value,
+                onStepEnum.SETUP,
+              );
+          }}
           className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
           required={field.required}
         />
       </div>
-    )
+    );
   }
-  console.log(field)
+  console.log(field);
   return (
     <div className="flex flex-col relative w-full">
-      <div className="flex gap-1 text-xs font-bold">{field.fieldLabel} <div className="text-red-400">*</div></div>
-    <input
-      type={field.fieldInputType}
-      placeholder={field.fieldPlaceholder}
+      <div className="flex gap-1 text-xs font-bold">
+        {field.fieldLabel} <div className="text-red-400">*</div>
+      </div>
+      <input
+        type={field.fieldInputType}
+        placeholder={field.fieldPlaceholder}
         defaultValue={field.fieldValue || undefined}
-        onChange={(e) => onFieldChange(field.fieldNumber, e.target.value, onStepEnum.SETUP)}
+        onChange={(e) =>
+          onFieldChange(field.fieldNumber, e.target.value, onStepEnum.SETUP)
+        }
         className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
         required={field.required}
       />
     </div>
-  )
+  );
 }

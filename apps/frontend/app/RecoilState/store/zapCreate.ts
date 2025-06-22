@@ -9,7 +9,6 @@ export interface ZapCreateState {
   initialPosition: { x: number; y: number };
 }
 
-
 export const zapCreateState = atom<ZapCreateState>({
   key: "zapCreateState",
   default: {
@@ -17,6 +16,6 @@ export const zapCreateState = atom<ZapCreateState>({
     selectedCell: undefined,
     isDragging: false,
     position: { x: 0, y: 0 },
-    initialPosition: { x: 0, y: 0 }
-  }
-}); 
+    initialPosition: { x: 0, y: 0 },
+  },
+});

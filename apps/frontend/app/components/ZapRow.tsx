@@ -29,12 +29,19 @@ export default function ZapRow({ zaps }: { zaps: zapInterface[] }) {
               className="min-w-5 min-h-5 rounded-md border-2 border-gray-400 bg-white checked:bg-blue-500 hover:cursor-pointer checked:border-blue-500 focus:ring-0 focus:ring-blue-300 transition duration-200"
             />
             <div>
-            
-              <img src={zap.trigger.type.imagePath} alt="trigger" className="w-8 h-8 border border-gray-400 rounded-md p-0.5" />
+              <img
+                src={zap.trigger.type.imagePath}
+                alt="trigger"
+                className="w-8 h-8 border border-gray-400 rounded-md p-0.5"
+              />
             </div>{" "}
             {zap.actions.map((action, i) => (
               <div key={action.id}>
-              <img src={zap.actions[i].actionDetails.imagePath} alt="trigger" className="w-8 h-8 border border-gray-400 rounded-md p-0.5" />
+                <img
+                  src={zap.actions[i].actionDetails.imagePath}
+                  alt="trigger"
+                  className="w-8 h-8 border border-gray-400 rounded-md p-0.5"
+                />
               </div>
             ))}
           </div>
@@ -68,7 +75,8 @@ const ActionIcon = ({ action }: { action: string }) => {
     case "sheet":
       return <LuFileSpreadsheet className={IconStyle} />;
     case "webhook":
-      return <MdOutlineWebhook className={IconStyle} />;g
+      return <MdOutlineWebhook className={IconStyle} />;
+      g;
     case "email":
       return <MdOutlineAttachEmail className={IconStyle} />;
     case "solana":

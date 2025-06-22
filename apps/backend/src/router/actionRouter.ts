@@ -1,11 +1,11 @@
-import express from "express"
-import { AuthMiddleware } from "../Middleware/AuthMiddleware.js"
-import { prisma } from "../client.js"
-const actionRouter = express.Router()
+import express from "express";
+import { AuthMiddleware } from "../Middleware/AuthMiddleware.js";
+import { prisma } from "../client.js";
+const actionRouter = express.Router();
 
-actionRouter.get("/available",async (req,res)=>{
-   const actions = await prisma.availableActions.findMany()
-    res.status(200).json({items:actions})
-})
+actionRouter.get("/available", async (req, res) => {
+  const actions = await prisma.availableActions.findMany();
+  res.status(200).json({ items: actions });
+});
 
-export default actionRouter;     
+export default actionRouter;

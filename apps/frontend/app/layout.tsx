@@ -24,9 +24,7 @@ export default function RootLayout({
         style={{ backgroundColor: "#FFFDF9" }}
         className={`${inter.variable} font-sans antialiased`}
       >
-        <RecoilContextProvider>
-          {children}
-        </RecoilContextProvider>
+        <RecoilContextProvider>{children}</RecoilContextProvider>
       </body>
     </html>
   );

@@ -27,12 +27,11 @@ export interface zapInterface {
   };
 }
 
-
 export interface ItemType {
   id: string;
   name: string;
   imagePath: string;
-  optionConfiguration:optionConfiguration;
+  optionConfiguration: optionConfiguration;
   metadata?: itemStepMetaData;
 }
 
@@ -44,56 +43,55 @@ export interface ZapCreateType {
     actionMetadata: JSON;
   }[];
 }
- export enum onStepEnum {
-    SETUP,
-    CONFIGURATION,
-    TEST
+export enum onStepEnum {
+  SETUP,
+  CONFIGURATION,
+  TEST,
 }
 
 export interface selectedItemMetaDataType {
-  index:number | null | undefined,
-  isOpen:boolean
+  index: number | null | undefined;
+  isOpen: boolean;
 }
 
 export interface itemStepMetaData {
-stepName:string | undefined,
-stepNumber:number,
-stepDescription?:string,
-completed:boolean | null,
-fields:Field[]
+  stepName: string | undefined;
+  stepNumber: number;
+  stepDescription?: string;
+  completed: boolean | null;
+  fields: Field[];
 }
 
 export interface itemTestMetaData {
-  stepName:string,
-  stepNumber:number,
-  completed:boolean,
-  does:string,
-  aboutDoes:string,
-  type:string
+  stepName: string;
+  stepNumber: number;
+  completed: boolean;
+  does: string;
+  aboutDoes: string;
+  type: string;
 }
 
 export interface Field {
-  name: string
-  fieldInputType: string
-  fieldLabel: string
-  fieldPlaceholder: string
-  fieldValue: string | null
-  required: boolean
-  options?: FieldOption[]
-  fieldNumber: number
+  name: string;
+  fieldInputType: string;
+  fieldLabel: string;
+  fieldPlaceholder: string;
+  fieldValue: string | null;
+  required: boolean;
+  options?: FieldOption[];
+  fieldNumber: number;
 }
 
 export interface FieldOption {
-  id: string,
-   optionIndex:number,
-  description: string,
-  type: string,
+  id: string;
+  optionIndex: number;
+  description: string;
+  type: string;
 }
 
 export interface optionConfiguration {
-  [optionId:string]:{
-    configurationStep:itemStepMetaData | null,
-    testStep:itemTestMetaData
-  }
+  [optionId: string]: {
+    configurationStep: itemStepMetaData | null;
+    testStep: itemTestMetaData;
+  };
 }
-

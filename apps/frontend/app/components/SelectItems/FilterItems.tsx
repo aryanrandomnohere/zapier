@@ -56,8 +56,12 @@ const FilterItems: React.FC = () => {
               : "text-gray-700 hover:bg-gray-100"
           }`}
         >
-          <span className="flex items-center justify-center">{option.icon}</span>
-          {option.label && <span className="text-xs font-bold">{option.label}</span>}
+          <span className="flex items-center justify-center">
+            {option.icon}
+          </span>
+          {option.label && (
+            <span className="text-xs font-bold">{option.label}</span>
+          )}
         </button>
       ))}
     </div>

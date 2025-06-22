@@ -1,5 +1,3 @@
 export default function WebHookText() {
-  return (
-    <div>WebHookText</div>
-  )
+  return <div>WebHookText</div>;
 }

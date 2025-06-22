@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { zapInterface } from "../../../../packages/types/src";
 
-export default function  useZaps() {
+export default function useZaps() {
   const [loading, setLoading] = useState(false);
   const [zaps, setZaps] = useState<zapInterface[]>([]);
   const [error, setError] = useState(null);

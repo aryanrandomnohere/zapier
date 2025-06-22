@@ -10,23 +10,24 @@ export default function Page() {
   function handleCreateZap() {
     router.push("/zap/create");
   }
-  return (<>
-  <Navbar />
-    <div className="flex justify-end w-full  items-center h-full">
-      <div className="flex justify-between items-center mt-12 mr-5 min-w-7/12">
-        <div className="w-full text-lg">
-          <ZapTable />
+  return (
+    <>
+      <Navbar />
+      <div className="flex justify-end w-full  items-center h-full">
+        <div className="flex justify-between items-center mt-12 mr-5 min-w-7/12">
+          <div className="w-full text-lg">
+            <ZapTable />
+          </div>
+        </div>
+        <div className="self-start mr-10 mt-12 ">
+          <SecondaryButton onClick={handleCreateZap} size="small">
+            <div className="flex gap-1 items-center">
+              <AiOutlinePlus className="text-white font-semibold" />
+              Create
+            </div>
+          </SecondaryButton>
         </div>
       </div>
-      <div className="self-start mr-10 mt-12 ">
-        <SecondaryButton onClick={handleCreateZap} size="small">
-          <div className="flex gap-1 items-center">
-            <AiOutlinePlus className="text-white font-semibold" />
-            Create
-          </div>
-        </SecondaryButton>
-      </div>
-    </div>
     </>
   );
 }
