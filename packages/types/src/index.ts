@@ -67,6 +67,7 @@ export interface itemTestMetaData {
   stepNumber: number;
   completed: boolean;
   does: string;
+  description?:string;
   aboutDoes: string;
   type: string;
 }

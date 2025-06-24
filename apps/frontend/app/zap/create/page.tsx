@@ -4,16 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import AddCell from "../../components/AddCell";
 import Modal from "../../ui/Modal";
 import SelectItem from "@/app/components/SelectItem";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../../RecoilState/store/zapCreate";
 import axios from "axios";
 import { ItemType } from "@repo/types";
 import SideModal from "@/app/ui/SideModal";
-import { selectedItemMetaData } from "@/app/RecoilState/currentZap";
+import { configureStepDetails, selectedItemMetaData } from "@/app/RecoilState/currentZap";
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
   const canvasRef = useRef<HTMLDivElement | null>(null);
+  const setConfigurationId = useSetRecoilState(configureStepDetails)
   const addCell = (order: number) => {
     setZapState((prev) => {
       const updatedActions = [...prev.selectedItems];
@@ -50,6 +51,7 @@ export default function Page1() {
   };
 
   function SelectCell(index: number) {
+    setConfigurationId("")
     setZapState((prev) => ({ ...prev, selectedCell: index }));
   }
 
@@ -101,7 +103,7 @@ export default function Page1() {
       </div>
       <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-stone-200 dot-background">
         {metaData.isOpen && (
-          <div className=" fixed flex max-w-1/5 min-h-3/4  right-2 z-50 transform-all duration-300 mt-4">
+          <div className=" fixed flex max-w-96 min-h-3/4 max-h-3/4   right-2 z-50 transform-all duration-300 mt-4">
             <SideModal />
           </div>
         )}

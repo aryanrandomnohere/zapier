@@ -16,8 +16,7 @@ export default function AddMetaData({
   index: number;
   onFieldChange: (fieldNumber: number, value: string, type: onStepEnum) => void;
 }) {
-  const [configureId, setConfiguredStepDetails] =
-    useRecoilState(configureStepDetails);
+  const [configureId, setConfiguredStepDetails] = useRecoilState(configureStepDetails);
   const metaData =
     index === onStepEnum.SETUP && item.metadata
       ? item.metadata
@@ -29,11 +28,12 @@ export default function AddMetaData({
           ? item.optionConfiguration[configureId].testStep
           : null;
   if (index === onStepEnum.TEST) {
+    console.log("test step rendered")
     return <TestItem item={item.optionConfiguration[configureId].testStep} />;
   }
 
   return (
-    <div className="flex flex-col justify-between h-full mb-8 w-full">
+    <div className="flex flex-col justify-between  mb-8 w-full">
       {index === 0 && (
         <div className="flex flex-col w-full text-xs">
           <div className="flex gap-0.5 text-sm">
@@ -43,8 +43,8 @@ export default function AddMetaData({
         </div>
       )}
 
-      <div className="flex flex-col gap-6">
-        {metaData &&
+      <div className="flex flex-col mt-2 gap-6">
+        {metaData && index != onStepEnum.TEST &&
           metaData.fields.map((field) => {
             return (
               <div key={field.fieldLabel}>

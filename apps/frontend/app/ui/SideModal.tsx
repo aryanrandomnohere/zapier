@@ -414,7 +414,7 @@ export default function SideModal() {
 
   if (!zap.selectedItems[index]?.metadata) {
     return (
-      <div className="min-h-full flex flex-col items-center justify-center w-96 border-blue-700 border-1 z-20 mx-6 transform-all ease-in-out duration-300 bg-white">
+      <div className="min-h-full flex flex-col items-center justify-center w-96 border-blue-700 border-1 z-20 mx-6 transform-all ease-in-out duration-300  bg-white">
         <div className="text-sm text-gray-500 font-medium bg-gray-50 rounded-md p-4">
           We don't support this trigger yet
         </div>
@@ -422,8 +422,8 @@ export default function SideModal() {
     );
   }
   return (
-    <div className="min-h-full flex flex-col items-center justify-between w-96 border-blue-700 border-1 z-20  transform-all ease-in-out duration-300 bg-white">
-      <div className="flex flex-col items-center w-full">
+    <div className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-700 border-1 z-20   transform-all ease-in-out duration-300 bg-white`}>
+      <div className={`flex flex-col items-center w-full`}>
         <div className="flex justify-between w-full items-center bg-blue-300/10">
           <div className="flex items-center gap-1 text-sm font-bold">
             {zap.selectedItems[index].imagePath ? (
