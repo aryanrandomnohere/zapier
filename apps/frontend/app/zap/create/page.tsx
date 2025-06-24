@@ -89,7 +89,7 @@ export default function Page1() {
   }, [zapState.isDragging, zapState.initialPosition]);
 
   useEffect(() => {}, [zapState]);
-
+console.log( zapState.selectedItems[0]?.metadata?.fields[0].fieldValue )
   return (
     <>
       <div className="flex flex-col w-full h-10 bg-stone-50 justify-center ">
@@ -116,7 +116,7 @@ export default function Page1() {
           ref={canvasRef}
           onMouseDown={handleMouseDown}
         >
-          <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-1/2 -translate-y-3/4">
+          <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-1/6 -translate-y-3/4">
             {!zapState.selectedItems[0]?.imagePath &&
             !zapState.selectedItems[0]?.name ? (
               <Modal>
@@ -126,7 +126,7 @@ export default function Page1() {
                       SelectCell={SelectCell}
                       imagePath={zapState.selectedItems[0]?.imagePath}
                       title={zapState.selectedItems[0]?.name || "Trigger"}
-                      subtitle="An event that starts your Zap"
+                      subtitle={ zapState.selectedItems[0]?.metadata?.fields[0].fieldValue || "An event that starts your Zap"}
                       order={1}
                     />
                   </div>
@@ -143,7 +143,7 @@ export default function Page1() {
                   SelectCell={SelectCell}
                   imagePath={zapState.selectedItems[0]?.imagePath}
                   title={zapState.selectedItems[0]?.name || "Trigger"}
-                  subtitle="An event that starts your Zap"
+                  subtitle={zapState.selectedItems[0]?.metadata?.fields[0].fieldValue ||"An event that starts your Zap"}
                   order={1}
                 />
               </div>

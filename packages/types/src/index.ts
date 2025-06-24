@@ -96,3 +96,16 @@ export interface optionConfiguration {
     testStep: itemTestMetaData;
   };
 }
+export interface RecordMetadata {
+  id: string;
+  type: 'modified' | 'original';
+  createdAt: string;
+  pulledAt: string;
+  title: string;
+}
+
+export interface ApiResponse {
+  records: RecordMetadata[];
+  total: number;
+  lastUpdated: string;
+}
