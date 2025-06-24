@@ -4,8 +4,7 @@ import ChangeItem from "./ChangeItem";
 import MetaDataField from "./MetaDataField";
 import { useRecoilState } from "recoil";
 import { configureStepDetails } from "@/app/RecoilState/currentZap";
-import { metadata } from "framer-motion/client";
-import TestItem from "../TestItem";
+
 
 export default function AddMetaData({
   item,
@@ -27,10 +26,7 @@ export default function AddMetaData({
             item.optionConfiguration[configureId].testStep
           ? item.optionConfiguration[configureId].testStep
           : null;
-  if (index === onStepEnum.TEST) {
-    console.log("test step rendered")
-    return <TestItem item={item.optionConfiguration[configureId].testStep} />;
-  }
+ 
 
   return (
     <div className="flex flex-col justify-between  mb-8 w-full">

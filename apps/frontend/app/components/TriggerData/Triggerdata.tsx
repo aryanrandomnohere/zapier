@@ -1,135 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Search, MoreHorizontal, ChevronRight } from 'lucide-react';
+import { IoIosArrowRoundForward } from 'react-icons/io';
+import { FaSquare } from 'react-icons/fa6';
+import { ApiResponse, itemTestMetaData, RecordMetadata } from '@repo/types';
+import { mockRecords } from './mockdata';
+import { RecordItem } from './RecordItem';
 
-// TypeScript interfaces
-interface RecordMetadata {
-  id: string;
-  type: 'modified' | 'original';
-  createdAt: string;
-  pulledAt: string;
-  title: string;
-}
 
-interface ApiResponse {
-  records: RecordMetadata[];
-  total: number;
-  lastUpdated: string;
-}
 
-interface RecordItemProps {
-  record: RecordMetadata;
-  onRecordClick: (record: RecordMetadata) => void;
-}
 
-// Individual Record Item Component
-const RecordItem: React.FC<RecordItemProps> = ({ record, onRecordClick }) => {
-  const getTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
-    if (diffInHours < 1) return 'just now';
-    if (diffInHours === 1) return '1 hour ago';
-    if (diffInHours < 24) return `${diffInHours} hours ago`;
-    
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    });
-  };
 
-  const isModified = record.type === 'modified';
-
-  return (
-    <div 
-      className={`border border-gray-200 rounded-lg p-2 mb-1.5 cursor-pointer text-sm hover:bg-gray-50 transition-colors ${
-        isModified ? 'bg-blue-50 border-blue-200' : 'bg-white'
-      }`}
-      onClick={() => onRecordClick(record)}
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-1.5">
-            <h3 className={`text-xs font-bold ${isModified ? 'text-blue-900' : 'text-gray-900'}`}>
-              {record.title}
-            </h3>
-            {isModified && (
-              <button className="p-1 hover:bg-blue-100 rounded">
-                <MoreHorizontal className="w-4 h-4 text-blue-600" />
-              </button>
-            )}
-          </div>
-          <p className={`text-xs mt-0.5 ${isModified ? 'text-blue-700' : 'text-gray-600'}`}>
-            {isModified 
-              ? `created ${getTimeAgo(record.createdAt)}`
-              : `original record pulled on ${getTimeAgo(record.pulledAt)}`
-            }
-          </p>
-        </div>
-        <ChevronRight className={`w-5 h-5 ${isModified ? 'text-blue-600' : 'text-gray-400'}`} />
-      </div>
-    </div>
-  );
-};
 
 // Main Records Interface Component
-const TriggerData: React.FC = () => {
+const TriggerData = ({zapImage, item}:{zapImage:string, item:itemTestMetaData}) => {
   const [records, setRecords] = useState<RecordMetadata[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-
+  const [triedFetching, setTriedFetching] = useState(false);
+  const [selectedRecordId, setSelectedRecordId] = useState("");
   // Mock API call function
   const fetchRecords = async (): Promise<ApiResponse> => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Mock data that matches the screenshot
-    const mockRecords: RecordMetadata[] = [
-      {
-        id: '1',
-        type: 'modified',
-        title: 'Modified Record',
-        createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(), // 1 hour ago
-        pulledAt: new Date().toISOString()
-      },
-      {
-        id: '2',
-        type: 'original',
-        title: 'request E',
-        createdAt: new Date().toISOString(),
-        pulledAt: new Date().toISOString()
-      },
-      {
-        id: '3',
-        type: 'original',
-        title: 'request D',
-        createdAt: new Date().toISOString(),
-        pulledAt: new Date().toISOString()
-      },
-      // {
-      //   id: '4',
-      //   type: 'original',
-      //   title: 'request C',
-      //   createdAt: new Date().toISOString(),
-      //   pulledAt: new Date().toISOString()
-      // },
-      // {
-      //   id: '5',
-      //   type: 'original',
-      //   title: 'request B',
-      //   createdAt: new Date().toISOString(),
-      //   pulledAt: new Date().toISOString()
-      // },
-      // {
-      //   id: '6',
-      //   type: 'original',
-      //   title: 'request A',
-      //   createdAt: new Date().toISOString(),
-      //   pulledAt: new Date().toISOString()
-      // }
-    ];
+    
 
     return {
       records: mockRecords,
@@ -142,11 +38,13 @@ const TriggerData: React.FC = () => {
   const handleFindNewRecords = async () => {
     setLoading(true);
     setError(null);
+    setTriedFetching(true);
     
     try {
       // Make API call to xyz endpoint
       const response = await fetchRecords();
       setRecords(response.records);
+      setSelectedRecordId(response.records[response.records.length-1].id);
     } catch (err) {
       setError('Failed to fetch records. Please try again.');
       console.error('API Error:', err);
@@ -167,14 +65,35 @@ const TriggerData: React.FC = () => {
   );
 
   // Load initial data
-  useEffect(() => {
-    handleFindNewRecords();
-  }, []);
+  // useEffect(() => {
+  //   handleFindNewRecords();
+  // }, [])
 
-  return (
-    <div className="flex flex-col h-full overflow-hidden bg-white text-xs">
+  return (<div className='flex flex-col w-full min-h-full overflow-y-auto justify-end bg-white text-xs'>
+    { loading || !triedFetching ?   <div className="flex justify-center gap-6 w-full">
+        <div className="flex gap-1 " >   <div className="flex items-center">  
+                 <img
+                    src={zapImage}
+                    alt="logo"
+                    className="w-8 h-8 p-1 border border-black/10 rounded"
+                  />
+                <IoIosArrowRoundForward size={24} />
+                       <FaSquare size={30} className="text-red-500 rounded p-1 border border-black/10" />
+                   </div></div>
+        <div className="flex flex-col max-w-2/3">
+          <div className="font-bold my-2">{item.does}</div>
+          <div>{item.aboutDoes}</div>
+        </div>
+      </div>
+        : !loading && filteredRecords.length <= 0  ?   <div className='flex flex-col mt-2 text-xs gap-1.5 px-2'>
+        <div className='font-bold'> No request found</div>
+        <div>Create a request in your account and test again</div>
+        <div>Webhooks by Zapier</div>
+        <a href='https://help.zapier.com/hc/en-us/articles/8496215655437-Zap-is-not-receiving-webhooks' className="text-blue-700 underline" > Learn more about testing instant triggers.</a>
+      </div> : <div className="flex flex-col h-full overflow-hidden bg-white text-xs">
+      <div className=' flex flex-col text-xs px-2 mt-3 '>We found records in your YouTube account. We will load up to 3 most recent records, that have not appeared previously.<a className='text-blue-700 underline' href='https://help.zapier.com/hc/en-us/articles/8496288188429-Set-up-your-Zap-trigger#4-test-your-trigger-0-4'>Learn more about test records</a></div>
       {/* Search Bar */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="px-2 py-2 border-gray-200">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <input
@@ -188,11 +107,11 @@ const TriggerData: React.FC = () => {
       </div>
 
       {/* Find New ds Button */}
-      <div className="text-sm p-5 border-b border-gray-200">
+      <div className="text-sm px-2 py-2  border-gray-200">
         <button
           onClick={handleFindNewRecords}
           disabled={loading}
-          className="w-full bg-white border border-gray-600 text-gray-700 py-2 px-4 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-white border border-gray-600 text-gray-700 py-2 px-2 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Finding Records...' : 'Find new records'}
         </button>
@@ -206,7 +125,7 @@ const TriggerData: React.FC = () => {
       )}
 
       {/* Records List */}
-      <div className="flex-1 px-4 py-4  overflow-y-auto">
+      <div className="flex-1 px-2 py-4  overflow-y-auto">
         {filteredRecords.length === 0 && !loading ? (
           <div className="text-center text-gray-500 py-8">
             {searchTerm ? 'No records match your search.' : 'No records found.'}
@@ -214,6 +133,7 @@ const TriggerData: React.FC = () => {
         ) : (
           filteredRecords.map((record) => (
             <RecordItem
+              selectedRecord={selectedRecordId}
               key={record.id}
               record={record}
               onRecordClick={handleRecordClick}
@@ -224,9 +144,15 @@ const TriggerData: React.FC = () => {
         {loading && (
           <div className="text-center text-gray-500 py-8">
             Loading records...
-          </div>
+          </div> 
         )}
       </div>
+      
+    </div>}
+    <div className=' absolute w-full bottom-0'> { selectedRecordId ? <div className='w-full border-t border-black/10 self-start justify-start'> <button className=' my-4 px-2 w-full bg-blue-700 text-white hover:bg-blue-800 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer' > Continue with selected record</button>  </div> :!loading ? <div className="w-full border-t border-black/10 self-start justify-start">
+        <div className="flex gap-1 w-full my-4 px-2 "><button className={` ${!loading && filteredRecords.length >= 0 && triedFetching ? "w-1/2 bg-transparent text-black hover:bg-gray-500/50 border border-gray-400": "w-full bg-blue-700 text-white hover:bg-blue-800" } py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer` } onClick={()=>handleFindNewRecords()} >Test Trigger</button> { !loading && filteredRecords.length<=0 && triedFetching && <button className={`w-1/2 bg-blue-700 text-white hover:bg-blue-800" py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer`}>Skip test</button>}</div></div>
+      :<div className='w-full border-t border-black/10 self-start justify-start'> <button disabled={true} className=' w-full  my-4 px-2 bg-black/10 text-black/40 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer' > Testing</button>  </div>
+      }</div>
     </div>
   );
 };
