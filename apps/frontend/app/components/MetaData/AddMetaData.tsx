@@ -5,7 +5,6 @@ import MetaDataField from "./MetaDataField";
 import { useRecoilState } from "recoil";
 import { configureStepDetails } from "@/app/RecoilState/currentZap";
 
-
 export default function AddMetaData({
   item,
   index,
@@ -15,7 +14,8 @@ export default function AddMetaData({
   index: number;
   onFieldChange: (fieldNumber: number, value: string, type: onStepEnum) => void;
 }) {
-  const [configureId, setConfiguredStepDetails] = useRecoilState(configureStepDetails);
+  const [configureId, setConfiguredStepDetails] =
+    useRecoilState(configureStepDetails);
   const metaData =
     index === onStepEnum.SETUP && item.metadata
       ? item.metadata
@@ -26,7 +26,6 @@ export default function AddMetaData({
             item.optionConfiguration[configureId].testStep
           ? item.optionConfiguration[configureId].testStep
           : null;
- 
 
   return (
     <div className="flex flex-col justify-between  mb-8 w-full">
@@ -40,7 +39,8 @@ export default function AddMetaData({
       )}
 
       <div className="flex flex-col mt-2 gap-6">
-        {metaData && index != onStepEnum.TEST &&
+        {metaData &&
+          index != onStepEnum.TEST &&
           metaData.fields.map((field) => {
             return (
               <div key={field.fieldLabel}>

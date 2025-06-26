@@ -1,4 +1,4 @@
-import {  itemTestMetaData } from "@repo/types";
+import { itemTestMetaData } from "@repo/types";
 import React from "react";
 import { useRecoilState } from "recoil";
 import { selectedItemMetaData } from "../RecoilState/currentZap";
@@ -9,14 +9,18 @@ import Triggerdata from "./TriggerData/Triggerdata";
 import DataInForm from "./DataInField/FieldData";
 
 export default function TestItem({ item }: { item: itemTestMetaData }) {
-  const [zap,setZap] = useRecoilState(zapCreateState)
-  const [metadata,setMetaData] = useRecoilState(selectedItemMetaData)
-  
+  const [zap, setZap] = useRecoilState(zapCreateState);
+  const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
+
   console.log(JSON.stringify(item));
-  if(metadata.index == null || metadata.index == undefined || !metadata.isOpen) {
-    console.log("Returning some error", metadata)
+  if (
+    metadata.index == null ||
+    metadata.index == undefined ||
+    !metadata.isOpen
+  ) {
+    console.log("Returning some error", metadata);
     return null;
-  };
+  }
   return (
     <div className="flex flex-col text-xs overflow-y-auto min-h-full ">
       {/* <div className="flex justify-center gap-6 w-full">
@@ -38,11 +42,24 @@ export default function TestItem({ item }: { item: itemTestMetaData }) {
           <div>{item.aboutDoes}</div>
         </div>
       </div> */}
-      { item.type == "trigger" ? 
-      <div>
-        <Triggerdata item={item} zapImage={zap.selectedItems[metadata.index].imagePath}/>
-        </div> : zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue && <DataInForm fields={zap.selectedItems[metadata.index].optionConfiguration[zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue].configurationStep.fields}  />}
+      {item.type == "trigger" ? (
+        <div>
+          <Triggerdata
+            item={item}
+            zapImage={zap.selectedItems[metadata.index].imagePath}
+          />
+        </div>
+      ) : (
+        zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue && (
+          <DataInForm
+            fields={
+              zap.selectedItems[metadata.index].optionConfiguration[
+                zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue
+              ].configurationStep.fields
+            }
+          />
+        )
+      )}
     </div>
-    
   );
 }

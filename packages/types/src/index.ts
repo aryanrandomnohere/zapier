@@ -67,7 +67,7 @@ export interface itemTestMetaData {
   stepNumber: number;
   completed: boolean;
   does: string;
-  description?:string;
+  description?: string;
   aboutDoes: string;
   type: string;
 }
@@ -98,7 +98,7 @@ export interface optionConfiguration {
 }
 export interface RecordMetadata {
   id: string;
-  type: 'modified' | 'original';
+  type: "modified" | "original";
   createdAt: string;
   pulledAt: string;
   title: string;

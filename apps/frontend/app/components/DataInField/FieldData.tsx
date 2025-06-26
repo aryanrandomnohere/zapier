@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import React, { useState } from "react";
+import { Search } from "lucide-react";
 
 interface FieldOption {
   label: string;
@@ -22,88 +22,89 @@ interface DataInFormProps {
 }
 
 const DataInForm: React.FC<DataInFormProps> = ({ fields = [] }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Sample data matching the design
   const sampleFields: Field[] = [
     {
-      name: 'to',
-      fieldInputType: 'text',
-      fieldLabel: 'To',
-      fieldPlaceholder: '',
-      fieldValue: 'jj',
+      name: "to",
+      fieldInputType: "text",
+      fieldLabel: "To",
+      fieldPlaceholder: "",
+      fieldValue: "jj",
       required: true,
-      fieldNumber: 1
+      fieldNumber: 1,
     },
     {
-      name: 'subject',
-      fieldInputType: 'text',
-      fieldLabel: 'Subject',
-      fieldPlaceholder: '',
-      fieldValue: 'j',
+      name: "subject",
+      fieldInputType: "text",
+      fieldLabel: "Subject",
+      fieldPlaceholder: "",
+      fieldValue: "j",
       required: true,
-      fieldNumber: 2
+      fieldNumber: 2,
     },
     {
-      name: 'body',
-      fieldInputType: 'textarea',
-      fieldLabel: 'Body',
-      fieldPlaceholder: '',
-      fieldValue: 'jj',
+      name: "body",
+      fieldInputType: "textarea",
+      fieldLabel: "Body",
+      fieldPlaceholder: "",
+      fieldValue: "jj",
       required: true,
-      fieldNumber: 3
+      fieldNumber: 3,
     },
     {
-      name: 'attachment',
-      fieldInputType: 'file',
-      fieldLabel: 'Attachment',
-      fieldPlaceholder: '',
+      name: "attachment",
+      fieldInputType: "file",
+      fieldLabel: "Attachment",
+      fieldPlaceholder: "",
       fieldValue: null,
       required: false,
-      fieldNumber: 4
+      fieldNumber: 4,
     },
     {
-      name: 'fromName',
-      fieldInputType: 'text',
-      fieldLabel: 'From Name',
-      fieldPlaceholder: '',
+      name: "fromName",
+      fieldInputType: "text",
+      fieldLabel: "From Name",
+      fieldPlaceholder: "",
       fieldValue: null,
       required: false,
-      fieldNumber: 5
+      fieldNumber: 5,
     },
     {
-      name: 'replyTo',
-      fieldInputType: 'email',
-      fieldLabel: 'Reply To',
-      fieldPlaceholder: '',
+      name: "replyTo",
+      fieldInputType: "email",
+      fieldLabel: "Reply To",
+      fieldPlaceholder: "",
       fieldValue: null,
       required: false,
-      fieldNumber: 6
+      fieldNumber: 6,
     },
     {
-      name: 'cc',
-      fieldInputType: 'text',
-      fieldLabel: 'Cc',
-      fieldPlaceholder: '',
+      name: "cc",
+      fieldInputType: "text",
+      fieldLabel: "Cc",
+      fieldPlaceholder: "",
       fieldValue: null,
       required: false,
-      fieldNumber: 7
-    }
+      fieldNumber: 7,
+    },
   ];
 
   const fieldsToRender = fields.length > 0 ? fields : sampleFields;
 
   // Separate fields with values and empty fields
-  const filledFields = fieldsToRender.filter(field => field.fieldValue !== null && field.fieldValue !== '');
-  const emptyFields = fieldsToRender.filter(field => field.fieldValue === null || field.fieldValue === '');
+  const filledFields = fieldsToRender.filter(
+    (field) => field.fieldValue !== null && field.fieldValue !== "",
+  );
+  const emptyFields = fieldsToRender.filter(
+    (field) => field.fieldValue === null || field.fieldValue === "",
+  );
 
   const renderFieldValue = (field: Field) => {
-    const content = field.fieldValue || `empty ${!field.required ? '(optional)' : ''}`;
-    return (
-      <span className="text-xs text-gray-700 font-medium">
-        {content}
-      </span>
-    );
+    const content =
+      field.fieldValue || `empty ${!field.required ? "(optional)" : ""}`;
+    return <span className="text-xs text-gray-700 font-medium">{content}</span>;
   };
 
   return (
@@ -113,7 +114,7 @@ const DataInForm: React.FC<DataInFormProps> = ({ fields = [] }) => {
         <h2 className="text-sm font-medium text-gray-900 mb-2">Data In</h2>
         <div className="h-0.5 w-12 bg-blue-500 mb-0"></div>
       </div>
-      
+
       {/* Main container */}
       <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
         {/* Search Bar */}
@@ -146,7 +147,9 @@ const DataInForm: React.FC<DataInFormProps> = ({ fields = [] }) => {
           {emptyFields.length > 0 && (
             <>
               <div className="border-t border-gray-200 pt-4">
-                <h3 className="text-xs font-medium text-gray-900 mb-3">Empty fields:</h3>
+                <h3 className="text-xs font-medium text-gray-900 mb-3">
+                  Empty fields:
+                </h3>
                 <div className="space-y-3">
                   {emptyFields.map((field) => (
                     <div key={field.name} className="flex items-center gap-3">

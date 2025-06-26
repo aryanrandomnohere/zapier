@@ -424,7 +424,9 @@ export default function SideModal() {
     );
   }
   return (
-    <div className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-700 border-1 z-20   transform-all ease-in-out duration-300 bg-white`}>
+    <div
+      className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-700 border-1 z-20   transform-all ease-in-out duration-300 bg-white`}
+    >
       <div className={`flex flex-col items-center w-full`}>
         <div className="flex justify-between w-full items-center bg-blue-300/10">
           <div className="flex items-center gap-1 text-sm font-bold">
@@ -438,7 +440,10 @@ export default function SideModal() {
                 <BiSolidZap size={22} />
               </div>
             )}
-            {index + 1}. {zap.selectedItems[0].metadata?.fields[0].fieldValue ||"Select an event"} <FiEdit3 size={16} />
+            {index + 1}.{" "}
+            {zap.selectedItems[0].metadata?.fields[0].fieldValue ||
+              "Select an event"}{" "}
+            <FiEdit3 size={16} />
           </div>
           <div className="flex items-center gap-2 m-2">
             <SlSizeFullscreen size={18} />
@@ -498,35 +503,55 @@ export default function SideModal() {
               setIndex={setStepIndex}
             />
           ) : (
-            <div className="text-xs font-semibold flex items-center px-1 gap-1 py-2.5"> Test <div className="text-black/30 "> <IoTimerOutline size={18} /> </div>
+            <div className="text-xs font-semibold flex items-center px-1 gap-1 py-2.5">
+              {" "}
+              Test{" "}
+              <div className="text-black/30 ">
+                {" "}
+                <IoTimerOutline size={18} />{" "}
+              </div>
             </div>
           )}
         </div>
-        { StepIndex != onStepEnum.TEST  ? <div className="self-start p-2 w-full">
-          <AddMetaData
-            index={StepIndex}
-            key={selectedStep}
-            item={zap.selectedItems[index]}
-            onFieldChange={handleFieldChange}
-          />
-        </div> : <div className="min-h-full w-full"> <TestItem item={zap.selectedItems[index].optionConfiguration[configureId].testStep} /> </div>}
+        {StepIndex != onStepEnum.TEST ? (
+          <div className="self-start p-2 w-full">
+            <AddMetaData
+              index={StepIndex}
+              key={selectedStep}
+              item={zap.selectedItems[index]}
+              onFieldChange={handleFieldChange}
+            />
+          </div>
+        ) : (
+          <div className="min-h-full w-full">
+            {" "}
+            <TestItem
+              item={
+                zap.selectedItems[index].optionConfiguration[configureId]
+                  .testStep
+              }
+            />{" "}
+          </div>
+        )}
       </div>
-      { StepIndex != onStepEnum.TEST && <div className="w-full border-t border-black/10">
-        <div className="w-full my-4 px-2">
-          <button
-            onClick={handleContinue}
-            disabled={!isCurrentStepValid}
-            className={`w-full py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer
+      {StepIndex != onStepEnum.TEST && (
+        <div className="w-full border-t border-black/10">
+          <div className="w-full my-4 px-2">
+            <button
+              onClick={handleContinue}
+              disabled={!isCurrentStepValid}
+              className={`w-full py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer
               ${
                 isCurrentStepValid
                   ? "bg-blue-700 text-white hover:bg-blue-800"
                   : "bg-black/10 text-black/40 cursor-not-allowed"
               } `}
-          >
-            {isCurrentStepValid ? "Continue" : "To continue, choose an event"}
-          </button>
+            >
+              {isCurrentStepValid ? "Continue" : "To continue, choose an event"}
+            </button>
+          </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 }

@@ -9,12 +9,15 @@ import { zapCreateState } from "../../RecoilState/store/zapCreate";
 import axios from "axios";
 import { ItemType } from "@repo/types";
 import SideModal from "@/app/ui/SideModal";
-import { configureStepDetails, selectedItemMetaData } from "@/app/RecoilState/currentZap";
+import {
+  configureStepDetails,
+  selectedItemMetaData,
+} from "@/app/RecoilState/currentZap";
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
   const canvasRef = useRef<HTMLDivElement | null>(null);
-  const setConfigurationId = useSetRecoilState(configureStepDetails)
+  const setConfigurationId = useSetRecoilState(configureStepDetails);
   const addCell = (order: number) => {
     setZapState((prev) => {
       const updatedActions = [...prev.selectedItems];
@@ -51,7 +54,7 @@ export default function Page1() {
   };
 
   function SelectCell(index: number) {
-    setConfigurationId("")
+    setConfigurationId("");
     setZapState((prev) => ({ ...prev, selectedCell: index }));
   }
 
@@ -89,7 +92,7 @@ export default function Page1() {
   }, [zapState.isDragging, zapState.initialPosition]);
 
   useEffect(() => {}, [zapState]);
-console.log( zapState.selectedItems[0]?.metadata?.fields[0].fieldValue )
+  console.log(zapState.selectedItems[0]?.metadata?.fields[0].fieldValue);
   return (
     <>
       <div className="flex flex-col w-full h-10 bg-stone-50 justify-center ">
@@ -126,7 +129,10 @@ console.log( zapState.selectedItems[0]?.metadata?.fields[0].fieldValue )
                       SelectCell={SelectCell}
                       imagePath={zapState.selectedItems[0]?.imagePath}
                       title={zapState.selectedItems[0]?.name || "Trigger"}
-                      subtitle={ zapState.selectedItems[0]?.metadata?.fields[0].fieldValue || "An event that starts your Zap"}
+                      subtitle={
+                        zapState.selectedItems[0]?.metadata?.fields[0]
+                          .fieldValue || "An event that starts your Zap"
+                      }
                       order={1}
                     />
                   </div>
@@ -143,7 +149,10 @@ console.log( zapState.selectedItems[0]?.metadata?.fields[0].fieldValue )
                   SelectCell={SelectCell}
                   imagePath={zapState.selectedItems[0]?.imagePath}
                   title={zapState.selectedItems[0]?.name || "Trigger"}
-                  subtitle={zapState.selectedItems[0]?.metadata?.fields[0].fieldValue ||"An event that starts your Zap"}
+                  subtitle={
+                    zapState.selectedItems[0]?.metadata?.fields[0].fieldValue ||
+                    "An event that starts your Zap"
+                  }
                   order={1}
                 />
               </div>
