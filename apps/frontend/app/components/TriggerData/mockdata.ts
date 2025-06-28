@@ -15,13 +15,13 @@ export const mockRecords: RecordMetadata[] = [
     createdAt: new Date().toISOString(),
     pulledAt: new Date().toISOString(),
   },
-  {
-    id: "3",
-    type: "original",
-    title: "request D",
-    createdAt: new Date().toISOString(),
-    pulledAt: new Date().toISOString(),
-  },
+  // {
+  //   id: "3",
+  //   type: "original",
+  //   title: "request D",
+  //   createdAt: new Date().toISOString(),
+  //   pulledAt: new Date().toISOString(),
+  // },
   // {
   //   id: '4',
   //   type: 'original',

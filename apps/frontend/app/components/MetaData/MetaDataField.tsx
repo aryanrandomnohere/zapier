@@ -31,9 +31,9 @@ export default function MetaDataField({
   const stepIndex = useRecoilValue(onStep);
   if (field.fieldInputType === "dropdown") {
     return (
-      <div className="flex flex-col relative w-full">
+      <div className="flex flex-col gap-1 relative w-full">
         <div className="flex gap-1 text-xs font-bold">
-          {field.fieldLabel} <div className="text-red-400">*</div>
+          {field.fieldLabel} { field.required &&  <div className="text-red-400">*</div>}
         </div>
         <div
           onClick={() => setIsOpen(!isOpen)}
@@ -114,9 +114,9 @@ export default function MetaDataField({
 
   if (field.fieldInputType === "text") {
     return (
-      <div className="flex flex-col relative w-full">
+      <div className="flex flex-col gap-1 relative w-full">
         <div className="flex gap-1 text-xs font-bold">
-          {field.fieldLabel} <div className="text-red-400">*</div>
+          {field.fieldLabel} {field.required && <div className="text-red-400">*</div>}
         </div>
         <input
           type={field.fieldInputType}
@@ -136,7 +136,7 @@ export default function MetaDataField({
                 onStepEnum.SETUP,
               );
           }}
-          className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
+          className="px-3 py-1.5 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
           required={field.required}
         />
       </div>

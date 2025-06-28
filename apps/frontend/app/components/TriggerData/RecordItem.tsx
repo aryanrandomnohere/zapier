@@ -6,11 +6,13 @@ interface RecordItemProps {
   record: RecordMetadata;
   onRecordClick: (record: RecordMetadata) => void;
   selectedRecord: string;
+  setSelectedRecord:(id:string)=>void;
 }
 
 export const RecordItem: React.FC<RecordItemProps> = ({
   record,
   onRecordClick,
+  setSelectedRecord,
   selectedRecord,
 }) => {
   const getTimeAgo = (dateString: string) => {
@@ -36,12 +38,15 @@ export const RecordItem: React.FC<RecordItemProps> = ({
   return (
     <div
       className={`border-2  rounded-lg p-2 mb-1.5 cursor-pointer text-sm ${selectedRecord == record.id ? "border-blue-700 bg-blue-700/5" : "border-gray-200 hover:bg-gray-50  "} transition-colors `}
-      onClick={() => onRecordClick(record)}
+      onClick={() =>{ 
+        onRecordClick(record)
+        setSelectedRecord(record.id)
+      }}
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-1.5">
-            <h3 className={`text-xs font-bold `}>{record.title}</h3>
+            <h3 className={`text-xs font-bold p-1 pl-0 `}>{record.title}</h3>
             {isModified && (
               <button className="p-1 hover:bg-blue-100 rounded">
                 <MoreHorizontal className="w-4 h-4" />

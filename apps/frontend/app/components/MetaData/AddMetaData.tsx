@@ -31,7 +31,7 @@ export default function AddMetaData({
     <div className="flex flex-col justify-between  mb-8 w-full">
       {index === 0 && (
         <div className="flex flex-col w-full text-xs">
-          <div className="flex gap-0.5 text-sm">
+          <div className="flex gap-0.5 text-xs font-bold pb-1">
             App<div className="text-red-400">*</div>
           </div>
           <ChangeItem item={item} />

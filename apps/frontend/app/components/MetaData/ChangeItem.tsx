@@ -10,7 +10,7 @@ export default function ChangeItem({ item }: { item: ItemType }) {
         <div className="hover:cursor-pointer flex justify-between px-3 py-2 border border-black/20 rounded min-w-full">
           <div className="flex items-center bg-yellow-500/10 min-w-fit justify-center rounded p-2 gap-1 border border-black/30 text-xs font-semibold">
             <img src={item.imagePath} className="w-4 h-4" />
-            {item.name} by Zapier
+            {item.name}
           </div>
           <button className="text-blue-500 text-xs border border-black/20 rounded px-2 py-[1px] hover:bg-gray-100 font-bold hover:cursor-pointer">
             Change

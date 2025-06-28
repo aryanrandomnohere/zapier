@@ -67,9 +67,16 @@ export interface itemTestMetaData {
   stepNumber: number;
   completed: boolean;
   does: string;
-  description?: string;
   aboutDoes: string;
-  type: string;
+  type:string;
+  testType: TriggerTestType;
+  userTriggered?:{
+  title:string;
+  subtitle:string;
+  description: string;
+  learnMoreText:string;
+  learnMoreUrl:string;
+  }
 }
 
 export interface Field {
@@ -109,3 +116,9 @@ export interface ApiResponse {
   total: number;
   lastUpdated: string;
 }
+
+export enum TriggerTestType {
+  UserTriggered = 'user_triggered',
+  SystemTriggered = 'system_triggered',
+}
+

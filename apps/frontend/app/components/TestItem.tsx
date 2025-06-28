@@ -23,7 +23,7 @@ export default function TestItem({ item }: { item: itemTestMetaData }) {
   }
   return (
     <div className="flex flex-col text-xs overflow-y-auto min-h-full ">
-      {/* <div className="flex justify-center gap-6 w-full">
+      <div className="flex justify-center gap-6 w-full">
         <div className="flex gap-1 " > 
        
    
@@ -35,16 +35,18 @@ export default function TestItem({ item }: { item: itemTestMetaData }) {
                 alt="logo"
                 className="w-8 h-8 p-1 rounded border border-black/10"
               /> 
-          </div>}
-        </div>
-        <div className="flex flex-col max-w-2/3">
+          <div className="flex flex-col max-w-2/3">
           <div className="font-bold my-2">{item.does}</div>
           <div>{item.aboutDoes}</div>
         </div>
-      </div> */}
+          </div>}
+        </div>
+        
+      </div>
       {item.type == "trigger" ? (
         <div>
           <Triggerdata
+            triggerName={zap.selectedItems[metadata.index].name}
             item={item}
             zapImage={zap.selectedItems[metadata.index].imagePath}
           />

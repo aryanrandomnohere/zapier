@@ -2,17 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Search, MoreHorizontal, ChevronRight } from "lucide-react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { FaSquare } from "react-icons/fa6";
-import { ApiResponse, itemTestMetaData, RecordMetadata } from "@repo/types";
+import { ApiResponse, itemTestMetaData, RecordMetadata, TriggerTestType } from "@repo/types";
 import { mockRecords } from "./mockdata";
 import { RecordItem } from "./RecordItem";
+import Task from "./Task";
 
 // Main Records Interface Component
 const TriggerData = ({
+  triggerName,
   zapImage,
   item,
 }: {
   zapImage: string;
   item: itemTestMetaData;
+  triggerName:string;
 }) => {
   const [records, setRecords] = useState<RecordMetadata[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -71,8 +74,11 @@ const TriggerData = ({
 
   return (
     <div className="flex flex-col w-full min-h-full overflow-y-auto justify-end bg-white text-xs">
+      {item.testType === TriggerTestType.UserTriggered && item.userTriggered && 
+      <Task imagePath={zapImage} item={item}/>
+      }
       {loading || !triedFetching ? (
-        <div className="flex justify-center gap-6 w-full">
+        <div className="flex justify-center gap-6 px-3 mt-2 w-full">
           <div className="flex gap-1 ">
             {" "}
             <div className="flex items-center">
@@ -94,10 +100,10 @@ const TriggerData = ({
           </div>
         </div>
       ) : !loading && filteredRecords.length <= 0 ? (
-        <div className="flex flex-col mt-2 text-xs gap-1.5 px-2">
+        <div className="flex flex-col mt-2  text-xs gap-1.5 px-3">
           <div className="font-bold"> No request found</div>
           <div>Create a request in your account and test again</div>
-          <div>Webhooks by Zapier</div>
+          <div>{triggerName}</div>
           <a
             href="https://help.zapier.com/hc/en-us/articles/8496215655437-Zap-is-not-receiving-webhooks"
             className="text-blue-700 underline"
@@ -107,7 +113,7 @@ const TriggerData = ({
           </a>
         </div>
       ) : (
-        <div className="flex flex-col h-full overflow-hidden bg-white text-xs">
+        <div className="flex flex-col h-full px-3 overflow-hidden bg-white text-xs">
           <div className=" flex flex-col text-xs px-2 mt-3 ">
             We found records in your YouTube account. We will load up to 3 most
             recent records, that have not appeared previously.
@@ -161,6 +167,7 @@ const TriggerData = ({
             ) : (
               filteredRecords.map((record) => (
                 <RecordItem
+                  setSelectedRecord = {setSelectedRecordId}
                   selectedRecord={selectedRecordId}
                   key={record.id}
                   record={record}
@@ -182,10 +189,12 @@ const TriggerData = ({
         {selectedRecordId ? (
           <div className="w-full border-t border-black/10 self-start justify-start">
             {" "}
-            <button className=" my-4 px-2 w-full bg-blue-700 text-white hover:bg-blue-800 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer">
+              <div className="flex gap-1 w-full my-4 px-2 ">
+            <button className="  px-2 w-full bg-blue-700 text-white hover:bg-blue-800 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer">
               {" "}
               Continue with selected record
             </button>{" "}
+            </div>
           </div>
         ) : !loading ? (
           <div className="w-full border-t border-black/10 self-start justify-start">
@@ -208,13 +217,15 @@ const TriggerData = ({
         ) : (
           <div className="w-full border-t border-black/10 self-start justify-start">
             {" "}
+            <div className="flex gap-1 w-full my-4 px-2 ">
             <button
               disabled={true}
-              className=" w-full  my-4 px-2 bg-black/10 text-black/40 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer"
+              className=" w-full  px-2 bg-black/10 text-black/40 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer"
             >
               {" "}
               Testing
             </button>{" "}
+            </div>
           </div>
         )}
       </div>
