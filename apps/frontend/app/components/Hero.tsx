@@ -2,6 +2,7 @@ import hero from "./homepage-hero.png";
 import { GoArrowRight } from "react-icons/go";
 import PrimaryButton from "./buttons/PrimaryButton";
 import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
 export default function Hero() {
   return (
     <div className="flex justify-center w-full pt-[100px] ">
@@ -28,9 +29,11 @@ export default function Hero() {
             <div className=" mt-10">
               <div className="flex items-center w-full gap-5 ">
                 <div className="">
-                  <PrimaryButton size="big">
-                    Start free with email
-                  </PrimaryButton>{" "}
+                  <Link href="/sign-up">
+                    <PrimaryButton size="big">
+                      Start free with email
+                    </PrimaryButton>{" "}
+                  </Link>
                 </div>
                 <div
                   className={`flex justify-center items-center "text-xl px-10 py-2.5 h-full gap-3  font-semibold  border text-black border-black/50 hover:cursor-pointer rounded-full hover:border-black hover:border-2 `}

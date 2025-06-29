@@ -1,26 +1,15 @@
-"use client";
-
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import LinkButton from "./buttons/LinkButton";
 import PrimaryButton from "./buttons/PrimaryButton";
 import zap from "./zap.png";
 import { SlArrowDown } from "react-icons/sl";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { auth } from "../api/auth/[...nextauth]/auth";
 
-export default function Navbar() {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Check authentication after the component mounts
-      const token = Boolean(window.localStorage.getItem("token"));
-      setIsAuthenticated(token);
-    }
-  }, []);
-
+export default async function Navbar() {
+  const session = await auth();
+  const isAuthenticated = !!session;
   return (
     <div
       className="w-full border-b bg-stone-50 border-b-black/10 pl-8 pr-10"
@@ -28,16 +17,16 @@ export default function Navbar() {
     >
       <div className="flex w-full justify-between items-center my-1.5">
         <div className="flex gap-3 justify-center items-center">
-          <Image
-            width={100}
-            height={100}
-            src={zap.src}
-            onClick={() => {
-              router.push("/");
-            }}
-            alt="LOGO"
-            className="max-w-32 hover:cursor-pointer"
-          />
+          <Link href={"/"}>
+            {" "}
+            <Image
+              width={100}
+              height={100}
+              src={zap.src}
+              alt="LOGO"
+              className="max-w-32 hover:cursor-pointer"
+            />
+          </Link>
           <LinkButton size="small">
             Products <SlArrowDown className="ml-1.5 text-xs" />
           </LinkButton>
@@ -56,17 +45,12 @@ export default function Navbar() {
             Explore Apps
           </LinkButton>
           <LinkButton size="small">Contact sales</LinkButton>
-          {!isAuthenticated && <LinkButton size="small">Log in</LinkButton>}
-          {!isAuthenticated && (
-            <PrimaryButton
-              onClick={() => {
-                router.push("/sign-up");
-              }}
-              size="small"
-            >
-              Sign up
-            </PrimaryButton>
-          )}
+          <Link className="flex items-center gap-4" href={"sign-up"}>
+            {!isAuthenticated && <LinkButton size="small">Log in</LinkButton>}
+            {!isAuthenticated && (
+              <PrimaryButton size="small">Sign up</PrimaryButton>
+            )}
+          </Link>
         </div>
       </div>
     </div>

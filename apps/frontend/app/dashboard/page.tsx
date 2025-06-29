@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 export default function Page() {
   const router = useRouter();
   function handleCreateZap() {
+    console.log("navigating button clicked");
     router.push("/zap/create");
   }
   return (

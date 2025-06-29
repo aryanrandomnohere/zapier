@@ -7,6 +7,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 export default function SingIn() {
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -20,24 +21,34 @@ export default function SingIn() {
       setNextField(true);
       return;
     }
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      firstname,
+      lastname,
+      password,
+    });
+    if (result?.ok) {
+      router.push("/dashboard"); // use router from useRouter()
+    }
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/signin`,
-        {
-          email,
-          firstname,
-          lastname,
-          password,
-        },
-      );
-      localStorage.setItem("token", response.data.token);
-      router.push("/dashboard");
-      console.log("Response:", response.data);
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/signin`,
+      //   {
+      //     email,
+      //     firstname,
+      //     lastname,
+      //     password,
+      //   },
+      // );
+      // localStorage.setItem("token", response.data.token);
+      // router.push("/dashboard");
+      // console.log("Response:", response.data);
     } catch (error) {
       //@ts-ignore
       console.error(
         "Axios error:",
-        error.response ? error.response.data : error.message,
+        // error.response ? error.response.data : error.message,
       );
     }
   }
