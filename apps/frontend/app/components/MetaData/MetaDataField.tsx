@@ -10,6 +10,7 @@ import { BiSolidZap } from "react-icons/bi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import FloatingModal from "../FloatingModal";
 
 interface MetaDataFieldProps {
   field: Field;
@@ -33,7 +34,8 @@ export default function MetaDataField({
     return (
       <div className="flex flex-col gap-1 relative w-full">
         <div className="flex gap-1 text-xs font-bold">
-          {field.fieldLabel} { field.required &&  <div className="text-red-400">*</div>}
+          {field.fieldLabel}{" "}
+          {field.required && <div className="text-red-400">*</div>}
         </div>
         <div
           onClick={() => setIsOpen(!isOpen)}
@@ -48,7 +50,7 @@ export default function MetaDataField({
         </div>
 
         {isOpen && (
-          <div className="absolute top-4 shadow-2xl shadow-black/40 right-full mr-1 transform-all duration-300 ease-in-out w-full mt-1 bg-white border border-gray-200 rounded-md z-50">
+          <FloatingModal>
             <div className="p-2">
               <div className="flex items-center gap-2 px-2 py-1.5 bg-white mb-3.5 border border-black/20 rounded focus:border focus:border-blue-600">
                 <div className="text-gray-500">
@@ -63,7 +65,7 @@ export default function MetaDataField({
                 />
               </div>
             </div>
-            <div className="max-h-60 overflow-y-auto">
+            <div className="max-h-60 ">
               {field.options
                 ?.filter((option) =>
                   option.id.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -106,7 +108,7 @@ export default function MetaDataField({
                   </div>
                 ))}
             </div>
-          </div>
+          </FloatingModal>
         )}
       </div>
     );
@@ -116,7 +118,8 @@ export default function MetaDataField({
     return (
       <div className="flex flex-col gap-1 relative w-full">
         <div className="flex gap-1 text-xs font-bold">
-          {field.fieldLabel} {field.required && <div className="text-red-400">*</div>}
+          {field.fieldLabel}{" "}
+          {field.required && <div className="text-red-400">*</div>}
         </div>
         <input
           type={field.fieldInputType}

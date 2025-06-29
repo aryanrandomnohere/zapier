@@ -1,12 +1,15 @@
 import { RecordMetadata } from "@repo/types";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
+import FloatingModal from "../FloatingModal";
+import RecordJsonData from "./RecordJsonData";
 
 // Individual Record Item Component
 interface RecordItemProps {
   record: RecordMetadata;
   onRecordClick: (record: RecordMetadata) => void;
   selectedRecord: string;
-  setSelectedRecord:(id:string)=>void;
+  setSelectedRecord: (id: string) => void;
 }
 
 export const RecordItem: React.FC<RecordItemProps> = ({
@@ -15,6 +18,7 @@ export const RecordItem: React.FC<RecordItemProps> = ({
   setSelectedRecord,
   selectedRecord,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -37,10 +41,11 @@ export const RecordItem: React.FC<RecordItemProps> = ({
   // ${  isModified ? 'bg-blue-50 border-blue-200' : 'bg-white' }.  ${isModified ? 'text-blue-900' : 'text-gray-900'}${isModified ? 'text-blue-700' : 'text-gray-600'}
   return (
     <div
-      className={`border-2  rounded-lg p-2 mb-1.5 cursor-pointer text-sm ${selectedRecord == record.id ? "border-blue-700 bg-blue-700/5" : "border-gray-200 hover:bg-gray-50  "} transition-colors `}
-      onClick={() =>{ 
-        onRecordClick(record)
-        setSelectedRecord(record.id)
+      className={`relative  border-2 rounded-lg p-2 mb-1.5 cursor-pointer text-sm ${selectedRecord == record.id ? "border-blue-700 bg-blue-700/5" : "border-gray-200 hover:bg-gray-50  "} transition-colors `}
+      onClick={() => {
+        onRecordClick(record);
+        setSelectedRecord(record.id);
+        setIsOpen(!isOpen);
       }}
     >
       <div className="flex items-center justify-between">
@@ -63,6 +68,11 @@ export const RecordItem: React.FC<RecordItemProps> = ({
           className={`w-5 h-5 ${isModified ? "text-blue-600" : "text-gray-400"}`}
         />
       </div>
+      {isOpen && (
+        <FloatingModal>
+          <RecordJsonData data={record.JsonData} />
+        </FloatingModal>
+      )}
     </div>
   );
 };

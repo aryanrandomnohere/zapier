@@ -6,7 +6,6 @@ import {
 } from "react-icons/fa6";
 import { GoCheckCircleFill } from "react-icons/go";
 import { IoTimerOutline } from "react-icons/io5";
-import { MdError } from "react-icons/md";
 
 export default function StepsStatus({
   step,
@@ -29,6 +28,8 @@ export default function StepsStatus({
       : unique === onStepEnum.CONFIGURATION
         ? checkValidity(onStepEnum.SETUP)
         : true;
+  const validity =
+    unique === onStepEnum.TEST ? step.completed : checkValidity(unique);
   return (
     <button
       disabled={!isClickable}
@@ -43,7 +44,7 @@ export default function StepsStatus({
         <div className="text-black/30 ">
           <IoTimerOutline size={18} />
         </div>
-      ) : checkValidity(unique) ? (
+      ) : validity ? (
         <div className="text-green-700">
           <GoCheckCircleFill size={15} />
         </div>

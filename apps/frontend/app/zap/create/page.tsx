@@ -7,10 +7,11 @@ import SelectItem from "@/app/components/SelectItem";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../../RecoilState/store/zapCreate";
 import axios from "axios";
-import { ItemType } from "@repo/types";
+import { ItemType, onStepEnum } from "@repo/types";
 import SideModal from "@/app/ui/SideModal";
 import {
   configureStepDetails,
+  onStep,
   selectedItemMetaData,
 } from "@/app/RecoilState/currentZap";
 export default function Page1() {
@@ -18,6 +19,7 @@ export default function Page1() {
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
   const canvasRef = useRef<HTMLDivElement | null>(null);
   const setConfigurationId = useSetRecoilState(configureStepDetails);
+  const setOnStep = useSetRecoilState(onStep);
   const addCell = (order: number) => {
     setZapState((prev) => {
       const updatedActions = [...prev.selectedItems];
@@ -55,6 +57,7 @@ export default function Page1() {
 
   function SelectCell(index: number) {
     setConfigurationId("");
+    setOnStep(onStepEnum.SETUP);
     setZapState((prev) => ({ ...prev, selectedCell: index }));
   }
 
@@ -106,7 +109,7 @@ export default function Page1() {
       </div>
       <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-stone-200 dot-background">
         {metaData.isOpen && (
-          <div className=" fixed flex max-w-96 min-h-3/4 max-h-3/4   right-2 z-50 transform-all duration-300 mt-4">
+          <div className=" fixed flex max-w-96 min-h-4/5 max-h-4/5   right-2 z-50 transform-all duration-300 mt-4">
             <SideModal />
           </div>
         )}

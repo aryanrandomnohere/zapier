@@ -31,7 +31,7 @@ export interface ItemType {
   id: string;
   name: string;
   imagePath: string;
-  optionConfiguration: optionConfiguration;
+  optionConfiguration?: optionConfiguration;
   metadata?: itemStepMetaData;
 }
 
@@ -68,15 +68,16 @@ export interface itemTestMetaData {
   completed: boolean;
   does: string;
   aboutDoes: string;
-  type:string;
+  type: string;
   testType: TriggerTestType;
-  userTriggered?:{
-  title:string;
-  subtitle:string;
-  description: string;
-  learnMoreText:string;
-  learnMoreUrl:string;
-  }
+
+  userTriggered?: {
+    title: string;
+    subtitle: string;
+    description: string;
+    learnMoreText: string;
+    learnMoreUrl: string;
+  };
 }
 
 export interface Field {
@@ -109,6 +110,7 @@ export interface RecordMetadata {
   createdAt: string;
   pulledAt: string;
   title: string;
+  JsonData: Record<string, string>;
 }
 
 export interface ApiResponse {
@@ -118,7 +120,6 @@ export interface ApiResponse {
 }
 
 export enum TriggerTestType {
-  UserTriggered = 'user_triggered',
-  SystemTriggered = 'system_triggered',
+  UserTriggered = "user_triggered",
+  SystemTriggered = "system_triggered",
 }
-

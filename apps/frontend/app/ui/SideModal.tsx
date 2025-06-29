@@ -514,17 +514,16 @@ export default function SideModal() {
           )}
         </div>
         {StepIndex != onStepEnum.TEST ? (
-   <div className="flex gap-1 w-full  px-2.5 ">
-          <div className="self-start p-2 w-full">
-            <AddMetaData
-              index={StepIndex}
-              key={selectedStep}
-              item={zap.selectedItems[index]}
-              onFieldChange={handleFieldChange}
-            />
+          <div className="flex gap-1 w-full  px-2.5 ">
+            <div className="self-start p-2 w-full">
+              <AddMetaData
+                index={StepIndex}
+                key={selectedStep}
+                item={zap.selectedItems[index]}
+                onFieldChange={handleFieldChange}
+              />
+            </div>
           </div>
-        </div>
-
         ) : (
           <div className="min-h-full w-full">
             {" "}
