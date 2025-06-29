@@ -13,6 +13,7 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   }
+  console.log(process.env.GOOGLE_CLIENTID, process.env.GOOGLE_CLIENTSECRET);
 
   console.log("🔥 Middleware triggered:", url.pathname);
 

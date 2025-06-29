@@ -59,7 +59,12 @@ export default function SingIn() {
         {!nextField ? (
           <div className="flex flex-col gap-4">
             {/* Google Sign-Up Button */}
-            <div className="flex items-center min-w-[390px] p-2 bg-blue-500/90 rounded hover:bg-blue-600 transition-all duration-500 cursor-pointer w-60 text-center justify-between">
+            <div
+              onClick={() => {
+                signIn("google");
+              }}
+              className="flex items-center min-w-[390px] p-2 bg-blue-500/90 rounded hover:bg-blue-600 transition-all duration-500 cursor-pointer w-60 text-center justify-between"
+            >
               <div className="bg-white p-0.5 rounded text-sm">
                 <FcGoogle className="text-2xl" />
               </div>

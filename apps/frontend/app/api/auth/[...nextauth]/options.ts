@@ -1,7 +1,7 @@
 import Credentials from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import { Session } from "next-auth";
-
+import GoogleProvider from "next-auth/providers/google";
 export default {
   providers: [
     Credentials({
@@ -32,6 +32,12 @@ export default {
           name: `${credentials.firstname} ${credentials.lastname}`,
         };
       },
+    }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENTID || "",
+      clientSecret: process.env.GOOGLE_SECRET || "",
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
