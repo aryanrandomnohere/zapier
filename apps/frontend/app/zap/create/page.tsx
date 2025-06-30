@@ -14,6 +14,7 @@ import {
   onStep,
   selectedItemMetaData,
 } from "@/app/RecoilState/currentZap";
+import { metadata } from "framer-motion/client";
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
@@ -56,8 +57,17 @@ export default function Page1() {
   };
 
   function SelectCell(index: number) {
-    setConfigurationId("");
-    setOnStep(onStepEnum.SETUP);
+    setMetaData((prev) => {return {...prev, index}})
+   if(zapState.selectedItems[index]?.metadata && zapState.selectedItems[index].metadata?.fields[0].fieldValue){ 
+    console.log("Setting seelcted configuration Id", zapState.selectedItems[index].metadata?.fields[0].fieldValue)
+      setConfigurationId(zapState.selectedItems[index].metadata?.fields[0].fieldValue);
+    }
+   else {
+      console.log("Configuration id does not exizst")
+     setConfigurationId("")
+     setOnStep(onStepEnum.SETUP);
+   }
+    
     setZapState((prev) => ({ ...prev, selectedCell: index }));
   }
 
@@ -95,7 +105,6 @@ export default function Page1() {
   }, [zapState.isDragging, zapState.initialPosition]);
 
   useEffect(() => {}, [zapState]);
-  console.log(zapState.selectedItems[0]?.metadata?.fields[0].fieldValue);
   return (
     <>
       <div className="flex flex-col w-full h-10 bg-stone-50 justify-center ">
@@ -122,7 +131,7 @@ export default function Page1() {
           ref={canvasRef}
           onMouseDown={handleMouseDown}
         >
-          <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-1/6 -translate-y-3/4">
+          <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-2/6 -translate-y-2/4">
             {!zapState.selectedItems[0]?.imagePath &&
             !zapState.selectedItems[0]?.name ? (
               <Modal>

@@ -108,10 +108,10 @@ const DataInForm: React.FC<DataInFormProps> = ({ fields = [] }) => {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full px-3 max-w-md">
       {/* Header - Outside the box */}
       <div className="mb-0 ml-2">
-        <h2 className="text-sm font-medium text-gray-900 mb-2">Data In</h2>
+        <h2 className="text-xs font-medium text-gray-900 mb-2">Data In</h2>
         <div className="h-0.5 w-12 bg-blue-500 mb-0"></div>
       </div>
 

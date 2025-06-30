@@ -18,22 +18,27 @@ model User {
 }
 
 model Zap {
-  id              String   @id @default(uuid())
-  triggerId       String
-  triggerMetadata Json     @default("{}")
-  userId          Int
-  user            User     @relation(fields: [userId], references: [id])
-  trigger         Trigger?
-  actions         Action[]
-  zapRuns         ZapRun[]
+  id                   Int      @id @default(autoincrement())
+  triggerId            String
+  name                 String   @default("Untitled Zap")
+  lastEdited           DateTime @default(now())
+  createdAt            DateTime @default(now())
+  triggerMetadata      Json     @default("{}")
+  triggerMetadataindex Int      @default(0)
+  userId               Int
+  user                 User     @relation(fields: [userId], references: [id])
+  trigger              Trigger?
+  actions              Action[]
+  zapRuns              ZapRun[]
 }
 
 model Trigger {
-  id        String            @id @default(uuid())
-  zap       Zap               @relation(fields: [zapId], references: [id])
-  zapId     String            @unique
-  type      AvailableTriggers @relation(fields: [triggerId], references: [id])
-  triggerId String
+  id            String            @id @default(uuid())
+  zap           Zap               @relation(fields: [zapId], references: [id])
+  zapId         Int               @unique
+  configuration Json
+  type          AvailableTriggers @relation(fields: [triggerId], references: [id])
+  triggerId     String
 }
 
 model AvailableTriggers {
@@ -47,9 +52,10 @@ model AvailableTriggers {
 
 model Action {
   id            String           @id @default(uuid())
-  zapId         String
+  zapId         Int
   zap           Zap              @relation(fields: [zapId], references: [id])
   actionDetails AvailableActions @relation(fields: [actionId], references: [id])
+  configuration Json             @default("{}")
   actionId      String
   sortingOrder  Int              @default(0)
 }
@@ -65,7 +71,7 @@ model AvailableActions {
 
 model ZapRun {
   id           String        @id @default(uuid())
-  zapId        String
+  zapId        Int
   zap          Zap           @relation(fields: [zapId], references: [id])
   metaData     Json
   zapRunOutBox ZapRunOutbox?

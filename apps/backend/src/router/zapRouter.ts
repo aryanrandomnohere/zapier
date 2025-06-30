@@ -34,6 +34,10 @@ zapRouter.get(
     });
   },
 );
+
+
+
+
 zapRouter.post(
   "/",
   AuthMiddleware,
@@ -61,6 +65,7 @@ zapRouter.post(
           },
         },
       });
+
       const trigger = await tx.trigger.create({
         data: {
           triggerId: parsedData.data.triggerId,
@@ -89,7 +94,7 @@ zapRouter.get(
   async (req: extendedRequest, res: Response) => {
     const id = req.userId;
     const zapId = req.params.zapId;
-    const zaps = await prisma.zap.findMany({
+    const zaps = await prisma.zap.findUnique({
       where: {
         id: zapId,
         userId: id,
