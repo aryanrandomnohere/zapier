@@ -1,35 +1,56 @@
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import bcrypt from "bcryptjs";
+import { prisma } from "@repo/db";
 import { JWT } from "next-auth/jwt";
 import { Session } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+
 export default {
   providers: [
-    Credentials({
-      name: "Email and password",
+    CredentialsProvider({
+      name: "Email and Password",
       credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "Enter Your Email Here",
-        },
-        firstname: { label: "firstname", type: "text", placeholder: "" },
-        lastname: { label: "lastname", type: "text", placeholder: "" },
+        email: { label: "Email", type: "text" },
+        firstname: { label: "First name", type: "text" },
+        lastname: { label: "Last name", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log(credentials);
+        if (!credentials?.email || !credentials?.password) return null;
 
-        // Here you'd typically validate the credentials against your DB
-        // Return null if credentials are invalid
-        if (!credentials?.email || !credentials?.password) {
-          return null;
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
+
+        const hashedPassword = await bcrypt.hash(credentials.password, 10);
+
+        // If user doesn't exist, create
+        if (!user) {
+          const newUser = await prisma.user.create({
+            data: {
+              email: credentials.email,
+              firstname: credentials.firstname,
+              lastname: credentials.lastname,
+              password: hashedPassword,
+              type: "credentials",
+              verified: false,
+            },
+          });
+
+          return {
+            id: newUser.id.toString(),
+            name: `${newUser.firstname || ""} ${newUser.lastname || ""}`,
+            email: newUser.email,
+            image: newUser.imageUrl || null,
+          };
         }
 
-        // Mock user - replace with actual database validation
+        // Otherwise, return existing
         return {
-          id: "123",
-          email: credentials.email,
-          name: `${credentials.firstname} ${credentials.lastname}`,
+          id: user.id.toString(),
+          name: `${user.firstname || ""} ${user.lastname || ""}`,
+          email: user.email,
+          image: user.imageUrl || null,
         };
       },
     }),
@@ -40,25 +61,66 @@ export default {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/sign-up",
-  },
+
+  secret: process.env.NEXTAUTH_SECRET, // used for signing JWT
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+    encryption: false, // disables JWE encryption so your backend can decode
+  },
+
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: any }) {
+    async signIn({ user, account, profile }) {
+      try {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email || profile?.email },
+        });
+
+        if (account.provider === "google" && !existingUser) {
+          const response = await prisma.user.create({
+            data: {
+              email: profile.email,
+              firstname: profile.name?.split(" ")[0],
+              lastname: profile.name?.split(" ")[1],
+              imageUrl: profile.picture,
+              password: null,
+              type: "google",
+              verified: profile.email_verified,
+            },
+            select: {
+              id: true,
+            },
+          });
+          console.log(response.id);
+          user.userId = response.id;
+        }
+
+        return true;
+      } catch (error) {
+        console.error("Sign-in error:", error);
+        return false;
+      }
+    },
+
+    async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.userId = user.userId; // 🟢 this is what gets signed in the token
       }
       return token;
     },
-    async session({ session, token }: { session: Session; token: JWT }) {
-      if (token && session.user) {
-        session.user.id = token.id;
+
+    async session({ session, token }) {
+      if (session.user && token.userId) {
+        session.user.userId = token.userId; // 🟢 this becomes available in frontend session
       }
       return session;
     },
+  },
+
+  pages: {
+    signIn: "/sign-up",
   },
 };

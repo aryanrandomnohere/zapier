@@ -13,16 +13,11 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   }
-  console.log(process.env.GOOGLE_CLIENTID, process.env.GOOGLE_CLIENTSECRET);
-
-  console.log("🔥 Middleware triggered:", url.pathname);
 
   const token = await getToken({
     req: request as any,
     secret: process.env.NEXTAUTH_SECRET,
   });
-
-  console.log("Token:", token);
 
   // If no token and not already on sign-up or sign-in page → redirect
   if (!token) {
@@ -32,7 +27,6 @@ export async function middleware(request: NextRequest) {
       url.pathname === "/sign-in";
 
     if (!isPublicPath) {
-      console.log("🚫 No token, redirecting to /sign-up");
       return NextResponse.redirect(new URL("/sign-up", request.url));
     }
   } else {
@@ -42,7 +36,6 @@ export async function middleware(request: NextRequest) {
       url.pathname === "/sign-in" ||
       url.pathname === "/"
     ) {
-      console.log("✅ Token exists, redirecting to /dashboard");
       return NextResponse.redirect(new URL("/home", request.url));
     }
   }
