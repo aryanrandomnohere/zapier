@@ -403,8 +403,10 @@ export default function SideModal() {
       }));
     }
     if (StepIndex === onStepEnum.SETUP) {
-      if (  zap.selectedItems[index].optionConfiguration &&
-        zap.selectedItems[index].optionConfiguration[configureId].configurationStep
+      if (
+        zap.selectedItems[index].optionConfiguration &&
+        zap.selectedItems[index].optionConfiguration[configureId]
+          .configurationStep
       )
         setStepIndex(onStepEnum.CONFIGURATION);
       else setStepIndex(onStepEnum.TEST);

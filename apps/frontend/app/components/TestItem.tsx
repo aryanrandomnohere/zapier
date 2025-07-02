@@ -26,23 +26,25 @@ export default function TestItem({ item }: { item: itemTestMetaData }) {
       <div className="flex px-3 mt-2  justify-center gap-6 w-full">
         <div className="">
           {item.type === "action" && (
-           <div className="flex gap-6 "> <div className="flex items-center">
-              <FaSquare
-                size={30}
-                className="text-red-500 rounded p-1 border border-black/10"
-              />
-              <IoIosArrowRoundForward size={24} />
-              <img
-                src={zap.selectedItems[metadata.index].imagePath}
-                alt="logo"
-                className="w-8 h-8 p-1 rounded border border-black/10"
-              />
-               </div>
+            <div className="flex gap-6 ">
+              {" "}
+              <div className="flex items-center">
+                <FaSquare
+                  size={30}
+                  className="text-red-500 rounded p-1 border border-black/10"
+                />
+                <IoIosArrowRoundForward size={24} />
+                <img
+                  src={zap.selectedItems[metadata.index].imagePath}
+                  alt="logo"
+                  className="w-8 h-8 p-1 rounded border border-black/10"
+                />
+              </div>
               <div className="flex flex-col max-w-2/3">
                 <div className="font-bold my-2">{item.does}</div>
                 <div>{item.aboutDoes}</div>
               </div>
-           </div>
+            </div>
           )}
         </div>
       </div>

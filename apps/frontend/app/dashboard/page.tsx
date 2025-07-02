@@ -4,13 +4,27 @@ import { AiOutlinePlus } from "react-icons/ai";
 import ZapTable from "../components/ZapTable";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
-
+import axios from "axios";
+import { getSession } from "next-auth/react";
 export default function Page() {
   const router = useRouter();
-  function handleCreateZap() {
-    
-    router.push("/zap/create");
+  async function handleCreateZap() {
+    try {
+      const session = await getSession();
+      console.log(session?.user.userId);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/draft`,
+        {
+          userId: session?.user.userId,
+        },
+      );
+      console.log(response);
+      router.push(`/zap/create/${response.data.zapId}`);
+    } catch (e) {
+      console.error(e);
+    }
   }
+
   return (
     <>
       <div className="flex justify-end w-full  items-center h-full">
