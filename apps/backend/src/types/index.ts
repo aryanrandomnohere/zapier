@@ -12,11 +12,11 @@ export const logInSchema = z.object({
 
 export const ZapCreateSchema = z.object({
   triggerId: z.string(),
-  triggerMetadata: z.any().optional(),
+  triggerConfiguration: z.any(),
   actions: z.array(
     z.object({
       actionId: z.string(),
-      actonMetadata: z.any().optional(),
+      configuration: z.any(),
     }),
   ),
 });

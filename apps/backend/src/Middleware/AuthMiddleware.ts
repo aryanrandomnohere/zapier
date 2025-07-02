@@ -1,30 +1,35 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../JWT_SECRET.js";
-const { verify } = jwt;
-interface extendedRequest extends Request {
-  userId?: number;
+
+interface ExtendedRequest extends Request {
+  userId?: string;
 }
 
 export function AuthMiddleware(
-  req: extendedRequest,
+  req: ExtendedRequest,
   res: Response,
   next: NextFunction,
 ) {
   try {
-    const jwt = req.headers.authorization;
-    if (!jwt) {
-      res.status(401).json({ msg: "You are not logged in" });
-      return;
-    }
-    const data = verify(jwt, JWT_SECRET);
-    //@ts-ignore
-    req.userId = data.userId;
+    const token =
+      req.cookies["next-auth.session-token"] ||
+      req.cookies["__Secure-next-auth.session-token"];
 
+    if (!token) {
+      return res.status(401).json({ msg: "You are not logged in" });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+
+    if (!decoded || !decoded.id) {
+      return res.status(403).json({ msg: "Invalid token" });
+    }
+
+    req.userId = decoded.id;
     next();
   } catch (error) {
-    // Return "Invalid request" if token verification fails
-    res.status(400).json({ msg: "Invalid request" });
-    return;
+    console.error("JWT verification error:", error);
+    return res.status(400).json({ msg: "Invalid request" });
   }
 }
