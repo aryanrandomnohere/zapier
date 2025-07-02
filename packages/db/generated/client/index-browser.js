@@ -127,7 +127,12 @@ exports.Prisma.UserScalarFieldEnum = {
   firstname: 'firstname',
   lastname: 'lastname',
   email: 'email',
-  password: 'password'
+  type: 'type',
+  verified: 'verified',
+  password: 'password',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ZapScalarFieldEnum = {
@@ -136,9 +141,19 @@ exports.Prisma.ZapScalarFieldEnum = {
   name: 'name',
   lastEdited: 'lastEdited',
   createdAt: 'createdAt',
-  triggerMetadata: 'triggerMetadata',
-  triggerMetadataindex: 'triggerMetadataindex',
+  RecordId: 'RecordId',
   userId: 'userId'
+};
+
+exports.Prisma.RecordScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  zapId: 'zapId',
+  createdAt: 'createdAt',
+  pulledAt: 'pulledAt',
+  title: 'title',
+  JsonData: 'JsonData',
+  selectedIndex: 'selectedIndex'
 };
 
 exports.Prisma.TriggerScalarFieldEnum = {
@@ -197,6 +212,11 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
@@ -207,6 +227,7 @@ exports.Prisma.JsonNullValueFilter = {
 exports.Prisma.ModelName = {
   User: 'User',
   Zap: 'Zap',
+  Record: 'Record',
   Trigger: 'Trigger',
   AvailableTriggers: 'AvailableTriggers',
   Action: 'Action',

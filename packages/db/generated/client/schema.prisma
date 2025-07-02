@@ -9,27 +9,46 @@ datasource db {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
-  firstname String
-  lastname  String
-  email     String
-  password  String
+  id        Int      @id @default(autoincrement())
+  firstname String?
+  lastname  String?
+  email     String   @unique
+  type      String
+  verified  Boolean  @default(false)
+  password  String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   zap       Zap[]
 }
 
 model Zap {
-  id                   Int      @id @default(autoincrement())
-  triggerId            String
-  name                 String   @default("Untitled Zap")
-  lastEdited           DateTime @default(now())
-  createdAt            DateTime @default(now())
-  triggerMetadata      Json     @default("{}")
-  triggerMetadataindex Int      @default(0)
-  userId               Int
-  user                 User     @relation(fields: [userId], references: [id])
-  trigger              Trigger?
-  actions              Action[]
-  zapRuns              ZapRun[]
+  id         Int      @id @default(autoincrement())
+  triggerId  String?
+  name       String   @default("Untitled Zap")
+  lastEdited DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  RecordId   String?  @unique
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  trigger    Trigger?
+  actions    Action[]
+  zapRuns    ZapRun[]
+  records    Record[]
+  record     Record?  @relation("ZapSingleRecord", fields: [RecordId], references: [id])
+}
+
+model Record {
+  id            String   @id
+  type          String
+  zap           Zap      @relation(fields: [zapId], references: [id])
+  zapId         Int
+  createdAt     DateTime @default(now())
+  pulledAt      DateTime @updatedAt
+  title         String
+  JsonData      Json
+  selectedIndex Int
+  zapSingle     Zap?     @relation("ZapSingleRecord") // ✅ Backward one-to-one reference (optional)
 }
 
 model Trigger {
