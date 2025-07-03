@@ -1,4 +1,7 @@
+"use client"
 import { itemTestMetaData } from "@repo/types";
+import { getSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function Task({
@@ -11,7 +14,16 @@ export default function Task({
   const [fetchedUrl, setFetchedUrl] = useState("");
   const [isPressed, setIsPressed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  useEffect(() => {}, []);
+  const {zapId} = useParams()
+
+  useEffect(() => {
+    async function handleFetch(){
+    const session = await getSession()
+    if(!session) return;
+    setFetchedUrl(`http://localhost:3002/hooks/catch/${session.user.userId}/${zapId}`)
+    }
+    handleFetch()
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(

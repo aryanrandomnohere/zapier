@@ -1,3 +1,4 @@
+import { selectedRecord } from "@/app/RecoilState/store/recordsAtom";
 import { itemStepMetaData, onStepEnum } from "@repo/types";
 import {
   FaCircleExclamation,
@@ -6,6 +7,7 @@ import {
 } from "react-icons/fa6";
 import { GoCheckCircleFill } from "react-icons/go";
 import { IoTimerOutline } from "react-icons/io5";
+import { useRecoilValue } from "recoil";
 
 export default function StepsStatus({
   step,
@@ -20,6 +22,7 @@ export default function StepsStatus({
   setIndex: (index: number) => void;
   checkValidity: (index: onStepEnum) => boolean;
 }) {
+  const selectedRecordId = useRecoilValue(selectedRecord)
   if (!step) return;
   const isClickable =
     unique === onStepEnum.TEST
@@ -29,7 +32,7 @@ export default function StepsStatus({
         ? checkValidity(onStepEnum.SETUP)
         : true;
   const validity =
-    unique === onStepEnum.TEST ? step.completed : checkValidity(unique);
+    unique === onStepEnum.TEST ? !!selectedRecordId : checkValidity(unique);
   return (
     <button
       disabled={!isClickable}

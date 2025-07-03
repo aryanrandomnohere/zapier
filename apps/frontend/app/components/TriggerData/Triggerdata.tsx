@@ -11,12 +11,15 @@ import {
 import { mockRecords } from "./mockdata";
 import { RecordItem } from "./RecordItem";
 import Task from "./Task";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
 import {
   configureStepDetails,
   selectedItemMetaData,
 } from "@/app/RecoilState/currentZap";
+import axios from "axios";
+import { useParams } from "next/navigation";
+import { recordsAtom, selectedRecord } from "@/app/RecoilState/store/recordsAtom";
 
 // Main Records Interface Component
 const TriggerData = ({
@@ -28,24 +31,23 @@ const TriggerData = ({
   item: itemTestMetaData;
   triggerName: string;
 }) => {
-  const [records, setRecords] = useState<RecordMetadata[]>([]);
+  const [records, setRecords] = useRecoilState<RecordMetadata[]>(recordsAtom);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [triedFetching, setTriedFetching] = useState(false);
-  const [selectedRecordId, setSelectedRecordId] = useState("");
+  const [selectedRecordId, setSelectedRecordId] = useRecoilState(selectedRecord);
   const setZapState = useSetRecoilState(zapCreateState);
-  const metadata = useRecoilValue(selectedItemMetaData);
   const optionId = useRecoilValue(configureStepDetails);
+  const {zapId} = useParams()
   // Mock API call function
   const fetchRecords = async (): Promise<ApiResponse> => {
     // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const response = await axios.get( `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/records/${zapId}/${optionId}`)
 
     // Mock data that matches the screenshot
-
     return {
-      records: mockRecords,
+      records: response.data.records,
       total: mockRecords.length,
       lastUpdated: new Date().toISOString(),
     };
@@ -156,7 +158,7 @@ const TriggerData = ({
       <div className="">
         {item.testType === TriggerTestType.UserTriggered &&
           item.userTriggered && <Task imagePath={zapImage} item={item} />}
-        {loading || !triedFetching ? (
+        {loading || !triedFetching && !selectedRecordId && records.length <= 0 ? (
           <div className="flex justify-center gap-6 px-3 mt-2 w-full">
             <div className="flex gap-1 ">
               {" "}
@@ -192,7 +194,7 @@ const TriggerData = ({
             </a>
           </div>
         ) : (
-          <div className="flex flex-col h-full px-3  bg-white text-xs">
+          <div className="flex flex-col h-full px-3  bg-white text-xs overflow-y-auto max-h-80">
             <div className=" pr-1 h-[19rem]">
               <div className=" flex flex-col text-xs px-2 mt-3 ">
                 We found records in your YouTube account. We will load up to 3
@@ -238,7 +240,7 @@ const TriggerData = ({
               )}
 
               {/* Records List */}
-              <div className="flex-1 px-2 py-4">
+              <div className="flex-1 px-2 py-4 ">
                 {filteredRecords.length === 0 && !loading ? (
                   <div className="text-center text-gray-500 py-8">
                     {searchTerm
@@ -247,6 +249,7 @@ const TriggerData = ({
                   </div>
                 ) : (
                   filteredRecords.map((record) => (
+                    
                     <RecordItem
                       setSelectedRecord={setSelectedRecordId}
                       selectedRecord={selectedRecordId}
@@ -254,6 +257,7 @@ const TriggerData = ({
                       record={record}
                       onRecordClick={handleRecordClick}
                     />
+                  
                   ))
                 )}
 

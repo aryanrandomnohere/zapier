@@ -1,5 +1,5 @@
 import { itemTestMetaData } from "@repo/types";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { selectedItemMetaData } from "../RecoilState/currentZap";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
@@ -7,12 +7,37 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { FaSquare } from "react-icons/fa6";
 import Triggerdata from "./TriggerData/Triggerdata";
 import DataInForm from "./DataInField/FieldData";
+import axios from "axios";
+import { getSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 
 export default function TestItem({ item }: { item: itemTestMetaData }) {
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
+  const {zapId} = useParams()
 
-  console.log(JSON.stringify(item));
+useEffect(()=>{
+ async function handleSaveTrigger(){
+  let triggerSaved = false;
+  // while(!triggerSaved){
+    const session = await getSession();
+    console.log(  `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/updatetrigger/${zapId}`)
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/updatetrigger/${zapId}`,
+      {
+        triggerId:zap.selectedItems[0].id,
+        triggerConfiguration:zap.selectedItems[0],
+        userId: session?.user.userId,
+      },
+    );
+    console.log(response)
+    if(response.data.success){
+      triggerSaved = true;
+    }
+  }
+  handleSaveTrigger()
+},[])
+
   if (
     metadata.index == null ||
     metadata.index == undefined ||
@@ -57,10 +82,10 @@ export default function TestItem({ item }: { item: itemTestMetaData }) {
           />
         </div>
       ) : (
-        zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue && (
+        zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue &&  zap.selectedItems[metadata.index]?.metadata?.optionConfiguration && (
           <DataInForm
             fields={
-              zap.selectedItems[metadata.index].optionConfiguration[
+              zap.selectedItems[metadata.index]?.metadata?.optionConfiguration[
                 zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue
               ].configurationStep.fields
             }

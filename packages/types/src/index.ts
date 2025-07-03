@@ -31,8 +31,7 @@ export interface ItemType {
   id: string;
   name: string;
   imagePath: string;
-  optionConfiguration?: optionConfiguration;
-  metadata?: itemStepMetaData;
+  metadata: itemStepMetaData;
 }
 
 export interface ZapCreateType {
@@ -57,6 +56,7 @@ export interface selectedItemMetaDataType {
 export interface itemStepMetaData {
   stepName: string | undefined;
   stepNumber: number;
+  optionConfiguration: optionConfiguration;
   stepDescription?: string;
   completed: boolean | null;
   fields: Field[];

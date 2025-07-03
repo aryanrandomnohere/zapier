@@ -20,11 +20,11 @@ export default function AddMetaData({
     index === onStepEnum.SETUP && item.metadata
       ? item.metadata
       : index === onStepEnum.CONFIGURATION &&
-          item.optionConfiguration[configureId].configurationStep
-        ? item.optionConfiguration[configureId].configurationStep
+          item.metadata.optionConfiguration[configureId].configurationStep
+        ? item.metadata.optionConfiguration[configureId].configurationStep
         : index === onStepEnum.TEST &&
-            item.optionConfiguration[configureId].testStep
-          ? item.optionConfiguration[configureId].testStep
+            item.metadata.optionConfiguration[configureId].testStep
+          ? item.metadata.optionConfiguration[configureId].testStep
           : null;
 
   return (

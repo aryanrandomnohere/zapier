@@ -25,6 +25,7 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased`}
       >
         <RecoilContextProvider>{children}</RecoilContextProvider>
+        <div id="modal-root" />
       </body>
     </html>
   );
