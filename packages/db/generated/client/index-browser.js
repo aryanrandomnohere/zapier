@@ -141,6 +141,7 @@ exports.Prisma.ZapScalarFieldEnum = {
   name: 'name',
   lastEdited: 'lastEdited',
   createdAt: 'createdAt',
+  published: 'published',
   RecordId: 'RecordId',
   userId: 'userId'
 };
@@ -153,7 +154,7 @@ exports.Prisma.RecordScalarFieldEnum = {
   pulledAt: 'pulledAt',
   title: 'title',
   JsonData: 'JsonData',
-  selectedIndex: 'selectedIndex'
+  triggerOptionId: 'triggerOptionId'
 };
 
 exports.Prisma.TriggerScalarFieldEnum = {
@@ -167,7 +168,6 @@ exports.Prisma.AvailableTriggersScalarFieldEnum = {
   id: 'id',
   name: 'name',
   metadata: 'metadata',
-  optionConfiguration: 'optionConfiguration',
   imagePath: 'imagePath'
 };
 
@@ -183,8 +183,7 @@ exports.Prisma.AvailableActionsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   imagePath: 'imagePath',
-  metadata: 'metadata',
-  optionConfiguration: 'optionConfiguration'
+  metadata: 'metadata'
 };
 
 exports.Prisma.ZapRunScalarFieldEnum = {
