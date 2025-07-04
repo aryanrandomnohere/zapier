@@ -77,6 +77,8 @@ model Action {
   configuration Json             @default("{}")
   actionId      String
   sortingOrder  Int              @default(0)
+
+  @@unique([zapId, sortingOrder])
 }
 
 model AvailableActions {

@@ -12848,6 +12848,7 @@ export namespace Prisma {
   export type ActionWhereUniqueInput = Prisma.AtLeast<
     {
       id?: string;
+      zapId_sortingOrder?: ActionZapIdSortingOrderCompoundUniqueInput;
       AND?: ActionWhereInput | ActionWhereInput[];
       OR?: ActionWhereInput[];
       NOT?: ActionWhereInput | ActionWhereInput[];
@@ -12861,7 +12862,7 @@ export namespace Prisma {
         AvailableActionsWhereInput
       >;
     },
-    "id"
+    "id" | "zapId_sortingOrder"
   >;
 
   export type ActionOrderByWithAggregationInput = {
@@ -14072,6 +14073,11 @@ export namespace Prisma {
   export type AvailableActionsRelationFilter = {
     is?: AvailableActionsWhereInput;
     isNot?: AvailableActionsWhereInput;
+  };
+
+  export type ActionZapIdSortingOrderCompoundUniqueInput = {
+    zapId: number;
+    sortingOrder: number;
   };
 
   export type ActionCountOrderByAggregateInput = {
