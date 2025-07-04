@@ -22,7 +22,7 @@ export const ZapCreateSchema = z.object({
 });
 
 export const TriggerCreateSchema = z.object({
-  triggerId:z.string(),
-  triggerConfiguration:z.any(),
-  userId:z.number()
-})
+  triggerId: z.string(),
+  triggerConfiguration: z.any(),
+  userId: z.number(),
+});

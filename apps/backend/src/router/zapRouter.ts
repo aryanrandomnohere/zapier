@@ -49,72 +49,71 @@ zapRouter.post("/draft", async (req: extendedRequest, res: Response) => {
     res.json(400).json({ msg: "Error while creating a draft" });
   }
 });
-zapRouter.post("/updatetrigger/:zapId",async (req:extendedRequest, res:Response)=>{
-  try{
-    const zapId = Number(req.params.zapId)
-    const parsedBody = TriggerCreateSchema.safeParse(req.body)
-    console.log(req.body, zapId)
-    if(!parsedBody.success){
-      res.status(200).json({
-        msg:"Invalid Input",
-        success:false
-      }) 
-      return;
-    }
-    if(!parsedBody.data.userId){
-      res.status(200).json({msg:"UserId does not exist", success:false})
-      return;
-    }
-    const existingTrigger  = await prisma.trigger.findUnique({
-      where:{
-        zapId,
-      },
-      select:{
-        id:true
+zapRouter.post(
+  "/updatetrigger/:zapId",
+  async (req: extendedRequest, res: Response) => {
+    try {
+      const zapId = Number(req.params.zapId);
+      const parsedBody = TriggerCreateSchema.safeParse(req.body);
+      console.log(req.body, zapId);
+      if (!parsedBody.success) {
+        res.status(200).json({
+          msg: "Invalid Input",
+          success: false,
+        });
+        return;
       }
-    })
-    if(existingTrigger){
-      prisma.trigger.update({
-        where:{
-          id:existingTrigger.id,
-        },
-        data:{
-          triggerId:parsedBody.data.triggerId,
-          configuration:parsedBody.data.triggerConfiguration,
-        }
-      })
-      res.status(200).json({msg:"Trigger updated",
-      success:true
-      })
-      return;
-    }
-    const {id} = await prisma.trigger.create(
-      {
-        data:{
+      if (!parsedBody.data.userId) {
+        res.status(200).json({ msg: "UserId does not exist", success: false });
+        return;
+      }
+      const existingTrigger = await prisma.trigger.findUnique({
+        where: {
           zapId,
-          triggerId:parsedBody.data.triggerId,
-          configuration:parsedBody.data.triggerConfiguration,
         },
-        select:{
-          id:true
-        }
+        select: {
+          id: true,
+        },
+      });
+      if (existingTrigger) {
+        prisma.trigger.update({
+          where: {
+            id: existingTrigger.id,
+          },
+          data: {
+            triggerId: parsedBody.data.triggerId,
+            configuration: parsedBody.data.triggerConfiguration,
+          },
+        });
+        res.status(200).json({ msg: "Trigger updated", success: true });
+        return;
       }
-    )
+      const { id } = await prisma.trigger.create({
+        data: {
+          zapId,
+          triggerId: parsedBody.data.triggerId,
+          configuration: parsedBody.data.triggerConfiguration,
+        },
+        select: {
+          id: true,
+        },
+      });
 
-    await prisma.zap.update({
-      where: {
-        id:zapId
-      },
-      data:{
-      triggerId:id,
-      }
-    })
-    res.status(400).json({msg:"Something went wrong", success:true})
-  }catch(e){
-    console.error(e);
-    res.status(200).json({msg:"something went wrong", success:false})
-  }
-})
+      await prisma.zap.update({
+        where: {
+          id: zapId,
+        },
+        data: {
+          triggerId: id,
+        },
+      });
+      res.status(400).json({ msg: "Something went wrong", success: true });
+    } catch (e) {
+      console.error(e);
+      res.status(200).json({ msg: "something went wrong", success: false });
+    }
+  },
+);
 
 zapRouter.post(
   "/publish",
@@ -201,21 +200,24 @@ zapRouter.get(
   },
 );
 
-zapRouter.get("/records/:zapId/:optionId",async (req:Request,res:Response)=>{
-try{
-  const optionId = req.params.optionId;
-const zapId = Number(req.params.zapId);
-const records = await  prisma.record.findMany({
-  where:{
-    zapId,
-    triggerOptionId:optionId
-  }
-})
-res.status(200).json({msg:"Found Records",records, success:true})
-}catch(e){
-  console.error(e)
-  res.status(400).json({msg:"Unable to find Record", success:false})
-}
-})
+zapRouter.get(
+  "/records/:zapId/:optionId",
+  async (req: Request, res: Response) => {
+    try {
+      const optionId = req.params.optionId;
+      const zapId = Number(req.params.zapId);
+      const records = await prisma.record.findMany({
+        where: {
+          zapId,
+          triggerOptionId: optionId,
+        },
+      });
+      res.status(200).json({ msg: "Found Records", records, success: true });
+    } catch (e) {
+      console.error(e);
+      res.status(400).json({ msg: "Unable to find Record", success: false });
+    }
+  },
+);
 
 export { zapRouter };
