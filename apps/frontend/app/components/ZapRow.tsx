@@ -12,7 +12,7 @@ export default function ZapRow({ zaps }: { zaps: zapInterface[] }) {
   const [activeZap, setActiveZap] = useState<boolean>(false);
   const router = useRouter();
   const handleZapClick = (id: string) => {
-    router.push(`/zaps/${id}`);
+    router.push(`/zap/create/${id}`);
   };
 
   return (

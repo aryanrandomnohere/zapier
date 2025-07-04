@@ -1,5 +1,5 @@
 "use client";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
 import {
   configureStepDetails,
@@ -22,8 +22,8 @@ import {
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { IoTimerOutline } from "react-icons/io5";
 import TestItem from "../components/TestItem";
+import { recordsAtom, selectedRecord } from "../RecoilState/store/recordsAtom";
 // Mock data for when metadata is not available
-
 
 export default function SideModal() {
   const [zap, setZapState] = useRecoilState(zapCreateState);
@@ -36,6 +36,8 @@ export default function SideModal() {
   const [StepIndex, setStepIndex] = useRecoilState(onStep);
   const configureId = useRecoilValue(configureStepDetails);
   const optionChanged = useRecoilState(OptionChanged);
+  const setSelectedRecordId = useSetRecoilState(selectedRecord);
+  const setSelectedRecords = useSetRecoilState(recordsAtom);
   if (index == null) return null;
 
   // const steps =
@@ -47,7 +49,7 @@ export default function SideModal() {
       StepIndex === onStepEnum.CONFIGURATION
         ? zap.selectedItems[index]?.metadata.optionConfiguration[configureId]
             .configurationStep
-          : zap.selectedItems[index]?.metadata;
+        : zap.selectedItems[index]?.metadata;
 
     if (!currentStep?.fields) {
       console.log("Field does not exist returnning");
@@ -98,67 +100,74 @@ export default function SideModal() {
   const handleFieldChange = (
     fieldNumber: number,
     value: string,
-    type: onStepEnum
+    type: onStepEnum,
   ) => {
     if (!zap.selectedItems[index]?.metadata) return;
-  
     if (type === onStepEnum.SETUP) {
+      if (zap.selectedItems[index].id === "webhook") {
+        setSelectedRecordId("");
+        setSelectedRecords([]);
+      }
       setZapState((prev) => {
         const newState = { ...prev };
         const newSelectedItems = [...newState.selectedItems];
         const updatedItem = { ...newSelectedItems[index] };
-  
+
         if (!updatedItem.metadata || !updatedItem.metadata.fields) return prev;
-  
+
         const updatedFields = [...updatedItem.metadata.fields];
         updatedFields[fieldNumber] = {
           ...updatedFields[fieldNumber],
           fieldValue: value,
         };
-  
+
         const updatedMetadata = {
           ...updatedItem.metadata,
           fields: updatedFields,
         };
-  
+
         const newItem = {
           ...updatedItem,
           metadata: updatedMetadata,
         };
-  
+
         newSelectedItems[index] = newItem;
-  
+
         return {
           ...newState,
           selectedItems: newSelectedItems,
         };
       });
     } else if (type === onStepEnum.CONFIGURATION) {
+      console.log(value);
       setZapState((prev) => {
         const newState = { ...prev };
         const newSelectedItems = [...newState.selectedItems];
         const updatedItem = { ...newSelectedItems[index] };
-  
+
         if (
           !updatedItem.metadata ||
-          !updatedItem.metadata.optionConfiguration?.[configureId]?.configurationStep?.fields
+          !updatedItem.metadata.optionConfiguration?.[configureId]
+            ?.configurationStep?.fields
         ) {
           return prev;
         }
-  
+
         const oldFields =
-          updatedItem.metadata.optionConfiguration[configureId].configurationStep.fields;
+          updatedItem.metadata.optionConfiguration[configureId]
+            .configurationStep.fields;
         const updatedFields = [...oldFields];
         updatedFields[fieldNumber] = {
           ...updatedFields[fieldNumber],
           fieldValue: value,
         };
-  
+
         const updatedConfigStep = {
-          ...updatedItem.metadata.optionConfiguration[configureId].configurationStep,
+          ...updatedItem.metadata.optionConfiguration[configureId]
+            .configurationStep,
           fields: updatedFields,
         };
-  
+
         const updatedOptionConfig = {
           ...updatedItem.metadata.optionConfiguration,
           [configureId]: {
@@ -166,19 +175,19 @@ export default function SideModal() {
             configurationStep: updatedConfigStep,
           },
         };
-  
+
         const updatedMetadata = {
           ...updatedItem.metadata,
           optionConfiguration: updatedOptionConfig,
         };
-  
+
         const newItem = {
           ...updatedItem,
           metadata: updatedMetadata,
         };
-  
+
         newSelectedItems[index] = newItem;
-  
+
         return {
           ...newState,
           selectedItems: newSelectedItems,
@@ -188,15 +197,15 @@ export default function SideModal() {
       // Implement TEST field update logic here if needed
     }
   };
-  
+
   const handleContinue = () => {
     if (!isCurrentStepValid) return;
-  
+
     if (StepIndex === onStepEnum.CONFIGURATION) {
       setZapState((prev) => {
         const newState = { ...prev };
         const newSelectedItems = [...newState.selectedItems];
-  
+
         const existingItem = newSelectedItems[index];
         if (
           !existingItem ||
@@ -205,12 +214,13 @@ export default function SideModal() {
         ) {
           return prev;
         }
-  
+
         const updatedConfigStep = {
-          ...existingItem.metadata.optionConfiguration[configureId].configurationStep,
+          ...existingItem.metadata.optionConfiguration[configureId]
+            .configurationStep,
           completed: true,
         };
-  
+
         const updatedOptionConfig = {
           ...existingItem.metadata.optionConfiguration,
           [configureId]: {
@@ -218,19 +228,19 @@ export default function SideModal() {
             configurationStep: updatedConfigStep,
           },
         };
-  
+
         const updatedMetadata = {
           ...existingItem.metadata,
           optionConfiguration: updatedOptionConfig,
         };
-  
+
         const updatedItem = {
           ...existingItem,
           metadata: updatedMetadata,
         };
-  
+
         newSelectedItems[index] = updatedItem;
-  
+
         return {
           ...newState,
           selectedItems: newSelectedItems,
@@ -240,7 +250,7 @@ export default function SideModal() {
       setZapState((prev) => {
         const newState = { ...prev };
         const newSelectedItems = [...newState.selectedItems];
-  
+
         const existingItem = newSelectedItems[index];
         if (
           !existingItem ||
@@ -249,12 +259,12 @@ export default function SideModal() {
         ) {
           return prev;
         }
-  
+
         const updatedTestStep = {
           ...existingItem.metadata.optionConfiguration[configureId].testStep,
           completed: true,
         };
-  
+
         const updatedOptionConfig = {
           ...existingItem.metadata.optionConfiguration,
           [configureId]: {
@@ -262,19 +272,19 @@ export default function SideModal() {
             testStep: updatedTestStep,
           },
         };
-  
+
         const updatedMetadata = {
           ...existingItem.metadata,
           optionConfiguration: updatedOptionConfig,
         };
-  
+
         const updatedItem = {
           ...existingItem,
           metadata: updatedMetadata,
         };
-  
+
         newSelectedItems[index] = updatedItem;
-  
+
         return {
           ...newState,
           selectedItems: newSelectedItems,
@@ -284,21 +294,21 @@ export default function SideModal() {
       setZapState((prev) => {
         const newSelectedItems = [...prev.selectedItems];
         const existingItem = newSelectedItems[index];
-  
+
         if (!existingItem || !existingItem.metadata) return prev;
-  
+
         const updatedMetadata = {
           ...existingItem.metadata,
           completed: true,
         };
-  
+
         const updatedItem = {
           ...existingItem,
           metadata: updatedMetadata,
         };
-  
+
         newSelectedItems[index] = updatedItem;
-  
+
         return {
           ...prev,
           selectedItems: newSelectedItems,
@@ -311,19 +321,20 @@ export default function SideModal() {
         isOpen: false,
       }));
     }
-  
+
     // Step navigation
     if (StepIndex === onStepEnum.SETUP) {
       const configStepExists =
         zap.selectedItems[index].metadata.optionConfiguration?.[configureId]
           ?.configurationStep;
-  
-      setStepIndex(configStepExists ? onStepEnum.CONFIGURATION : onStepEnum.TEST);
+
+      setStepIndex(
+        configStepExists ? onStepEnum.CONFIGURATION : onStepEnum.TEST,
+      );
     } else if (StepIndex === onStepEnum.CONFIGURATION) {
       setStepIndex(onStepEnum.TEST);
     }
   };
-  
 
   if (!zap.selectedItems[index]?.metadata) {
     return (
@@ -392,8 +403,9 @@ export default function SideModal() {
                 stepIndex={StepIndex}
                 unique={onStepEnum.CONFIGURATION}
                 step={
-                  zap.selectedItems[index].metadata.optionConfiguration[configureId]
-                    .configurationStep
+                  zap.selectedItems[index].metadata.optionConfiguration[
+                    configureId
+                  ].configurationStep
                 }
               />
             )}
@@ -408,8 +420,9 @@ export default function SideModal() {
               stepIndex={StepIndex}
               unique={onStepEnum.TEST}
               step={
-                zap.selectedItems[index].metadata.optionConfiguration[configureId]
-                  .testStep
+                zap.selectedItems[index].metadata.optionConfiguration[
+                  configureId
+                ].testStep
               }
               setIndex={setStepIndex}
             />
@@ -428,6 +441,7 @@ export default function SideModal() {
           <div className="flex gap-1 w-full  px-2.5 ">
             <div className="self-start p-2 w-full">
               <AddMetaData
+                imagePath={zap.selectedItems[0].imagePath}
                 index={StepIndex}
                 key={selectedStep}
                 item={zap.selectedItems[index]}
@@ -439,9 +453,11 @@ export default function SideModal() {
           <div className="min-h-full w-full">
             {" "}
             <TestItem
+              type={zap.selectedItems[index].id}
               item={
-                zap.selectedItems[index].metadata.optionConfiguration[configureId]
-                  .testStep
+                zap.selectedItems[index].metadata.optionConfiguration[
+                  configureId
+                ].testStep
               }
             />{" "}
           </div>

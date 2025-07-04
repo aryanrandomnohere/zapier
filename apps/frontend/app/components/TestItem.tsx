@@ -11,32 +11,41 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 
-export default function TestItem({ item }: { item: itemTestMetaData }) {
+export default function TestItem({
+  item,
+  type,
+}: {
+  item: itemTestMetaData;
+  type: string;
+}) {
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
-  const {zapId} = useParams()
+  const { zapId } = useParams();
 
-useEffect(()=>{
- async function handleSaveTrigger(){
-  let triggerSaved = false;
-  // while(!triggerSaved){
-    const session = await getSession();
-    console.log(  `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/updatetrigger/${zapId}`)
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/updatetrigger/${zapId}`,
-      {
-        triggerId:zap.selectedItems[0].id,
-        triggerConfiguration:zap.selectedItems[0],
-        userId: session?.user.userId,
-      },
-    );
-    console.log(response)
-    if(response.data.success){
-      triggerSaved = true;
+  useEffect(() => {
+    async function handleSaveTrigger() {
+      let triggerSaved = false;
+      // while(!triggerSaved){
+      if (!metadata || !metadata.index) return;
+      const session = await getSession();
+      console.log(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type == "webhook" ? "updatetrigger" : "updateaction"}/${zapId}`,
+      );
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/updatetrigger/${zapId}`,
+        {
+          triggerId: zap.selectedItems[metadata.index].id,
+          triggerConfiguration: zap.selectedItems[metadata.index],
+          userId: session?.user.userId,
+        },
+      );
+      console.log(response);
+      if (response.data.success) {
+        triggerSaved = true;
+      }
     }
-  }
-  handleSaveTrigger()
-},[])
+    handleSaveTrigger();
+  }, []);
 
   if (
     metadata.index == null ||
@@ -82,7 +91,8 @@ useEffect(()=>{
           />
         </div>
       ) : (
-        zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue &&  zap.selectedItems[metadata.index]?.metadata?.optionConfiguration && (
+        zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue &&
+        zap.selectedItems[metadata.index]?.metadata?.optionConfiguration && (
           <DataInForm
             fields={
               zap.selectedItems[metadata.index]?.metadata?.optionConfiguration[
