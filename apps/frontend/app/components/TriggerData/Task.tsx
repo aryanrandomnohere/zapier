@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { itemTestMetaData } from "@repo/types";
 import { getSession } from "next-auth/react";
 import { useParams } from "next/navigation";
@@ -14,15 +14,17 @@ export default function Task({
   const [fetchedUrl, setFetchedUrl] = useState("");
   const [isPressed, setIsPressed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const {zapId} = useParams()
+  const { zapId } = useParams();
 
   useEffect(() => {
-    async function handleFetch(){
-    const session = await getSession()
-    if(!session) return;
-    setFetchedUrl(`http://localhost:3002/hooks/catch/${session.user.userId}/${zapId}`)
+    async function handleFetch() {
+      const session = await getSession();
+      if (!session) return;
+      setFetchedUrl(
+        `http://localhost:3002/hooks/catch/${session.user.userId}/${zapId}`,
+      );
     }
-    handleFetch()
+    handleFetch();
   }, []);
 
   const handleCopy = () => {
@@ -55,7 +57,7 @@ export default function Task({
           </div>
           <input
             type="text"
-            value={fetchedUrl || "https://hooks.zapier.com/hooks/c..."}
+            value={fetchedUrl}
             readOnly
             className="flex-1 bg-transparent border-0 text-xs text-gray-700 py-2 px-1 focus:outline-none focus:ring-0"
           />
