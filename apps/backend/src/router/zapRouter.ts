@@ -1,7 +1,11 @@
 import express, { Request, Response } from "express";
 import { prisma } from "../client.js";
 import { AuthMiddleware } from "../Middleware/AuthMiddleware.js";
-import { TriggerCreateSchema, ZapCreateSchema } from "../types/index.js";
+import {
+  ActionCreationSchema,
+  TriggerCreateSchema,
+  ZapCreateSchema,
+} from "../types/index.js";
 const zapRouter = express.Router();
 interface extendedRequest extends Request {
   userId?: number;
@@ -108,6 +112,65 @@ zapRouter.post(
         },
       });
       res.status(400).json({ msg: "Something went wrong", success: true });
+    } catch (e) {
+      console.error(e);
+      res.status(200).json({ msg: "something went wrong", success: false });
+    }
+  },
+);
+
+zapRouter.post(
+  "/updateaction/:zapId",
+  async (req: extendedRequest, res: Response) => {
+    try {
+      const zapId = Number(req.params.zapId);
+      const parsedBody = ActionCreationSchema.safeParse(req.body);
+      console.log(req.body, zapId);
+      if (!parsedBody.success) {
+        res.status(200).json({
+          msg: "Invalid Input",
+          success: false,
+        });
+        return;
+      }
+      if (!parsedBody.data.userId) {
+        res.status(200).json({ msg: "UserId does not exist", success: false });
+        return;
+      }
+      const existingAction = await prisma.action.findUnique({
+        where: {
+          zapId,
+          sortingOrder: parsedBody.data.sortingOrder,
+        },
+        select: {
+          id: true,
+        },
+      });
+      if (existingAction) {
+        prisma.action.update({
+          where: {
+            id: existingAction.id,
+          },
+          data: {
+            actionId: parsedBody.data.actionId,
+            configuration: parsedBody.data.actionConfiguration,
+          },
+        });
+        res.status(200).json({ msg: "Action updated", success: true });
+        return;
+      }
+      await prisma.action.create({
+        data: {
+          zapId,
+          actionId: parsedBody.data.actionId,
+          configuration: parsedBody.data.actionConfiguration,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      res.status(400).json({ msg: "Action Created", success: true });
     } catch (e) {
       console.error(e);
       res.status(200).json({ msg: "something went wrong", success: false });

@@ -25,19 +25,29 @@ export default function TestItem({
   useEffect(() => {
     async function handleSaveTrigger() {
       let triggerSaved = false;
-      // while(!triggerSaved){
-      if (!metadata || !metadata.index) return;
+      if (!metadata || metadata.index === null || metadata.index === undefined)
+        return;
       const session = await getSession();
+      const body =
+        type == "webhook"
+          ? {
+              triggerId: zap.selectedItems[metadata.index].id,
+              triggerConfiguration: zap.selectedItems[metadata.index],
+              userId: session?.user.userId,
+            }
+          : {
+              actionId: type,
+              actionConfiguration: zap.selectedItems[metadata.index],
+              userId: session?.user.userId,
+              sortingOrder: metadata.index,
+            };
+
       console.log(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type == "webhook" ? "updatetrigger" : "updateaction"}/${zapId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "webhook" ? "updatetrigger" : "updateaction"}/${zapId}`,
       );
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/updatetrigger/${zapId}`,
-        {
-          triggerId: zap.selectedItems[metadata.index].id,
-          triggerConfiguration: zap.selectedItems[metadata.index],
-          userId: session?.user.userId,
-        },
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "webhook" ? "updatetrigger" : "updateaction"}/${zapId}`,
+        body,
       );
       console.log(response);
       if (response.data.success) {

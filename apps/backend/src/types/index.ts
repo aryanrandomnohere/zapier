@@ -26,3 +26,10 @@ export const TriggerCreateSchema = z.object({
   triggerConfiguration: z.any(),
   userId: z.number(),
 });
+
+export const ActionCreationSchema = z.object({
+  actionId: z.string(),
+  actionConfiguration: z.any(),
+  userId: z.number(),
+  sortingOrder: z.number(),
+});

@@ -1,9 +1,7 @@
 import { prisma } from "@repo/db";
 import { itemStepMetaData } from "@repo/types";
 import express, { Request, Response } from "express";
-import isEqual from 'lodash.isequal';
-
-
+import isEqual from "lodash.isequal";
 
 const app = express();
 app.use(express.json());
@@ -12,17 +10,17 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
   const zapId = Number(req.params.zapId);
   const body = req.body;
   if (!zapId) return;
-  const zap= await prisma.zap.findUnique({
-    where:{
-      id:zapId,
-      userId:userId
+  const zap = await prisma.zap.findUnique({
+    where: {
+      id: zapId,
+      userId: userId,
     },
-    select:{
-      records:true,
-      published:true,
-      trigger:true,
-    }
-  })
+    select: {
+      records: true,
+      published: true,
+      trigger: true,
+    },
+  });
 
   if (
     zap &&
@@ -32,60 +30,68 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
     zap.trigger.configuration !== null &&
     "metadata" in zap.trigger.configuration
   ) {
-    const metadata = (zap.trigger.configuration as unknown as { metadata: itemStepMetaData }).metadata;
-    if(!metadata.fields[0].fieldValue) {
-      res.json({msg:"No Trigger Option selected"})
+    const metadata = (
+      zap.trigger.configuration as unknown as { metadata: itemStepMetaData }
+    ).metadata;
+    if (!metadata.fields[0].fieldValue) {
+      res.json({ msg: "No Trigger Option selected" });
       return;
     }
-    console.log(req.body)
+    console.log(req.body);
     const records = await prisma.record.findMany({
-      where:{
+      where: {
         zapId,
-        triggerOptionId: metadata.fields[0].fieldValue
-      }
-    })
-    const matchedRecord = records.find(record => isEqual(record.JsonData, req.body));
+        triggerOptionId: metadata.fields[0].fieldValue,
+      },
+    });
+    const matchedRecord = records.find((record) =>
+      isEqual(record.JsonData, req.body),
+    );
 
-if (matchedRecord) {
-  return res.json({msg:"Record already exists", success: true, record: matchedRecord });
-}
-      const newRecord =  await prisma.record.create({
-      data:{
-        type:"original",
+    if (matchedRecord) {
+      return res.json({
+        msg: "Record already exists",
+        success: true,
+        record: matchedRecord,
+      });
+    }
+    const newRecord = await prisma.record.create({
+      data: {
+        type: "original",
         zapId,
-        title:`Record ${ records.length }`,
-        triggerOptionId:metadata.fields[0].fieldValue,
-        JsonData:req.body
-      }
-     })
-     if(records.length == 0){
+        title: `Record ${records.length + 1}`,
+        triggerOptionId: metadata.fields[0].fieldValue,
+        JsonData: req.body,
+      },
+    });
+    if (records.length == 0) {
       await prisma.zap.update({
-        where:{
-          id:zapId
+        where: {
+          id: zapId,
         },
-        data:{
-          RecordId:newRecord.id
-        }
-      })
-     }
-    res.json({msg:"Testing triggered",newRecord})
-return;
-  }else{
-  await prisma.$transaction(async (tx) => {
-    const zapRun = await tx.zapRun.create({
-      data: {
-        zapId: zapId,
-        metaData: body,
-      },
+        data: {
+          RecordId: newRecord.id,
+        },
+      });
+    }
+    res.json({ msg: "Testing triggered", newRecord });
+    return;
+  } else {
+    await prisma.$transaction(async (tx) => {
+      const zapRun = await tx.zapRun.create({
+        data: {
+          zapId: zapId,
+          metaData: body,
+        },
+      });
+      await tx.zapRunOutbox.create({
+        data: {
+          zapRunId: zapRun.id,
+        },
+      });
     });
-    await tx.zapRunOutbox.create({
-      data: {
-        zapRunId: zapRun.id,
-      },
-    });
-  });
-  res.json({ msg: "Webhook triggered" });
-}
+    res.json({ msg: "Webhook triggered" });
+  }
 });
 
 app.listen(3002);
