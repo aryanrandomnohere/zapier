@@ -5,27 +5,37 @@ import {
   OptionChanged,
 } from "@/app/RecoilState/currentZap";
 import { Field, FieldOption, onStepEnum } from "@repo/types";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { BiSolidZap } from "react-icons/bi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import FloatingModal from "../FloatingModal";
+import { FilePlus, Plus } from "lucide-react";
+import DittoComponent from "./SelectActionField";
 
 interface MetaDataFieldProps {
   field: Field;
   onFieldChange: (fieldNumber: number, value: string, type: onStepEnum) => void;
+  type: string;
+  setEditingField: (fieldId: string) => void;
+  selectedField: string;
+  imagePath: string;
 }
 
 export default function MetaDataField({
   field,
   onFieldChange,
+  type,
+  selectedField,
+  setEditingField,
+  imagePath,
 }: MetaDataFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectFieldIsOpen, setSelectFieldIsOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [value, setValue] = useState(
-    field.fieldValue || field.fieldPlaceholder,
-  );
+  const [value, setValue] = useState(field.fieldValue);
+  const inputRef = useRef<HTMLInputElement>();
   const [configureStepIndex, setConfigureStepIndex] =
     useRecoilState(configureStepDetails);
   const setOptionChanged = useSetRecoilState(OptionChanged);
@@ -122,9 +132,12 @@ export default function MetaDataField({
           {field.required && <div className="text-red-400">*</div>}
         </div>
         <input
+          ref={inputRef}
+          onClick={() => setEditingField("")}
           type={field.fieldInputType}
           placeholder={field.fieldPlaceholder}
-          defaultValue={field.fieldValue || undefined}
+          defaultValue={field.fieldValue || ""}
+          value={field.fieldValue || ""}
           onChange={(e) => {
             if (stepIndex == onStepEnum.CONFIGURATION)
               onFieldChange(
@@ -139,9 +152,44 @@ export default function MetaDataField({
                 onStepEnum.SETUP,
               );
           }}
-          className="px-3 py-1.5 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
+          className={`relative px-3 py-1.5 ${type != "webhook" ? "pr-9" : ""} border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none`}
           required={field.required}
         />
+        {selectedField === field.fieldLabel &&
+          selectFieldIsOpen &&
+          stepIndex !== onStepEnum.SETUP &&
+          type != "webhook" && (
+            <FloatingModal>
+              <DittoComponent
+                setValue={setValue}
+                fieldLabel={field.fieldLabel}
+                imagePath={imagePath}
+                fieldNumber={field.fieldNumber}
+                onStepEnum={onStepEnum.CONFIGURATION}
+                currentValue={field.fieldValue || ""}
+                cursorPosition={
+                  inputRef.current?.selectionStart ||
+                  inputRef.current?.selectionEnd ||
+                  field.fieldValue?.length ||
+                  0
+                }
+                onFieldChange={onFieldChange}
+              />
+            </FloatingModal>
+          )}
+        {selectFieldIsOpen &&
+          stepIndex !== onStepEnum.SETUP &&
+          type != "webhook" && (
+            <div
+              onClick={() => {
+                if (selectedField === field.fieldLabel) setEditingField("");
+                else setEditingField(field.fieldLabel);
+              }}
+              className="absolute right-1.5 bottom-[5.5px] rounded p-0.5 focus hover:cursor-pointer border border-gray-600/30 hover:bg-black/10 text-gray-600/80 "
+            >
+              <Plus size={18} />
+            </div>
+          )}
       </div>
     );
   }
@@ -155,9 +203,10 @@ export default function MetaDataField({
         type={field.fieldInputType}
         placeholder={field.fieldPlaceholder}
         defaultValue={field.fieldValue || undefined}
-        onChange={(e) =>
-          onFieldChange(field.fieldNumber, e.target.value, onStepEnum.SETUP)
-        }
+        onChange={(e) => {
+          onFieldChange(field.fieldNumber, e.target.value, onStepEnum.SETUP);
+          setValue(e.target.value);
+        }}
         className="px-3 py-2 border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none"
         required={field.required}
       />

@@ -22,7 +22,7 @@ export default function StepsStatus({
   setIndex: (index: number) => void;
   checkValidity: (index: onStepEnum) => boolean;
 }) {
-  const selectedRecordId = useRecoilValue(selectedRecord)
+  const selectedRecordId = useRecoilValue(selectedRecord);
   if (!step) return;
   const isClickable =
     unique === onStepEnum.TEST

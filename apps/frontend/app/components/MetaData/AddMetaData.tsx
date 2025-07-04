@@ -4,28 +4,29 @@ import ChangeItem from "./ChangeItem";
 import MetaDataField from "./MetaDataField";
 import { useRecoilState } from "recoil";
 import { configureStepDetails } from "@/app/RecoilState/currentZap";
+import { useState } from "react";
 
 export default function AddMetaData({
   item,
   index,
   onFieldChange,
+  imagePath,
 }: {
   item: ItemType;
   index: number;
+  imagePath: string;
   onFieldChange: (fieldNumber: number, value: string, type: onStepEnum) => void;
 }) {
   const [configureId, setConfiguredStepDetails] =
     useRecoilState(configureStepDetails);
+  const [editingField, setEditingField] = useState("");
   const metaData =
     index === onStepEnum.SETUP && item.metadata
       ? item.metadata
       : index === onStepEnum.CONFIGURATION &&
           item.metadata.optionConfiguration[configureId].configurationStep
         ? item.metadata.optionConfiguration[configureId].configurationStep
-        : index === onStepEnum.TEST &&
-            item.metadata.optionConfiguration[configureId].testStep
-          ? item.metadata.optionConfiguration[configureId].testStep
-          : null;
+        : null;
 
   return (
     <div className="flex flex-col justify-between  mb-8 w-full">
@@ -44,7 +45,14 @@ export default function AddMetaData({
           metaData.fields.map((field) => {
             return (
               <div key={field.fieldLabel}>
-                <MetaDataField onFieldChange={onFieldChange} field={field} />
+                <MetaDataField
+                  imagePath={imagePath}
+                  onFieldChange={onFieldChange}
+                  selectedField={editingField}
+                  setEditingField={setEditingField}
+                  type={item.id}
+                  field={field}
+                />
               </div>
             );
           })}
