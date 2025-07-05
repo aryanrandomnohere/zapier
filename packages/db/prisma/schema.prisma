@@ -28,6 +28,7 @@ triggerId        String?
 name             String        @default("Untitled Zap")
 lastEdited       DateTime      @updatedAt   
 createdAt        DateTime      @default(now())
+triggerOptionId  String        @default("")
 published        Boolean       @default(false)
 RecordId         String?       @unique
 userId           Int
