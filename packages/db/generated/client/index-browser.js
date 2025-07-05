@@ -141,6 +141,7 @@ exports.Prisma.ZapScalarFieldEnum = {
   name: 'name',
   lastEdited: 'lastEdited',
   createdAt: 'createdAt',
+  triggerOptionId: 'triggerOptionId',
   published: 'published',
   RecordId: 'RecordId',
   userId: 'userId'

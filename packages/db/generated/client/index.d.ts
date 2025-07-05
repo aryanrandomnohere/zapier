@@ -3000,6 +3000,7 @@ export namespace Prisma {
     name: string | null;
     lastEdited: Date | null;
     createdAt: Date | null;
+    triggerOptionId: string | null;
     published: boolean | null;
     RecordId: string | null;
     userId: number | null;
@@ -3011,6 +3012,7 @@ export namespace Prisma {
     name: string | null;
     lastEdited: Date | null;
     createdAt: Date | null;
+    triggerOptionId: string | null;
     published: boolean | null;
     RecordId: string | null;
     userId: number | null;
@@ -3022,6 +3024,7 @@ export namespace Prisma {
     name: number;
     lastEdited: number;
     createdAt: number;
+    triggerOptionId: number;
     published: number;
     RecordId: number;
     userId: number;
@@ -3044,6 +3047,7 @@ export namespace Prisma {
     name?: true;
     lastEdited?: true;
     createdAt?: true;
+    triggerOptionId?: true;
     published?: true;
     RecordId?: true;
     userId?: true;
@@ -3055,6 +3059,7 @@ export namespace Prisma {
     name?: true;
     lastEdited?: true;
     createdAt?: true;
+    triggerOptionId?: true;
     published?: true;
     RecordId?: true;
     userId?: true;
@@ -3066,6 +3071,7 @@ export namespace Prisma {
     name?: true;
     lastEdited?: true;
     createdAt?: true;
+    triggerOptionId?: true;
     published?: true;
     RecordId?: true;
     userId?: true;
@@ -3165,6 +3171,7 @@ export namespace Prisma {
     name: string;
     lastEdited: Date;
     createdAt: Date;
+    triggerOptionId: string;
     published: boolean;
     RecordId: string | null;
     userId: number;
@@ -3196,6 +3203,7 @@ export namespace Prisma {
       name?: boolean;
       lastEdited?: boolean;
       createdAt?: boolean;
+      triggerOptionId?: boolean;
       published?: boolean;
       RecordId?: boolean;
       userId?: boolean;
@@ -3219,6 +3227,7 @@ export namespace Prisma {
       name?: boolean;
       lastEdited?: boolean;
       createdAt?: boolean;
+      triggerOptionId?: boolean;
       published?: boolean;
       RecordId?: boolean;
       userId?: boolean;
@@ -3234,6 +3243,7 @@ export namespace Prisma {
     name?: boolean;
     lastEdited?: boolean;
     createdAt?: boolean;
+    triggerOptionId?: boolean;
     published?: boolean;
     RecordId?: boolean;
     userId?: boolean;
@@ -3276,6 +3286,7 @@ export namespace Prisma {
         name: string;
         lastEdited: Date;
         createdAt: Date;
+        triggerOptionId: string;
         published: boolean;
         RecordId: string | null;
         userId: number;
@@ -3815,6 +3826,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Zap", "String">;
     readonly lastEdited: FieldRef<"Zap", "DateTime">;
     readonly createdAt: FieldRef<"Zap", "DateTime">;
+    readonly triggerOptionId: FieldRef<"Zap", "String">;
     readonly published: FieldRef<"Zap", "Boolean">;
     readonly RecordId: FieldRef<"Zap", "String">;
     readonly userId: FieldRef<"Zap", "Int">;
@@ -12230,6 +12242,7 @@ export namespace Prisma {
     name: "name";
     lastEdited: "lastEdited";
     createdAt: "createdAt";
+    triggerOptionId: "triggerOptionId";
     published: "published";
     RecordId: "RecordId";
     userId: "userId";
@@ -12533,6 +12546,7 @@ export namespace Prisma {
     name?: StringFilter<"Zap"> | string;
     lastEdited?: DateTimeFilter<"Zap"> | Date | string;
     createdAt?: DateTimeFilter<"Zap"> | Date | string;
+    triggerOptionId?: StringFilter<"Zap"> | string;
     published?: BoolFilter<"Zap"> | boolean;
     RecordId?: StringNullableFilter<"Zap"> | string | null;
     userId?: IntFilter<"Zap"> | number;
@@ -12550,6 +12564,7 @@ export namespace Prisma {
     name?: SortOrder;
     lastEdited?: SortOrder;
     createdAt?: SortOrder;
+    triggerOptionId?: SortOrder;
     published?: SortOrder;
     RecordId?: SortOrderInput | SortOrder;
     userId?: SortOrder;
@@ -12572,6 +12587,7 @@ export namespace Prisma {
       name?: StringFilter<"Zap"> | string;
       lastEdited?: DateTimeFilter<"Zap"> | Date | string;
       createdAt?: DateTimeFilter<"Zap"> | Date | string;
+      triggerOptionId?: StringFilter<"Zap"> | string;
       published?: BoolFilter<"Zap"> | boolean;
       userId?: IntFilter<"Zap"> | number;
       user?: XOR<UserRelationFilter, UserWhereInput>;
@@ -12590,6 +12606,7 @@ export namespace Prisma {
     name?: SortOrder;
     lastEdited?: SortOrder;
     createdAt?: SortOrder;
+    triggerOptionId?: SortOrder;
     published?: SortOrder;
     RecordId?: SortOrderInput | SortOrder;
     userId?: SortOrder;
@@ -12613,6 +12630,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Zap"> | string;
     lastEdited?: DateTimeWithAggregatesFilter<"Zap"> | Date | string;
     createdAt?: DateTimeWithAggregatesFilter<"Zap"> | Date | string;
+    triggerOptionId?: StringWithAggregatesFilter<"Zap"> | string;
     published?: BoolWithAggregatesFilter<"Zap"> | boolean;
     RecordId?: StringNullableWithAggregatesFilter<"Zap"> | string | null;
     userId?: IntWithAggregatesFilter<"Zap"> | number;
@@ -13157,6 +13175,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
@@ -13172,6 +13191,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     RecordId?: string | null;
     userId: number;
@@ -13186,6 +13206,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
@@ -13201,6 +13222,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
@@ -13216,6 +13238,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     RecordId?: string | null;
     userId: number;
@@ -13226,6 +13249,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
   };
 
@@ -13235,6 +13259,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
@@ -13853,6 +13878,7 @@ export namespace Prisma {
     name?: SortOrder;
     lastEdited?: SortOrder;
     createdAt?: SortOrder;
+    triggerOptionId?: SortOrder;
     published?: SortOrder;
     RecordId?: SortOrder;
     userId?: SortOrder;
@@ -13869,6 +13895,7 @@ export namespace Prisma {
     name?: SortOrder;
     lastEdited?: SortOrder;
     createdAt?: SortOrder;
+    triggerOptionId?: SortOrder;
     published?: SortOrder;
     RecordId?: SortOrder;
     userId?: SortOrder;
@@ -13880,6 +13907,7 @@ export namespace Prisma {
     name?: SortOrder;
     lastEdited?: SortOrder;
     createdAt?: SortOrder;
+    triggerOptionId?: SortOrder;
     published?: SortOrder;
     RecordId?: SortOrder;
     userId?: SortOrder;
@@ -15255,6 +15283,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -15269,6 +15298,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     RecordId?: string | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
@@ -15315,6 +15345,7 @@ export namespace Prisma {
     name?: StringFilter<"Zap"> | string;
     lastEdited?: DateTimeFilter<"Zap"> | Date | string;
     createdAt?: DateTimeFilter<"Zap"> | Date | string;
+    triggerOptionId?: StringFilter<"Zap"> | string;
     published?: BoolFilter<"Zap"> | boolean;
     RecordId?: StringNullableFilter<"Zap"> | string | null;
     userId?: IntFilter<"Zap"> | number;
@@ -15720,6 +15751,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
@@ -15734,6 +15766,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     RecordId?: string | null;
     userId: number;
@@ -15755,6 +15788,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
@@ -15769,6 +15803,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     userId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
@@ -15810,6 +15845,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
@@ -15824,6 +15860,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
@@ -15857,6 +15894,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
@@ -15871,6 +15909,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     userId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
@@ -15884,6 +15923,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     user: UserCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -15898,6 +15938,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     RecordId?: string | null;
     userId: number;
@@ -15961,6 +16002,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -15975,6 +16017,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
@@ -16085,6 +16128,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
@@ -16099,6 +16143,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     RecordId?: string | null;
     userId: number;
@@ -16162,6 +16207,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
@@ -16176,6 +16222,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
@@ -16280,6 +16327,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
@@ -16294,6 +16342,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     RecordId?: string | null;
     userId: number;
@@ -16351,6 +16400,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
@@ -16365,6 +16415,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
@@ -16459,6 +16510,7 @@ export namespace Prisma {
     name?: string;
     lastEdited?: Date | string;
     createdAt?: Date | string;
+    triggerOptionId?: string;
     published?: boolean;
     RecordId?: string | null;
   };
@@ -16468,6 +16520,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -16482,6 +16535,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
@@ -16496,6 +16550,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    triggerOptionId?: StringFieldUpdateOperationsInput | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
