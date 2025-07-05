@@ -12,6 +12,8 @@ export const logInSchema = z.object({
 
 export const ZapCreateSchema = z.object({
   triggerId: z.string(),
+  zapId: z.number(),
+  userId: z.number(),
   triggerConfiguration: z.any(),
   actions: z.array(
     z.object({
