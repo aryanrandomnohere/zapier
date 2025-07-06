@@ -4,23 +4,31 @@ import { useEffect, useRef, useState } from "react";
 import AddCell from "../../../components/AddCell";
 import Modal from "../../../ui/Modal";
 import SelectItem from "@/app/components/SelectItem";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../../../RecoilState/store/zapCreate";
 import axios from "axios";
-import { ItemType, onStepEnum } from "@repo/types";
+import { ItemType, onStepEnum, RecordMetadata } from "@repo/types";
 import SideModal from "@/app/ui/SideModal";
 import {
   configureStepDetails,
   onStep,
   selectedItemMetaData,
 } from "@/app/RecoilState/currentZap";
-import { metadata } from "framer-motion/client";
+import { useParams } from "next/navigation";
+import { getSession } from "next-auth/react";
+import {
+  recordsAtom,
+  selectedRecord,
+} from "@/app/RecoilState/store/recordsAtom";
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
   const canvasRef = useRef<HTMLDivElement | null>(null);
   const setConfigurationId = useSetRecoilState(configureStepDetails);
   const setOnStep = useSetRecoilState(onStep);
+  const setRecords = useSetRecoilState<RecordMetadata[]>(recordsAtom);
+  const setSelectedRecordId = useSetRecoilState(selectedRecord);
+  const { zapId } = useParams();
   const addCell = (order: number) => {
     setZapState((prev) => {
       const updatedActions = [...prev.selectedItems];
@@ -81,14 +89,18 @@ export default function Page1() {
   }
 
   async function handlePublish() {
+    const session = await getSession();
+    console.log(session?.user);
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/publish`,
       {
         triggerId: zapState.selectedItems[0].id,
+        zapId: Number(zapId),
+        userId: Number(session?.user.userId),
         triggerConfiguration: zapState.selectedItems[0].metadata || {},
         actions: zapState.selectedItems.slice(1).map((item: ItemType) => ({
           actionId: item.id,
-          configuration: item.metadata || {},
+          configuration: item.metadata,
         })),
       },
       {
@@ -113,7 +125,24 @@ export default function Page1() {
     };
   }, [zapState.isDragging, zapState.initialPosition]);
 
-  useEffect(() => {}, [zapState]);
+  useEffect(() => {
+    async function handleLoadZap() {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/loadzap/${zapId}`,
+      );
+      console.log(response.data.finalZap);
+      setSelectedRecordId(response.data.RecordId);
+      setRecords(response.data.records);
+      setZapState((prev) => {
+        let newZap = { ...prev };
+        let newItems = { ...newZap.selectedItems };
+        newItems = response.data.finalZap;
+        newZap = { ...newZap, selectedItems: newItems };
+        return newZap;
+      });
+    }
+    handleLoadZap();
+  }, []);
   return (
     <>
       <div className="flex flex-col w-full h-10 bg-stone-50 justify-center ">

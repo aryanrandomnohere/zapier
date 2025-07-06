@@ -1,5 +1,5 @@
 import { prisma } from "@repo/db";
-import { itemStepMetaData } from "@repo/types";
+import { Field, itemStepMetaData } from "@repo/types";
 import express, { Request, Response } from "express";
 import isEqual from "lodash.isequal";
 
@@ -21,19 +21,25 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
       trigger: true,
     },
   });
-
+  console.log(
+    zap &&
+      zap.trigger &&
+      typeof zap.trigger.configuration === "object" &&
+      zap.trigger.configuration !== null &&
+      "fields" in zap.trigger.configuration,
+  );
+  //@ts-ignore
+  console.log("fields" in zap.trigger.configuration);
   if (
     zap &&
-    !zap.published &&
     zap.trigger &&
     typeof zap.trigger.configuration === "object" &&
     zap.trigger.configuration !== null &&
-    "metadata" in zap.trigger.configuration
+    "fields" in zap.trigger.configuration
   ) {
-    const metadata = (
-      zap.trigger.configuration as unknown as { metadata: itemStepMetaData }
-    ).metadata;
-    if (!metadata.fields[0].fieldValue) {
+    const fields = (zap.trigger.configuration as unknown as { fields: Field[] })
+      .fields;
+    if (!fields[0].fieldValue) {
       res.json({ msg: "No Trigger Option selected" });
       return;
     }
@@ -41,7 +47,7 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
     const records = await prisma.record.findMany({
       where: {
         zapId,
-        triggerOptionId: metadata.fields[0].fieldValue,
+        triggerOptionId: fields[0].fieldValue,
       },
     });
     const matchedRecord = records.find((record) =>
@@ -60,7 +66,7 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
         type: "original",
         zapId,
         title: `Record ${records.length + 1}`,
-        triggerOptionId: metadata.fields[0].fieldValue,
+        triggerOptionId: fields[0].fieldValue,
         JsonData: req.body,
       },
     });

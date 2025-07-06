@@ -31,13 +31,13 @@ export default function TestItem({
       const body =
         type == "webhook"
           ? {
-              triggerId: zap.selectedItems[metadata.index].id,
-              triggerConfiguration: zap.selectedItems[metadata.index],
+              triggerId: zap.selectedItems[0].id,
+              triggerConfiguration: zap.selectedItems[0].metadata,
               userId: session?.user.userId,
             }
           : {
               actionId: type,
-              actionConfiguration: zap.selectedItems[metadata.index],
+              actionConfiguration: zap.selectedItems[metadata.index].metadata,
               userId: session?.user.userId,
               sortingOrder: metadata.index,
             };

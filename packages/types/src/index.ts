@@ -1,6 +1,7 @@
 export interface zapInterface {
   id: string;
   name: string;
+  published: boolean;
   triggerId: string;
   lastEdited: string;
   userId: number;

@@ -22,6 +22,7 @@ export default function useZaps() {
         setError(error);
       });
   }, []);
+  console.log(zaps);
   return {
     zaps,
     loading,
