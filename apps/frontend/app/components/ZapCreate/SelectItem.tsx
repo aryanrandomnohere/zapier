@@ -1,7 +1,7 @@
-import FilterItems from "./SelectItems/FilterItems";
-import Options from "./SelectItems/Options";
-import Search from "./SelectItems/Search";
-import { useModal } from "../ui/Modal";
+import FilterItems from "../SelectItems/FilterItems";
+import Options from "../SelectItems/Options";
+import Search from "../SelectItems/Search";
+import { useModal } from "../../ui/Modal";
 
 export default function SelectItem({ type }: { type: "actions" | "triggers" }) {
   const { close } = useModal();

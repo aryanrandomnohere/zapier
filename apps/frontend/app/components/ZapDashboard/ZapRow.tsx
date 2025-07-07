@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { zapInterface } from "../../../../packages/types/src";
-import ToggleButton from "./buttons/ToggleButton";
+import { zapInterface } from "../../../../../packages/types/src";
+import ToggleButton from "../buttons/ToggleButton";
 import { IoIosArrowForward } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { MdOutlineAttachEmail, MdOutlineWebhook } from "react-icons/md";

@@ -1,6 +1,6 @@
 import { itemStepMetaData, zapInterface } from "@repo/types";
 import { IoIosArrowForward } from "react-icons/io";
-import ToggleButton from "./buttons/ToggleButton";
+import ToggleButton from "../buttons/ToggleButton";
 import { useState } from "react";
 
 export default function Row({
@@ -17,7 +17,7 @@ export default function Row({
   }
   return (
     <div
-      className="flex w-6/6 justify-between  border-b border-black/20 pr-10 py-4 items-center gap-1"
+      className="flex w-6/6 justify-between  border-b border-black/20 pr-10 py-2 items-center gap-1"
       key={zap.id}
     >
       <div className="flex  w-fit gap-2 items-center">
@@ -49,7 +49,7 @@ export default function Row({
       <div className="flex justify-center w-1/6 items-center gap-7">
         {" "}
         <div className="text-sm min-w-24 w-1/3">
-          {zap.lastEdited || "Nov 13, 2023"}
+          {new Date(zap.lastEdited).toLocaleDateString() || "Nov 13, 2023"}
         </div>
         <div className="w-1/3">
           <ToggleButton
