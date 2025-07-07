@@ -10,7 +10,7 @@ import { BiSolidZap } from "react-icons/bi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import FloatingModal from "../FloatingModal";
+import FloatingModal from "../../ui/FloatingModal";
 import { FilePlus, Plus } from "lucide-react";
 import DittoComponent from "./SelectActionField";
 

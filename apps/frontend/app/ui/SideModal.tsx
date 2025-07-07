@@ -23,6 +23,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { IoTimerOutline } from "react-icons/io5";
 import TestItem from "../components/TestItem";
 import { recordsAtom, selectedRecord } from "../RecoilState/store/recordsAtom";
+import SelectItem from "../components/ZapCreate/SelectItem";
 // Mock data for when metadata is not available
 
 export default function SideModal() {

@@ -1,7 +1,7 @@
 "use client";
 import Modal from "@/app/ui/Modal";
 import { ItemType } from "@repo/types";
-import SelectItem from "../SelectItem";
+import SelectItem from "../ZapCreate/SelectItem";
 
 export default function ChangeItem({ item }: { item: ItemType }) {
   return (

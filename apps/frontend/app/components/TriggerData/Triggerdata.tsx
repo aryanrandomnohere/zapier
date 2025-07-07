@@ -5,6 +5,7 @@ import { FaSquare } from "react-icons/fa6";
 import {
   ApiResponse,
   itemTestMetaData,
+  onStepEnum,
   RecordMetadata,
   TriggerTestType,
 } from "@repo/types";
@@ -15,6 +16,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
 import {
   configureStepDetails,
+  onStep,
   selectedItemMetaData,
 } from "@/app/RecoilState/currentZap";
 import axios from "axios";
@@ -41,9 +43,11 @@ const TriggerData = ({
   const [records, setRecords] = useRecoilState<RecordMetadata[]>(recordsAtom);
   const [selectedRecordId, setSelectedRecordId] =
     useRecoilState(selectedRecord);
-  const setZapState = useSetRecoilState(zapCreateState);
-  const optionId = useRecoilValue(configureStepDetails);
+  const [zapState, setZapState] = useRecoilState(zapCreateState);
   const { zapId } = useParams();
+  const setMetaData = useSetRecoilState(selectedItemMetaData);
+  const [optionId, setConfigurationId] = useRecoilState(configureStepDetails);
+  const setOnStep = useSetRecoilState(onStep);
   // Mock API call function
   const fetchRecords = async (): Promise<ApiResponse> => {
     // Simulate API delay
@@ -152,11 +156,21 @@ const TriggerData = ({
   );
 
   const handleContinue = () => {
-    setZapState((prev) => {
-      const updatedActions = [...prev.selectedItems];
-      updatedActions.splice(1, 0, { id: "", name: "", imagePath: "" });
-      return { ...prev, selectedItems: updatedActions };
-    });
+    if (zapState.selectedItems.length === 1)
+      setZapState((prev) => {
+        const updatedActions = [...prev.selectedItems];
+        updatedActions.splice(1, 0, { id: "", name: "", imagePath: "" });
+        return { ...prev, selectedItems: updatedActions };
+      });
+    else {
+      setMetaData((prev) => {
+        return { ...prev, index: 1 };
+      });
+      setConfigurationId(
+        zapState.selectedItems[1].metadata?.fields[0].fieldValue || "",
+      );
+      setOnStep(onStepEnum.SETUP);
+    }
   };
   console.log(records);
   return (

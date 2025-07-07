@@ -1,7 +1,7 @@
 "use client";
 import SecondaryButton from "../components/buttons/SecondaryButton";
 import { AiOutlinePlus } from "react-icons/ai";
-import ZapTable from "../components/ZapTable";
+import ZapTable from "../components/ZapDashboard/ZapTable";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
 import axios from "axios";

@@ -1,7 +1,7 @@
 import { RecordMetadata } from "@repo/types";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
-import FloatingModal from "../FloatingModal";
+import FloatingModal from "../../ui/FloatingModal";
 import RecordJsonData from "./RecordJsonData";
 
 // Individual Record Item Component
