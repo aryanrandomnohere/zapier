@@ -5,7 +5,7 @@ import {
   TriggerCreateSchema,
   ZapCreateSchema,
 } from "../types/index.js";
-import { ItemType } from "@repo/types";
+import { JsonObject } from "@repo/db/generated/client/runtime/library";
 const zapRouter = express.Router();
 interface extendedRequest extends Request {
   userId?: number;
@@ -84,6 +84,10 @@ zapRouter.post(
         },
       });
       if (existingTrigger) {
+        console.log(
+          (parsedBody.data.triggerConfiguration as JsonObject).fields[0]
+            .fieldValue,
+        );
         prisma.trigger.update({
           where: {
             id: existingTrigger.id,
@@ -96,9 +100,15 @@ zapRouter.post(
         res.status(200).json({ msg: "Trigger updated", success: true });
         return;
       }
+      console.log(
+        (parsedBody.data.triggerConfiguration as JsonObject).fields[0]
+          .fieldValue,
+      );
       const { id } = await prisma.trigger.create({
         data: {
           zapId,
+          optionId: (parsedBody.data.triggerConfiguration as JsonObject)
+            .fields[0].fieldValue,
           triggerId: parsedBody.data.triggerId,
           configuration: parsedBody.data.triggerConfiguration,
         },
@@ -141,7 +151,6 @@ zapRouter.post(
         res.status(400).json({ msg: "UserId does not exist", success: false });
         return;
       }
-      console.log();
       const existingAction = await prisma.action.findUnique({
         where: {
           zapId_sortingOrder: {
@@ -153,6 +162,11 @@ zapRouter.post(
           id: true,
         },
       });
+      console.log(
+        (parsedBody.data.actionConfiguration as JsonObject).fields[0]
+          .fieldValue,
+      );
+
       if (existingAction) {
         prisma.action.update({
           where: {
@@ -160,6 +174,8 @@ zapRouter.post(
           },
           data: {
             actionId: parsedBody.data.actionId,
+            optionId: (parsedBody.data.actionConfiguration as JsonObject)
+              .fields[0].fieldValue,
             configuration: parsedBody.data.actionConfiguration,
           },
         });
@@ -170,6 +186,8 @@ zapRouter.post(
         data: {
           zapId,
           actionId: parsedBody.data.actionId,
+          optionId: (parsedBody.data.actionConfiguration as JsonObject)
+            .fields[0].fieldValue,
           configuration: parsedBody.data.actionConfiguration,
           sortingOrder: parsedBody.data.sortingOrder,
         },
@@ -378,24 +396,26 @@ zapRouter.get("/loadzap/:zapId", async (req: Request, res: Response) => {
       },
       select: {
         RecordId: true,
-        triggerOptionId: true,
+        trigger: {
+          select: {
+            optionId: true,
+          },
+        },
       },
     });
     const records = await prisma.record.findMany({
       where: {
         zapId: zapId,
-        triggerOptionId: zap?.triggerOptionId,
+        triggerOptionId: zap?.trigger?.optionId,
       },
     });
-    res
-      .status(200)
-      .json({
-        msg: "Your Zap",
-        records,
-        finalZap,
-        RecordId: zap?.RecordId,
-        success: true,
-      });
+    res.status(200).json({
+      msg: "Your Zap",
+      records,
+      finalZap,
+      RecordId: zap?.RecordId,
+      success: true,
+    });
     return;
   } catch (e) {
     console.error(e);
