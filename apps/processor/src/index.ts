@@ -12,19 +12,23 @@ async function main() {
     const pendingRows = await prisma.zapRunOutbox.findMany({
       take: 10,
     });
-    producer.send({
+    const produced = await producer.send({
       topic: "zapier-events",
       messages: pendingRows.map((r: any) => {
-        return { value: r.zapRunId };
+        return {
+          value: JSON.stringify({ zapRunId: r.zapRunId, stage: 1 }),
+        };
       }),
     });
-    await prisma.zapRunOutbox.deleteMany({
+    if (produced.length > 0) console.log("Added to kafka", produced);
+    const deletedZapRun = await prisma.zapRunOutbox.deleteMany({
       where: {
         id: {
           in: pendingRows.map((r) => r.id),
         },
       },
     });
+    if (deletedZapRun.count > 0) console.log("Deleted", deletedZapRun);
   }
 }
 main();

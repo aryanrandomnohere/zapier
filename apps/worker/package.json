@@ -4,14 +4,16 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc && node dist/index.js"
+    "dev": "tsx watch src/index.ts "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "kafkajs": "^2.2.4"
+    "kafkajs": "^2.2.4",
+    "@repo/db":"*",
+    "@repo/types":"*"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",

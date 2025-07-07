@@ -21,17 +21,10 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
       trigger: true,
     },
   });
-  console.log(
-    zap &&
-      zap.trigger &&
-      typeof zap.trigger.configuration === "object" &&
-      zap.trigger.configuration !== null &&
-      "fields" in zap.trigger.configuration,
-  );
-  //@ts-ignore
-  console.log("fields" in zap.trigger.configuration);
+
   if (
     zap &&
+    !zap.published &&
     zap.trigger &&
     typeof zap.trigger.configuration === "object" &&
     zap.trigger.configuration !== null &&
