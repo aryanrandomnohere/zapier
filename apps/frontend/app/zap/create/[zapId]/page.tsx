@@ -1,9 +1,9 @@
 "use client";
-import ZapCell from "@/app/components/ZapCell";
+import ZapCell from "@/app/components/ZapDashboard/ZapCell";
 import { useEffect, useRef, useState } from "react";
-import AddCell from "../../../components/AddCell";
+import AddCell from "../../../components/ZapCreate/AddCell";
 import Modal from "../../../ui/Modal";
-import SelectItem from "@/app/components/SelectItem";
+import SelectItem from "@/app/components/ZapCreate/SelectItem";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../../../RecoilState/store/zapCreate";
 import axios from "axios";
@@ -20,6 +20,7 @@ import {
   recordsAtom,
   selectedRecord,
 } from "@/app/RecoilState/store/recordsAtom";
+import { useRouter } from "next/navigation";
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
@@ -29,6 +30,7 @@ export default function Page1() {
   const setRecords = useSetRecoilState<RecordMetadata[]>(recordsAtom);
   const setSelectedRecordId = useSetRecoilState(selectedRecord);
   const { zapId } = useParams();
+  const router = useRouter();
   const addCell = (order: number) => {
     setZapState((prev) => {
       const updatedActions = [...prev.selectedItems];
@@ -110,6 +112,9 @@ export default function Page1() {
       },
     );
     console.log(response);
+    if (response.data.zapId) {
+      router.push("/dashboard");
+    }
   }
 
   function handleSetMetaData(index: number) {
