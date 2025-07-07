@@ -28,7 +28,6 @@ triggerId        String?
 name             String        @default("Untitled Zap")
 lastEdited       DateTime      @updatedAt   
 createdAt        DateTime      @default(now())
-triggerOptionId  String        @default("")
 published        Boolean       @default(false)
 RecordId         String?       @unique
 userId           Int
@@ -60,6 +59,7 @@ model Trigger {
   id             String               @id @default(uuid())
   zap            Zap                  @relation(fields: [zapId],references: [id])
   zapId          Int                  @unique
+  optionId       String               @default("")
   configuration  Json                 
   type           AvailableTriggers     @relation(fields: [triggerId], references: [id])
   triggerId      String    
@@ -79,6 +79,7 @@ model Action {
   zap            Zap               @relation(fields: [zapId],references: [id])
   actionDetails  AvailableActions  @relation(fields: [actionId],references: [id])
   configuration  Json              @default("{}")          
+  optionId       String            @default("")
   actionId       String    
   sortingOrder   Int               @default(0)
   @@unique([zapId, sortingOrder])
