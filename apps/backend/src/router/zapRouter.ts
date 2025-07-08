@@ -41,14 +41,22 @@ zapRouter.post("/draft", async (req: extendedRequest, res: Response) => {
     console.log(userId);
 
     if (!userId) return;
-    const response = await prisma.zap.create({
-      data: {
-        userId,
-      },
-      select: {
-        id: true,
-      },
-    });
+    const allZaps = await prisma.zap.findMany();
+
+    const emptyZap = allZaps.find((zap) => zap.triggerId === null);
+    let response;
+    if (!emptyZap) {
+      response = await prisma.zap.create({
+        data: {
+          userId,
+        },
+        select: {
+          id: true,
+        },
+      });
+    } else {
+      response = { id: emptyZap.id };
+    }
     res.status(200).json({ zapId: response.id });
     return;
   } catch (e) {
