@@ -11,9 +11,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@repo/db": "*",
+    "@repo/types": "*",
+    "@types/dotenv": "^6.1.1",
+    "@types/nodemailer": "^6.4.17",
+    "dotenv": "^17.0.1",
     "kafkajs": "^2.2.4",
-    "@repo/db":"*",
-    "@repo/types":"*"
+    "nodemailer": "^7.0.5"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",

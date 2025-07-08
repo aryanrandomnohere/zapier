@@ -1,7 +1,11 @@
 import { prisma } from "@repo/db";
+import dotenv from "dotenv";
+dotenv.config();
 import { JsonObject } from "@repo/db/generated/client/runtime/library";
 import { Kafka } from "kafkajs";
 import Parser from "./parser.js";
+import { Field } from "@repo/types";
+import sendEmail from "./apps/email/send-email/index.js";
 const TOPIC_NAME = "zapier-events";
 const kafka = new Kafka({
   clientId: "outbox-processor",
@@ -17,11 +21,11 @@ async function main() {
   consumer.run({
     autoCommit: false,
     eachMessage: async ({ topic, partition, message }) => {
-      console.log({
-        partition,
-        value: message.value?.toString(),
-        offset: message.offset,
-      });
+      //console.log({
+      //   partition,
+      //   value: message.value?.toString(),
+      //   offset: message.offset,
+      // });
       if (!message.value?.toString()) {
         return;
       }
@@ -63,23 +67,19 @@ async function main() {
         return;
       }
       if (currentAction?.actionDetails?.id === "email") {
-        console.log(
-          (currentAction.configuration as JsonObject).optionConfiguration[
-            currentAction.optionId
-          ].configurationStep,
-        );
         const fields = (currentAction.configuration as JsonObject)
           ?.optionConfiguration[currentAction.optionId].configurationStep
           .fields;
 
         const toField = fields.find(
-          (x) => String(x.fieldLabel).toLowerCase() === "to",
+          (x: Field) => String(x.fieldLabel).toLowerCase() === "to",
         );
         const subjectField = fields.find(
-          (x) => String(x.fieldLabel).toLowerCase() === "subject",
+          (x: Field) => String(x.fieldLabel).toLowerCase() === "subject",
         );
         const bodyField = fields.find(
-          (x) => String(x.fieldLabel).toLowerCase() === "body (html or plain)",
+          (x: Field) =>
+            String(x.fieldLabel).toLowerCase() === "body (html or plain)",
         );
 
         const to = toField?.fieldValue ?? null;
@@ -88,7 +88,6 @@ async function main() {
 
         if (!to || !subject || !body) {
         } else {
-          console.log(to, subject, body);
           const parsedTo = Parser(to, "{{", "}}", zapRunDetails?.metaData);
           const parsedSubject = Parser(
             subject,
@@ -98,6 +97,7 @@ async function main() {
           );
           const parsedBody = Parser(body, "{{", "}}", zapRunDetails?.metaData);
           console.log(parsedTo, parsedSubject, parsedBody);
+          await sendEmail({ parsedTo, parsedBody, parsedSubject });
         }
       }
 
