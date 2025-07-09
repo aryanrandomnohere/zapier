@@ -31,6 +31,7 @@ export interface zapInterface {
 export interface ItemType {
   id: string;
   name: string;
+  type: string;
   imagePath: string;
   metadata: itemStepMetaData;
 }
@@ -56,8 +57,10 @@ export interface selectedItemMetaDataType {
 
 export interface itemStepMetaData {
   stepName: string | undefined;
+  type: string;
   stepNumber: number;
   optionConfiguration: optionConfiguration;
+  triggerType: TriggerTestType;
   stepDescription?: string;
   completed: boolean | null;
   fields: Field[];
@@ -70,9 +73,7 @@ export interface itemTestMetaData {
   does: string;
   aboutDoes: string;
   type: string;
-  testType: TriggerTestType;
-
-  userTriggered?: {
+  task?: {
     title: string;
     subtitle: string;
     description: string;
@@ -123,4 +124,12 @@ export interface ApiResponse {
 export enum TriggerTestType {
   UserTriggered = "user_triggered",
   SystemTriggered = "system_triggered",
+}
+
+export interface SessionType {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  zapmail: string;
 }
