@@ -1813,6 +1813,7 @@ export namespace Prisma {
     firstname: string | null;
     lastname: string | null;
     email: string | null;
+    zapmail: string | null;
     type: string | null;
     verified: boolean | null;
     password: string | null;
@@ -1826,6 +1827,7 @@ export namespace Prisma {
     firstname: string | null;
     lastname: string | null;
     email: string | null;
+    zapmail: string | null;
     type: string | null;
     verified: boolean | null;
     password: string | null;
@@ -1839,6 +1841,7 @@ export namespace Prisma {
     firstname: number;
     lastname: number;
     email: number;
+    zapmail: number;
     type: number;
     verified: number;
     password: number;
@@ -1861,6 +1864,7 @@ export namespace Prisma {
     firstname?: true;
     lastname?: true;
     email?: true;
+    zapmail?: true;
     type?: true;
     verified?: true;
     password?: true;
@@ -1874,6 +1878,7 @@ export namespace Prisma {
     firstname?: true;
     lastname?: true;
     email?: true;
+    zapmail?: true;
     type?: true;
     verified?: true;
     password?: true;
@@ -1887,6 +1892,7 @@ export namespace Prisma {
     firstname?: true;
     lastname?: true;
     email?: true;
+    zapmail?: true;
     type?: true;
     verified?: true;
     password?: true;
@@ -1990,6 +1996,7 @@ export namespace Prisma {
     firstname: string | null;
     lastname: string | null;
     email: string;
+    zapmail: string;
     type: string;
     verified: boolean;
     password: string | null;
@@ -2023,6 +2030,7 @@ export namespace Prisma {
       firstname?: boolean;
       lastname?: boolean;
       email?: boolean;
+      zapmail?: boolean;
       type?: boolean;
       verified?: boolean;
       password?: boolean;
@@ -2043,6 +2051,7 @@ export namespace Prisma {
       firstname?: boolean;
       lastname?: boolean;
       email?: boolean;
+      zapmail?: boolean;
       type?: boolean;
       verified?: boolean;
       password?: boolean;
@@ -2058,6 +2067,7 @@ export namespace Prisma {
     firstname?: boolean;
     lastname?: boolean;
     email?: boolean;
+    zapmail?: boolean;
     type?: boolean;
     verified?: boolean;
     password?: boolean;
@@ -2089,6 +2099,7 @@ export namespace Prisma {
         firstname: string | null;
         lastname: string | null;
         email: string;
+        zapmail: string;
         type: string;
         verified: boolean;
         password: string | null;
@@ -2590,6 +2601,7 @@ export namespace Prisma {
     readonly firstname: FieldRef<"User", "String">;
     readonly lastname: FieldRef<"User", "String">;
     readonly email: FieldRef<"User", "String">;
+    readonly zapmail: FieldRef<"User", "String">;
     readonly type: FieldRef<"User", "String">;
     readonly verified: FieldRef<"User", "Boolean">;
     readonly password: FieldRef<"User", "String">;
@@ -6613,18 +6625,21 @@ export namespace Prisma {
   export type AvailableTriggersMinAggregateOutputType = {
     id: string | null;
     name: string | null;
+    type: string | null;
     imagePath: string | null;
   };
 
   export type AvailableTriggersMaxAggregateOutputType = {
     id: string | null;
     name: string | null;
+    type: string | null;
     imagePath: string | null;
   };
 
   export type AvailableTriggersCountAggregateOutputType = {
     id: number;
     name: number;
+    type: number;
     metadata: number;
     imagePath: number;
     _all: number;
@@ -6633,18 +6648,21 @@ export namespace Prisma {
   export type AvailableTriggersMinAggregateInputType = {
     id?: true;
     name?: true;
+    type?: true;
     imagePath?: true;
   };
 
   export type AvailableTriggersMaxAggregateInputType = {
     id?: true;
     name?: true;
+    type?: true;
     imagePath?: true;
   };
 
   export type AvailableTriggersCountAggregateInputType = {
     id?: true;
     name?: true;
+    type?: true;
     metadata?: true;
     imagePath?: true;
     _all?: true;
@@ -6734,6 +6752,7 @@ export namespace Prisma {
   export type AvailableTriggersGroupByOutputType = {
     id: string;
     name: string;
+    type: string;
     metadata: JsonValue;
     imagePath: string;
     _count: AvailableTriggersCountAggregateOutputType | null;
@@ -6762,6 +6781,7 @@ export namespace Prisma {
     {
       id?: boolean;
       name?: boolean;
+      type?: boolean;
       metadata?: boolean;
       imagePath?: boolean;
       triggers?: boolean | AvailableTriggers$triggersArgs<ExtArgs>;
@@ -6776,6 +6796,7 @@ export namespace Prisma {
     {
       id?: boolean;
       name?: boolean;
+      type?: boolean;
       metadata?: boolean;
       imagePath?: boolean;
     },
@@ -6785,6 +6806,7 @@ export namespace Prisma {
   export type AvailableTriggersSelectScalar = {
     id?: boolean;
     name?: boolean;
+    type?: boolean;
     metadata?: boolean;
     imagePath?: boolean;
   };
@@ -6810,6 +6832,7 @@ export namespace Prisma {
       {
         id: string;
         name: string;
+        type: string;
         metadata: Prisma.JsonValue;
         imagePath: string;
       },
@@ -7334,6 +7357,7 @@ export namespace Prisma {
   interface AvailableTriggersFieldRefs {
     readonly id: FieldRef<"AvailableTriggers", "String">;
     readonly name: FieldRef<"AvailableTriggers", "String">;
+    readonly type: FieldRef<"AvailableTriggers", "String">;
     readonly metadata: FieldRef<"AvailableTriggers", "Json">;
     readonly imagePath: FieldRef<"AvailableTriggers", "String">;
   }
@@ -8899,18 +8923,21 @@ export namespace Prisma {
   export type AvailableActionsMinAggregateOutputType = {
     id: string | null;
     name: string | null;
+    type: string | null;
     imagePath: string | null;
   };
 
   export type AvailableActionsMaxAggregateOutputType = {
     id: string | null;
     name: string | null;
+    type: string | null;
     imagePath: string | null;
   };
 
   export type AvailableActionsCountAggregateOutputType = {
     id: number;
     name: number;
+    type: number;
     imagePath: number;
     metadata: number;
     _all: number;
@@ -8919,18 +8946,21 @@ export namespace Prisma {
   export type AvailableActionsMinAggregateInputType = {
     id?: true;
     name?: true;
+    type?: true;
     imagePath?: true;
   };
 
   export type AvailableActionsMaxAggregateInputType = {
     id?: true;
     name?: true;
+    type?: true;
     imagePath?: true;
   };
 
   export type AvailableActionsCountAggregateInputType = {
     id?: true;
     name?: true;
+    type?: true;
     imagePath?: true;
     metadata?: true;
     _all?: true;
@@ -9020,6 +9050,7 @@ export namespace Prisma {
   export type AvailableActionsGroupByOutputType = {
     id: string;
     name: string;
+    type: string;
     imagePath: string;
     metadata: JsonValue;
     _count: AvailableActionsCountAggregateOutputType | null;
@@ -9048,6 +9079,7 @@ export namespace Prisma {
     {
       id?: boolean;
       name?: boolean;
+      type?: boolean;
       imagePath?: boolean;
       metadata?: boolean;
       actions?: boolean | AvailableActions$actionsArgs<ExtArgs>;
@@ -9062,6 +9094,7 @@ export namespace Prisma {
     {
       id?: boolean;
       name?: boolean;
+      type?: boolean;
       imagePath?: boolean;
       metadata?: boolean;
     },
@@ -9071,6 +9104,7 @@ export namespace Prisma {
   export type AvailableActionsSelectScalar = {
     id?: boolean;
     name?: boolean;
+    type?: boolean;
     imagePath?: boolean;
     metadata?: boolean;
   };
@@ -9096,6 +9130,7 @@ export namespace Prisma {
       {
         id: string;
         name: string;
+        type: string;
         imagePath: string;
         metadata: Prisma.JsonValue;
       },
@@ -9613,6 +9648,7 @@ export namespace Prisma {
   interface AvailableActionsFieldRefs {
     readonly id: FieldRef<"AvailableActions", "String">;
     readonly name: FieldRef<"AvailableActions", "String">;
+    readonly type: FieldRef<"AvailableActions", "String">;
     readonly imagePath: FieldRef<"AvailableActions", "String">;
     readonly metadata: FieldRef<"AvailableActions", "Json">;
   }
@@ -12237,6 +12273,7 @@ export namespace Prisma {
     firstname: "firstname";
     lastname: "lastname";
     email: "email";
+    zapmail: "zapmail";
     type: "type";
     verified: "verified";
     password: "password";
@@ -12290,6 +12327,7 @@ export namespace Prisma {
   export const AvailableTriggersScalarFieldEnum: {
     id: "id";
     name: "name";
+    type: "type";
     metadata: "metadata";
     imagePath: "imagePath";
   };
@@ -12312,6 +12350,7 @@ export namespace Prisma {
   export const AvailableActionsScalarFieldEnum: {
     id: "id";
     name: "name";
+    type: "type";
     imagePath: "imagePath";
     metadata: "metadata";
   };
@@ -12469,6 +12508,7 @@ export namespace Prisma {
     firstname?: StringNullableFilter<"User"> | string | null;
     lastname?: StringNullableFilter<"User"> | string | null;
     email?: StringFilter<"User"> | string;
+    zapmail?: StringFilter<"User"> | string;
     type?: StringFilter<"User"> | string;
     verified?: BoolFilter<"User"> | boolean;
     password?: StringNullableFilter<"User"> | string | null;
@@ -12483,6 +12523,7 @@ export namespace Prisma {
     firstname?: SortOrderInput | SortOrder;
     lastname?: SortOrderInput | SortOrder;
     email?: SortOrder;
+    zapmail?: SortOrder;
     type?: SortOrder;
     verified?: SortOrder;
     password?: SortOrderInput | SortOrder;
@@ -12496,6 +12537,7 @@ export namespace Prisma {
     {
       id?: number;
       email?: string;
+      zapmail?: string;
       AND?: UserWhereInput | UserWhereInput[];
       OR?: UserWhereInput[];
       NOT?: UserWhereInput | UserWhereInput[];
@@ -12509,7 +12551,7 @@ export namespace Prisma {
       updatedAt?: DateTimeFilter<"User"> | Date | string;
       zap?: ZapListRelationFilter;
     },
-    "id" | "email"
+    "id" | "email" | "zapmail"
   >;
 
   export type UserOrderByWithAggregationInput = {
@@ -12517,6 +12559,7 @@ export namespace Prisma {
     firstname?: SortOrderInput | SortOrder;
     lastname?: SortOrderInput | SortOrder;
     email?: SortOrder;
+    zapmail?: SortOrder;
     type?: SortOrder;
     verified?: SortOrder;
     password?: SortOrderInput | SortOrder;
@@ -12542,6 +12585,7 @@ export namespace Prisma {
     firstname?: StringNullableWithAggregatesFilter<"User"> | string | null;
     lastname?: StringNullableWithAggregatesFilter<"User"> | string | null;
     email?: StringWithAggregatesFilter<"User"> | string;
+    zapmail?: StringWithAggregatesFilter<"User"> | string;
     type?: StringWithAggregatesFilter<"User"> | string;
     verified?: BoolWithAggregatesFilter<"User"> | boolean;
     password?: StringNullableWithAggregatesFilter<"User"> | string | null;
@@ -12799,6 +12843,7 @@ export namespace Prisma {
     NOT?: AvailableTriggersWhereInput | AvailableTriggersWhereInput[];
     id?: StringFilter<"AvailableTriggers"> | string;
     name?: StringFilter<"AvailableTriggers"> | string;
+    type?: StringFilter<"AvailableTriggers"> | string;
     metadata?: JsonFilter<"AvailableTriggers">;
     imagePath?: StringFilter<"AvailableTriggers"> | string;
     triggers?: TriggerListRelationFilter;
@@ -12807,6 +12852,7 @@ export namespace Prisma {
   export type AvailableTriggersOrderByWithRelationInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     metadata?: SortOrder;
     imagePath?: SortOrder;
     triggers?: TriggerOrderByRelationAggregateInput;
@@ -12819,6 +12865,7 @@ export namespace Prisma {
       OR?: AvailableTriggersWhereInput[];
       NOT?: AvailableTriggersWhereInput | AvailableTriggersWhereInput[];
       name?: StringFilter<"AvailableTriggers"> | string;
+      type?: StringFilter<"AvailableTriggers"> | string;
       metadata?: JsonFilter<"AvailableTriggers">;
       imagePath?: StringFilter<"AvailableTriggers"> | string;
       triggers?: TriggerListRelationFilter;
@@ -12829,6 +12876,7 @@ export namespace Prisma {
   export type AvailableTriggersOrderByWithAggregationInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     metadata?: SortOrder;
     imagePath?: SortOrder;
     _count?: AvailableTriggersCountOrderByAggregateInput;
@@ -12846,6 +12894,7 @@ export namespace Prisma {
       | AvailableTriggersScalarWhereWithAggregatesInput[];
     id?: StringWithAggregatesFilter<"AvailableTriggers"> | string;
     name?: StringWithAggregatesFilter<"AvailableTriggers"> | string;
+    type?: StringWithAggregatesFilter<"AvailableTriggers"> | string;
     metadata?: JsonWithAggregatesFilter<"AvailableTriggers">;
     imagePath?: StringWithAggregatesFilter<"AvailableTriggers"> | string;
   };
@@ -12935,6 +12984,7 @@ export namespace Prisma {
     NOT?: AvailableActionsWhereInput | AvailableActionsWhereInput[];
     id?: StringFilter<"AvailableActions"> | string;
     name?: StringFilter<"AvailableActions"> | string;
+    type?: StringFilter<"AvailableActions"> | string;
     imagePath?: StringFilter<"AvailableActions"> | string;
     metadata?: JsonFilter<"AvailableActions">;
     actions?: ActionListRelationFilter;
@@ -12943,6 +12993,7 @@ export namespace Prisma {
   export type AvailableActionsOrderByWithRelationInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     imagePath?: SortOrder;
     metadata?: SortOrder;
     actions?: ActionOrderByRelationAggregateInput;
@@ -12955,6 +13006,7 @@ export namespace Prisma {
       OR?: AvailableActionsWhereInput[];
       NOT?: AvailableActionsWhereInput | AvailableActionsWhereInput[];
       name?: StringFilter<"AvailableActions"> | string;
+      type?: StringFilter<"AvailableActions"> | string;
       imagePath?: StringFilter<"AvailableActions"> | string;
       metadata?: JsonFilter<"AvailableActions">;
       actions?: ActionListRelationFilter;
@@ -12965,6 +13017,7 @@ export namespace Prisma {
   export type AvailableActionsOrderByWithAggregationInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     imagePath?: SortOrder;
     metadata?: SortOrder;
     _count?: AvailableActionsCountOrderByAggregateInput;
@@ -12982,6 +13035,7 @@ export namespace Prisma {
       | AvailableActionsScalarWhereWithAggregatesInput[];
     id?: StringWithAggregatesFilter<"AvailableActions"> | string;
     name?: StringWithAggregatesFilter<"AvailableActions"> | string;
+    type?: StringWithAggregatesFilter<"AvailableActions"> | string;
     imagePath?: StringWithAggregatesFilter<"AvailableActions"> | string;
     metadata?: JsonWithAggregatesFilter<"AvailableActions">;
   };
@@ -13100,6 +13154,7 @@ export namespace Prisma {
     firstname?: string | null;
     lastname?: string | null;
     email: string;
+    zapmail: string;
     type: string;
     verified?: boolean;
     password?: string | null;
@@ -13114,6 +13169,7 @@ export namespace Prisma {
     firstname?: string | null;
     lastname?: string | null;
     email: string;
+    zapmail: string;
     type: string;
     verified?: boolean;
     password?: string | null;
@@ -13127,6 +13183,7 @@ export namespace Prisma {
     firstname?: NullableStringFieldUpdateOperationsInput | string | null;
     lastname?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
     type?: StringFieldUpdateOperationsInput | string;
     verified?: BoolFieldUpdateOperationsInput | boolean;
     password?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -13141,6 +13198,7 @@ export namespace Prisma {
     firstname?: NullableStringFieldUpdateOperationsInput | string | null;
     lastname?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
     type?: StringFieldUpdateOperationsInput | string;
     verified?: BoolFieldUpdateOperationsInput | boolean;
     password?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -13155,6 +13213,7 @@ export namespace Prisma {
     firstname?: string | null;
     lastname?: string | null;
     email: string;
+    zapmail: string;
     type: string;
     verified?: boolean;
     password?: string | null;
@@ -13167,6 +13226,7 @@ export namespace Prisma {
     firstname?: NullableStringFieldUpdateOperationsInput | string | null;
     lastname?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
     type?: StringFieldUpdateOperationsInput | string;
     verified?: BoolFieldUpdateOperationsInput | boolean;
     password?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -13180,6 +13240,7 @@ export namespace Prisma {
     firstname?: NullableStringFieldUpdateOperationsInput | string | null;
     lastname?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
     type?: StringFieldUpdateOperationsInput | string;
     verified?: BoolFieldUpdateOperationsInput | boolean;
     password?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -13413,6 +13474,7 @@ export namespace Prisma {
   export type AvailableTriggersCreateInput = {
     id?: string;
     name: string;
+    type?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: string;
     triggers?: TriggerCreateNestedManyWithoutTypeInput;
@@ -13421,6 +13483,7 @@ export namespace Prisma {
   export type AvailableTriggersUncheckedCreateInput = {
     id?: string;
     name: string;
+    type?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: string;
     triggers?: TriggerUncheckedCreateNestedManyWithoutTypeInput;
@@ -13429,6 +13492,7 @@ export namespace Prisma {
   export type AvailableTriggersUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: StringFieldUpdateOperationsInput | string;
     triggers?: TriggerUpdateManyWithoutTypeNestedInput;
@@ -13437,6 +13501,7 @@ export namespace Prisma {
   export type AvailableTriggersUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: StringFieldUpdateOperationsInput | string;
     triggers?: TriggerUncheckedUpdateManyWithoutTypeNestedInput;
@@ -13445,6 +13510,7 @@ export namespace Prisma {
   export type AvailableTriggersCreateManyInput = {
     id?: string;
     name: string;
+    type?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: string;
   };
@@ -13452,6 +13518,7 @@ export namespace Prisma {
   export type AvailableTriggersUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: StringFieldUpdateOperationsInput | string;
   };
@@ -13459,6 +13526,7 @@ export namespace Prisma {
   export type AvailableTriggersUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: StringFieldUpdateOperationsInput | string;
   };
@@ -13527,6 +13595,7 @@ export namespace Prisma {
   export type AvailableActionsCreateInput = {
     id?: string;
     name: string;
+    type?: string;
     imagePath?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
     actions?: ActionCreateNestedManyWithoutActionDetailsInput;
@@ -13535,6 +13604,7 @@ export namespace Prisma {
   export type AvailableActionsUncheckedCreateInput = {
     id?: string;
     name: string;
+    type?: string;
     imagePath?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
     actions?: ActionUncheckedCreateNestedManyWithoutActionDetailsInput;
@@ -13543,6 +13613,7 @@ export namespace Prisma {
   export type AvailableActionsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     imagePath?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
     actions?: ActionUpdateManyWithoutActionDetailsNestedInput;
@@ -13551,6 +13622,7 @@ export namespace Prisma {
   export type AvailableActionsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     imagePath?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
     actions?: ActionUncheckedUpdateManyWithoutActionDetailsNestedInput;
@@ -13559,6 +13631,7 @@ export namespace Prisma {
   export type AvailableActionsCreateManyInput = {
     id?: string;
     name: string;
+    type?: string;
     imagePath?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
   };
@@ -13566,6 +13639,7 @@ export namespace Prisma {
   export type AvailableActionsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     imagePath?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
   };
@@ -13573,6 +13647,7 @@ export namespace Prisma {
   export type AvailableActionsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     imagePath?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
   };
@@ -13733,6 +13808,7 @@ export namespace Prisma {
     firstname?: SortOrder;
     lastname?: SortOrder;
     email?: SortOrder;
+    zapmail?: SortOrder;
     type?: SortOrder;
     verified?: SortOrder;
     password?: SortOrder;
@@ -13750,6 +13826,7 @@ export namespace Prisma {
     firstname?: SortOrder;
     lastname?: SortOrder;
     email?: SortOrder;
+    zapmail?: SortOrder;
     type?: SortOrder;
     verified?: SortOrder;
     password?: SortOrder;
@@ -13763,6 +13840,7 @@ export namespace Prisma {
     firstname?: SortOrder;
     lastname?: SortOrder;
     email?: SortOrder;
+    zapmail?: SortOrder;
     type?: SortOrder;
     verified?: SortOrder;
     password?: SortOrder;
@@ -14107,6 +14185,7 @@ export namespace Prisma {
   export type AvailableTriggersCountOrderByAggregateInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     metadata?: SortOrder;
     imagePath?: SortOrder;
   };
@@ -14114,12 +14193,14 @@ export namespace Prisma {
   export type AvailableTriggersMaxOrderByAggregateInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     imagePath?: SortOrder;
   };
 
   export type AvailableTriggersMinOrderByAggregateInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     imagePath?: SortOrder;
   };
 
@@ -14171,6 +14252,7 @@ export namespace Prisma {
   export type AvailableActionsCountOrderByAggregateInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     imagePath?: SortOrder;
     metadata?: SortOrder;
   };
@@ -14178,12 +14260,14 @@ export namespace Prisma {
   export type AvailableActionsMaxOrderByAggregateInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     imagePath?: SortOrder;
   };
 
   export type AvailableActionsMinOrderByAggregateInput = {
     id?: SortOrder;
     name?: SortOrder;
+    type?: SortOrder;
     imagePath?: SortOrder;
   };
 
@@ -15380,6 +15464,7 @@ export namespace Prisma {
     firstname?: string | null;
     lastname?: string | null;
     email: string;
+    zapmail: string;
     type: string;
     verified?: boolean;
     password?: string | null;
@@ -15393,6 +15478,7 @@ export namespace Prisma {
     firstname?: string | null;
     lastname?: string | null;
     email: string;
+    zapmail: string;
     type: string;
     verified?: boolean;
     password?: string | null;
@@ -15562,6 +15648,7 @@ export namespace Prisma {
     firstname?: NullableStringFieldUpdateOperationsInput | string | null;
     lastname?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
     type?: StringFieldUpdateOperationsInput | string;
     verified?: BoolFieldUpdateOperationsInput | boolean;
     password?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -15575,6 +15662,7 @@ export namespace Prisma {
     firstname?: NullableStringFieldUpdateOperationsInput | string | null;
     lastname?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
     type?: StringFieldUpdateOperationsInput | string;
     verified?: BoolFieldUpdateOperationsInput | boolean;
     password?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -15980,6 +16068,7 @@ export namespace Prisma {
   export type AvailableTriggersCreateWithoutTriggersInput = {
     id?: string;
     name: string;
+    type?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: string;
   };
@@ -15987,6 +16076,7 @@ export namespace Prisma {
   export type AvailableTriggersUncheckedCreateWithoutTriggersInput = {
     id?: string;
     name: string;
+    type?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: string;
   };
@@ -16069,6 +16159,7 @@ export namespace Prisma {
   export type AvailableTriggersUpdateWithoutTriggersInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: StringFieldUpdateOperationsInput | string;
   };
@@ -16076,6 +16167,7 @@ export namespace Prisma {
   export type AvailableTriggersUncheckedUpdateWithoutTriggersInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
     imagePath?: StringFieldUpdateOperationsInput | string;
   };
@@ -16184,6 +16276,7 @@ export namespace Prisma {
   export type AvailableActionsCreateWithoutActionsInput = {
     id?: string;
     name: string;
+    type?: string;
     imagePath?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
   };
@@ -16191,6 +16284,7 @@ export namespace Prisma {
   export type AvailableActionsUncheckedCreateWithoutActionsInput = {
     id?: string;
     name: string;
+    type?: string;
     imagePath?: string;
     metadata?: JsonNullValueInput | InputJsonValue;
   };
@@ -16273,6 +16367,7 @@ export namespace Prisma {
   export type AvailableActionsUpdateWithoutActionsInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     imagePath?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
   };
@@ -16280,6 +16375,7 @@ export namespace Prisma {
   export type AvailableActionsUncheckedUpdateWithoutActionsInput = {
     id?: StringFieldUpdateOperationsInput | string;
     name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
     imagePath?: StringFieldUpdateOperationsInput | string;
     metadata?: JsonNullValueInput | InputJsonValue;
   };

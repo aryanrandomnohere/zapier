@@ -9,10 +9,11 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement()) 
+  id            Int          @id @default(autoincrement()) 
   firstname     String?
   lastname      String?
   email         String        @unique
+  zapmail       String        @unique
   type          String
   verified      Boolean       @default(false)
   password      String?
@@ -68,6 +69,7 @@ model Trigger {
 model AvailableTriggers {
   id                  String        @id @default(uuid())
   name                String 
+  type                String        @default("trigger")
   metadata            Json          @default("{}")
   imagePath           String        @default("") 
   triggers            Trigger[]
@@ -88,6 +90,7 @@ model Action {
 model AvailableActions {
   id                  String     @id @default(uuid())
   name                String        
+  type                String     @default("action")
   imagePath           String     @default("")
   actions             Action[]
   metadata            Json       @default("{}")

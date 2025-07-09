@@ -127,6 +127,7 @@ exports.Prisma.UserScalarFieldEnum = {
   firstname: 'firstname',
   lastname: 'lastname',
   email: 'email',
+  zapmail: 'zapmail',
   type: 'type',
   verified: 'verified',
   password: 'password',
@@ -168,6 +169,7 @@ exports.Prisma.TriggerScalarFieldEnum = {
 exports.Prisma.AvailableTriggersScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  type: 'type',
   metadata: 'metadata',
   imagePath: 'imagePath'
 };
@@ -184,6 +186,7 @@ exports.Prisma.ActionScalarFieldEnum = {
 exports.Prisma.AvailableActionsScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  type: 'type',
   imagePath: 'imagePath',
   metadata: 'metadata'
 };
