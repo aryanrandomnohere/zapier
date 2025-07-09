@@ -438,7 +438,7 @@ export default function SideModal() {
             </div>
           )}
         </div>
-        {StepIndex != onStepEnum.TEST ? (
+        {StepIndex === onStepEnum.SETUP && (
           <div className="flex gap-1 w-full  px-2.5 ">
             <div className="self-start p-2 w-full">
               <AddMetaData
@@ -450,11 +450,26 @@ export default function SideModal() {
               />
             </div>
           </div>
-        ) : (
+        )}
+        {StepIndex === onStepEnum.CONFIGURATION && (
+          <div className="flex gap-1 w-full  px-2.5">
+            <div className="self-start p-2 w-full">
+              <AddMetaData
+                imagePath={zap.selectedItems[0].imagePath}
+                index={StepIndex}
+                key={selectedStep}
+                item={zap.selectedItems[index]}
+                onFieldChange={handleFieldChange}
+              />
+            </div>
+          </div>
+        )}
+        {StepIndex === onStepEnum.TEST && (
           <div className="min-h-full w-full">
             {" "}
             <TestItem
-              type={zap.selectedItems[index].id}
+              id={zap.selectedItems[index].id}
+              type={zap.selectedItems[index].type}
               item={
                 zap.selectedItems[index].metadata.optionConfiguration[
                   configureId
