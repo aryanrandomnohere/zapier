@@ -14,9 +14,11 @@ import { useParams } from "next/navigation";
 export default function TestItem({
   item,
   type,
+  id,
 }: {
   item: itemTestMetaData;
   type: string;
+  id:string
 }) {
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
@@ -29,7 +31,7 @@ export default function TestItem({
         return;
       const session = await getSession();
       const body =
-        type == "webhook"
+        type == "trigger"
           ? {
               triggerId: zap.selectedItems[0].id,
               triggerConfiguration: zap.selectedItems[0].metadata,
@@ -43,10 +45,10 @@ export default function TestItem({
             };
 
       console.log(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "webhook" ? "updatetrigger" : "updateaction"}/${zapId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
       );
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "webhook" ? "updatetrigger" : "updateaction"}/${zapId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
         body,
       );
       console.log(response);
@@ -95,6 +97,7 @@ export default function TestItem({
       {item.type == "trigger" ? (
         <div>
           <Triggerdata
+            id={id}
             triggerName={zap.selectedItems[metadata.index].name}
             item={item}
             zapImage={zap.selectedItems[metadata.index].imagePath}

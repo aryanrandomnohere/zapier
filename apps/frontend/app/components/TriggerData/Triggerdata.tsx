@@ -11,7 +11,7 @@ import {
 } from "@repo/types";
 import { mockRecords } from "./mockdata";
 import { RecordItem } from "./RecordItem";
-import Task from "./Task";
+import Task from "../BuiltInTriggers/Task";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
 import {
@@ -31,10 +31,12 @@ const TriggerData = ({
   triggerName,
   zapImage,
   item,
+  id,
 }: {
   zapImage: string;
   item: itemTestMetaData;
   triggerName: string;
+  id: string;
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -176,8 +178,7 @@ const TriggerData = ({
   return (
     <div className="flex flex-col w-full min-h-full  justify-end bg-white text-xs">
       <div className="">
-        {item.testType === TriggerTestType.UserTriggered &&
-          item.userTriggered && <Task imagePath={zapImage} item={item} />}
+        {item.task && <Task id={id} imagePath={zapImage} item={item} />}
         {loading ||
         (!triedFetching && !selectedRecordId && records.length <= 0) ? (
           <div className="flex justify-center gap-6 px-3 mt-2 w-full">
