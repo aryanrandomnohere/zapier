@@ -50,7 +50,8 @@ export default function AddMetaData({
                   onFieldChange={onFieldChange}
                   selectedField={editingField}
                   setEditingField={setEditingField}
-                  type={item.id}
+                  type={item.type}
+                  id={item.id}
                   field={field}
                 />
               </div>

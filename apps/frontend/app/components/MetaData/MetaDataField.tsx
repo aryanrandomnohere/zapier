@@ -4,8 +4,8 @@ import {
   onStep,
   OptionChanged,
 } from "@/app/RecoilState/currentZap";
-import { Field, FieldOption, onStepEnum } from "@repo/types";
-import { useMemo, useRef, useState } from "react";
+import { Field, FieldOption, onStepEnum, SessionType } from "@repo/types";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BiSolidZap } from "react-icons/bi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
@@ -13,6 +13,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import FloatingModal from "../../ui/FloatingModal";
 import { FilePlus, Plus } from "lucide-react";
 import DittoComponent from "./SelectActionField";
+import { getSession } from "next-auth/react";
 
 interface MetaDataFieldProps {
   field: Field;
@@ -21,6 +22,7 @@ interface MetaDataFieldProps {
   setEditingField: (fieldId: string) => void;
   selectedField: string;
   imagePath: string;
+  id: string;
 }
 
 export default function MetaDataField({
@@ -30,6 +32,7 @@ export default function MetaDataField({
   selectedField,
   setEditingField,
   imagePath,
+  id,
 }: MetaDataFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectFieldIsOpen, setSelectFieldIsOpen] = useState(true);
@@ -40,6 +43,66 @@ export default function MetaDataField({
     useRecoilState(configureStepDetails);
   const setOptionChanged = useSetRecoilState(OptionChanged);
   const stepIndex = useRecoilValue(onStep);
+  const [user, setUser] = useState<SessionType | undefined>();
+
+  useEffect(() => {
+    async function getUserInfo() {
+      const response = await getSession();
+      console.log(response);
+      setUser(response?.user);
+    }
+    getUserInfo();
+  }, []);
+
+  if (
+    type === "trigger" &&
+    id === "email" &&
+    stepIndex === onStepEnum.CONFIGURATION
+  ) {
+    if (!user) return;
+    const placeholder = `.${user.zapmail}${field.fieldPlaceholder}`;
+    return (
+      <div className="flex iw-full max-w-sm">
+        <div>
+          <div className="flex gap-1 text-xs font-bold">
+            {field.fieldLabel}{" "}
+            {field.required && <div className="text-red-400">*</div>}
+          </div>
+          <div className="flex items-center border border-gray-300 rounded px-3 py-1 bg-white">
+            <input
+              ref={inputRef}
+              onClick={() => setEditingField("")}
+              type={field.fieldInputType}
+              value={value?.split("@")[0] || ""}
+              onChange={(e) => {
+                if (stepIndex == onStepEnum.CONFIGURATION) {
+                  onFieldChange(
+                    field.fieldNumber,
+                    e.target.value + placeholder,
+                    onStepEnum.CONFIGURATION,
+                  );
+                  setValue(e.target.value);
+                  console.log(field.fieldValue);
+                } else {
+                  onFieldChange(
+                    field.fieldNumber,
+                    e.target.value,
+                    onStepEnum.SETUP,
+                  );
+                }
+              }}
+              className={`relative px-0.5 py-1 border outline-none border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 flex-1 border-none  bg-transparent placeholder-gray-400 `}
+              required={field.required}
+            />
+            <span className="text-gray-500 select-none text-xs">
+              {placeholder}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (field.fieldInputType === "dropdown") {
     return (
       <div className="flex flex-col gap-1 relative w-full">
@@ -152,13 +215,13 @@ export default function MetaDataField({
                 onStepEnum.SETUP,
               );
           }}
-          className={`relative px-3 py-1.5 ${type != "webhook" ? "pr-9" : ""} border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none`}
+          className={`relative px-3 py-1.5 ${type != "action" ? "pr-9" : ""} border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none`}
           required={field.required}
         />
         {selectedField === field.fieldLabel &&
           selectFieldIsOpen &&
           stepIndex !== onStepEnum.SETUP &&
-          type != "webhook" && (
+          type === "action" && (
             <FloatingModal>
               <DittoComponent
                 setValue={setValue}
@@ -179,7 +242,7 @@ export default function MetaDataField({
           )}
         {selectFieldIsOpen &&
           stepIndex !== onStepEnum.SETUP &&
-          type != "webhook" && (
+          type === "action" && (
             <div
               onClick={() => {
                 if (selectedField === field.fieldLabel) setEditingField("");
