@@ -13,7 +13,7 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
   const zap = await prisma.zap.findUnique({
     where: {
       id: zapId,
-      userId: userId,
+      // userId: userId,
     },
     select: {
       records: true,

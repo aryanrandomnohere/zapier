@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import { prisma } from "@repo/db";
 import { JWT } from "next-auth/jwt";
-import { Session } from "next-auth";
+import { Session, TokenSet } from "next-auth";
 
 export default {
   providers: [
@@ -30,6 +30,7 @@ export default {
             data: {
               email: credentials.email,
               firstname: credentials.firstname,
+              zapmail: Date.now().toString(36),
               lastname: credentials.lastname,
               password: hashedPassword,
               type: "credentials",
@@ -65,7 +66,7 @@ export default {
   secret: process.env.NEXTAUTH_SECRET, // used for signing JWT
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60,
   },
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
@@ -86,18 +87,20 @@ export default {
               firstname: profile.name?.split(" ")[0],
               lastname: profile.name?.split(" ")[1],
               imageUrl: profile.picture,
+              zapmail: Date.now().toString(36),
               password: null,
               type: "google",
               verified: profile.email_verified,
             },
             select: {
               id: true,
+              zapmail: true,
             },
           });
-          console.log(response.id);
+          console.log(response);
           user.userId = response.id;
+          user.zapmail = response.zapmail;
         }
-
         return true;
       } catch (error) {
         console.error("Sign-in error:", error);
@@ -107,14 +110,16 @@ export default {
 
     async jwt({ token, user }) {
       if (user) {
-        token.userId = user.userId; // 🟢 this is what gets signed in the token
+        token.userId = user.userId;
+        token.zapmail = user.zapmail;
       }
       return token;
     },
 
     async session({ session, token }) {
       if (session.user && token.userId) {
-        session.user.userId = token.userId; // 🟢 this becomes available in frontend session
+        session.user.userId = token.userId;
+        session.user.zapmail = token.zapmail;
       }
       return session;
     },

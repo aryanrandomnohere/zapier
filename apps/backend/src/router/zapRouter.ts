@@ -73,7 +73,7 @@ zapRouter.post(
       const parsedBody = TriggerCreateSchema.safeParse(req.body);
       console.log(req.body, zapId);
       if (!parsedBody.success) {
-        res.status(200).json({
+        res.status(400).json({
           msg: "Invalid Input",
           success: false,
         });
