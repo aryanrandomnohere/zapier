@@ -18,7 +18,7 @@ export default function TestItem({
 }: {
   item: itemTestMetaData;
   type: string;
-  id:string
+  id: string;
 }) {
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
