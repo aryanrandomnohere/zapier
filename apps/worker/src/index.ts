@@ -67,6 +67,11 @@ async function main() {
         return;
       }
       if (currentAction?.actionDetails?.id === "email") {
+        // console.log(currentAction)
+        //@ts-ignore
+        // console.log(currentAction.configuration.optionConfiguration, "option id", currentAction.optionId)
+        //  console.log((currentAction.configuration as JsonObject)
+        // ?.optionConfiguration[currentAction.optionId])
         const fields = (currentAction.configuration as JsonObject)
           ?.optionConfiguration[currentAction.optionId].configurationStep
           .fields;
