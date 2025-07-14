@@ -256,6 +256,30 @@ export default function MetaDataField({
       </div>
     );
   }
+
+  if (field.fieldInputType === "connection") {
+    return (
+      <>
+        <div className="flex flex-col gap-1 relative w-full">
+          <div className="flex gap-1 text-xs font-bold">
+            {field.fieldLabel}{" "}
+            {field.required && <div className="text-red-400">*</div>}
+          </div>
+          <div className="flex justify-between items-center px-3 py-2 border border-black/20 rounded hover:border-blue-500 cursor-pointer">
+            <div className="flex items-center gap-2 text-xs font-medium">
+              {field.fieldValue || field.fieldPlaceholder}
+            </div>
+            <div className="text-xs text-gray-500">
+              <button className="text-blue-500 text-xs border border-black/20 rounded px-2 py-[1px] hover:bg-gray-100 font-bold hover:cursor-pointer">
+                Sign in
+              </button>
+            </div>
+          </div>
+          <div className="text-sm mt-6">{field.fieldDescription}</div>
+        </div>
+      </>
+    );
+  }
   console.log(field);
   return (
     <div className="flex flex-col relative w-full">
