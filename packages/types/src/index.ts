@@ -31,6 +31,8 @@ export interface zapInterface {
 export interface ItemType {
   id: string;
   name: string;
+  serviceType: string;
+  appId: string;
   type: string;
   imagePath: string;
   metadata: itemStepMetaData;
@@ -90,6 +92,7 @@ export interface Field {
   fieldValue: string | null;
   required: boolean;
   options?: FieldOption[];
+  fieldDescription?: string;
   fieldNumber: number;
 }
 
@@ -132,4 +135,8 @@ export interface SessionType {
   email: string;
   image: string;
   zapmail: string;
+}
+
+export interface currnetZap {
+  zapId: string;
 }

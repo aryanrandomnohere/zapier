@@ -13,7 +13,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import FloatingModal from "../../ui/FloatingModal";
 import { FilePlus, Plus } from "lucide-react";
 import DittoComponent from "./SelectActionField";
-import { getSession } from "next-auth/react";
+import { userAtom } from "@/app/RecoilState/store/userAtom";
 
 interface MetaDataFieldProps {
   field: Field;
@@ -43,16 +43,28 @@ export default function MetaDataField({
     useRecoilState(configureStepDetails);
   const setOptionChanged = useSetRecoilState(OptionChanged);
   const stepIndex = useRecoilValue(onStep);
-  const [user, setUser] = useState<SessionType | undefined>();
-
+  const user = useRecoilValue(userAtom)
   useEffect(() => {
-    async function getUserInfo() {
-      const response = await getSession();
-      console.log(response);
-      setUser(response?.user);
-    }
-    getUserInfo();
+    const handler = (event: MessageEvent) => {
+      if(field.fieldNumber === 0 ) return;
+      if (event.origin !== window.location.origin) return;
+
+      if (event.data?.status === "oauth-success") {
+        const { email, name, picture } = event.data;
+        console.log(field)
+       onFieldChange(field.fieldNumber,email,onStepEnum.SETUP)
+
+        // Optional: Save to backend, or trigger something
+        console.log("User info received:", event.data);
+      }
+    };
+
+    window.addEventListener("message", handler);
+    return () => window.removeEventListener("message", handler);
   }, []);
+
+
+
 
   if (
     type === "trigger" &&
@@ -199,7 +211,7 @@ export default function MetaDataField({
           onClick={() => setEditingField("")}
           type={field.fieldInputType}
           placeholder={field.fieldPlaceholder}
-          defaultValue={field.fieldValue || ""}
+          // defaultValue={field.fieldValue || ""}
           value={field.fieldValue || ""}
           onChange={(e) => {
             if (stepIndex == onStepEnum.CONFIGURATION)
@@ -270,7 +282,26 @@ export default function MetaDataField({
               {field.fieldValue || field.fieldPlaceholder}
             </div>
             <div className="text-xs text-gray-500">
-              <button className="text-blue-500 text-xs border border-black/20 rounded px-2 py-[1px] hover:bg-gray-100 font-bold hover:cursor-pointer">
+              <button
+                onClick={() => {
+                  const popup = window.open(
+                    `/api/oauth/google/start?userId=${user?.id || "8"}`,
+                    "oauthPopup",
+                    "width=500,height=600",
+                  );
+
+                  // Optional: Poll until the popup closes
+                  const interval = setInterval(() => {
+                    if (popup?.closed) {
+                      clearInterval(interval);
+                      // Refetch data or update UI
+                      console.log("OAuth popup closed");
+                      // window.location.reload(); or update state
+                    }
+                  }, 500);
+                }}
+                className="text-blue-500 text-xs border border-black/20 rounded px-2 py-[1px] hover:bg-gray-100 font-bold hover:cursor-pointer"
+              >
                 Sign in
               </button>
             </div>
@@ -289,7 +320,7 @@ export default function MetaDataField({
       <input
         type={field.fieldInputType}
         placeholder={field.fieldPlaceholder}
-        defaultValue={field.fieldValue || undefined}
+        // defaultValue={field.fieldValue || undefined}
         onChange={(e) => {
           onFieldChange(field.fieldNumber, e.target.value, onStepEnum.SETUP);
           setValue(e.target.value);

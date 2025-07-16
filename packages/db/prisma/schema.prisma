@@ -21,6 +21,7 @@ model User {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   zap           Zap[]
+  connections   UserConnection[]
 }
  
 model Zap {
@@ -68,21 +69,25 @@ model Trigger {
 }
 
 model UserConnection {
-  id            String    @id @default(uuid())
-  userId        String
+  id            String      @id @default(uuid())
+  userId        Int
+  appId         String 
+  identifier    String
   accessToken   String
-  refreshToken  String
-  createdAt     DateTime  @default(now())
+  refreshToken  String?
+  createdAt     DateTime    @default(now())
   expiredAt     DateTime
-  trigger       Trigger?   @relation(name: "TriggerToUserConnection")
-  action        Action?    @relation(name: "ActionToUserConnection")
+  User          User        @relation(fields:[userId], references:[id])
+  trigger       Trigger[]   @relation(name: "TriggerToUserConnection")
+  action        Action[]    @relation(name: "ActionToUserConnection")
 }
 
 model AvailableTriggers {
   id                  String        @id @default(uuid())
   name                String 
   type                String        @default("trigger")
-  handler             String        @default("")
+  serviceType         String        @default("")
+  appId               String?       
   metadata            Json          @default("{}")
   imagePath           String        @default("") 
   triggers            Trigger[]
@@ -106,6 +111,8 @@ model AvailableActions {
   id                  String     @id @default(uuid())
   name                String        
   type                String     @default("action")
+  serviceType         String     @default("builtIn")
+  appId               String?    
   imagePath           String     @default("")
   actions             Action[]
   metadata            Json       @default("{}")

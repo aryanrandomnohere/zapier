@@ -13,7 +13,7 @@ import { FiEdit3 } from "react-icons/fi";
 import { BiSolidZap } from "react-icons/bi";
 import StepsStatus from "../components/MetaData/StepsStatus";
 import AddMetaData from "../components/MetaData/AddMetaData";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   itemStepMetaData,
   onStepEnum,
@@ -24,6 +24,8 @@ import { IoTimerOutline } from "react-icons/io5";
 import TestItem from "../components/TestItem";
 import { recordsAtom, selectedRecord } from "../RecoilState/store/recordsAtom";
 import SelectItem from "../components/ZapCreate/SelectItem";
+import { userAtom } from "../RecoilState/store/userAtom";
+import { getSession } from "next-auth/react";
 // Mock data for when metadata is not available
 
 export default function SideModal() {
@@ -39,11 +41,23 @@ export default function SideModal() {
   const optionChanged = useRecoilState(OptionChanged);
   const setSelectedRecordId = useSetRecoilState(selectedRecord);
   const setSelectedRecords = useSetRecoilState(recordsAtom);
+  const [user, setUser] = useRecoilState(userAtom);
+
   if (index == null) return null;
 
   // const steps =
   //      zap.selectedItems[index].metadata
   //     || mockSteps;
+
+  useEffect(() => {
+    async function getUserInfo() {
+      const response = await getSession();
+      console.log(response);
+      setUser(response?.user);
+    }
+    getUserInfo();
+  }, []);
+
 
   const isCurrentStepValid = useMemo(() => {
     const currentStep =

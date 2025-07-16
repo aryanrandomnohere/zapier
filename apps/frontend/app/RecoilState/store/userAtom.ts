@@ -1,9 +1,8 @@
-import { useSession } from "next-auth/react";
-import { selector } from "recoil";
+// recoil/userAtom.ts
+import { SessionType } from "@repo/types";
+import { atom } from "recoil";
 
-const user = selector({
-  key: "UserInfo",
-  get: async () => {
-    const session = await useSession();
-  },
+export const userAtom = atom<SessionType  | undefined>({
+  key: "UserAtom",
+  default:undefined
 });

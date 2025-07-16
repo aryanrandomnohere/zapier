@@ -163,13 +163,27 @@ exports.Prisma.TriggerScalarFieldEnum = {
   zapId: 'zapId',
   optionId: 'optionId',
   configuration: 'configuration',
+  connectionId: 'connectionId',
   triggerId: 'triggerId'
+};
+
+exports.Prisma.UserConnectionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  appId: 'appId',
+  identifier: 'identifier',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  createdAt: 'createdAt',
+  expiredAt: 'expiredAt'
 };
 
 exports.Prisma.AvailableTriggersScalarFieldEnum = {
   id: 'id',
   name: 'name',
   type: 'type',
+  serviceType: 'serviceType',
+  appId: 'appId',
   metadata: 'metadata',
   imagePath: 'imagePath'
 };
@@ -180,13 +194,16 @@ exports.Prisma.ActionScalarFieldEnum = {
   configuration: 'configuration',
   optionId: 'optionId',
   actionId: 'actionId',
-  sortingOrder: 'sortingOrder'
+  sortingOrder: 'sortingOrder',
+  connectionId: 'connectionId'
 };
 
 exports.Prisma.AvailableActionsScalarFieldEnum = {
   id: 'id',
   name: 'name',
   type: 'type',
+  serviceType: 'serviceType',
+  appId: 'appId',
   imagePath: 'imagePath',
   metadata: 'metadata'
 };
@@ -233,6 +250,7 @@ exports.Prisma.ModelName = {
   Zap: 'Zap',
   Record: 'Record',
   Trigger: 'Trigger',
+  UserConnection: 'UserConnection',
   AvailableTriggers: 'AvailableTriggers',
   Action: 'Action',
   AvailableActions: 'AvailableActions',

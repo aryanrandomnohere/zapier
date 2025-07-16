@@ -17,7 +17,7 @@ export const topApps = [
     imagePath:
       "https://zapier-images.imgix.net/storage/services/a5b8a9920e9dae8a73711590e7090d3d.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64",
   },
-  {
+  {  
     id: "googe_forms",
     name: "Google Forms",
     imagePath:
@@ -59,12 +59,12 @@ export const topApps = [
     imagePath:
       "https://zapier-images.imgix.net/storage/services/6cf3f5a461feadfba7abc93c4c395b33_2.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64",
   },
-  {
-    id: "calendly",
-    name: "Calendly",
-    imagePath:
-      "https://zapier-images.imgix.net/storage/developer_cli/33464c48a26a29dd29977ffb16bcca53.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64",
-  },
+  // {
+  //   id: "calendly",
+  //   name: "Calendly",
+  //   imagePath:
+  //     "https://zapier-images.imgix.net/storage/developer_cli/33464c48a26a29dd29977ffb16bcca53.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64",
+  // },
   {
     id: "Typeform",
     name: "Typeform",

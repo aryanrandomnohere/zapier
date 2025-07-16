@@ -9,18 +9,19 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  firstname String?
-  lastname  String?
-  email     String   @unique
-  zapmail   String   @unique
-  type      String
-  verified  Boolean  @default(false)
-  password  String?
-  imageUrl  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  zap       Zap[]
+  id          Int              @id @default(autoincrement())
+  firstname   String?
+  lastname    String?
+  email       String           @unique
+  zapmail     String           @unique
+  type        String
+  verified    Boolean          @default(false)
+  password    String?
+  imageUrl    String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  zap         Zap[]
+  connections UserConnection[]
 }
 
 model Zap {
@@ -50,48 +51,70 @@ model Record {
   title           String
   JsonData        Json
   triggerOptionId String
-  zapSingle       Zap?     @relation("ZapSingleRecord") // ✅ Backward one-to-one reference (optional)
+  zapSingle       Zap?     @relation("ZapSingleRecord")
 }
 
 model Trigger {
-  id            String            @id @default(uuid())
-  zap           Zap               @relation(fields: [zapId], references: [id])
-  zapId         Int               @unique
-  optionId      String            @default("")
-  configuration Json
-  type          AvailableTriggers @relation(fields: [triggerId], references: [id])
-  triggerId     String
+  id             String            @id @default(uuid())
+  zap            Zap               @relation(fields: [zapId], references: [id])
+  zapId          Int               @unique
+  optionId       String            @default("")
+  configuration  Json
+  connectionId   String?           @unique
+  userConnection UserConnection?   @relation(name: "TriggerToUserConnection", fields: [connectionId], references: [id])
+  type           AvailableTriggers @relation(fields: [triggerId], references: [id])
+  triggerId      String
+}
+
+model UserConnection {
+  id           String    @id @default(uuid())
+  userId       Int
+  appId        String
+  identifier   String
+  accessToken  String
+  refreshToken String?
+  createdAt    DateTime  @default(now())
+  expiredAt    DateTime
+  User         User      @relation(fields: [userId], references: [id])
+  trigger      Trigger[] @relation(name: "TriggerToUserConnection")
+  action       Action[]  @relation(name: "ActionToUserConnection")
 }
 
 model AvailableTriggers {
-  id        String    @id @default(uuid())
-  name      String
-  type      String    @default("trigger")
-  metadata  Json      @default("{}")
-  imagePath String    @default("")
-  triggers  Trigger[]
+  id          String    @id @default(uuid())
+  name        String
+  type        String    @default("trigger")
+  serviceType String    @default("")
+  appId       String?
+  metadata    Json      @default("{}")
+  imagePath   String    @default("")
+  triggers    Trigger[]
 }
 
 model Action {
-  id            String           @id @default(uuid())
-  zapId         Int
-  zap           Zap              @relation(fields: [zapId], references: [id])
-  actionDetails AvailableActions @relation(fields: [actionId], references: [id])
-  configuration Json             @default("{}")
-  optionId      String           @default("")
-  actionId      String
-  sortingOrder  Int              @default(0)
+  id             String           @id @default(uuid())
+  zapId          Int
+  zap            Zap              @relation(fields: [zapId], references: [id])
+  actionDetails  AvailableActions @relation(fields: [actionId], references: [id])
+  configuration  Json             @default("{}")
+  optionId       String           @default("")
+  actionId       String
+  sortingOrder   Int              @default(0)
+  connectionId   String?          @unique
+  userConnection UserConnection?  @relation(name: "ActionToUserConnection", fields: [connectionId], references: [id])
 
   @@unique([zapId, sortingOrder])
 }
 
 model AvailableActions {
-  id        String   @id @default(uuid())
-  name      String
-  type      String   @default("action")
-  imagePath String   @default("")
-  actions   Action[]
-  metadata  Json     @default("{}")
+  id          String   @id @default(uuid())
+  name        String
+  type        String   @default("action")
+  serviceType String   @default("builtIn")
+  appId       String?
+  imagePath   String   @default("")
+  actions     Action[]
+  metadata    Json     @default("{}")
 }
 
 model ZapRun {

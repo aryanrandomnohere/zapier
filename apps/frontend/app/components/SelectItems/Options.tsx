@@ -10,11 +10,15 @@ export default function Options({
   onClose: () => void;
 }) {
   const { items } = useItems(type);
-  const Items = [...items, ...extendedItems];
+  const builtInItems = items.filter((item)=>item.serviceType != "app")
+  const apps = items.filter((item)=>item.serviceType === "app")
+
+  const Items = [...builtInItems, ...extendedItems];
+  const Apps = [...apps, ...topApps]
   return (
     <div className="flex h-full mt-5">
       <div className="w-1/2">
-        <OptionList title="Your top apps" items={topApps} onClose={onClose} />
+        <OptionList title="Your top apps" items={Apps} onClose={onClose} />
       </div>
       <div className="flex flex-col w-1/2">
         <div className="min-h-2/3">
