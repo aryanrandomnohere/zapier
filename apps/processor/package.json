@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@repo/db": "*",
-    "kafkajs": "^2.2.4"
+    "kafkajs": "^2.2.4",
+    "@repo/types":"*",
+    "@repo/apps":"*"
   }
 }
