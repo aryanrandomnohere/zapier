@@ -58,7 +58,6 @@ export default function SideModal() {
     getUserInfo();
   }, []);
 
-
   const isCurrentStepValid = useMemo(() => {
     const currentStep =
       StepIndex === onStepEnum.CONFIGURATION
