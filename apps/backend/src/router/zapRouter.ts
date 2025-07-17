@@ -176,7 +176,8 @@ zapRouter.post(
       );
 
       if (existingAction) {
-        prisma.action.update({
+        console.log(existingAction.id, parsedBody)
+        await prisma.action.update({
           where: {
             id: existingAction.id,
           },
@@ -304,6 +305,7 @@ zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
         triggerId: parsedData.data.triggerId,
         configuration: parsedData.data.triggerConfiguration,
         zapId: zap.id,
+        published:true
       },
     });
     await tx.zap.update({
