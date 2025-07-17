@@ -30,11 +30,13 @@ import {
 const TriggerData = ({
   triggerName,
   zapImage,
+  appId,
   item,
   id,
 }: {
   zapImage: string;
   item: itemTestMetaData;
+  appId?: string;
   triggerName: string;
   id: string;
 }) => {
@@ -51,7 +53,7 @@ const TriggerData = ({
   const [optionId, setConfigurationId] = useRecoilState(configureStepDetails);
   const setOnStep = useSetRecoilState(onStep);
   // Mock API call function
-  const fetchRecords = async (): Promise<ApiResponse> => {
+  const fetchRecords = async () => {
     // Simulate API delay
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/records/${zapId}/${optionId}`,
@@ -60,7 +62,18 @@ const TriggerData = ({
     // Mock data that matches the screenshot
     return {
       records: response.data.records,
-      total: mockRecords.length,
+      total: response.data.records.length,
+      lastUpdated: new Date().toISOString(),
+    };
+  };
+  const testTrigger = async () => {
+    const response = await axios.post(
+      `http://localhost:3002/test/trigger/${zapId}`,
+    );
+    console.log(response.data);
+    return {
+      records: response.data.records,
+      total: response.data.records.length,
       lastUpdated: new Date().toISOString(),
     };
   };
@@ -73,71 +86,11 @@ const TriggerData = ({
 
     try {
       // Make API call to xyz endpoint
-      const response = await fetchRecords();
+      console.log(appId);
+      const response = !appId ? await fetchRecords() : await testTrigger();
+
       setRecords(response.records);
       setSelectedRecordId(response.records[response.records.length - 1].id);
-      // setZapState((prev) => {
-      //   if (metadata?.index == null) return prev;
-
-      //   // Step 1: Deep copy of selectedItems
-      //   const newSelectedItems = [...prev.selectedItems];
-
-      //   // Step 2: Deep copy of the specific item
-      //   const item = { ...newSelectedItems[metadata.index] };
-
-      //   // Step 3: Deep copy of optionConfiguration
-      //   const newOptionConfiguration = {
-      //     ...item.optionConfiguration,
-      //     [optionId]: {
-      //       ...item.optionConfiguration[optionId],
-      //       testStep: {
-      //         ...item.optionConfiguration[optionId].testStep,
-      //         completed: true,
-      //       },
-      //     },
-      //   };
-      //   setZapState((prev) => {
-      //     if (metadata?.index == null) return prev;
-
-      //     // Step 1: Deep copy of selectedItems
-      //     const newSelectedItems = [...prev.selectedItems];
-
-      //     // Step 2: Deep copy of the specific item
-      //     const item = { ...newSelectedItems[metadata.index] };
-
-      //     // Step 3: Deep copy of optionConfiguration
-      //     const newOptionConfiguration = {
-      //       ...item.optionConfiguration,
-      //       [optionId]: {
-      //         ...item.optionConfiguration[optionId],
-      //         testStep: {
-      //           ...item.optionConfiguration[optionId].testStep,
-      //           completed: true,
-      //         },
-      //       },
-      //     };
-
-      //     // Step 4: Replace updated structures
-      //     item.optionConfiguration = newOptionConfiguration;
-      //     newSelectedItems[metadata.index] = item;
-
-      //     // Step 5: Return the full new state
-      //     return {
-      //       ...prev,
-      //       selectedItems: newSelectedItems,
-      //     };
-      //   });
-
-      //   // Step 4: Replace updated structures
-      //   item.optionConfiguration = newOptionConfiguration;
-      //   newSelectedItems[metadata.index] = item;
-
-      //   // Step 5: Return the full new state
-      //   return {
-      //     ...prev,
-      //     selectedItems: newSelectedItems,
-      //   };
-      // });
     } catch (err) {
       setError("Failed to fetch records. Please try again.");
       console.error("API Error:", err);

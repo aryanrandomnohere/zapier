@@ -12,7 +12,7 @@ export default function JsonData({
       <span className="text-gray-600 bg-blue-200/20 px-2 py-1 rounded border border-gray-200 font-medium">
         {label}
       </span>
-      { value && <span className="text-gray-800">{value}</span>}
+      {value && <span className="text-gray-800">{value}</span>}
     </div>
   );
 }

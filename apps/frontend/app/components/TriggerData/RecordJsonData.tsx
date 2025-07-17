@@ -4,10 +4,10 @@ import { TbPointFilled } from "react-icons/tb";
 
 export default function RecordJsonData({
   data,
-  type
+  type,
 }: {
   data: Record<string, any>; // allow nested objects
-  type: string;
+  type?: string;
 }) {
   return (
     <div className="space-y-0.5 w-full h-full">
@@ -15,17 +15,33 @@ export default function RecordJsonData({
         if (typeof value === "object" && value !== null) {
           return (
             <>
-        <div className="flex items-center">
-          {type && type === "nested" && <div className="text-sm"><TbPointFilled  className="text-blue-500/40" /></div> }
-              <JsonData label={label} /></div>
-             <div className="pl-10 "> <RecordJsonData data={value} type = "nested" /></div>
+              <div className="flex items-center">
+                {type && type === "nested" && (
+                  <div className="text-sm">
+                    <TbPointFilled className="text-blue-500/40" />
+                  </div>
+                )}
+                <JsonData label={label} />
+              </div>
+              <div className="pl-10 ">
+                {" "}
+                <RecordJsonData data={value} type="nested" />
+              </div>
             </>
           );
         }
-        return <div className="flex items-center">
-          {type && type === "nested" && <div className="text-sm"><TbPointFilled className="text-blue-500/40"/></div> }
-           <JsonData key={label} label={label} value={value} /> </div>;
+        return (
+          <div className="flex items-center">
+            {type && type === "nested" && (
+              <div className="text-sm">
+                <TbPointFilled className="text-blue-500/40" />
+              </div>
+            )}
+            <JsonData key={label} label={label} value={value} />{" "}
+          </div>
+        );
       })}
     </div>
-  );``
+  );
+  ``;
 }
