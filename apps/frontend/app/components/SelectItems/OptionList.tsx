@@ -52,8 +52,9 @@ export default function OptionList({
       {items.map((item: ItemType, index: number) => (
         <div
           onClick={() => {
-            if(!item?.serviceType) return;
-            handleClick(item, index)}}
+            if (!item?.serviceType) return;
+            handleClick(item, index);
+          }}
           key={item.id}
           className="flex p-1.5 hover:cursor-pointer transform transition-all duration-200 ease-in-out rounded group hover:bg-blue-500/10 min-w items-center gap-2 text-sm font-semibold justify-start hover:justify-between group-hover:justify-between"
         >

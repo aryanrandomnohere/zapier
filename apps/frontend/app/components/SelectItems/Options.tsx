@@ -10,11 +10,11 @@ export default function Options({
   onClose: () => void;
 }) {
   const { items } = useItems(type);
-  const builtInItems = items.filter((item)=>item.serviceType != "app")
-  const apps = items.filter((item)=>item.serviceType === "app")
+  const builtInItems = items.filter((item) => item.serviceType != "app");
+  const apps = items.filter((item) => item.serviceType === "app");
 
   const Items = [...builtInItems, ...extendedItems];
-  const Apps = [...apps, ...topApps]
+  const Apps = [...apps, ...topApps];
   return (
     <div className="flex h-full mt-5">
       <div className="w-1/2">

@@ -17,7 +17,7 @@ export const topApps = [
     imagePath:
       "https://zapier-images.imgix.net/storage/services/a5b8a9920e9dae8a73711590e7090d3d.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64",
   },
-  {  
+  {
     id: "googe_forms",
     name: "Google Forms",
     imagePath:
