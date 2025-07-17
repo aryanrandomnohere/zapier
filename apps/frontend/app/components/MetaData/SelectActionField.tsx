@@ -5,6 +5,7 @@ import {
   selectedRecord,
 } from "@/app/RecoilState/store/recordsAtom";
 import { onStepEnum } from "@repo/types";
+import SelectField from "./SelectField";
 
 interface RecordMetadata {
   id: string;
@@ -133,26 +134,36 @@ const DittoComponent: React.FC<DittoComponentProps> = ({
             <h4 className="text-xs text-gray-500 font-bold mb-1">
               Selected Record :
             </h4>
-            {filteredFields.map(([fieldName, fieldValue]) => (
-              <div
-                key={fieldName}
-                onClick={() => handleFieldClick(fieldName)}
-                className="flex justify-between items-start p-1 rounded hover:bg-blue-600/5 cursor-pointer transition"
-              >
-                <div className="flex gap-1.5 border items-center rounded-sm border-black/20 hover:border-blue-600 p-0.5">
-                  <img
-                    src={imagePath}
-                    alt="logo"
-                    className="w-[21px] h-[21px] p-0.5"
-                  />
-                  <p className="text-xs font-bold text-gray-900">
-                    {fieldName[0].toUpperCase() +
-                      fieldName.slice(1, fieldName.length)}
-                  </p>
-                  <p className="text-xs text-gray-500 truncate">{fieldValue}</p>
-                </div>
-              </div>
-            ))}
+            {filteredFields.map(([fieldName, fieldValue]) => {
+              console.log(typeof fieldValue);
+              return (
+                <SelectField
+                  fieldName={fieldName}
+                  fieldValue={fieldValue}
+                  handleFieldClick={handleFieldClick}
+                  imagePath={imagePath}
+                  parentPath=""
+                />
+                // <div
+                //   key={fieldName}
+                //   onClick={() => handleFieldClick(fieldName)}
+                //   className="flex justify-between items-start p-1 rounded hover:bg-blue-600/5 cursor-pointer transition"
+                // >
+                //   <div className="flex gap-1.5 border items-center rounded-sm border-black/20 hover:border-blue-600 p-0.5">
+                //     <img
+                //       src={imagePath}
+                //       alt="logo"
+                //       className="w-[21px] h-[21px] p-0.5"
+                //     />
+                //     <p className="text-xs font-bold text-gray-900">
+                //       {fieldName[0].toUpperCase() +
+                //         fieldName.slice(1, fieldName.length)}
+                //     </p>
+                //     <p className="text-xs text-gray-500 truncate">{fieldValue}</p>
+                //   </div>
+                // </div>
+              );
+            })}
           </div>
         )}
       </div>
