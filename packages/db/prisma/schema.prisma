@@ -61,7 +61,10 @@ model Trigger {
   zap             Zap               @relation(fields: [zapId], references: [id])
   zapId           Int               @unique
   optionId        String            @default("")
+  optionType      String            @default("polling")
+  published       Boolean           @default(false)
   configuration   Json
+  lastPolledAt    DateTime?         
   connectionId    String?            @unique
   userConnection  UserConnection?    @relation(name: "TriggerToUserConnection", fields: [connectionId], references: [id])
   type            AvailableTriggers  @relation(fields: [triggerId], references: [id])
