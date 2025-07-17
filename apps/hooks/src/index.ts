@@ -2,6 +2,7 @@ import { prisma } from "@repo/db";
 import { Field, itemStepMetaData } from "@repo/types";
 import express, { Request, Response } from "express";
 import isEqual from "lodash.isequal";
+import { test } from "./test.js";
 
 const app = express();
 app.use(express.json());
@@ -91,6 +92,56 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
     });
     res.json({ msg: "Webhook triggered" });
   }
+});
+
+app.post("/test/trigger/:zapId", async (req: Request, res: Response) => {
+  const zapId = req.params.zapId;
+  const trigger = await prisma.trigger.findUnique({
+    where: {
+      zapId: Number(zapId),
+    },
+    include: {
+      userConnection: true,
+      type: true,
+    },
+  });
+
+  const matchedRecord = await prisma.record.findMany({
+    where: {
+      zapId: trigger?.zapId,
+      triggerOptionId: trigger?.optionId,
+    },
+  });
+
+  if (matchedRecord.length > 0) {
+    return res.json({
+      msg: "Record already exists",
+      success: true,
+      record: matchedRecord,
+    });
+  }
+
+  console.log("Testing");
+  const newRecords = await test(trigger); // this should return an array with 3 items
+  const createdRecords = [];
+  console.log(newRecords);
+  for (const [index, record] of newRecords.entries()) {
+    console.log("Creating records");
+    const createdRecord = await prisma.record.create({
+      data: {
+        type: "original",
+        zapId: Number(trigger?.zapId),
+        title: `Record ${index + 1}`,
+        triggerOptionId: trigger?.optionId || "",
+        JsonData: record,
+      },
+    });
+
+    createdRecords.push(createdRecord);
+  }
+  console.log(createdRecords);
+  res.json({ msg: "Testing triggered", records: createdRecords });
+  return;
 });
 
 app.listen(3002);
