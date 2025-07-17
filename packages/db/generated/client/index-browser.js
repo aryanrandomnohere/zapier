@@ -162,7 +162,10 @@ exports.Prisma.TriggerScalarFieldEnum = {
   id: 'id',
   zapId: 'zapId',
   optionId: 'optionId',
+  optionType: 'optionType',
+  published: 'published',
   configuration: 'configuration',
+  lastPolledAt: 'lastPolledAt',
   connectionId: 'connectionId',
   triggerId: 'triggerId'
 };
