@@ -38,7 +38,7 @@ export default function TestItem({
               userId: session?.user.userId,
             }
           : {
-              actionId: type,
+              actionId: id,
               actionConfiguration: zap.selectedItems[metadata.index].metadata,
               userId: session?.user.userId,
               sortingOrder: metadata.index,
@@ -97,6 +97,7 @@ export default function TestItem({
       {item.type == "trigger" ? (
         <div>
           <Triggerdata
+            appId={zap.selectedItems[metadata.index].appId}
             id={id}
             triggerName={zap.selectedItems[metadata.index].name}
             item={item}
