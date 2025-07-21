@@ -4,7 +4,7 @@ export default function page() {
   return (
     <div className="w-full flex flex-col gap-9">
       <div className="flex justify-center bg-stone-100 py-9">
-        <div className=" w-full flex flex-col gap-5 mx-96 ">
+        <div className=" w-full flex flex-col gap-5 items-center">
           <div className="font-bold text-3xl">
             What would you like to automate?
           </div>
@@ -33,7 +33,7 @@ export default function page() {
           </div>
         </div>
       </div>
-      <div className="min-w-full h-full flex flex-col gap-5 font-bold text-xl justify-center  ">
+      <div className="min-w-screen h-full flex flex-col gap-5 font-bold text-xl items-center justify-center  ">
         Start from scratch
         <div className="flex gap-2">
           <ServiceCards />

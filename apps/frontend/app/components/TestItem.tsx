@@ -23,7 +23,7 @@ export default function TestItem({
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
   const { zapId } = useParams();
-
+  console.log(type)
   useEffect(() => {
     async function handleSaveTrigger() {
       let triggerSaved = false;
@@ -97,7 +97,7 @@ export default function TestItem({
       {item.type == "trigger" ? (
         <div>
           <Triggerdata
-            appId={zap.selectedItems[metadata.index].appId}
+            appId={zap.selectedItems[metadata.index].appId || "google"}
             id={id}
             triggerName={zap.selectedItems[metadata.index].name}
             item={item}

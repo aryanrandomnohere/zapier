@@ -3,7 +3,6 @@ import SecondaryButton from "../components/buttons/SecondaryButton";
 import { AiOutlinePlus } from "react-icons/ai";
 import ZapTable from "../components/ZapDashboard/ZapTable";
 import { useRouter } from "next/navigation";
-import Navbar from "../components/Navbar";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 export default function Page() {

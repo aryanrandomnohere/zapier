@@ -96,6 +96,15 @@ export async function GET(req: NextRequest) {
 
 // Helper function to get Google access token (works for all services)
 export const getGoogleAccessToken = async (userId: number) => {
+ await prisma.$transaction( async (tx)=> {
+  const connection = await prisma.userConnection.findFirst({
+    where: {
+      userId,
+      appId: "google",
+    }
+  });
+  prisma.trigger
+  })
   const connection = await prisma.userConnection.findFirst({
     where: {
       userId,

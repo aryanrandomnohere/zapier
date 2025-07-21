@@ -4,7 +4,7 @@ export default async function newVideoBySearch(
   token: string,
   lastPolledAt: string,
 ) {
- 
+ console.log(type, keywords, token, lastPolledAt)
   const baseUrl = "https://youtube.googleapis.com/youtube/v3/search";
   const params = new URLSearchParams({
     part: "snippet",
@@ -26,7 +26,6 @@ export default async function newVideoBySearch(
       Accept: "application/json",
     },
   });
-
   if (!response.ok) {
     const errorData = await response.json();
     console.error("API Error:", errorData);
@@ -35,7 +34,12 @@ export default async function newVideoBySearch(
 
   const data = await response.json();
   // console.log("YouTube API response:", data.item[0].snippet);
-  if (!data?.items[0]?.snipped) return null;
+  console.log(data)
+  if (data.items.length === 0) {
+    console.log("Data does not exists")
+    return;
+  };
+
   if (type === "test") {
     return data.items.map((item: any) => {
       return item.snippet;

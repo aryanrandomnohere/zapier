@@ -67,6 +67,7 @@ const TriggerData = ({
     };
   };
   const testTrigger = async () => {
+    console.log("Testing record")
     const response = await axios.post(
       `http://localhost:3002/test/trigger/${zapId}`,
     );

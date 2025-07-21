@@ -33,8 +33,12 @@ async function main() {
     for (const trigger of pollingTriggers) {
       try {
         const record = await poll(trigger);
-        if (record === null) {
+        if (!record) {
           console.log("No new record polled");
+          await prisma.trigger.update({
+          where: { id: trigger.id },
+          data: { lastPolledAt: new Date() },
+        });
           continue;
         }
         // console.log(record)
