@@ -89,4 +89,8 @@ userRouter.post("/login", async (req: Request, res: Response) => {
   }
 });
 
+userRouter.post("/createConnection", async (req, res)=>{
+
+})
+
 export { userRouter };

@@ -147,7 +147,7 @@ zapRouter.post(
     try {
       const zapId = Number(req.params.zapId);
       const parsedBody = ActionCreationSchema.safeParse(req.body);
-      console.log(req.body, zapId);
+      // console.log(req.body, zapId);
       if (!parsedBody.success) {
         res.status(400).json({
           msg: "Invalid Input",
@@ -170,11 +170,11 @@ zapRouter.post(
           id: true,
         },
       });
-      console.log(
-        (parsedBody.data.actionConfiguration as JsonObject).fields[0]
-          .fieldValue,
-      );
-
+      // console.log(
+      //   (parsedBody.data.actionConfiguration as JsonObject).fields[0]
+      //     .fieldValue,
+      // );
+      console.log(existingAction)
       if (existingAction) {
         console.log(existingAction.id, parsedBody)
         await prisma.action.update({
@@ -365,6 +365,8 @@ zapRouter.get("/loadzap/:zapId", async (req: Request, res: Response) => {
           id: true,
           name: true,
           imagePath: true,
+          appId:true,
+          type:true,
           metadata: true,
         },
       });
