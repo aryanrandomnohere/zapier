@@ -1,10 +1,8 @@
-import ZapRow from "./ZapRow";
+// "use server"
+import ZapRows from "./ZapRow";
 import { RiArrowDownSFill } from "react-icons/ri";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
-import useZaps from "@/app/hooks/useZaps";
 export default function ZapTable() {
-  const { zaps, loading, error } = useZaps();
-  console.log(zaps, loading, error);
   return (
     <div className="flex flex-col h-full">
       {" "}
@@ -25,7 +23,7 @@ export default function ZapTable() {
           </div>
         </div>
       </div>
-      {loading ? "Loading...." : <ZapRow zaps={zaps} />}
+      <ZapRows />
     </div>
   );
 }

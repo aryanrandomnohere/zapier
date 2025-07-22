@@ -8,16 +8,20 @@ import { MdOutlineAttachEmail, MdOutlineWebhook } from "react-icons/md";
 import { SiSolana } from "react-icons/si";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import Row from "./Row";
-export default function ZapRow({ zaps }: { zaps: zapInterface[] }) {
+import useZaps from "@/app/hooks/useZaps";
+export default function ZapRows() {
+  const { zaps, loading, error } = useZaps();
   const router = useRouter();
   const handleZapClick = (id: string) => {
     router.push(`/zap/create/${id}`);
   };
 
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className="flex flex-col justify-center h-full">
       {zaps.map((zap: zapInterface) => (
-        <Row zap={zap} handleZapClick={handleZapClick} />
+        <Row key={zap.id} zap={zap} handleZapClick={handleZapClick} />
       ))}
     </div>
   );

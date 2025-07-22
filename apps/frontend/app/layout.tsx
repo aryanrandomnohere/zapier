@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import RecoilContextProvider from "./RecoilState/RecoilContextProvider";
+
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
@@ -26,7 +26,7 @@ export default function RootLayout({
         className={`${inter.variable} font-sans antialiased`}
       >
         <Toaster position="top-center" />
-        <RecoilContextProvider>{children}</RecoilContextProvider>
+        {children}
         <div id="modal-root" />
       </body>
     </html>
