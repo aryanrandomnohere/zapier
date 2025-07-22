@@ -3,9 +3,10 @@ import { Field, itemStepMetaData } from "@repo/types";
 import express, { Request, Response } from "express";
 import isEqual from "lodash.isequal";
 import { test } from "./test.js";
-
+import cors from "cors";
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
   const userId = Number(req.params.userId);
   const zapId = Number(req.params.zapId);
@@ -117,7 +118,7 @@ app.post("/test/trigger/:zapId", async (req: Request, res: Response) => {
     return res.json({
       msg: "Record already exists",
       success: true,
-      record: matchedRecord,
+      records: matchedRecord,
     });
   }
 
@@ -136,7 +137,16 @@ app.post("/test/trigger/:zapId", async (req: Request, res: Response) => {
         JsonData: record,
       },
     });
-
+    if (index === 0) {
+      await prisma.zap.update({
+        where: {
+          id: Number(zapId),
+        },
+        data: {
+          RecordId: createdRecord.id,
+        },
+      });
+    }
     createdRecords.push(createdRecord);
   }
   console.log(createdRecords);
