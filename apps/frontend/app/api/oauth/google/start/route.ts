@@ -4,7 +4,7 @@ import { google } from "googleapis";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get("userId");
-
+  const zapId = searchParams.get("zapId");
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENTID!,
     process.env.GOOGLE_SECRET!,
@@ -50,11 +50,17 @@ export async function GET(req: Request) {
     // Google Analytics (if needed)
     "https://www.googleapis.com/auth/analytics.readonly",
   ];
-
+  console.log({
+    zapId,
+    userId,
+  });
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: allGoogleScopes,
-    state: userId || "",
+    state: JSON.stringify({
+      zapId,
+      userId,
+    }),
     prompt: "consent", // Force consent to ensure refresh token
   });
 
