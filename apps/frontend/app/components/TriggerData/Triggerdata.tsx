@@ -52,6 +52,7 @@ const TriggerData = ({
   const setMetaData = useSetRecoilState(selectedItemMetaData);
   const [optionId, setConfigurationId] = useRecoilState(configureStepDetails);
   const setOnStep = useSetRecoilState(onStep);
+  const [recordIsOpenId, setRecordIsOpenId] = useState("");
   // Mock API call function
   const fetchRecords = async () => {
     // Simulate API delay
@@ -67,7 +68,7 @@ const TriggerData = ({
     };
   };
   const testTrigger = async () => {
-    console.log("Testing record")
+    console.log("Testing record");
     const response = await axios.post(
       `http://localhost:3002/test/trigger/${zapId}`,
     );
@@ -91,7 +92,8 @@ const TriggerData = ({
       const response = !appId ? await fetchRecords() : await testTrigger();
 
       setRecords(response.records);
-      setSelectedRecordId(response.records[response.records.length - 1].id);
+      if (!records)
+        setSelectedRecordId(response.records[response.records.length - 1].id);
     } catch (err) {
       setError("Failed to fetch records. Please try again.");
       console.error("API Error:", err);
@@ -101,9 +103,15 @@ const TriggerData = ({
   };
 
   // Handle record click
-  const handleRecordClick = (record: RecordMetadata) => {
-    console.log("Record clicked:", record);
-    // Add your navigation/modal logic here
+  const handleRecordClick = async (record: RecordMetadata) => {
+    //Saving the Selected Record in the backend
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/selectRecord`,
+      {
+        zapId: Number(zapId),
+        recordId: record.id,
+      },
+    );
   };
 
   // Filter records based on search term
@@ -198,7 +206,7 @@ const TriggerData = ({
               </div>
 
               {/* Find New ds Button */}
-              <div className="text-sm px-2 py-2  border-gray-200">
+              <div className="text-sm px-2 py-2 hover:cursor-pointer border-gray-200">
                 <button
                   onClick={handleFindNewRecords}
                   disabled={loading}
@@ -226,6 +234,8 @@ const TriggerData = ({
                 ) : (
                   filteredRecords.map((record) => (
                     <RecordItem
+                      setIsOpen={setRecordIsOpenId}
+                      isOpen={recordIsOpenId}
                       setSelectedRecord={setSelectedRecordId}
                       selectedRecord={selectedRecordId}
                       key={record.id}

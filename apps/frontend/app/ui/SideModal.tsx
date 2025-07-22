@@ -1,5 +1,10 @@
 "use client";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  SetterOrUpdater,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
 import {
   configureStepDetails,
@@ -28,14 +33,18 @@ import { userAtom } from "../RecoilState/store/userAtom";
 import { getSession } from "next-auth/react";
 // Mock data for when metadata is not available
 
-export default function SideModal() {
+export default function SideModal({
+  index,
+  setMetaData,
+}: {
+  index: number | null;
+  setMetaData: (arg1: number | null, arg2: boolean) => void;
+}) {
   const [zap, setZapState] = useRecoilState(zapCreateState);
-  const [metaData, setMetaData] =
-    useRecoilState<selectedItemMetaDataType>(selectedItemMetaData);
+
   const [selectedStep, setSelectedStep] = useState<onStepEnum>(
     onStepEnum.SETUP,
   );
-  const { index } = metaData;
   const [StepIndex, setStepIndex] = useRecoilState(onStep);
   const configureId = useRecoilValue(configureStepDetails);
   const optionChanged = useRecoilState(OptionChanged);
@@ -329,11 +338,7 @@ export default function SideModal() {
         };
       });
     } else {
-      setMetaData((prev) => ({
-        ...prev,
-        index: null,
-        isOpen: false,
-      }));
+      setMetaData(null, false);
     }
 
     // Step navigation
@@ -385,11 +390,8 @@ export default function SideModal() {
             <SlSizeFullscreen size={18} />
             <div
               onClick={() => {
-                setMetaData((prev) => ({
-                  ...prev,
-                  index: null,
-                  isOpen: false,
-                }));
+                console.log("closing");
+                setMetaData(null, false);
               }}
               className="cursor-pointer"
             >

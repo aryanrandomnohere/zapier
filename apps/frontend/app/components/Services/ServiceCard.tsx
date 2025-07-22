@@ -5,14 +5,16 @@ export const ServiceCard = ({
   title,
   description,
   href,
+  working,
 }: {
   icon: React.JSX.Element;
   title: string;
   description: string;
   href: string;
+  working?: boolean;
 }) => {
   return (
-    <Link href={href} className="block">
+    <Link href={working ? href : ""} className="block">
       <div className="bg-white rounded shadow-md p-4 hover:shadow-md transition-all duration-200 hover:border-gray-300 cursor-pointer group flex items-center space-x-3 min-w-[180px] max-w-fit">
         <div className="w-9 h-9 border p-1 rounded bg-yellow-200/20 flex items-center justify-center flex-shrink-0">
           {icon}

@@ -14,6 +14,7 @@ import FloatingModal from "../../ui/FloatingModal";
 import { FilePlus, Plus } from "lucide-react";
 import DittoComponent from "./SelectActionField";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
+import { useParams } from "next/navigation";
 
 interface MetaDataFieldProps {
   field: Field;
@@ -44,6 +45,7 @@ export default function MetaDataField({
   const setOptionChanged = useSetRecoilState(OptionChanged);
   const stepIndex = useRecoilValue(onStep);
   const user = useRecoilValue(userAtom);
+  const { zapId } = useParams();
   useEffect(() => {
     const handler = (event: MessageEvent) => {
       if (field.fieldNumber === 0) return;
@@ -279,11 +281,12 @@ export default function MetaDataField({
               {field.fieldValue || field.fieldPlaceholder}
             </div>
             <div className="text-xs text-gray-500">
-              {!!field.fieldValue ? (
+              {!!!field.fieldValue ? (
                 <button
                   onClick={() => {
+                    console.log(user?.id);
                     const popup = window.open(
-                      `/api/oauth/google/start?userId=${user?.id || "8"}`,
+                      `/api/oauth/google/start?userId=${user?.id || "8"}&zapId=${zapId}`,
                       "oauthPopup",
                       "width=500,height=600",
                     );
@@ -305,8 +308,9 @@ export default function MetaDataField({
               ) : (
                 <button
                   onClick={() => {
+                    console.log(user?.id);
                     const popup = window.open(
-                      `/api/oauth/google/start?userId=${user?.id || "8"}`,
+                      `/api/oauth/google/start?userId=${user?.id || "8"}&zapId=${zapId}`,
                       "oauthPopup",
                       "width=500,height=600",
                     );

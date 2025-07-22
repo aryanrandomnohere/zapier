@@ -14,7 +14,7 @@ export default function RecordJsonData({
       {Object.entries(data).map(([label, value]) => {
         if (typeof value === "object" && value !== null) {
           return (
-            <>
+            <div key={label + String(value)}>
               <div className="flex items-center">
                 {type && type === "nested" && (
                   <div className="text-sm">
@@ -27,7 +27,7 @@ export default function RecordJsonData({
                 {" "}
                 <RecordJsonData data={value} type="nested" />
               </div>
-            </>
+            </div>
           );
         }
         return (

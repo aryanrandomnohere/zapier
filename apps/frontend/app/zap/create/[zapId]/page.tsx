@@ -39,6 +39,10 @@ export default function Page1() {
     });
   };
 
+  const handleCloseSideModal = (index: number | null, isOpen: boolean) => {
+    setMetaData(() => ({ index, isOpen }));
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest(".zap-cell")) {
@@ -153,7 +157,7 @@ export default function Page1() {
       <div className="flex flex-col w-full h-10 bg-stone-50 justify-center ">
         {" "}
         <div
-          className="self-end px-1.5 py-0.5 bg-black/10 text-sm rounded justify-center mr-4 font-semibold hover:bg-black/20 hover:cursor-pointer transition-all duration-300"
+          className="self-end px-1.5 py-0.5 rounded-md bg-black/10 text-sm  justify-center mr-4 font-semibold hover:bg-black/20 hover:cursor-pointer transition-all duration-300"
           onClick={handlePublish}
         >
           Publish
@@ -162,7 +166,10 @@ export default function Page1() {
       <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-stone-200 dot-background">
         {metaData.isOpen && (
           <div className=" fixed flex max-w-96 min-h-4/5 max-h-4/5   right-2 z-50 transform-all duration-300 mt-4">
-            <SideModal />
+            <SideModal
+              index={metaData.index || 0}
+              setMetaData={handleCloseSideModal}
+            />
           </div>
         )}
 

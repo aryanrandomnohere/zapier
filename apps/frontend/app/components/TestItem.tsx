@@ -23,7 +23,7 @@ export default function TestItem({
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
   const { zapId } = useParams();
-  console.log(type)
+  console.log(type);
   useEffect(() => {
     async function handleSaveTrigger() {
       let triggerSaved = false;

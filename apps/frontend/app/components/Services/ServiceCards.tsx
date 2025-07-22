@@ -22,6 +22,7 @@ const ServiceCards = () => {
       title: "Zap",
       description: "Automated workflows",
       href: "/dashboard",
+      working: true,
     },
     {
       icon: (
@@ -138,6 +139,7 @@ const ServiceCards = () => {
           {services.map((service, index) => (
             <ServiceCard
               key={index}
+              working={service.working}
               icon={service.icon}
               title={service.title}
               description={service.description}
