@@ -8,7 +8,8 @@ export async function poll(trigger: any) {
   if (trigger.type.appId === "google") {
     const metadata = await newVideoBySearch(
       "polling",
-      trigger.configuration.optionConfiguration[trigger.optionId].configurationStep.fields[0].fieldValue || "JavaScript",
+      trigger.configuration.optionConfiguration[trigger.optionId]
+        .configurationStep.fields[0].fieldValue || "JavaScript",
       trigger.userConnection.accessToken,
       lastPolledAt,
     );

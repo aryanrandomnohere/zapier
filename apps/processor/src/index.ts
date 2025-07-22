@@ -36,9 +36,9 @@ async function main() {
         if (!record) {
           console.log("No new record polled");
           await prisma.trigger.update({
-          where: { id: trigger.id },
-          data: { lastPolledAt: new Date() },
-        });
+            where: { id: trigger.id },
+            data: { lastPolledAt: new Date() },
+          });
           continue;
         }
         // console.log(record)
