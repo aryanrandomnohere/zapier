@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma } from "../client.js";
+import { prisma } from "../config/client.js";
 const triggerRouter = express.Router();
 
 triggerRouter.get("/available", async (req, res) => {

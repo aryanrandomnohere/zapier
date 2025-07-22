@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
-import { prisma } from "../client.js";
+import { prisma } from "../config/client.js";
 import {
   ActionCreationSchema,
+  SetRecordSchema,
   TriggerCreateSchema,
   ZapCreateSchema,
 } from "../types/index.js";
@@ -174,9 +175,9 @@ zapRouter.post(
       //   (parsedBody.data.actionConfiguration as JsonObject).fields[0]
       //     .fieldValue,
       // );
-      console.log(existingAction)
+      console.log(existingAction);
       if (existingAction) {
-        console.log(existingAction.id, parsedBody)
+        console.log(existingAction.id, parsedBody);
         await prisma.action.update({
           where: {
             id: existingAction.id,
@@ -305,7 +306,7 @@ zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
         triggerId: parsedData.data.triggerId,
         configuration: parsedData.data.triggerConfiguration,
         zapId: zap.id,
-        published:true
+        published: true,
       },
     });
     await tx.zap.update({
@@ -365,8 +366,8 @@ zapRouter.get("/loadzap/:zapId", async (req: Request, res: Response) => {
           id: true,
           name: true,
           imagePath: true,
-          appId:true,
-          type:true,
+          appId: true,
+          type: true,
           metadata: true,
         },
       });
@@ -468,5 +469,24 @@ zapRouter.get(
     });
   },
 );
+
+zapRouter.post("/selectRecord", async (req, res) => {
+  const parsedBody = SetRecordSchema.safeParse(req.body);
+  if (!parsedBody.success) {
+    const msg = "Invalid Inputs";
+    console.log(msg);
+    res.status(400).json({ msg, success: false });
+    return;
+  }
+  await prisma.zap.update({
+    where: {
+      id: parsedBody.data.zapId,
+    },
+    data: {
+      RecordId: parsedBody.data.recordId,
+    },
+  });
+  res.status(200).json({ success: true });
+});
 
 export { zapRouter };
