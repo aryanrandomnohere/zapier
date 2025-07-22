@@ -10,6 +10,8 @@ interface RecordItemProps {
   onRecordClick: (record: RecordMetadata) => void;
   selectedRecord: string;
   setSelectedRecord: (id: string) => void;
+  isOpen: string;
+  setIsOpen: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const RecordItem: React.FC<RecordItemProps> = ({
@@ -17,8 +19,9 @@ export const RecordItem: React.FC<RecordItemProps> = ({
   onRecordClick,
   setSelectedRecord,
   selectedRecord,
+  isOpen,
+  setIsOpen,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -45,7 +48,8 @@ export const RecordItem: React.FC<RecordItemProps> = ({
       onClick={() => {
         onRecordClick(record);
         setSelectedRecord(record.id);
-        setIsOpen(!isOpen);
+        if (isOpen === record.id) setIsOpen("");
+        else setIsOpen(record.id);
       }}
     >
       <div className="flex items-center justify-between">
@@ -68,9 +72,11 @@ export const RecordItem: React.FC<RecordItemProps> = ({
           className={`w-5 h-5 ${isModified ? "text-blue-600" : "text-gray-400"}`}
         />
       </div>
-      {isOpen && (
+      {isOpen === record.id && (
         <FloatingModal>
-          <RecordJsonData data={record.JsonData} />
+          <div className="overflow-y-auto max-h-96">
+            <RecordJsonData data={record.JsonData} />
+          </div>
         </FloatingModal>
       )}
     </div>

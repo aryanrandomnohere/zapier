@@ -30,7 +30,7 @@ export default function Row({
           <img
             src={zap.trigger.type.imagePath}
             alt="trigger"
-            className="w-8 h-8 border border-gray-400 rounded-md p-0.5"
+            className="w-8 h-8 border border-gray-400/50 rounded-md p-0.5"
           />
         </div>{" "}
         {zap.actions.map((action, i) => (
@@ -38,7 +38,7 @@ export default function Row({
             <img
               src={zap.actions[i].actionDetails.imagePath}
               alt="trigger"
-              className="w-8 h-8 border border-gray-400 rounded-md p-0.5"
+              className="w-8 h-8 border border-gray-400/50 rounded-md p-0.5"
             />
           </div>
         ))}
