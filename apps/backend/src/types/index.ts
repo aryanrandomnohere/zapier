@@ -35,3 +35,17 @@ export const ActionCreationSchema = z.object({
   userId: z.number(),
   sortingOrder: z.number(),
 });
+
+export const UserConnectionSchema = z.object({
+  userId: z.number(),
+  appId: z.string(),
+  identifier: z.string(),
+  access_token: z.string(),
+  refresh_token: z.string(),
+  expiry_date: z.number(),
+});
+
+export const SetRecordSchema = z.object({
+  zapId: z.number(),
+  recordId: z.string(),
+});
