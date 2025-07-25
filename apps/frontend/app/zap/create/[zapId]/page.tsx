@@ -21,6 +21,7 @@ import {
   selectedRecord,
 } from "@/app/RecoilState/store/recordsAtom";
 import { useRouter } from "next/navigation";
+import ActionButton from "@/app/components/buttons/ActionButton";
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
@@ -154,14 +155,12 @@ export default function Page1() {
   }, []);
   return (
     <>
-      <div className="flex flex-col w-full h-10 bg-stone-50 justify-center ">
+      <div className="flex  w-full  bg-stone-50 justify-end items-center ">
         {" "}
-        <div
-          className="self-end px-1.5 py-0.5 rounded-md bg-black/10 text-sm  justify-center mr-4 font-semibold hover:bg-black/20 hover:cursor-pointer transition-all duration-300"
-          onClick={handlePublish}
-        >
-          Publish
-        </div>
+        <ActionButton>
+          <div className="flex gap-2"> Test Run</div>
+        </ActionButton>
+        <ActionButton onClick={handlePublish}>Publish</ActionButton>
       </div>
       <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-stone-200 dot-background">
         {metaData.isOpen && (
