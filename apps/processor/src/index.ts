@@ -18,7 +18,7 @@ async function main() {
           { lastPolledAt: null },
           {
             lastPolledAt: {
-              lt: new Date(Date.now() - 1 * 60 * 1000),
+              lt: new Date(Date.now() - 15 * 60 * 1000),
             },
           },
         ],
@@ -29,8 +29,7 @@ async function main() {
         type: true,
       },
     });
-    if (pollingTriggers.length != 0) console.log("1 trigger is present");
-    for (const trigger of pollingTriggers) {
+    if (pollingTriggers.length != 0) for (const trigger of pollingTriggers) {
       try {
         const record = await poll(trigger);
         if (!record) {
@@ -71,7 +70,7 @@ async function main() {
     const pendingRows = await prisma.zapRunOutbox.findMany({
       take: 10,
     });
-    if (pendingRows.length > 10) {
+    if (pendingRows.length > 0) {
       const produced = await producer.send({
         topic: "zapier-events",
         messages: pendingRows.map((r: any) => {
