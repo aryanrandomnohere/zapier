@@ -39,6 +39,6 @@ export default async function sendEmail({
     subject: parsedSubject,
     text: parsedBody,
   });
-
-  console.log("Message sent:", info.messageId);
+  if(info.messageId) return {msg:"Message sent:", id:info.messageId, success:true}
+  else return {msg:"Message Failed to Send", success:false}
 }
