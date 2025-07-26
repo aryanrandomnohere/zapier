@@ -41,7 +41,11 @@ zapRouter.post("/draft", async (req: extendedRequest, res: Response) => {
     const userId = req.body.userId;
     console.log(userId);
 
-    if (!userId) return;
+    if (!userId) {
+      console.log("UserId does not exists error");
+      res.status(400).json({msg:"UserId does not exists", success:false});
+      return;
+    }
     const allZaps = await prisma.zap.findMany();
 
     const emptyZap = allZaps.find((zap) => zap.triggerId === null);
@@ -171,16 +175,13 @@ zapRouter.post(
           id: true,
         },
       });
-      // console.log(
-      //   (parsedBody.data.actionConfiguration as JsonObject).fields[0]
-      //     .fieldValue,
-      // );
-      console.log(existingAction);
+      
       if (existingAction) {
-        console.log(existingAction.id, parsedBody);
+        console.log((parsedBody.data.actionConfiguration as JsonObject)
+              .fields[0].fieldValue )
         await prisma.action.update({
           where: {
-            id: existingAction.id,
+            id: existingAction.id, 
           },
           data: {
             actionId: parsedBody.data.actionId,
@@ -219,6 +220,7 @@ zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
   const parsedData = ZapCreateSchema.safeParse(body);
   const userId = parsedData.data?.userId;
   if (!parsedData.success || !userId) {
+    console.log(userId, req.body )
     res.status(411).json({
       msg: "Incorrect inputs",
     });
@@ -237,30 +239,6 @@ zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
         published: true,
       },
     });
-
-    // parsedData.data.actions.map(
-    //   async (x, index) =>
-    //     await tx.action.upsert({
-    //       where: {
-    //            zapId_sortingOrder: {
-    //           zapId: parsedData.data.zapId,
-    //           sortingOrder: index+1,
-    //         },
-    //       },
-    //       update: {
-    //         actionId: x.actionId,
-    //         configuration: x.configuration,
-    //         zapId:parsedData.data.zapId,
-    //         sortingOrder:index+1,
-    //       },
-    //       create: {
-    //         zapId: parsedData.data.zapId,
-    //         actionId: x.actionId,
-    //         configuration: x.configuration,
-    //         sortingOrder: index+1,
-    //       },
-    //     }),
-    // );
 
     parsedData.data.actions.map(async (x, index) => {
       const existingAction = await prisma.action.findUnique({
