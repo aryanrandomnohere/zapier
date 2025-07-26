@@ -108,6 +108,6 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../../packages/apps/src/email/actions/index.ts", "../../packages/apps/src/parser.ts"],
   "exclude": ["node_modules"]
 }
