@@ -15,10 +15,12 @@ export default function TestItem({
   item,
   type,
   id,
+  handlePublish
 }: {
   item: itemTestMetaData;
   type: string;
   id: string;
+  handlePublish:()=>void
 }) {
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
@@ -108,6 +110,7 @@ export default function TestItem({
         zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue &&
         zap.selectedItems[metadata.index]?.metadata?.optionConfiguration && (
           <DataInForm
+            handlePublish={handlePublish}
             fields={
               zap.selectedItems[metadata.index]?.metadata?.optionConfiguration[
                 zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue

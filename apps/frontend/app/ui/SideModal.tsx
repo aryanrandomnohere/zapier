@@ -36,9 +36,11 @@ import { getSession } from "next-auth/react";
 export default function SideModal({
   index,
   setMetaData,
+  handlePublish
 }: {
   index: number | null;
   setMetaData: (arg1: number | null, arg2: boolean) => void;
+  handlePublish:()=>void;
 }) {
   const [zap, setZapState] = useRecoilState(zapCreateState);
 
@@ -483,6 +485,7 @@ export default function SideModal({
           <div className="min-h-full w-full">
             {" "}
             <TestItem
+              handlePublish={handlePublish}
               id={zap.selectedItems[index].id}
               type={zap.selectedItems[index].type}
               item={

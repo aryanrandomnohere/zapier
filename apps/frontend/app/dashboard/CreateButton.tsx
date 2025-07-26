@@ -1,19 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SecondaryButton from "../components/buttons/SecondaryButton";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import axios from "axios";
+import { userAtom } from "../RecoilState/store/userAtom";
+import { useRecoilState } from "recoil";
 export default function CreateButton() {
   const router = useRouter();
+  const [user, setUser] = useRecoilState(userAtom)
+  
+  useEffect(()=>{
+    async function handleLoadSession(){
+       const session = await getSession();
+       setUser(session?.user)
+    }
+    if(!user) handleLoadSession();
+  })
   async function handleCreateZap() {
     try {
-      const session = await getSession();
-      console.log(session?.user.userId);
+      console.log(user);
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/draft`,
         {
-          userId: session?.user.userId,
+          userId: user?.userId,
         },
       );
       console.log(response);
@@ -23,13 +33,15 @@ export default function CreateButton() {
     }
   }
   return (
+    
     <div className="self-start mr-10 mt-12 ">
       <SecondaryButton onClick={handleCreateZap} size="small">
         <div className="flex gap-1 items-center">
-          <AiOutlinePlus className="text-white font-semibold" />
+          <AiOutlinePlus color="white" />
           Create
         </div>
       </SecondaryButton>
     </div>
+    
   );
 }

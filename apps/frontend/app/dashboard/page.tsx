@@ -1,6 +1,7 @@
 "use client";
 import ZapTable from "../components/ZapDashboard/ZapTable";
 import CreateButton from "./CreateButton";
+import RecoilProvider from "./RecoilProvider";
 export default function Page() {
   return (
     <>
@@ -10,7 +11,7 @@ export default function Page() {
             <ZapTable />
           </div>
         </div>
-        <CreateButton />
+        <RecoilProvider><CreateButton /> </RecoilProvider>
       </div>
     </>
   );

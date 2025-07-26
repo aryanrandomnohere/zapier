@@ -4,9 +4,10 @@ import { Field } from "@repo/types";
 
 interface DataInFormProps {
   fields?: Field[];
+  handlePublish:()=>void;
 }
 
-const DataInForm: React.FC<DataInFormProps> = ({ fields = [] }) => {
+const DataInForm: React.FC<DataInFormProps> = ({ fields = [], handlePublish }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [tested, setTested] = useState(false);
   const [skipped, setSkipped] = useState(false);
@@ -106,6 +107,7 @@ const DataInForm: React.FC<DataInFormProps> = ({ fields = [] }) => {
             )}
             {skipped || tested ? (
               <button
+                onClick={handlePublish}
                 className={`w-1/2 bg-blue-700 text-white hover:bg-blue-800" py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer`}
               >
                 Publish

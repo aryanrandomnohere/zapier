@@ -40,7 +40,7 @@ export default async function Navbar() {
           <LinkButton size="small">Pricing</LinkButton>
         </div>
         <div className="flex items-center gap-4">
-          <LinkButton size="small">
+          <LinkButton href="https://zapier.com/apps" size="small">
             <AiOutlineAppstoreAdd className="text-xl mr-1" />
             Explore Apps
           </LinkButton>

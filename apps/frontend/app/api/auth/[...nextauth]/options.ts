@@ -18,7 +18,7 @@ export default {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
 
@@ -26,7 +26,7 @@ export default {
 
         // If user doesn't exist, create
         if (!user) {
-          const newUser = await prisma.user.create({
+           user = await prisma.user.create({
             data: {
               email: credentials.email,
               firstname: credentials.firstname,
@@ -38,13 +38,7 @@ export default {
             },
           });
 
-          return {
-            id: newUser.id.toString(),
-            name: `${newUser.firstname || ""} ${newUser.lastname || ""}`,
-            email: newUser.email,
-            image: newUser.imageUrl || null,
-          };
-        }
+        }  
 
         // Otherwise, return existing
         return {
@@ -80,8 +74,8 @@ export default {
           where: { email: user.email || profile?.email },
         });
 
-        if (account.provider === "google" && !existingUser) {
-          const response = await prisma.user.create({
+        if (!existingUser) {
+            const response = await prisma.user.create({
             data: {
               email: profile.email,
               firstname: profile.name?.split(" ")[0],
@@ -100,6 +94,9 @@ export default {
           console.log(response);
           user.userId = response.id;
           user.zapmail = response.zapmail;
+        }else{
+             user.userId = existingUser.id;
+          user.zapmail = existingUser.zapmail;
         }
         return true;
       } catch (error) {
