@@ -135,6 +135,7 @@ export interface SessionType {
   email: string;
   image: string;
   zapmail: string;
+  userId:string;
 }
 
 export interface currnetZap {

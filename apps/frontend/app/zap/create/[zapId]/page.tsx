@@ -22,6 +22,8 @@ import {
 } from "@/app/RecoilState/store/recordsAtom";
 import { useRouter } from "next/navigation";
 import ActionButton from "@/app/components/buttons/ActionButton";
+import { ClockFadingIcon, Play, Undo } from "lucide-react";
+import { userAtom } from "@/app/RecoilState/store/userAtom";
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
@@ -30,6 +32,7 @@ export default function Page1() {
   const setOnStep = useSetRecoilState(onStep);
   const setRecords = useSetRecoilState<RecordMetadata[]>(recordsAtom);
   const setSelectedRecordId = useSetRecoilState(selectedRecord);
+  const [user, setUser] = useRecoilState(userAtom)
   const { zapId } = useParams();
   const router = useRouter();
   const addCell = (order: number) => {
@@ -43,7 +46,12 @@ export default function Page1() {
   const handleCloseSideModal = (index: number | null, isOpen: boolean) => {
     setMetaData(() => ({ index, isOpen }));
   };
-
+  const checkStack = ()=>{
+    return false;
+  }
+  const checkPublishability = ()=>{
+      return true;
+  }
   const handleMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest(".zap-cell")) {
@@ -96,15 +104,14 @@ export default function Page1() {
   }
 
   async function handlePublish() {
-    const session = await getSession();
-    console.log(session?.user);
+    console.log(user?.userId)
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/publish`,
       {
         triggerId: zapState.selectedItems[0].id,
         zapId: Number(zapId),
-        userId: Number(session?.user.userId),
-        triggerConfiguration: zapState.selectedItems[0].metadata || {},
+        userId: Number(user?.userId || 8),
+        triggerConfiguration: zapState.selectedItems[0].metadata || {}, 
         actions: zapState.selectedItems.slice(1).map((item: ItemType) => ({
           actionId: item.id,
           configuration: item.metadata,
@@ -140,7 +147,6 @@ export default function Page1() {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/loadzap/${zapId}`,
       );
-      console.log(response.data.finalZap);
       setSelectedRecordId(response.data.RecordId);
       setRecords(response.data.records);
       setZapState((prev) => {
@@ -150,17 +156,23 @@ export default function Page1() {
         newZap = { ...newZap, selectedItems: newItems };
         return newZap;
       });
+    if(!user) { 
+       const session = await getSession();
+       setUser(session?.user)
+    }
     }
     handleLoadZap();
   }, []);
   return (
     <>
-      <div className="flex  w-full  bg-stone-50 justify-end items-center ">
+      <div className="flex  w-full  bg-stone-50 justify-end items-center">
         {" "}
-        <ActionButton>
-          <div className="flex gap-2"> Test Run</div>
+       <ActionButton disabled={checkStack()} ><div className="flex gap-2"> <Undo size={18} /> Undo</div></ActionButton>
+        <ActionButton disabled={true}><ClockFadingIcon size={18}/> </ActionButton>
+        <ActionButton disabled={checkPublishability()} >
+          <div className="flex gap-2"> <Play size={18} /> Test Run</div>
         </ActionButton>
-        <ActionButton onClick={handlePublish}>Publish</ActionButton>
+        <ActionButton disabled={checkPublishability()} onClick={handlePublish}>Publish</ActionButton>
       </div>
       <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-stone-200 dot-background">
         {metaData.isOpen && (
@@ -168,19 +180,20 @@ export default function Page1() {
             <SideModal
               index={metaData.index || 0}
               setMetaData={handleCloseSideModal}
+              handlePublish={handlePublish}
             />
           </div>
         )}
 
         <div
-          className={`absolute w-full h-full ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+          className={`absolute w-screen h-full ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}
           style={{
             transform: `translate(${zapState.position.x}px, ${zapState.position.y}px)`,
           }}
           ref={canvasRef}
           onMouseDown={handleMouseDown}
         >
-          <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-2/6 -translate-y-2/4">
+          <div className="absolute flex flex-col top-1/2 left-4/9  -translate-x-2/6 -translate-y-2/4">
             {!zapState.selectedItems[0]?.imagePath &&
             !zapState.selectedItems[0]?.name ? (
               <Modal>
