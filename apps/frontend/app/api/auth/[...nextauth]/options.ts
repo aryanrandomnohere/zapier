@@ -26,7 +26,7 @@ export default {
 
         // If user doesn't exist, create
         if (!user) {
-           user = await prisma.user.create({
+          user = await prisma.user.create({
             data: {
               email: credentials.email,
               firstname: credentials.firstname,
@@ -37,8 +37,7 @@ export default {
               verified: false,
             },
           });
-
-        }  
+        }
 
         // Otherwise, return existing
         return {
@@ -75,7 +74,7 @@ export default {
         });
 
         if (!existingUser) {
-            const response = await prisma.user.create({
+          const response = await prisma.user.create({
             data: {
               email: profile.email,
               firstname: profile.name?.split(" ")[0],
@@ -94,8 +93,8 @@ export default {
           console.log(response);
           user.userId = response.id;
           user.zapmail = response.zapmail;
-        }else{
-             user.userId = existingUser.id;
+        } else {
+          user.userId = existingUser.id;
           user.zapmail = existingUser.zapmail;
         }
         return true;
