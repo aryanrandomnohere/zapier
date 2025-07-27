@@ -43,7 +43,7 @@ zapRouter.post("/draft", async (req: extendedRequest, res: Response) => {
 
     if (!userId) {
       console.log("UserId does not exists error");
-      res.status(400).json({msg:"UserId does not exists", success:false});
+      res.status(400).json({ msg: "UserId does not exists", success: false });
       return;
     }
     const allZaps = await prisma.zap.findMany();
@@ -175,13 +175,15 @@ zapRouter.post(
           id: true,
         },
       });
-      
+
       if (existingAction) {
-        console.log((parsedBody.data.actionConfiguration as JsonObject)
-              .fields[0].fieldValue )
+        console.log(
+          (parsedBody.data.actionConfiguration as JsonObject).fields[0]
+            .fieldValue,
+        );
         await prisma.action.update({
           where: {
-            id: existingAction.id, 
+            id: existingAction.id,
           },
           data: {
             actionId: parsedBody.data.actionId,
@@ -220,7 +222,7 @@ zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
   const parsedData = ZapCreateSchema.safeParse(body);
   const userId = parsedData.data?.userId;
   if (!parsedData.success || !userId) {
-    console.log(userId, req.body )
+    console.log(userId, req.body);
     res.status(411).json({
       msg: "Incorrect inputs",
     });
