@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/youtube/triggers/newvideobysearch.ts"],"version":"5.7.2"}
+{"root":["./src/index.ts","./src/parser.ts","./src/email/actions/index.ts","./src/youtube/triggers/newcommentonvideo.ts","./src/youtube/triggers/newvideobysearch.ts"],"version":"5.7.2"}

@@ -34,11 +34,12 @@ export default async function sendEmail({
     parsedBody,
   );
   const info = await transporter.sendMail({
-    from: "1032230629@tcetmumbai.in",
+    from: "rrathore0303@gmail.com",
     to: parsedTo,
     subject: parsedSubject,
     text: parsedBody,
   });
-  if(info.messageId) return {msg:"Message sent:", id:info.messageId, success:true}
-  else return {msg:"Message Failed to Send", success:false}
+  if (info.messageId)
+    return { msg: "Message sent:", id: info.messageId, success: true };
+  else return { msg: "Message Failed to Send", success: false };
 }

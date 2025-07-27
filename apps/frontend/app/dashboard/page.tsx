@@ -11,7 +11,9 @@ export default function Page() {
             <ZapTable />
           </div>
         </div>
-        <RecoilProvider><CreateButton /> </RecoilProvider>
+        <RecoilProvider>
+          <CreateButton />{" "}
+        </RecoilProvider>
       </div>
     </>
   );

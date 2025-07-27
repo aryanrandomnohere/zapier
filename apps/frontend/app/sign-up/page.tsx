@@ -1,5 +1,5 @@
 import { TbCircleCheckFilled } from "react-icons/tb";
-import SingIn from "../components/SingIn";
+import SingIn from "../components/Authentication/SingIn";
 
 export default function page() {
   return (

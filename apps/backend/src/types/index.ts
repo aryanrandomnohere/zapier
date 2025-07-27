@@ -52,5 +52,5 @@ export const SetRecordSchema = z.object({
 
 export const testActoinSchema = z.object({
   userId: z.number(),
-  actionId:z.string(),
-})
+  actionId: z.string(),
+});

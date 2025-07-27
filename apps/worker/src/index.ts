@@ -5,7 +5,7 @@ import { JsonObject } from "@repo/db/generated/client/runtime/library";
 import { Kafka } from "kafkajs";
 import Parser from "@repo/apps/src/parser.js";
 import { Field } from "@repo/types";
-import {sendEmail} from "@repo/apps/src/index.js";
+import { sendEmail } from "@repo/apps/src/index.js";
 const TOPIC_NAME = "zapier-events";
 const kafka = new Kafka({
   clientId: "outbox-processor",
@@ -15,7 +15,7 @@ const kafka = new Kafka({
 async function main() {
   const consumer = kafka.consumer({ groupId: "main-worker" });
   await consumer.connect();
-const producer = kafka.producer();
+  const producer = kafka.producer();
   producer.connect();
   await consumer.subscribe({ topic: TOPIC_NAME, fromBeginning: true });
   consumer.run({
@@ -69,9 +69,16 @@ const producer = kafka.producer();
       if (currentAction?.actionDetails?.id === "email") {
         // console.log(currentAction)
         //@ts-ignore
-        console.log(currentAction.configuration.optionConfiguration, "option id", currentAction.optionId)
-         console.log((currentAction.configuration as JsonObject)
-        ?.optionConfiguration[currentAction.optionId])
+        console.log(
+          currentAction.configuration.optionConfiguration,
+          "option id",
+          currentAction.optionId,
+        );
+        console.log(
+          (currentAction.configuration as JsonObject)?.optionConfiguration[
+            currentAction.optionId
+          ],
+        );
         const fields = (currentAction.configuration as JsonObject)
           ?.optionConfiguration[currentAction.optionId].configurationStep
           .fields;

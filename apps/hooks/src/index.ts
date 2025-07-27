@@ -2,8 +2,8 @@ import { prisma } from "@repo/db";
 import { Field, itemStepMetaData } from "@repo/types";
 import express, { Request, Response } from "express";
 import isEqual from "lodash.isequal";
-import { test } from "./test.js";
 import cors from "cors";
+import { RunTrigger } from "@repo/apps";
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -123,7 +123,7 @@ app.post("/test/trigger/:zapId", async (req: Request, res: Response) => {
   }
 
   console.log("Testing");
-  const newRecords = await test(trigger); // this should return an array with 3 items
+  const newRecords = await RunTrigger(trigger, "test"); // this should return an array with 3 items
   const createdRecords = [];
   console.log(newRecords);
   for (const [index, record] of newRecords.entries()) {

@@ -32,7 +32,7 @@ export default function Page1() {
   const setOnStep = useSetRecoilState(onStep);
   const setRecords = useSetRecoilState<RecordMetadata[]>(recordsAtom);
   const setSelectedRecordId = useSetRecoilState(selectedRecord);
-  const [user, setUser] = useRecoilState(userAtom)
+  const [user, setUser] = useRecoilState(userAtom);
   const { zapId } = useParams();
   const router = useRouter();
   const addCell = (order: number) => {
@@ -46,12 +46,12 @@ export default function Page1() {
   const handleCloseSideModal = (index: number | null, isOpen: boolean) => {
     setMetaData(() => ({ index, isOpen }));
   };
-  const checkStack = ()=>{
+  const checkStack = () => {
     return false;
-  }
-  const checkPublishability = ()=>{
-      return true;
-  }
+  };
+  const checkPublishability = () => {
+    return true;
+  };
   const handleMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest(".zap-cell")) {
@@ -104,14 +104,14 @@ export default function Page1() {
   }
 
   async function handlePublish() {
-    console.log(user?.userId)
+    console.log(user?.userId);
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/publish`,
       {
         triggerId: zapState.selectedItems[0].id,
         zapId: Number(zapId),
         userId: Number(user?.userId || 8),
-        triggerConfiguration: zapState.selectedItems[0].metadata || {}, 
+        triggerConfiguration: zapState.selectedItems[0].metadata || {},
         actions: zapState.selectedItems.slice(1).map((item: ItemType) => ({
           actionId: item.id,
           configuration: item.metadata,
@@ -156,25 +156,37 @@ export default function Page1() {
         newZap = { ...newZap, selectedItems: newItems };
         return newZap;
       });
-    if(!user) { 
-       const session = await getSession();
-       setUser(session?.user)
-    }
+      if (!user) {
+        const session = await getSession();
+        setUser(session?.user);
+      }
     }
     handleLoadZap();
   }, []);
   return (
     <>
-      <div className="flex  w-full  bg-stone-50 justify-end items-center">
+      <div className="flex  w-full  bg-[#FFFDF9] border-b border-zinc-200 justify-end items-center">
         {" "}
-       <ActionButton disabled={checkStack()} ><div className="flex gap-2"> <Undo size={18} /> Undo</div></ActionButton>
-        <ActionButton disabled={true}><ClockFadingIcon size={18}/> </ActionButton>
-        <ActionButton disabled={checkPublishability()} >
-          <div className="flex gap-2"> <Play size={18} /> Test Run</div>
+        <ActionButton disabled={checkStack()}>
+          <div className="flex gap-2">
+            {" "}
+            <Undo size={18} /> Undo
+          </div>
         </ActionButton>
-        <ActionButton disabled={checkPublishability()} onClick={handlePublish}>Publish</ActionButton>
+        <ActionButton disabled={true}>
+          <ClockFadingIcon size={18} />{" "}
+        </ActionButton>
+        <ActionButton disabled={checkPublishability()}>
+          <div className="flex gap-2">
+            {" "}
+            <Play size={18} /> Test Run
+          </div>
+        </ActionButton>
+        <ActionButton disabled={checkPublishability()} onClick={handlePublish}>
+          Publish
+        </ActionButton>
       </div>
-      <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-stone-200 dot-background">
+      <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-[rgb(249,247,243)] dot-background-alt">
         {metaData.isOpen && (
           <div className=" fixed flex max-w-96 min-h-4/5 max-h-4/5   right-2 z-50 transform-all duration-300 mt-4">
             <SideModal
@@ -186,7 +198,7 @@ export default function Page1() {
         )}
 
         <div
-          className={`absolute w-screen h-full ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+          className={`absolute w-screen  h-full ${zapState.isDragging ? "cursor-grabbing" : "cursor-grab"}`}
           style={{
             transform: `translate(${zapState.position.x}px, ${zapState.position.y}px)`,
           }}

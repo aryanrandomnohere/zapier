@@ -1,6 +1,6 @@
+import { RunTrigger } from "@repo/apps";
 import { prisma } from "@repo/db";
 import { Kafka } from "kafkajs";
-import { poll } from "./poll.js";
 const kafka = new Kafka({
   clientId: "outbox-processor",
   brokers: ["localhost:9092"],
@@ -18,7 +18,7 @@ async function main() {
           { lastPolledAt: null },
           {
             lastPolledAt: {
-              lt: new Date(Date.now() - 15 * 60 * 1000),
+              lt: new Date(Date.now() - 5 * 60 * 1000),
             },
           },
         ],
@@ -29,44 +29,45 @@ async function main() {
         type: true,
       },
     });
-    if (pollingTriggers.length != 0) for (const trigger of pollingTriggers) {
-      try {
-        const record = await poll(trigger);
-        if (!record) {
-          console.log("No new record polled");
+    if (pollingTriggers.length != 0)
+      for (const trigger of pollingTriggers) {
+        try {
+          const record = await RunTrigger(trigger, "polling");
+          if (!record) {
+            console.log("No new record polled");
+            await prisma.trigger.update({
+              where: { id: trigger.id },
+              data: { lastPolledAt: new Date() },
+            });
+            continue;
+          }
+          // console.log(record)
+          const zapRun = await prisma.zapRun.create({
+            data: {
+              zapId: trigger.zapId,
+              metaData: record,
+            },
+          });
+          await producer.send({
+            topic: "zapier-events",
+            messages: [
+              {
+                value: JSON.stringify({
+                  zapRunId: zapRun.id,
+                  stage: 1,
+                  payload: record,
+                }),
+              },
+            ],
+          });
           await prisma.trigger.update({
             where: { id: trigger.id },
             data: { lastPolledAt: new Date() },
           });
-          continue;
+        } catch (err) {
+          console.error("Error polling trigger", trigger.id, err);
         }
-        // console.log(record)
-        const zapRun = await prisma.zapRun.create({
-          data: {
-            zapId: trigger.zapId,
-            metaData: record,
-          },
-        });
-        await producer.send({
-          topic: "zapier-events",
-          messages: [
-            {
-              value: JSON.stringify({
-                zapRunId: zapRun.id,
-                stage: 1,
-                payload: record,
-              }),
-            },
-          ],
-        });
-        await prisma.trigger.update({
-          where: { id: trigger.id },
-          data: { lastPolledAt: new Date() },
-        });
-      } catch (err) {
-        console.error("Error polling trigger", trigger.id, err);
       }
-    }
     const pendingRows = await prisma.zapRunOutbox.findMany({
       take: 10,
     });
