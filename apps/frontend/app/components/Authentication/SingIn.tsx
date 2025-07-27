@@ -1,8 +1,8 @@
 "use client";
 import { FormEvent, useState } from "react";
-import Input from "./Input";
+import Input from "../InputBoxes/Input";
 import { FcGoogle } from "react-icons/fc";
-import PrimaryButton from "./buttons/PrimaryButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 import { IoArrowBack } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 // import axios from "axios";
@@ -66,7 +66,10 @@ export default function SingIn() {
               className="flex items-center min-w-[390px] p-2 bg-blue-500/90 rounded hover:bg-blue-600 transition-all duration-500 cursor-pointer w-60 text-center justify-between"
             >
               <div className="bg-white p-0.5 rounded text-sm">
-                <FcGoogle className="text-2xl" />
+                <div className="text-2xl">
+                  {" "}
+                  <FcGoogle />
+                </div>
               </div>
               <div className="flex items-center gap-2 flex-grow justify-center">
                 <div className="text-sm font-extrabold text-white">

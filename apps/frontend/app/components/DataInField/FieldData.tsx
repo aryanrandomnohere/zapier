@@ -4,10 +4,13 @@ import { Field } from "@repo/types";
 
 interface DataInFormProps {
   fields?: Field[];
-  handlePublish:()=>void;
+  handlePublish: () => void;
 }
 
-const DataInForm: React.FC<DataInFormProps> = ({ fields = [], handlePublish }) => {
+const DataInForm: React.FC<DataInFormProps> = ({
+  fields = [],
+  handlePublish,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [tested, setTested] = useState(false);
   const [skipped, setSkipped] = useState(false);

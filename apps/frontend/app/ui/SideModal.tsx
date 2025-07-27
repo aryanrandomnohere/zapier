@@ -36,11 +36,11 @@ import { getSession } from "next-auth/react";
 export default function SideModal({
   index,
   setMetaData,
-  handlePublish
+  handlePublish,
 }: {
   index: number | null;
   setMetaData: (arg1: number | null, arg2: boolean) => void;
-  handlePublish:()=>void;
+  handlePublish: () => void;
 }) {
   const [zap, setZapState] = useRecoilState(zapCreateState);
 

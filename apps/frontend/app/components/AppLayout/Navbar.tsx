@@ -1,11 +1,11 @@
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
-import LinkButton from "./buttons/LinkButton";
-import PrimaryButton from "./buttons/PrimaryButton";
+import LinkButton from "../buttons/LinkButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 import zap from "./zap.png";
 import { SlArrowDown } from "react-icons/sl";
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "../api/auth/[...nextauth]/auth";
+import { auth } from "../../api/auth/[...nextauth]/auth";
 
 export default async function Navbar() {
   const session = await auth();
@@ -28,20 +28,34 @@ export default async function Navbar() {
             />
           </Link>
           <LinkButton size="small">
-            Products <SlArrowDown className="ml-1.5 text-xs" />
+            Products{" "}
+            <div className="ml-1.5 text-xs">
+              <SlArrowDown />
+            </div>
           </LinkButton>
           <LinkButton size="small">
-            Solutions <SlArrowDown className="ml-1.5 text-xs" />
+            Solutions{" "}
+            <div className="ml-1.5 text-xs">
+              {" "}
+              <SlArrowDown />{" "}
+            </div>
           </LinkButton>
           <LinkButton size="small">
-            Resources <SlArrowDown className="ml-1.5 text-xs" />
+            Resources{" "}
+            <div className="ml-1.5 text-xs">
+              {" "}
+              <SlArrowDown />{" "}
+            </div>
           </LinkButton>
           <LinkButton size="small">Enterprise</LinkButton>
           <LinkButton size="small">Pricing</LinkButton>
         </div>
         <div className="flex items-center gap-4">
           <LinkButton href="https://zapier.com/apps" size="small">
-            <AiOutlineAppstoreAdd className="text-xl mr-1" />
+            <div className="text-xl mr-1">
+              {" "}
+              <AiOutlineAppstoreAdd />
+            </div>
             Explore Apps
           </LinkButton>
           <LinkButton size="small">Contact sales</LinkButton>

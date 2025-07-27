@@ -15,12 +15,12 @@ export default function TestItem({
   item,
   type,
   id,
-  handlePublish
+  handlePublish,
 }: {
   item: itemTestMetaData;
   type: string;
   id: string;
-  handlePublish:()=>void
+  handlePublish: () => void;
 }) {
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);

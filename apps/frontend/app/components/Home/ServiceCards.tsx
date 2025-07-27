@@ -133,7 +133,7 @@ const ServiceCards = () => {
   ];
 
   return (
-    <div className="p-4 max-w-fit bg-gray-50">
+    <div className="p-4 max-w-fita">
       <div className="w-full ">
         <div className="flex gap-3 justify-start">
           {services.map((service, index) => (

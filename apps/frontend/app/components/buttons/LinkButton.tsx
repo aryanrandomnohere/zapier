@@ -4,12 +4,12 @@ export default function LinkButton({
   children,
   size = "small",
   onClick,
-  href
+  href,
 }: {
   children: ReactNode;
   size: string;
   onClick?: () => void;
-  href?:string;
+  href?: string;
 }) {
   return (
     <a

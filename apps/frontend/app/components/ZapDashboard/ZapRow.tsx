@@ -28,18 +28,16 @@ export default function ZapRows() {
 }
 
 const ActionIcon = ({ action }: { action: string }) => {
-  const IconStyle = "text-2xl text-black";
   switch (action) {
     case "sheet":
-      return <LuFileSpreadsheet className={IconStyle} />;
+      return <LuFileSpreadsheet color="black" size={20} />;
     case "webhook":
-      return <MdOutlineWebhook className={IconStyle} />;
-      g;
+      return <MdOutlineWebhook color="black" size={20} />;
     case "email":
-      return <MdOutlineAttachEmail className={IconStyle} />;
+      return <MdOutlineAttachEmail color="black" size={20} />;
     case "solana":
-      return <SiSolana className={IconStyle} />;
+      return <SiSolana color="black" size={20} />;
     default:
-      return <MdOutlineWebhook className={IconStyle} />;
+      return <MdOutlineWebhook color="black" size={20} />;
   }
 };

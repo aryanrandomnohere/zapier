@@ -1,4 +1,3 @@
-// "use server"
 import ZapRows from "./ZapRow";
 import { RiArrowDownSFill } from "react-icons/ri";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";

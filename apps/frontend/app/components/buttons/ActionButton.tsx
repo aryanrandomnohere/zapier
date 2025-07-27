@@ -3,7 +3,7 @@ import React from "react";
 export default function ActionButton({
   onClick,
   children,
-  disabled
+  disabled,
 }: {
   onClick?: () => void;
   children: React.ReactNode;
