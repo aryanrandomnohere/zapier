@@ -34,7 +34,7 @@ export default async function sendEmail({
     parsedBody,
   );
   const info = await transporter.sendMail({
-    from: "rrathore0303@gmail.com",
+    from: "1032230629@tcetmumbai.in",
     to: parsedTo,
     subject: parsedSubject,
     text: parsedBody,

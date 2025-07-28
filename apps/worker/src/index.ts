@@ -3,9 +3,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import { JsonObject } from "@repo/db/generated/client/runtime/library";
 import { Kafka } from "kafkajs";
-import Parser from "@repo/apps/src/parser.js";
 import { Field } from "@repo/types";
-import { sendEmail } from "@repo/apps/src/index.js";
+import { RunAction } from "@repo/apps/src/index.js";
 const TOPIC_NAME = "zapier-events";
 const kafka = new Kafka({
   clientId: "outbox-processor",
@@ -21,11 +20,6 @@ async function main() {
   consumer.run({
     autoCommit: false,
     eachMessage: async ({ topic, partition, message }) => {
-      //console.log({
-      //   partition,
-      //   value: message.value?.toString(),
-      //   offset: message.offset,
-      // });
       if (!message.value?.toString()) {
         return;
       }
@@ -33,11 +27,15 @@ async function main() {
       const zapRunId = parsedValue.zapRunId;
       const stage = parsedValue.stage;
 
-      const zapRunDetails = await prisma.zapRun.findUnique({
+      const zapRunDetails = await prisma.zapRun.update({
         where: {
           id: zapRunId,
         },
+        data: {
+          status: "RUNNING",
+        },
         select: {
+          id: true,
           zap: {
             include: {
               actions: {
@@ -63,63 +61,56 @@ async function main() {
         return Number(x.sortingOrder) === Number(stage);
       });
       if (!currentAction) {
-        console.log("Action Does not exists", currentAction);
+        await prisma.zapRun.update({
+          where: {
+            id: zapRunDetails?.id,
+          },
+          data: {
+            status: "FAILED",
+            failureReason: `Action does not exixts`,
+            completedAt: new Date(),
+          },
+        });
+
         return;
       }
-      if (currentAction?.actionDetails?.id === "email") {
-        // console.log(currentAction)
-        //@ts-ignore
-        console.log(
-          currentAction.configuration.optionConfiguration,
-          "option id",
-          currentAction.optionId,
-        );
-        console.log(
-          (currentAction.configuration as JsonObject)?.optionConfiguration[
-            currentAction.optionId
-          ],
-        );
-        const fields = (currentAction.configuration as JsonObject)
-          ?.optionConfiguration[currentAction.optionId].configurationStep
-          .fields;
-
-        const toField = fields.find(
-          (x: Field) => String(x.fieldLabel).toLowerCase() === "to",
-        );
-        const subjectField = fields.find(
-          (x: Field) => String(x.fieldLabel).toLowerCase() === "subject",
-        );
-        const bodyField = fields.find(
-          (x: Field) =>
-            String(x.fieldLabel).toLowerCase() === "body (html or plain)",
-        );
-
-        const to = toField?.fieldValue ?? null;
-        const subject = subjectField?.fieldValue ?? null;
-        const body = bodyField?.fieldValue ?? null;
-
-        if (!to || !subject || !body) {
+      const RunDetails = await RunAction(
+        currentAction,
+        zapRunDetails?.metaData,
+      );
+      if (RunDetails?.success) {
+        if (zapRunDetails?.zap.actions.length !== stage) {
+          await producer.send({
+            topic: TOPIC_NAME,
+            messages: [
+              { value: JSON.stringify({ zapRunId, stage: stage + 1 }) },
+            ],
+          });
         } else {
-          const parsedTo = Parser(to, "{{", "}}", zapRunDetails?.metaData);
-          const parsedSubject = Parser(
-            subject,
-            "{{",
-            "}}",
-            zapRunDetails?.metaData,
-          );
-          const parsedBody = Parser(body, "{{", "}}", zapRunDetails?.metaData);
-          console.log(parsedTo, parsedSubject, parsedBody);
-          await sendEmail({ parsedTo, parsedBody, parsedSubject });
+          await prisma.zapRun.update({
+            where: {
+              id: zapRunDetails?.id,
+            },
+            data: {
+              status: "SUCCESS",
+              completedAt: new Date(), // mark finish time
+            },
+          });
+          console.log("All Actions Ran zap run complete");
         }
-      }
-
-      if (zapRunDetails?.zap.actions.length !== stage) {
-        await producer.send({
-          topic: TOPIC_NAME,
-          messages: [{ value: JSON.stringify({ zapRunId, stage: stage + 1 }) }],
-        });
       } else {
-        console.log("All Actions Ran zap run complete");
+        console.log("Zap Run failed");
+        await prisma.zapRun.update({
+          where: {
+            id: zapRunDetails?.id,
+          },
+          data: {
+            status: "FAILED",
+            failureReason: RunDetails?.error || "Failed",
+            failedActionId: currentAction.id,
+            completedAt: new Date(),
+          },
+        });
       }
 
       console.log("Processing Done");

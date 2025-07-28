@@ -141,3 +141,14 @@ export interface SessionType {
 export interface currnetZap {
   zapId: string;
 }
+
+export enum zapOperations {
+  LINKEDASSETS,
+  ZAPDETAILS,
+  NOTES,
+  CHANGEHISTORY,
+  ZAPRUN,
+  STATUS,
+  ADVANCEDSETTINGS,
+  VERSIONS,
+}

@@ -6,6 +6,7 @@ import actionRouter from "./router/actionRouter.js";
 import triggerRouter from "./router/triggerRouter.js";
 import cookieParser from "cookie-parser";
 import { AuthMiddleware } from "./Middleware/AuthMiddleware.js";
+import zapRunRouter from "./router/zapRunRouter.js";
 const PORT = 3001;
 const app = express();
 app.use(cors());
@@ -16,6 +17,7 @@ app.use("/api/v1/zap", zapRouter);
 app.use("/api/v1", userRouter);
 app.use("/api/v1/actions", actionRouter);
 app.use("/api/v1/triggers", triggerRouter);
+app.use("/api/v1/zap-runs", zapRunRouter);
 
 app.listen(PORT, () => {
   console.log("Server is listening on port: ", PORT);

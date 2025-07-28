@@ -18,7 +18,7 @@ async function main() {
           { lastPolledAt: null },
           {
             lastPolledAt: {
-              lt: new Date(Date.now() - 5 * 60 * 1000),
+              lt: new Date(Date.now() - 1 * 60 * 1000),
             },
           },
         ],
@@ -46,6 +46,7 @@ async function main() {
             data: {
               zapId: trigger.zapId,
               metaData: record,
+              status: "PENDING",
             },
           });
           await producer.send({
