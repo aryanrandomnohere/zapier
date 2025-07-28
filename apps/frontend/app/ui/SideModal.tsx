@@ -359,7 +359,7 @@ export default function SideModal({
 
   if (!zap.selectedItems[index]?.metadata) {
     return (
-      <div className="min-h-full relative flex flex-col items-center justify-center w-96 border-blue-600 border-1 z-20 mx-6 transform-all ease-in-out duration-300  bg-white">
+      <div className="min-h-full relative flex flex-col items-center justify-center w-96 border-blue-600 border-1 z-20 mx-6 transform-all ease-in-out duration-300  bg-[#FFFDF9]">
         <div className="text-sm text-gray-500 font-medium bg-gray-50 rounded-md p-4">
           We don't support this trigger yet
         </div>
@@ -368,7 +368,7 @@ export default function SideModal({
   }
   return (
     <div
-      className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-800 border-2 z-20  rounded transform-all ease-in-out duration-300 bg-white`}
+      className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-800 border-2 z-20  rounded transform-all ease-in-out duration-300 bg-[#FFFDF9]`}
     >
       <div className={`flex flex-col items-center w-full`}>
         <div className="flex justify-between w-full items-center bg-blue-300/10">
@@ -376,10 +376,10 @@ export default function SideModal({
             {zap.selectedItems[index].imagePath ? (
               <img
                 src={zap.selectedItems[index].imagePath}
-                className="m-2 w-10 h-10 p-1.5 border border-black/20 bg-white rounded"
+                className="m-2 w-10 h-10 p-1.5 border border-black/20 bg-[#FFFDF9] rounded"
               />
             ) : (
-              <div className="flex items-center justify-center m-2 w-10 h-10 p-1.5 border border-black/20 bg-white rounded">
+              <div className="flex items-center justify-center m-2 w-10 h-10 p-1.5 border border-black/20 bg-[#FFFDF9] rounded">
                 <BiSolidZap size={22} />
               </div>
             )}

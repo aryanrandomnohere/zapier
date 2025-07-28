@@ -12,12 +12,30 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import ZapOperations from "./ZapOperations";
+import { zapOperations } from "@repo/types";
+import LinkedAssets from "./LinkedAssets";
+import ZapRunDetails from "./ZapRunDetails";
 
 export default function LeftBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentOperation, setCurrentOperation] =
+    useState<zapOperations | null>(null);
+  function handleClick(operation: zapOperations) {
+    if (currentOperation === null) {
+      setIsOpen(true);
+      setCurrentOperation(operation);
+    } else {
+      if (operation === currentOperation) setIsOpen(!isOpen);
+      else {
+        setIsOpen(true);
+        setCurrentOperation(operation);
+      }
+    }
+  }
 
-  function handleClick() {
-    setIsOpen(!isOpen);
+  function handleClose() {
+    setIsOpen(false);
+    setCurrentOperation(null);
   }
 
   return (
@@ -27,35 +45,35 @@ export default function LeftBar() {
         {/* Top Icons */}
         <div className="flex flex-col space-y-5">
           <Grid
-            onClick={handleClick}
+            onClick={() => handleClick(zapOperations.LINKEDASSETS)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
           <Share
-            onClick={handleClick}
+            onClick={() => handleClick(zapOperations.ZAPDETAILS)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
           <MessageSquare
-            onClick={handleClick}
+            onClick={() => handleClick(zapOperations.NOTES)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
           <Calendar
-            onClick={handleClick}
+            onClick={() => handleClick(zapOperations.CHANGEHISTORY)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
           <Clock
-            onClick={handleClick}
+            onClick={() => handleClick(zapOperations.ZAPRUN)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
           <Activity
-            onClick={handleClick}
+            onClick={() => handleClick(zapOperations.STATUS)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
           <Settings
-            onClick={handleClick}
+            onClick={() => handleClick(zapOperations.ADVANCEDSETTINGS)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
           <FileText
-            onClick={handleClick}
+            onClick={() => handleClick(zapOperations.VERSIONS)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
         </div>
@@ -117,7 +135,34 @@ export default function LeftBar() {
           </div>
         </div>{" "}
       </div>
-      {isOpen && <ZapOperations />}
+      {isOpen && currentOperation != null && (
+        <ZapOperations onClick={handleClose}>
+          <CurrentOperation operation={currentOperation} />
+        </ZapOperations>
+      )}
     </>
   );
+}
+
+function CurrentOperation({ operation }: { operation: zapOperations }) {
+  switch (operation) {
+    case zapOperations.LINKEDASSETS:
+      return <LinkedAssets />;
+    case zapOperations.ADVANCEDSETTINGS:
+      return <div>Advanced Settings</div>;
+    case zapOperations.NOTES:
+      return <div>Notes</div>;
+    case zapOperations.STATUS:
+      return <div>Status</div>;
+    case zapOperations.CHANGEHISTORY:
+      return <div>Change History</div>;
+    case zapOperations.ZAPDETAILS:
+      return <div>Zap details</div>;
+    case zapOperations.VERSIONS:
+      return <div>Versions</div>;
+    case zapOperations.ZAPRUN:
+      return <ZapRunDetails />;
+    default:
+      <>Error</>;
+  }
 }
