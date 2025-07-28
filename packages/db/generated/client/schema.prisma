@@ -99,12 +99,14 @@ model Action {
   zapId          Int
   zap            Zap              @relation(fields: [zapId], references: [id])
   actionDetails  AvailableActions @relation(fields: [actionId], references: [id])
+  success        Boolean?
   configuration  Json             @default("{}")
   optionId       String           @default("")
   actionId       String
   sortingOrder   Int              @default(0)
   connectionId   String?          @unique
   userConnection UserConnection?  @relation(name: "ActionToUserConnection", fields: [connectionId], references: [id])
+  zapRunFailures ZapRun[]         @relation("ActionFailures")
 
   @@unique([zapId, sortingOrder])
 }
@@ -120,12 +122,26 @@ model AvailableActions {
   metadata    Json     @default("{}")
 }
 
+enum ZapRunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
 model ZapRun {
-  id           String        @id @default(uuid())
-  zapId        Int
-  zap          Zap           @relation(fields: [zapId], references: [id])
-  metaData     Json
-  zapRunOutBox ZapRunOutbox?
+  id             String        @id @default(uuid())
+  zapId          Int
+  createdAt      DateTime      @default(now())
+  completedAt    DateTime?
+  status         ZapRunStatus  @default(PENDING) // unified run state
+  failureReason  String?
+  // Foreign key to Action for failed step
+  failedActionId String?
+  failedAction   Action?       @relation(name: "ActionFailures", fields: [failedActionId], references: [id])
+  zap            Zap           @relation(fields: [zapId], references: [id])
+  metaData       Json
+  zapRunOutBox   ZapRunOutbox?
 }
 
 model ZapRunOutbox {

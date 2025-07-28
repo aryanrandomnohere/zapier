@@ -194,6 +194,7 @@ exports.Prisma.AvailableTriggersScalarFieldEnum = {
 exports.Prisma.ActionScalarFieldEnum = {
   id: 'id',
   zapId: 'zapId',
+  success: 'success',
   configuration: 'configuration',
   optionId: 'optionId',
   actionId: 'actionId',
@@ -214,6 +215,11 @@ exports.Prisma.AvailableActionsScalarFieldEnum = {
 exports.Prisma.ZapRunScalarFieldEnum = {
   id: 'id',
   zapId: 'zapId',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt',
+  status: 'status',
+  failureReason: 'failureReason',
+  failedActionId: 'failedActionId',
   metaData: 'metaData'
 };
 
@@ -246,7 +252,12 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
-
+exports.ZapRunStatus = exports.$Enums.ZapRunStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',

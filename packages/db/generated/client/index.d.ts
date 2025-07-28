@@ -67,6 +67,24 @@ export type ZapRunOutbox =
   $Result.DefaultSelection<Prisma.$ZapRunOutboxPayload>;
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const ZapRunStatus: {
+    PENDING: "PENDING";
+    RUNNING: "RUNNING";
+    SUCCESS: "SUCCESS";
+    FAILED: "FAILED";
+  };
+
+  export type ZapRunStatus = (typeof ZapRunStatus)[keyof typeof ZapRunStatus];
+}
+
+export type ZapRunStatus = $Enums.ZapRunStatus;
+
+export const ZapRunStatus: typeof $Enums.ZapRunStatus;
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -1894,6 +1912,42 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: TriggerWhereInput;
+  };
+
+  /**
+   * Count Type ActionCountOutputType
+   */
+
+  export type ActionCountOutputType = {
+    zapRunFailures: number;
+  };
+
+  export type ActionCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    zapRunFailures?: boolean | ActionCountOutputTypeCountZapRunFailuresArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * ActionCountOutputType without action
+   */
+  export type ActionCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionCountOutputType
+     */
+    select?: ActionCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * ActionCountOutputType without action
+   */
+  export type ActionCountOutputTypeCountZapRunFailuresArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ZapRunWhereInput;
   };
 
   /**
@@ -9323,6 +9377,7 @@ export namespace Prisma {
   export type ActionMinAggregateOutputType = {
     id: string | null;
     zapId: number | null;
+    success: boolean | null;
     optionId: string | null;
     actionId: string | null;
     sortingOrder: number | null;
@@ -9332,6 +9387,7 @@ export namespace Prisma {
   export type ActionMaxAggregateOutputType = {
     id: string | null;
     zapId: number | null;
+    success: boolean | null;
     optionId: string | null;
     actionId: string | null;
     sortingOrder: number | null;
@@ -9341,6 +9397,7 @@ export namespace Prisma {
   export type ActionCountAggregateOutputType = {
     id: number;
     zapId: number;
+    success: number;
     configuration: number;
     optionId: number;
     actionId: number;
@@ -9362,6 +9419,7 @@ export namespace Prisma {
   export type ActionMinAggregateInputType = {
     id?: true;
     zapId?: true;
+    success?: true;
     optionId?: true;
     actionId?: true;
     sortingOrder?: true;
@@ -9371,6 +9429,7 @@ export namespace Prisma {
   export type ActionMaxAggregateInputType = {
     id?: true;
     zapId?: true;
+    success?: true;
     optionId?: true;
     actionId?: true;
     sortingOrder?: true;
@@ -9380,6 +9439,7 @@ export namespace Prisma {
   export type ActionCountAggregateInputType = {
     id?: true;
     zapId?: true;
+    success?: true;
     configuration?: true;
     optionId?: true;
     actionId?: true;
@@ -9480,6 +9540,7 @@ export namespace Prisma {
   export type ActionGroupByOutputType = {
     id: string;
     zapId: number;
+    success: boolean | null;
     configuration: JsonValue;
     optionId: string;
     actionId: string;
@@ -9511,6 +9572,7 @@ export namespace Prisma {
     {
       id?: boolean;
       zapId?: boolean;
+      success?: boolean;
       configuration?: boolean;
       optionId?: boolean;
       actionId?: boolean;
@@ -9519,6 +9581,8 @@ export namespace Prisma {
       zap?: boolean | ZapDefaultArgs<ExtArgs>;
       actionDetails?: boolean | AvailableActionsDefaultArgs<ExtArgs>;
       userConnection?: boolean | Action$userConnectionArgs<ExtArgs>;
+      zapRunFailures?: boolean | Action$zapRunFailuresArgs<ExtArgs>;
+      _count?: boolean | ActionCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["action"]
   >;
@@ -9529,6 +9593,7 @@ export namespace Prisma {
     {
       id?: boolean;
       zapId?: boolean;
+      success?: boolean;
       configuration?: boolean;
       optionId?: boolean;
       actionId?: boolean;
@@ -9544,6 +9609,7 @@ export namespace Prisma {
   export type ActionSelectScalar = {
     id?: boolean;
     zapId?: boolean;
+    success?: boolean;
     configuration?: boolean;
     optionId?: boolean;
     actionId?: boolean;
@@ -9557,6 +9623,8 @@ export namespace Prisma {
     zap?: boolean | ZapDefaultArgs<ExtArgs>;
     actionDetails?: boolean | AvailableActionsDefaultArgs<ExtArgs>;
     userConnection?: boolean | Action$userConnectionArgs<ExtArgs>;
+    zapRunFailures?: boolean | Action$zapRunFailuresArgs<ExtArgs>;
+    _count?: boolean | ActionCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type ActionIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
@@ -9574,11 +9642,13 @@ export namespace Prisma {
       zap: Prisma.$ZapPayload<ExtArgs>;
       actionDetails: Prisma.$AvailableActionsPayload<ExtArgs>;
       userConnection: Prisma.$UserConnectionPayload<ExtArgs> | null;
+      zapRunFailures: Prisma.$ZapRunPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
         id: string;
         zapId: number;
+        success: boolean | null;
         configuration: Prisma.JsonValue;
         optionId: string;
         actionId: string;
@@ -10066,6 +10136,11 @@ export namespace Prisma {
       null,
       ExtArgs
     >;
+    zapRunFailures<T extends Action$zapRunFailuresArgs<ExtArgs> = {}>(
+      args?: Subset<T, Action$zapRunFailuresArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findMany"> | Null
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10108,6 +10183,7 @@ export namespace Prisma {
   interface ActionFieldRefs {
     readonly id: FieldRef<"Action", "String">;
     readonly zapId: FieldRef<"Action", "Int">;
+    readonly success: FieldRef<"Action", "Boolean">;
     readonly configuration: FieldRef<"Action", "Json">;
     readonly optionId: FieldRef<"Action", "String">;
     readonly actionId: FieldRef<"Action", "String">;
@@ -10470,6 +10546,28 @@ export namespace Prisma {
      */
     include?: UserConnectionInclude<ExtArgs> | null;
     where?: UserConnectionWhereInput;
+  };
+
+  /**
+   * Action.zapRunFailures
+   */
+  export type Action$zapRunFailuresArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ZapRun
+     */
+    select?: ZapRunSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZapRunInclude<ExtArgs> | null;
+    where?: ZapRunWhereInput;
+    orderBy?: ZapRunOrderByWithRelationInput | ZapRunOrderByWithRelationInput[];
+    cursor?: ZapRunWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: ZapRunScalarFieldEnum | ZapRunScalarFieldEnum[];
   };
 
   /**
@@ -11679,16 +11777,31 @@ export namespace Prisma {
   export type ZapRunMinAggregateOutputType = {
     id: string | null;
     zapId: number | null;
+    createdAt: Date | null;
+    completedAt: Date | null;
+    status: $Enums.ZapRunStatus | null;
+    failureReason: string | null;
+    failedActionId: string | null;
   };
 
   export type ZapRunMaxAggregateOutputType = {
     id: string | null;
     zapId: number | null;
+    createdAt: Date | null;
+    completedAt: Date | null;
+    status: $Enums.ZapRunStatus | null;
+    failureReason: string | null;
+    failedActionId: string | null;
   };
 
   export type ZapRunCountAggregateOutputType = {
     id: number;
     zapId: number;
+    createdAt: number;
+    completedAt: number;
+    status: number;
+    failureReason: number;
+    failedActionId: number;
     metaData: number;
     _all: number;
   };
@@ -11704,16 +11817,31 @@ export namespace Prisma {
   export type ZapRunMinAggregateInputType = {
     id?: true;
     zapId?: true;
+    createdAt?: true;
+    completedAt?: true;
+    status?: true;
+    failureReason?: true;
+    failedActionId?: true;
   };
 
   export type ZapRunMaxAggregateInputType = {
     id?: true;
     zapId?: true;
+    createdAt?: true;
+    completedAt?: true;
+    status?: true;
+    failureReason?: true;
+    failedActionId?: true;
   };
 
   export type ZapRunCountAggregateInputType = {
     id?: true;
     zapId?: true;
+    createdAt?: true;
+    completedAt?: true;
+    status?: true;
+    failureReason?: true;
+    failedActionId?: true;
     metaData?: true;
     _all?: true;
   };
@@ -11810,6 +11938,11 @@ export namespace Prisma {
   export type ZapRunGroupByOutputType = {
     id: string;
     zapId: number;
+    createdAt: Date;
+    completedAt: Date | null;
+    status: $Enums.ZapRunStatus;
+    failureReason: string | null;
+    failedActionId: string | null;
     metaData: JsonValue;
     _count: ZapRunCountAggregateOutputType | null;
     _avg: ZapRunAvgAggregateOutputType | null;
@@ -11837,7 +11970,13 @@ export namespace Prisma {
     {
       id?: boolean;
       zapId?: boolean;
+      createdAt?: boolean;
+      completedAt?: boolean;
+      status?: boolean;
+      failureReason?: boolean;
+      failedActionId?: boolean;
       metaData?: boolean;
+      failedAction?: boolean | ZapRun$failedActionArgs<ExtArgs>;
       zap?: boolean | ZapDefaultArgs<ExtArgs>;
       zapRunOutBox?: boolean | ZapRun$zapRunOutBoxArgs<ExtArgs>;
     },
@@ -11850,7 +11989,13 @@ export namespace Prisma {
     {
       id?: boolean;
       zapId?: boolean;
+      createdAt?: boolean;
+      completedAt?: boolean;
+      status?: boolean;
+      failureReason?: boolean;
+      failedActionId?: boolean;
       metaData?: boolean;
+      failedAction?: boolean | ZapRun$failedActionArgs<ExtArgs>;
       zap?: boolean | ZapDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["zapRun"]
@@ -11859,18 +12004,25 @@ export namespace Prisma {
   export type ZapRunSelectScalar = {
     id?: boolean;
     zapId?: boolean;
+    createdAt?: boolean;
+    completedAt?: boolean;
+    status?: boolean;
+    failureReason?: boolean;
+    failedActionId?: boolean;
     metaData?: boolean;
   };
 
   export type ZapRunInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
+    failedAction?: boolean | ZapRun$failedActionArgs<ExtArgs>;
     zap?: boolean | ZapDefaultArgs<ExtArgs>;
     zapRunOutBox?: boolean | ZapRun$zapRunOutBoxArgs<ExtArgs>;
   };
   export type ZapRunIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
+    failedAction?: boolean | ZapRun$failedActionArgs<ExtArgs>;
     zap?: boolean | ZapDefaultArgs<ExtArgs>;
   };
 
@@ -11879,6 +12031,7 @@ export namespace Prisma {
   > = {
     name: "ZapRun";
     objects: {
+      failedAction: Prisma.$ActionPayload<ExtArgs> | null;
       zap: Prisma.$ZapPayload<ExtArgs>;
       zapRunOutBox: Prisma.$ZapRunOutboxPayload<ExtArgs> | null;
     };
@@ -11886,6 +12039,11 @@ export namespace Prisma {
       {
         id: string;
         zapId: number;
+        createdAt: Date;
+        completedAt: Date | null;
+        status: $Enums.ZapRunStatus;
+        failureReason: string | null;
+        failedActionId: string | null;
         metaData: Prisma.JsonValue;
       },
       ExtArgs["result"]["zapRun"]
@@ -12338,6 +12496,17 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
+    failedAction<T extends ZapRun$failedActionArgs<ExtArgs> = {}>(
+      args?: Subset<T, ZapRun$failedActionArgs<ExtArgs>>,
+    ): Prisma__ActionClient<
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow"
+      > | null,
+      null,
+      ExtArgs
+    >;
     zap<T extends ZapDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapDefaultArgs<ExtArgs>>,
     ): Prisma__ZapClient<
@@ -12399,6 +12568,11 @@ export namespace Prisma {
   interface ZapRunFieldRefs {
     readonly id: FieldRef<"ZapRun", "String">;
     readonly zapId: FieldRef<"ZapRun", "Int">;
+    readonly createdAt: FieldRef<"ZapRun", "DateTime">;
+    readonly completedAt: FieldRef<"ZapRun", "DateTime">;
+    readonly status: FieldRef<"ZapRun", "ZapRunStatus">;
+    readonly failureReason: FieldRef<"ZapRun", "String">;
+    readonly failedActionId: FieldRef<"ZapRun", "String">;
     readonly metaData: FieldRef<"ZapRun", "Json">;
   }
 
@@ -12740,6 +12914,23 @@ export namespace Prisma {
      * Filter which ZapRuns to delete
      */
     where?: ZapRunWhereInput;
+  };
+
+  /**
+   * ZapRun.failedAction
+   */
+  export type ZapRun$failedActionArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Action
+     */
+    select?: ActionSelect<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionInclude<ExtArgs> | null;
+    where?: ActionWhereInput;
   };
 
   /**
@@ -13960,6 +14151,7 @@ export namespace Prisma {
   export const ActionScalarFieldEnum: {
     id: "id";
     zapId: "zapId";
+    success: "success";
     configuration: "configuration";
     optionId: "optionId";
     actionId: "actionId";
@@ -13986,6 +14178,11 @@ export namespace Prisma {
   export const ZapRunScalarFieldEnum: {
     id: "id";
     zapId: "zapId";
+    createdAt: "createdAt";
+    completedAt: "completedAt";
+    status: "status";
+    failureReason: "failureReason";
+    failedActionId: "failedActionId";
     metaData: "metaData";
   };
 
@@ -14104,6 +14301,20 @@ export namespace Prisma {
     $PrismaModel,
     "Json"
   >;
+
+  /**
+   * Reference to a field of type 'ZapRunStatus'
+   */
+  export type EnumZapRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "ZapRunStatus"
+  >;
+
+  /**
+   * Reference to a field of type 'ZapRunStatus[]'
+   */
+  export type ListEnumZapRunStatusFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, "ZapRunStatus[]">;
 
   /**
    * Reference to a field of type 'Float'
@@ -14670,6 +14881,7 @@ export namespace Prisma {
     NOT?: ActionWhereInput | ActionWhereInput[];
     id?: StringFilter<"Action"> | string;
     zapId?: IntFilter<"Action"> | number;
+    success?: BoolNullableFilter<"Action"> | boolean | null;
     configuration?: JsonFilter<"Action">;
     optionId?: StringFilter<"Action"> | string;
     actionId?: StringFilter<"Action"> | string;
@@ -14684,11 +14896,13 @@ export namespace Prisma {
       UserConnectionNullableRelationFilter,
       UserConnectionWhereInput
     > | null;
+    zapRunFailures?: ZapRunListRelationFilter;
   };
 
   export type ActionOrderByWithRelationInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    success?: SortOrderInput | SortOrder;
     configuration?: SortOrder;
     optionId?: SortOrder;
     actionId?: SortOrder;
@@ -14697,6 +14911,7 @@ export namespace Prisma {
     zap?: ZapOrderByWithRelationInput;
     actionDetails?: AvailableActionsOrderByWithRelationInput;
     userConnection?: UserConnectionOrderByWithRelationInput;
+    zapRunFailures?: ZapRunOrderByRelationAggregateInput;
   };
 
   export type ActionWhereUniqueInput = Prisma.AtLeast<
@@ -14708,6 +14923,7 @@ export namespace Prisma {
       OR?: ActionWhereInput[];
       NOT?: ActionWhereInput | ActionWhereInput[];
       zapId?: IntFilter<"Action"> | number;
+      success?: BoolNullableFilter<"Action"> | boolean | null;
       configuration?: JsonFilter<"Action">;
       optionId?: StringFilter<"Action"> | string;
       actionId?: StringFilter<"Action"> | string;
@@ -14721,6 +14937,7 @@ export namespace Prisma {
         UserConnectionNullableRelationFilter,
         UserConnectionWhereInput
       > | null;
+      zapRunFailures?: ZapRunListRelationFilter;
     },
     "id" | "connectionId" | "zapId_sortingOrder"
   >;
@@ -14728,6 +14945,7 @@ export namespace Prisma {
   export type ActionOrderByWithAggregationInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    success?: SortOrderInput | SortOrder;
     configuration?: SortOrder;
     optionId?: SortOrder;
     actionId?: SortOrder;
@@ -14750,6 +14968,7 @@ export namespace Prisma {
       | ActionScalarWhereWithAggregatesInput[];
     id?: StringWithAggregatesFilter<"Action"> | string;
     zapId?: IntWithAggregatesFilter<"Action"> | number;
+    success?: BoolNullableWithAggregatesFilter<"Action"> | boolean | null;
     configuration?: JsonWithAggregatesFilter<"Action">;
     optionId?: StringWithAggregatesFilter<"Action"> | string;
     actionId?: StringWithAggregatesFilter<"Action"> | string;
@@ -14838,7 +15057,13 @@ export namespace Prisma {
     NOT?: ZapRunWhereInput | ZapRunWhereInput[];
     id?: StringFilter<"ZapRun"> | string;
     zapId?: IntFilter<"ZapRun"> | number;
+    createdAt?: DateTimeFilter<"ZapRun"> | Date | string;
+    completedAt?: DateTimeNullableFilter<"ZapRun"> | Date | string | null;
+    status?: EnumZapRunStatusFilter<"ZapRun"> | $Enums.ZapRunStatus;
+    failureReason?: StringNullableFilter<"ZapRun"> | string | null;
+    failedActionId?: StringNullableFilter<"ZapRun"> | string | null;
     metaData?: JsonFilter<"ZapRun">;
+    failedAction?: XOR<ActionNullableRelationFilter, ActionWhereInput> | null;
     zap?: XOR<ZapRelationFilter, ZapWhereInput>;
     zapRunOutBox?: XOR<
       ZapRunOutboxNullableRelationFilter,
@@ -14849,7 +15074,13 @@ export namespace Prisma {
   export type ZapRunOrderByWithRelationInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    createdAt?: SortOrder;
+    completedAt?: SortOrderInput | SortOrder;
+    status?: SortOrder;
+    failureReason?: SortOrderInput | SortOrder;
+    failedActionId?: SortOrderInput | SortOrder;
     metaData?: SortOrder;
+    failedAction?: ActionOrderByWithRelationInput;
     zap?: ZapOrderByWithRelationInput;
     zapRunOutBox?: ZapRunOutboxOrderByWithRelationInput;
   };
@@ -14861,7 +15092,13 @@ export namespace Prisma {
       OR?: ZapRunWhereInput[];
       NOT?: ZapRunWhereInput | ZapRunWhereInput[];
       zapId?: IntFilter<"ZapRun"> | number;
+      createdAt?: DateTimeFilter<"ZapRun"> | Date | string;
+      completedAt?: DateTimeNullableFilter<"ZapRun"> | Date | string | null;
+      status?: EnumZapRunStatusFilter<"ZapRun"> | $Enums.ZapRunStatus;
+      failureReason?: StringNullableFilter<"ZapRun"> | string | null;
+      failedActionId?: StringNullableFilter<"ZapRun"> | string | null;
       metaData?: JsonFilter<"ZapRun">;
+      failedAction?: XOR<ActionNullableRelationFilter, ActionWhereInput> | null;
       zap?: XOR<ZapRelationFilter, ZapWhereInput>;
       zapRunOutBox?: XOR<
         ZapRunOutboxNullableRelationFilter,
@@ -14874,6 +15111,11 @@ export namespace Prisma {
   export type ZapRunOrderByWithAggregationInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    createdAt?: SortOrder;
+    completedAt?: SortOrderInput | SortOrder;
+    status?: SortOrder;
+    failureReason?: SortOrderInput | SortOrder;
+    failedActionId?: SortOrderInput | SortOrder;
     metaData?: SortOrder;
     _count?: ZapRunCountOrderByAggregateInput;
     _avg?: ZapRunAvgOrderByAggregateInput;
@@ -14892,6 +15134,23 @@ export namespace Prisma {
       | ZapRunScalarWhereWithAggregatesInput[];
     id?: StringWithAggregatesFilter<"ZapRun"> | string;
     zapId?: IntWithAggregatesFilter<"ZapRun"> | number;
+    createdAt?: DateTimeWithAggregatesFilter<"ZapRun"> | Date | string;
+    completedAt?:
+      | DateTimeNullableWithAggregatesFilter<"ZapRun">
+      | Date
+      | string
+      | null;
+    status?:
+      | EnumZapRunStatusWithAggregatesFilter<"ZapRun">
+      | $Enums.ZapRunStatus;
+    failureReason?:
+      | StringNullableWithAggregatesFilter<"ZapRun">
+      | string
+      | null;
+    failedActionId?:
+      | StringNullableWithAggregatesFilter<"ZapRun">
+      | string
+      | null;
     metaData?: JsonWithAggregatesFilter<"ZapRun">;
   };
 
@@ -15470,47 +15729,56 @@ export namespace Prisma {
 
   export type ActionCreateInput = {
     id?: string;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     sortingOrder?: number;
     zap: ZapCreateNestedOneWithoutActionsInput;
     actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput;
     userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
+    zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
   };
 
   export type ActionUncheckedCreateInput = {
     id?: string;
     zapId: number;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     actionId: string;
     sortingOrder?: number;
     connectionId?: string | null;
+    zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
   };
 
   export type ActionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     zap?: ZapUpdateOneRequiredWithoutActionsNestedInput;
     actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput;
     userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
+    zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
   };
 
   export type ActionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     actionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
+    zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
   };
 
   export type ActionCreateManyInput = {
     id?: string;
     zapId: number;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     actionId: string;
@@ -15520,6 +15788,7 @@ export namespace Prisma {
 
   export type ActionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
@@ -15528,6 +15797,7 @@ export namespace Prisma {
   export type ActionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     actionId?: StringFieldUpdateOperationsInput | string;
@@ -15611,7 +15881,12 @@ export namespace Prisma {
 
   export type ZapRunCreateInput = {
     id?: string;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
     metaData: JsonNullValueInput | InputJsonValue;
+    failedAction?: ActionCreateNestedOneWithoutZapRunFailuresInput;
     zap: ZapCreateNestedOneWithoutZapRunsInput;
     zapRunOutBox?: ZapRunOutboxCreateNestedOneWithoutZapRunInput;
   };
@@ -15619,13 +15894,27 @@ export namespace Prisma {
   export type ZapRunUncheckedCreateInput = {
     id?: string;
     zapId: number;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
+    failedActionId?: string | null;
     metaData: JsonNullValueInput | InputJsonValue;
     zapRunOutBox?: ZapRunOutboxUncheckedCreateNestedOneWithoutZapRunInput;
   };
 
   export type ZapRunUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
+    failedAction?: ActionUpdateOneWithoutZapRunFailuresNestedInput;
     zap?: ZapUpdateOneRequiredWithoutZapRunsNestedInput;
     zapRunOutBox?: ZapRunOutboxUpdateOneWithoutZapRunNestedInput;
   };
@@ -15633,6 +15922,15 @@ export namespace Prisma {
   export type ZapRunUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    failedActionId?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
     zapRunOutBox?: ZapRunOutboxUncheckedUpdateOneWithoutZapRunNestedInput;
   };
@@ -15640,17 +15938,39 @@ export namespace Prisma {
   export type ZapRunCreateManyInput = {
     id?: string;
     zapId: number;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
+    failedActionId?: string | null;
     metaData: JsonNullValueInput | InputJsonValue;
   };
 
   export type ZapRunUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
   };
 
   export type ZapRunUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    failedActionId?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
   };
 
@@ -16264,6 +16584,11 @@ export namespace Prisma {
     imagePath?: SortOrder;
   };
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null;
+  };
+
   export type AvailableActionsRelationFilter = {
     is?: AvailableActionsWhereInput;
     isNot?: AvailableActionsWhereInput;
@@ -16277,6 +16602,7 @@ export namespace Prisma {
   export type ActionCountOrderByAggregateInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    success?: SortOrder;
     configuration?: SortOrder;
     optionId?: SortOrder;
     actionId?: SortOrder;
@@ -16292,6 +16618,7 @@ export namespace Prisma {
   export type ActionMaxOrderByAggregateInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    success?: SortOrder;
     optionId?: SortOrder;
     actionId?: SortOrder;
     sortingOrder?: SortOrder;
@@ -16301,6 +16628,7 @@ export namespace Prisma {
   export type ActionMinOrderByAggregateInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    success?: SortOrder;
     optionId?: SortOrder;
     actionId?: SortOrder;
     sortingOrder?: SortOrder;
@@ -16310,6 +16638,14 @@ export namespace Prisma {
   export type ActionSumOrderByAggregateInput = {
     zapId?: SortOrder;
     sortingOrder?: SortOrder;
+  };
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedBoolNullableFilter<$PrismaModel>;
+    _max?: NestedBoolNullableFilter<$PrismaModel>;
   };
 
   export type AvailableActionsCountOrderByAggregateInput = {
@@ -16340,6 +16676,22 @@ export namespace Prisma {
     imagePath?: SortOrder;
   };
 
+  export type EnumZapRunStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ZapRunStatus | EnumZapRunStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.ZapRunStatus[]
+      | ListEnumZapRunStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.ZapRunStatus[]
+      | ListEnumZapRunStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumZapRunStatusFilter<$PrismaModel> | $Enums.ZapRunStatus;
+  };
+
+  export type ActionNullableRelationFilter = {
+    is?: ActionWhereInput | null;
+    isNot?: ActionWhereInput | null;
+  };
+
   export type ZapRunOutboxNullableRelationFilter = {
     is?: ZapRunOutboxWhereInput | null;
     isNot?: ZapRunOutboxWhereInput | null;
@@ -16348,6 +16700,11 @@ export namespace Prisma {
   export type ZapRunCountOrderByAggregateInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    createdAt?: SortOrder;
+    completedAt?: SortOrder;
+    status?: SortOrder;
+    failureReason?: SortOrder;
+    failedActionId?: SortOrder;
     metaData?: SortOrder;
   };
 
@@ -16358,15 +16715,41 @@ export namespace Prisma {
   export type ZapRunMaxOrderByAggregateInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    createdAt?: SortOrder;
+    completedAt?: SortOrder;
+    status?: SortOrder;
+    failureReason?: SortOrder;
+    failedActionId?: SortOrder;
   };
 
   export type ZapRunMinOrderByAggregateInput = {
     id?: SortOrder;
     zapId?: SortOrder;
+    createdAt?: SortOrder;
+    completedAt?: SortOrder;
+    status?: SortOrder;
+    failureReason?: SortOrder;
+    failedActionId?: SortOrder;
   };
 
   export type ZapRunSumOrderByAggregateInput = {
     zapId?: SortOrder;
+  };
+
+  export type EnumZapRunStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ZapRunStatus | EnumZapRunStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.ZapRunStatus[]
+      | ListEnumZapRunStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.ZapRunStatus[]
+      | ListEnumZapRunStatusFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedEnumZapRunStatusWithAggregatesFilter<$PrismaModel>
+      | $Enums.ZapRunStatus;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumZapRunStatusFilter<$PrismaModel>;
+    _max?: NestedEnumZapRunStatusFilter<$PrismaModel>;
   };
 
   export type ZapRunRelationFilter = {
@@ -17381,6 +17764,40 @@ export namespace Prisma {
     connect?: UserConnectionWhereUniqueInput;
   };
 
+  export type ZapRunCreateNestedManyWithoutFailedActionInput = {
+    create?:
+      | XOR<
+          ZapRunCreateWithoutFailedActionInput,
+          ZapRunUncheckedCreateWithoutFailedActionInput
+        >
+      | ZapRunCreateWithoutFailedActionInput[]
+      | ZapRunUncheckedCreateWithoutFailedActionInput[];
+    connectOrCreate?:
+      | ZapRunCreateOrConnectWithoutFailedActionInput
+      | ZapRunCreateOrConnectWithoutFailedActionInput[];
+    createMany?: ZapRunCreateManyFailedActionInputEnvelope;
+    connect?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+  };
+
+  export type ZapRunUncheckedCreateNestedManyWithoutFailedActionInput = {
+    create?:
+      | XOR<
+          ZapRunCreateWithoutFailedActionInput,
+          ZapRunUncheckedCreateWithoutFailedActionInput
+        >
+      | ZapRunCreateWithoutFailedActionInput[]
+      | ZapRunUncheckedCreateWithoutFailedActionInput[];
+    connectOrCreate?:
+      | ZapRunCreateOrConnectWithoutFailedActionInput
+      | ZapRunCreateOrConnectWithoutFailedActionInput[];
+    createMany?: ZapRunCreateManyFailedActionInputEnvelope;
+    connect?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+  };
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null;
+  };
+
   export type ZapUpdateOneRequiredWithoutActionsNestedInput = {
     create?: XOR<
       ZapCreateWithoutActionsInput,
@@ -17432,6 +17849,62 @@ export namespace Prisma {
       >,
       UserConnectionUncheckedUpdateWithoutActionInput
     >;
+  };
+
+  export type ZapRunUpdateManyWithoutFailedActionNestedInput = {
+    create?:
+      | XOR<
+          ZapRunCreateWithoutFailedActionInput,
+          ZapRunUncheckedCreateWithoutFailedActionInput
+        >
+      | ZapRunCreateWithoutFailedActionInput[]
+      | ZapRunUncheckedCreateWithoutFailedActionInput[];
+    connectOrCreate?:
+      | ZapRunCreateOrConnectWithoutFailedActionInput
+      | ZapRunCreateOrConnectWithoutFailedActionInput[];
+    upsert?:
+      | ZapRunUpsertWithWhereUniqueWithoutFailedActionInput
+      | ZapRunUpsertWithWhereUniqueWithoutFailedActionInput[];
+    createMany?: ZapRunCreateManyFailedActionInputEnvelope;
+    set?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+    disconnect?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+    delete?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+    connect?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+    update?:
+      | ZapRunUpdateWithWhereUniqueWithoutFailedActionInput
+      | ZapRunUpdateWithWhereUniqueWithoutFailedActionInput[];
+    updateMany?:
+      | ZapRunUpdateManyWithWhereWithoutFailedActionInput
+      | ZapRunUpdateManyWithWhereWithoutFailedActionInput[];
+    deleteMany?: ZapRunScalarWhereInput | ZapRunScalarWhereInput[];
+  };
+
+  export type ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput = {
+    create?:
+      | XOR<
+          ZapRunCreateWithoutFailedActionInput,
+          ZapRunUncheckedCreateWithoutFailedActionInput
+        >
+      | ZapRunCreateWithoutFailedActionInput[]
+      | ZapRunUncheckedCreateWithoutFailedActionInput[];
+    connectOrCreate?:
+      | ZapRunCreateOrConnectWithoutFailedActionInput
+      | ZapRunCreateOrConnectWithoutFailedActionInput[];
+    upsert?:
+      | ZapRunUpsertWithWhereUniqueWithoutFailedActionInput
+      | ZapRunUpsertWithWhereUniqueWithoutFailedActionInput[];
+    createMany?: ZapRunCreateManyFailedActionInputEnvelope;
+    set?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+    disconnect?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+    delete?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+    connect?: ZapRunWhereUniqueInput | ZapRunWhereUniqueInput[];
+    update?:
+      | ZapRunUpdateWithWhereUniqueWithoutFailedActionInput
+      | ZapRunUpdateWithWhereUniqueWithoutFailedActionInput[];
+    updateMany?:
+      | ZapRunUpdateManyWithWhereWithoutFailedActionInput
+      | ZapRunUpdateManyWithWhereWithoutFailedActionInput[];
+    deleteMany?: ZapRunScalarWhereInput | ZapRunScalarWhereInput[];
   };
 
   export type ActionCreateNestedManyWithoutActionDetailsInput = {
@@ -17520,6 +17993,15 @@ export namespace Prisma {
     deleteMany?: ActionScalarWhereInput | ActionScalarWhereInput[];
   };
 
+  export type ActionCreateNestedOneWithoutZapRunFailuresInput = {
+    create?: XOR<
+      ActionCreateWithoutZapRunFailuresInput,
+      ActionUncheckedCreateWithoutZapRunFailuresInput
+    >;
+    connectOrCreate?: ActionCreateOrConnectWithoutZapRunFailuresInput;
+    connect?: ActionWhereUniqueInput;
+  };
+
   export type ZapCreateNestedOneWithoutZapRunsInput = {
     create?: XOR<
       ZapCreateWithoutZapRunsInput,
@@ -17545,6 +18027,29 @@ export namespace Prisma {
     >;
     connectOrCreate?: ZapRunOutboxCreateOrConnectWithoutZapRunInput;
     connect?: ZapRunOutboxWhereUniqueInput;
+  };
+
+  export type EnumZapRunStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ZapRunStatus;
+  };
+
+  export type ActionUpdateOneWithoutZapRunFailuresNestedInput = {
+    create?: XOR<
+      ActionCreateWithoutZapRunFailuresInput,
+      ActionUncheckedCreateWithoutZapRunFailuresInput
+    >;
+    connectOrCreate?: ActionCreateOrConnectWithoutZapRunFailuresInput;
+    upsert?: ActionUpsertWithoutZapRunFailuresInput;
+    disconnect?: ActionWhereInput | boolean;
+    delete?: ActionWhereInput | boolean;
+    connect?: ActionWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        ActionUpdateToOneWithWhereWithoutZapRunFailuresInput,
+        ActionUpdateWithoutZapRunFailuresInput
+      >,
+      ActionUncheckedUpdateWithoutZapRunFailuresInput
+    >;
   };
 
   export type ZapUpdateOneRequiredWithoutZapRunsNestedInput = {
@@ -17845,6 +18350,49 @@ export namespace Prisma {
       _max?: NestedDateTimeNullableFilter<$PrismaModel>;
     };
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null;
+  };
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedBoolNullableFilter<$PrismaModel>;
+    _max?: NestedBoolNullableFilter<$PrismaModel>;
+  };
+
+  export type NestedEnumZapRunStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ZapRunStatus | EnumZapRunStatusFieldRefInput<$PrismaModel>;
+    in?:
+      | $Enums.ZapRunStatus[]
+      | ListEnumZapRunStatusFieldRefInput<$PrismaModel>;
+    notIn?:
+      | $Enums.ZapRunStatus[]
+      | ListEnumZapRunStatusFieldRefInput<$PrismaModel>;
+    not?: NestedEnumZapRunStatusFilter<$PrismaModel> | $Enums.ZapRunStatus;
+  };
+
+  export type NestedEnumZapRunStatusWithAggregatesFilter<$PrismaModel = never> =
+    {
+      equals?:
+        | $Enums.ZapRunStatus
+        | EnumZapRunStatusFieldRefInput<$PrismaModel>;
+      in?:
+        | $Enums.ZapRunStatus[]
+        | ListEnumZapRunStatusFieldRefInput<$PrismaModel>;
+      notIn?:
+        | $Enums.ZapRunStatus[]
+        | ListEnumZapRunStatusFieldRefInput<$PrismaModel>;
+      not?:
+        | NestedEnumZapRunStatusWithAggregatesFilter<$PrismaModel>
+        | $Enums.ZapRunStatus;
+      _count?: NestedIntFilter<$PrismaModel>;
+      _min?: NestedEnumZapRunStatusFilter<$PrismaModel>;
+      _max?: NestedEnumZapRunStatusFilter<$PrismaModel>;
+    };
+
   export type ZapCreateWithoutUserInput = {
     triggerId?: string | null;
     name?: string;
@@ -18062,20 +18610,24 @@ export namespace Prisma {
 
   export type ActionCreateWithoutZapInput = {
     id?: string;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     sortingOrder?: number;
     actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput;
     userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
+    zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
   };
 
   export type ActionUncheckedCreateWithoutZapInput = {
     id?: string;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     actionId: string;
     sortingOrder?: number;
     connectionId?: string | null;
+    zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
   };
 
   export type ActionCreateOrConnectWithoutZapInput = {
@@ -18093,12 +18645,22 @@ export namespace Prisma {
 
   export type ZapRunCreateWithoutZapInput = {
     id?: string;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
     metaData: JsonNullValueInput | InputJsonValue;
+    failedAction?: ActionCreateNestedOneWithoutZapRunFailuresInput;
     zapRunOutBox?: ZapRunOutboxCreateNestedOneWithoutZapRunInput;
   };
 
   export type ZapRunUncheckedCreateWithoutZapInput = {
     id?: string;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
+    failedActionId?: string | null;
     metaData: JsonNullValueInput | InputJsonValue;
     zapRunOutBox?: ZapRunOutboxUncheckedCreateNestedOneWithoutZapRunInput;
   };
@@ -18305,6 +18867,7 @@ export namespace Prisma {
     NOT?: ActionScalarWhereInput | ActionScalarWhereInput[];
     id?: StringFilter<"Action"> | string;
     zapId?: IntFilter<"Action"> | number;
+    success?: BoolNullableFilter<"Action"> | boolean | null;
     configuration?: JsonFilter<"Action">;
     optionId?: StringFilter<"Action"> | string;
     actionId?: StringFilter<"Action"> | string;
@@ -18346,6 +18909,11 @@ export namespace Prisma {
     NOT?: ZapRunScalarWhereInput | ZapRunScalarWhereInput[];
     id?: StringFilter<"ZapRun"> | string;
     zapId?: IntFilter<"ZapRun"> | number;
+    createdAt?: DateTimeFilter<"ZapRun"> | Date | string;
+    completedAt?: DateTimeNullableFilter<"ZapRun"> | Date | string | null;
+    status?: EnumZapRunStatusFilter<"ZapRun"> | $Enums.ZapRunStatus;
+    failureReason?: StringNullableFilter<"ZapRun"> | string | null;
+    failedActionId?: StringNullableFilter<"ZapRun"> | string | null;
     metaData?: JsonFilter<"ZapRun">;
   };
 
@@ -18899,20 +19467,24 @@ export namespace Prisma {
 
   export type ActionCreateWithoutUserConnectionInput = {
     id?: string;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     sortingOrder?: number;
     zap: ZapCreateNestedOneWithoutActionsInput;
     actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput;
+    zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
   };
 
   export type ActionUncheckedCreateWithoutUserConnectionInput = {
     id?: string;
     zapId: number;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     actionId: string;
     sortingOrder?: number;
+    zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
   };
 
   export type ActionCreateOrConnectWithoutUserConnectionInput = {
@@ -19208,6 +19780,43 @@ export namespace Prisma {
     >;
   };
 
+  export type ZapRunCreateWithoutFailedActionInput = {
+    id?: string;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
+    metaData: JsonNullValueInput | InputJsonValue;
+    zap: ZapCreateNestedOneWithoutZapRunsInput;
+    zapRunOutBox?: ZapRunOutboxCreateNestedOneWithoutZapRunInput;
+  };
+
+  export type ZapRunUncheckedCreateWithoutFailedActionInput = {
+    id?: string;
+    zapId: number;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
+    metaData: JsonNullValueInput | InputJsonValue;
+    zapRunOutBox?: ZapRunOutboxUncheckedCreateNestedOneWithoutZapRunInput;
+  };
+
+  export type ZapRunCreateOrConnectWithoutFailedActionInput = {
+    where: ZapRunWhereUniqueInput;
+    create: XOR<
+      ZapRunCreateWithoutFailedActionInput,
+      ZapRunUncheckedCreateWithoutFailedActionInput
+    >;
+  };
+
+  export type ZapRunCreateManyFailedActionInputEnvelope = {
+    data:
+      | ZapRunCreateManyFailedActionInput
+      | ZapRunCreateManyFailedActionInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type ZapUpsertWithoutActionsInput = {
     update: XOR<
       ZapUpdateWithoutActionsInput,
@@ -19339,22 +19948,54 @@ export namespace Prisma {
     trigger?: TriggerUncheckedUpdateManyWithoutUserConnectionNestedInput;
   };
 
+  export type ZapRunUpsertWithWhereUniqueWithoutFailedActionInput = {
+    where: ZapRunWhereUniqueInput;
+    update: XOR<
+      ZapRunUpdateWithoutFailedActionInput,
+      ZapRunUncheckedUpdateWithoutFailedActionInput
+    >;
+    create: XOR<
+      ZapRunCreateWithoutFailedActionInput,
+      ZapRunUncheckedCreateWithoutFailedActionInput
+    >;
+  };
+
+  export type ZapRunUpdateWithWhereUniqueWithoutFailedActionInput = {
+    where: ZapRunWhereUniqueInput;
+    data: XOR<
+      ZapRunUpdateWithoutFailedActionInput,
+      ZapRunUncheckedUpdateWithoutFailedActionInput
+    >;
+  };
+
+  export type ZapRunUpdateManyWithWhereWithoutFailedActionInput = {
+    where: ZapRunScalarWhereInput;
+    data: XOR<
+      ZapRunUpdateManyMutationInput,
+      ZapRunUncheckedUpdateManyWithoutFailedActionInput
+    >;
+  };
+
   export type ActionCreateWithoutActionDetailsInput = {
     id?: string;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     sortingOrder?: number;
     zap: ZapCreateNestedOneWithoutActionsInput;
     userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
+    zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
   };
 
   export type ActionUncheckedCreateWithoutActionDetailsInput = {
     id?: string;
     zapId: number;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     sortingOrder?: number;
     connectionId?: string | null;
+    zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
   };
 
   export type ActionCreateOrConnectWithoutActionDetailsInput = {
@@ -19397,6 +20038,36 @@ export namespace Prisma {
     data: XOR<
       ActionUpdateManyMutationInput,
       ActionUncheckedUpdateManyWithoutActionDetailsInput
+    >;
+  };
+
+  export type ActionCreateWithoutZapRunFailuresInput = {
+    id?: string;
+    success?: boolean | null;
+    configuration?: JsonNullValueInput | InputJsonValue;
+    optionId?: string;
+    sortingOrder?: number;
+    zap: ZapCreateNestedOneWithoutActionsInput;
+    actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput;
+    userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
+  };
+
+  export type ActionUncheckedCreateWithoutZapRunFailuresInput = {
+    id?: string;
+    zapId: number;
+    success?: boolean | null;
+    configuration?: JsonNullValueInput | InputJsonValue;
+    optionId?: string;
+    actionId: string;
+    sortingOrder?: number;
+    connectionId?: string | null;
+  };
+
+  export type ActionCreateOrConnectWithoutZapRunFailuresInput = {
+    where: ActionWhereUniqueInput;
+    create: XOR<
+      ActionCreateWithoutZapRunFailuresInput,
+      ActionUncheckedCreateWithoutZapRunFailuresInput
     >;
   };
 
@@ -19449,6 +20120,48 @@ export namespace Prisma {
       ZapRunOutboxCreateWithoutZapRunInput,
       ZapRunOutboxUncheckedCreateWithoutZapRunInput
     >;
+  };
+
+  export type ActionUpsertWithoutZapRunFailuresInput = {
+    update: XOR<
+      ActionUpdateWithoutZapRunFailuresInput,
+      ActionUncheckedUpdateWithoutZapRunFailuresInput
+    >;
+    create: XOR<
+      ActionCreateWithoutZapRunFailuresInput,
+      ActionUncheckedCreateWithoutZapRunFailuresInput
+    >;
+    where?: ActionWhereInput;
+  };
+
+  export type ActionUpdateToOneWithWhereWithoutZapRunFailuresInput = {
+    where?: ActionWhereInput;
+    data: XOR<
+      ActionUpdateWithoutZapRunFailuresInput,
+      ActionUncheckedUpdateWithoutZapRunFailuresInput
+    >;
+  };
+
+  export type ActionUpdateWithoutZapRunFailuresInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
+    configuration?: JsonNullValueInput | InputJsonValue;
+    optionId?: StringFieldUpdateOperationsInput | string;
+    sortingOrder?: IntFieldUpdateOperationsInput | number;
+    zap?: ZapUpdateOneRequiredWithoutActionsNestedInput;
+    actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput;
+    userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
+  };
+
+  export type ActionUncheckedUpdateWithoutZapRunFailuresInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    zapId?: IntFieldUpdateOperationsInput | number;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
+    configuration?: JsonNullValueInput | InputJsonValue;
+    optionId?: StringFieldUpdateOperationsInput | string;
+    actionId?: StringFieldUpdateOperationsInput | string;
+    sortingOrder?: IntFieldUpdateOperationsInput | number;
+    connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
 
   export type ZapUpsertWithoutZapRunsInput = {
@@ -19528,13 +20241,23 @@ export namespace Prisma {
 
   export type ZapRunCreateWithoutZapRunOutBoxInput = {
     id?: string;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
     metaData: JsonNullValueInput | InputJsonValue;
+    failedAction?: ActionCreateNestedOneWithoutZapRunFailuresInput;
     zap: ZapCreateNestedOneWithoutZapRunsInput;
   };
 
   export type ZapRunUncheckedCreateWithoutZapRunOutBoxInput = {
     id?: string;
     zapId: number;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
+    failedActionId?: string | null;
     metaData: JsonNullValueInput | InputJsonValue;
   };
 
@@ -19568,13 +20291,31 @@ export namespace Prisma {
 
   export type ZapRunUpdateWithoutZapRunOutBoxInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
+    failedAction?: ActionUpdateOneWithoutZapRunFailuresNestedInput;
     zap?: ZapUpdateOneRequiredWithoutZapRunsNestedInput;
   };
 
   export type ZapRunUncheckedUpdateWithoutZapRunOutBoxInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    failedActionId?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
   };
 
@@ -19671,6 +20412,7 @@ export namespace Prisma {
 
   export type ActionCreateManyZapInput = {
     id?: string;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     actionId: string;
@@ -19680,6 +20422,11 @@ export namespace Prisma {
 
   export type ZapRunCreateManyZapInput = {
     id?: string;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
+    failedActionId?: string | null;
     metaData: JsonNullValueInput | InputJsonValue;
   };
 
@@ -19695,24 +20442,29 @@ export namespace Prisma {
 
   export type ActionUpdateWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput;
     userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
+    zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
   };
 
   export type ActionUncheckedUpdateWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     actionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
+    zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
   };
 
   export type ActionUncheckedUpdateManyWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     actionId?: StringFieldUpdateOperationsInput | string;
@@ -19722,18 +20474,45 @@ export namespace Prisma {
 
   export type ZapRunUpdateWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
+    failedAction?: ActionUpdateOneWithoutZapRunFailuresNestedInput;
     zapRunOutBox?: ZapRunOutboxUpdateOneWithoutZapRunNestedInput;
   };
 
   export type ZapRunUncheckedUpdateWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    failedActionId?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
     zapRunOutBox?: ZapRunOutboxUncheckedUpdateOneWithoutZapRunNestedInput;
   };
 
   export type ZapRunUncheckedUpdateManyWithoutZapInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    failedActionId?: NullableStringFieldUpdateOperationsInput | string | null;
     metaData?: JsonNullValueInput | InputJsonValue;
   };
 
@@ -19783,6 +20562,7 @@ export namespace Prisma {
   export type ActionCreateManyUserConnectionInput = {
     id?: string;
     zapId: number;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     actionId: string;
@@ -19836,25 +20616,30 @@ export namespace Prisma {
 
   export type ActionUpdateWithoutUserConnectionInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     zap?: ZapUpdateOneRequiredWithoutActionsNestedInput;
     actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput;
+    zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
   };
 
   export type ActionUncheckedUpdateWithoutUserConnectionInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     actionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
+    zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
   };
 
   export type ActionUncheckedUpdateManyWithoutUserConnectionInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     actionId?: StringFieldUpdateOperationsInput | string;
@@ -19917,9 +20702,64 @@ export namespace Prisma {
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
 
+  export type ZapRunCreateManyFailedActionInput = {
+    id?: string;
+    zapId: number;
+    createdAt?: Date | string;
+    completedAt?: Date | string | null;
+    status?: $Enums.ZapRunStatus;
+    failureReason?: string | null;
+    metaData: JsonNullValueInput | InputJsonValue;
+  };
+
+  export type ZapRunUpdateWithoutFailedActionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    metaData?: JsonNullValueInput | InputJsonValue;
+    zap?: ZapUpdateOneRequiredWithoutZapRunsNestedInput;
+    zapRunOutBox?: ZapRunOutboxUpdateOneWithoutZapRunNestedInput;
+  };
+
+  export type ZapRunUncheckedUpdateWithoutFailedActionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    zapId?: IntFieldUpdateOperationsInput | number;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    metaData?: JsonNullValueInput | InputJsonValue;
+    zapRunOutBox?: ZapRunOutboxUncheckedUpdateOneWithoutZapRunNestedInput;
+  };
+
+  export type ZapRunUncheckedUpdateManyWithoutFailedActionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    zapId?: IntFieldUpdateOperationsInput | number;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    completedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    status?: EnumZapRunStatusFieldUpdateOperationsInput | $Enums.ZapRunStatus;
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null;
+    metaData?: JsonNullValueInput | InputJsonValue;
+  };
+
   export type ActionCreateManyActionDetailsInput = {
     id?: string;
     zapId: number;
+    success?: boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: string;
     sortingOrder?: number;
@@ -19928,25 +20768,30 @@ export namespace Prisma {
 
   export type ActionUpdateWithoutActionDetailsInput = {
     id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     zap?: ZapUpdateOneRequiredWithoutActionsNestedInput;
     userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
+    zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
   };
 
   export type ActionUncheckedUpdateWithoutActionDetailsInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
+    zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
   };
 
   export type ActionUncheckedUpdateManyWithoutActionDetailsInput = {
     id?: StringFieldUpdateOperationsInput | string;
     zapId?: IntFieldUpdateOperationsInput | number;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
     configuration?: JsonNullValueInput | InputJsonValue;
     optionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
@@ -19980,6 +20825,12 @@ export namespace Prisma {
   export type AvailableTriggersCountOutputTypeArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = AvailableTriggersCountOutputTypeDefaultArgs<ExtArgs>;
+  /**
+   * @deprecated Use ActionCountOutputTypeDefaultArgs instead
+   */
+  export type ActionCountOutputTypeArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = ActionCountOutputTypeDefaultArgs<ExtArgs>;
   /**
    * @deprecated Use AvailableActionsCountOutputTypeDefaultArgs instead
    */
