@@ -3,7 +3,7 @@ import { RiArrowDownSFill } from "react-icons/ri";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 export default function ZapTable() {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col justify-start h-full">
       {" "}
       <div className="text-3xl tex t-black font-semibold">My Zaps</div>
       <div className="flex text-sm font-bold border-b border-black/20 py-2 pr-10">

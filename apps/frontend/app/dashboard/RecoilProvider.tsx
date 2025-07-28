@@ -1,3 +1,4 @@
+"use client";
 import RecoilContextProvider from "../RecoilState/RecoilContextProvider";
 
 export default function RecoilProvider({
