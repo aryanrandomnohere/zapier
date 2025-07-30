@@ -70,6 +70,27 @@ zapRouter.post("/draft", async (req: extendedRequest, res: Response) => {
     return;
   }
 });
+
+zapRouter.get("/zap-history/:zapId", async (req: Request, res: Response) => {
+  try {
+    const zapId = parseInt(req.params.zapId);
+
+    const history = await prisma.zapChangeHistory.findMany({
+      where: { zapId },
+      include: {
+        createdBy: true, // fetch related user
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.status(200).json(history);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch zap history" });
+  }
+});
 zapRouter.post(
   "/updatetrigger/:zapId",
   async (req: extendedRequest, res: Response) => {
@@ -85,7 +106,7 @@ zapRouter.post(
         return;
       }
       if (!parsedBody.data.userId) {
-        res.status(200).json({ msg: "UserId does not exist", success: false });
+        res.status(400).json({ msg: "UserId does not exist", success: false });
         return;
       }
       const existingTrigger = await prisma.trigger.findUnique({
@@ -97,48 +118,69 @@ zapRouter.post(
         },
       });
       if (existingTrigger) {
-        console.log(
-          (parsedBody.data.triggerConfiguration as JsonObject).fields[0]
-            .fieldValue,
-        );
-        prisma.trigger.update({
+        const updatedTrigger = await prisma.trigger.update({
           where: {
             id: existingTrigger.id,
           },
           data: {
             triggerId: parsedBody.data.triggerId,
             configuration: parsedBody.data.triggerConfiguration,
+            optionId: (parsedBody.data.triggerConfiguration as JsonObject)
+            .fields[0].fieldValue
           },
         });
-        res.status(200).json({ msg: "Trigger updated", success: true });
+        res.status(200).json({
+          msg: "Trigger updated",
+          success: true,
+          stepId: updatedTrigger.id,
+        });
         return;
       }
-      console.log(
+      let response;
+      if (
         (parsedBody.data.triggerConfiguration as JsonObject).fields[0]
-          .fieldValue,
-      );
-      const { id } = await prisma.trigger.create({
-        data: {
-          zapId,
-          optionId: (parsedBody.data.triggerConfiguration as JsonObject)
-            .fields[0].fieldValue,
-          triggerId: parsedBody.data.triggerId,
-          configuration: parsedBody.data.triggerConfiguration,
-        },
-        select: {
-          id: true,
-        },
-      });
+          .fieldValue != ""
+      )
+        response = await prisma.trigger.create({
+          data: {
+            zapId,
+            optionId: (parsedBody.data.triggerConfiguration as JsonObject)
+              .fields[0].fieldValue,
+            triggerId: parsedBody.data.triggerId,
+            configuration: parsedBody.data.triggerConfiguration,
+          },
+          select: {
+            id: true,
+          },
+        });
+      else
+        response = await prisma.trigger.create({
+          data: {
+            zapId,
+            triggerId: parsedBody.data.triggerId,
+            configuration: parsedBody.data.triggerConfiguration,
+          },
+        });
 
       await prisma.zap.update({
         where: {
           id: zapId,
         },
         data: {
-          triggerId: id,
+          triggerId: response.id,
         },
       });
-      res.status(200).json({ msg: "Trigger Created", success: true });
+      await prisma.zapChangeHistory.create({
+        data: {
+          zapId: Number(zapId), // integer
+          type: "ZAP_CREATED", 
+          message: "Zap Created",
+          createdById: parsedBody.data.userId, 
+        },
+      });
+      res
+        .status(200)
+        .json({ msg: "Trigger Created", success: true, stepId: response.id });
     } catch (e) {
       console.error(e);
       res.status(200).json({ msg: "something went wrong", success: false });
@@ -181,7 +223,7 @@ zapRouter.post(
           (parsedBody.data.actionConfiguration as JsonObject).fields[0]
             .fieldValue,
         );
-        await prisma.action.update({
+        const updatedAction = await prisma.action.update({
           where: {
             id: existingAction.id,
           },
@@ -192,10 +234,14 @@ zapRouter.post(
             configuration: parsedBody.data.actionConfiguration,
           },
         });
-        res.status(200).json({ msg: "Action updated", success: true });
+        res.status(200).json({
+          msg: "Action updated",
+          success: true,
+          stepId: updatedAction.id,
+        });
         return;
       }
-      await prisma.action.create({
+      const newAction = await prisma.action.create({
         data: {
           zapId,
           actionId: parsedBody.data.actionId,
@@ -209,13 +255,74 @@ zapRouter.post(
         },
       });
 
-      res.status(200).json({ msg: "Action Created", success: true });
+      res
+        .status(200)
+        .json({ msg: "Action Created", success: true, stepId: newAction.id });
     } catch (e) {
       console.error(e);
       res.status(400).json({ msg: "something went wrong", success: false });
     }
   },
 );
+
+zapRouter.put("/stop/:zapId",async(req, res)=>{
+  const zapId = Number(req.params.zapId)
+  try{
+  await prisma.zap.update({
+    where:{
+      id:zapId
+    },
+    data:{
+      published:false
+    }
+  })
+  await prisma.zapChangeHistory.create({
+    data: {
+      zapId,
+      type:"ZAP_TURNED_OFF",
+      message: "Zap turned off",
+      createdById:Number(req.body.userId),
+    },
+  });
+  res.status(200).json({success:true, msg:"Zap stoped successfully"})
+  }catch(e){
+    console.log("Error",e)
+    res.status(400).json({msg:e, success:false})
+  }
+})
+
+zapRouter.put("/start/:zapId",async(req, res)=>{
+  const zapId = Number(req.params.zapId);
+    const isPublisedAtleastOnce = await prisma.zapChangeHistory.findFirst({
+      where:{
+        zapId,
+        type:"ZAP_TURNED_ON"
+      }
+    })
+    if(isPublisedAtleastOnce){
+      await prisma.zap.update({
+        where:{
+          id:zapId
+        },
+        data:{
+          published:true
+        }
+      })
+      await prisma.zapChangeHistory.create({
+        data: {
+          zapId,
+          type:"ZAP_TURNED_ON",
+          message: "Zap turned on",
+          createdById: Number(req.body.userId),
+        },
+      });
+      res.status(200).json({success:true, msg:"Zap published successfully"})
+      return;
+    }
+    res.status(200).json({success:false, msg:"Zap is not complete "})
+    return;
+
+})
 
 zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
   const body = req.body;
@@ -299,6 +406,15 @@ zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
     });
     return zap.id;
   });
+  await prisma.zapChangeHistory.create({
+    data: {
+      zapId,
+      type:"ZAP_TURNED_ON",
+      message: "Zap turned on",
+      createdById: userId,
+    },
+  });
+
   res.status(200).json({
     zapId,
   });
@@ -333,6 +449,7 @@ zapRouter.get("/loadzap/:zapId", async (req: Request, res: Response) => {
         zapId: zapId,
       },
       select: {
+        id: true,
         configuration: true,
         triggerId: true,
       },
@@ -355,8 +472,12 @@ zapRouter.get("/loadzap/:zapId", async (req: Request, res: Response) => {
         res.status(400).json({ msg: "Internal Server Error" });
         return;
       }
-      availableTrigger.metadata = trigger.configuration;
-      finalZap.push(availableTrigger);
+      const Trigger = {
+        ...availableTrigger,
+        stepId: trigger.id,
+        metadata: trigger.configuration,
+      };
+      finalZap.push(Trigger);
     } else {
       finalZap.push({ id: "", name: "", imagePath: "", metadata: null });
     }
@@ -377,9 +498,13 @@ zapRouter.get("/loadzap/:zapId", async (req: Request, res: Response) => {
           },
         });
         if (availableAction) {
-          availableAction.metadata = action.configuration;
-          finalZap.push(availableAction);
-          console.log(finalZap);
+          const Action = {
+            ...availableAction, // clone properties
+            stepId: action.id, // add new stepId
+            metadata: action.configuration, // override metadata
+          };
+
+          finalZap.push(Action);
         }
       }),
     );
@@ -420,15 +545,47 @@ zapRouter.get("/togglezap/:zapId", async (req: Request, res: Response) => {
   const zapId = Number(req.params.zapId);
 });
 
+zapRouter.get("/:zapId/notes", async (req, res) => {
+  try {
+    const { zapId } = req.params;
+
+    // Fetch zap notes
+    const zap = await prisma.zap.findUnique({
+      where: { id: Number(zapId) },
+      select: {
+        notes: true,
+        trigger: { select: { id: true, note: true } },
+        actions: { select: { id: true, note: true } },
+      },
+    });
+
+    if (!zap) return res.status(404).json({ error: "Zap not found" });
+    const stepNotes = [
+      { stepId: zap.trigger?.id, note: zap.trigger?.note },
+      ...zap.actions.map((a) => ({ stepId: a.id, note: a.note })),
+    ];
+    console.log(
+      stepNotes.map((step) => {
+        return { stepId: step.stepId, note: step.note };
+      }),
+    );
+    res.json({
+      zapNotes: zap.notes,
+      stepNotes,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch notes" });
+  }
+});
+
 zapRouter.get(
   "/:userId/:zapId",
   async (req: extendedRequest, res: Response) => {
-    const id = Number(req.params.userId);
     const zapId = Number(req.params.zapId);
     const zaps = await prisma.zap.findUnique({
       where: {
         id: zapId,
-        userId: id,
       },
       include: {
         actions: {
@@ -467,6 +624,105 @@ zapRouter.post("/selectRecord", async (req, res) => {
     },
   });
   res.status(200).json({ success: true });
+});
+
+zapRouter.post("/:zapId/notes", async (req, res) => {
+  try {
+    const { zapId } = req.params;
+    const { zapNotes, stepNotes, userId } = req.body;
+
+    // 1. Handle Zap-level note (ZAP_NOTE)
+    if (zapNotes !== undefined) {
+      // Check if zap-level note already exists
+      const existingZapNote = await prisma.zapNote.findFirst({
+        where: {
+          zapId: Number(zapId),
+          type: "ZAP_NOTE",
+        },
+      });
+
+      if (existingZapNote) {
+        await prisma.zapNote.update({
+          where: { id: existingZapNote.id },
+          data: { content: zapNotes, updatedAt: new Date() },
+        });
+      } else {
+        await prisma.zapNote.create({
+          data: {
+            zapId: Number(zapId),
+            type: "ZAP_NOTE",
+            content: zapNotes,
+            createdById: Number(userId),
+          },
+        });
+      }
+    }
+
+    // 2. Handle Step-level notes (STEP_NOTE)
+    if (Array.isArray(stepNotes)) {
+      await Promise.all(
+        stepNotes.map(async (step, index) => {
+          let existingStepNote;
+
+          if (index === 0) {
+            existingStepNote = await prisma.zapNote.findFirst({
+              where: {
+                zapId: Number(zapId),
+                triggerId: step.stepId,
+                type: "STEP_NOTE",
+              },
+            });
+          } else {
+            existingStepNote = await prisma.zapNote.findFirst({
+              where: {
+                zapId: Number(zapId),
+                stepId: step.stepId,
+                type: "STEP_NOTE",
+              },
+            });
+          }
+
+          if (existingStepNote) {
+            await prisma.zapNote.update({
+              where: { id: existingStepNote.id },
+              data: { content: step.note, updatedAt: new Date() },
+            });
+          } else {
+            const isTrigger = await prisma.trigger.findUnique({
+              where: {
+                id: step.stepId,
+              },
+            });
+            if (isTrigger)
+              await prisma.zapNote.create({
+                data: {
+                  zapId: Number(zapId),
+                  triggerId: step.stepId,
+                  type: "STEP_NOTE",
+                  content: step.note || "",
+                  createdById: userId,
+                },
+              });
+            else
+              await prisma.zapNote.create({
+                data: {
+                  zapId: Number(zapId),
+                  stepId: step.stepId,
+                  type: "STEP_NOTE",
+                  content: step.note || "",
+                  createdById: userId,
+                },
+              });
+          }
+        }),
+      );
+    }
+
+    res.json({ success: true, message: "Notes saved successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to save notes" });
+  }
 });
 
 export { zapRouter };

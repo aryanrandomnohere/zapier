@@ -53,7 +53,7 @@ export default function LinkedAssets() {
       />
 
       {/* Buttons */}
-      <div style={{ display: "flex", gap: "12px" }}>
+      <div className="flex gap-[12px] justify-between">
         {["≡ Create Table", "▢ Create Interface"].map((text, index) => (
           <button
             key={index}

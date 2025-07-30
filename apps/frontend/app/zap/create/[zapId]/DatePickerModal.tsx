@@ -114,15 +114,15 @@ export const DatePickerModal = ({
   const days = getDaysInMonth(currentMonth);
 
   return (
-    <div className="bg-opacity-50 flex items-center justify-center z-50 ">
-      <div className="bg-white rounded shadow-2xl w-full max-w-md">
+    <div className="absolute bg-opacity-50 flex items-center top-12 justify-center z-50 ">
+      <div className="bg-white rounded border border-zinc-300  w-full max-w-md">
         {/* Header */}
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-400 hover:text-gray-600 hover:cursor-pointer"
             >
               <X size={20} />
             </button>

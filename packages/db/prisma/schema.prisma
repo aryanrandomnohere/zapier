@@ -22,6 +22,8 @@ model User {
   updatedAt     DateTime      @updatedAt
   zap           Zap[]
   connections   UserConnection[]
+  changeHistory ZapChangeHistory[]  @relation("UserZapHistory")
+  notes         ZapNote[]           @relation("userNotes")
 }
  
 model Zap {
@@ -39,6 +41,9 @@ actions          Action[]
 zapRuns          ZapRun[]
 records          Record[]
 record           Record?         @relation("ZapSingleRecord", fields: [RecordId], references: [id])
+  changeHistory ZapChangeHistory[]  @relation("zapHistory")
+  notes         ZapNote[]           @relation("zapNotes")
+
 }
 
 
@@ -68,6 +73,7 @@ model Trigger {
   connectionId    String?            
   userConnection  UserConnection?    @relation(name: "TriggerToUserConnection", fields: [connectionId], references: [id])
   type            AvailableTriggers  @relation(fields: [triggerId], references: [id])
+  note            ZapNote?           @relation("triggerNote")
   triggerId       String
 }
 
@@ -109,6 +115,7 @@ model Action {
   connectionId    String?            @unique
   userConnection  UserConnection?    @relation(name: "ActionToUserConnection", fields: [connectionId], references: [id])
   zapRunFailures  ZapRun[]          @relation("ActionFailures")
+  note            ZapNote?           @relation("actionNote")
   @@unique([zapId,sortingOrder])
 }
 
@@ -129,6 +136,25 @@ enum ZapRunStatus {
   SUCCESS
   FAILED
 }
+enum ZapNoteType {
+  ZAP_NOTE
+  STEP_NOTE
+}
+
+enum ZapHistoryType { 
+  ZAP_CREATED
+  ZAP_TURNED_OFF
+  ZAP_DELETED
+  OWNER_CHANGED
+  ZAP_RESTORED
+  ZAP_TURNED_ON
+  VERSION_PUBLISHED
+  APPROVAL_REQUEST_SENT
+  APPROVAL_REQUEST_APPROVED
+  APPROVAL_REQUEST_DENIED
+  APPROVAL_REQUEST_CANCELLED
+}
+
 
 model ZapRun {
   id           String         @id @default(uuid())
@@ -149,4 +175,35 @@ model ZapRunOutbox {
   id        String    @id @default(uuid())
   zapRunId  String    @unique
   zapRun    ZapRun    @relation(fields: [zapRunId],references: [id]) 
+}
+
+
+
+
+model ZapChangeHistory {
+  id          String   @id @default(uuid())
+  zapId       Int
+  zap         Zap      @relation(name:"zapHistory",fields: [zapId], references: [id])
+  type        ZapHistoryType   // e.g., "TURNED_ON", "VERSION_PUBLISHED", "CREATED"
+  message     String   // human-readable: "Zap turned on"
+  createdById Int
+  createdBy   User     @relation(name:"UserZapHistory",fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model ZapNote {
+  id          String   @id @default(uuid())
+  zapId       Int
+  zap         Zap      @relation( name: "zapNotes",fields: [zapId], references: [id])
+  triggerId   String?  @unique
+  trigger     Trigger?   @relation(name: "triggerNote",fields: [triggerId], references: [id])
+  stepId      String?  @unique()
+  step        Action?  @relation(name: "actionNote",fields: [stepId], references: [id])
+  type        ZapNoteType   
+  content     String
+  createdById Int
+  createdBy   User     @relation(name: "userNotes",fields: [createdById], references: [id])
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

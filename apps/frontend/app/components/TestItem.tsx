@@ -46,14 +46,10 @@ export default function TestItem({
               sortingOrder: metadata.index,
             };
 
-      console.log(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
-      );
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
         body,
       );
-      console.log(response);
       if (response.data.success) {
         triggerSaved = true;
       }

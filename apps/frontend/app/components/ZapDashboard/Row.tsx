@@ -2,6 +2,10 @@ import { itemStepMetaData, zapInterface } from "@repo/types";
 import { IoIosArrowForward } from "react-icons/io";
 import ToggleButton from "../buttons/ToggleButton";
 import { useState } from "react";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { userAtom } from "@/app/RecoilState/store/userAtom";
+import { getSession } from "next-auth/react";
 
 export default function Row({
   zap,
@@ -11,6 +15,26 @@ export default function Row({
   handleZapClick: (arg: string) => void;
 }) {
   const [activeZap, setActiveZap] = useState<boolean>(zap.published);
+  const [user, setUser] = useRecoilState(userAtom)
+ async function handlePublishing(){
+  let userId = user?.userId
+  if (!user) {
+    const session = await getSession();
+    setUser(session?.user);
+    userId = session?.user.userId
+  }
+    if(activeZap){
+        const response = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/stop/${zap.id}`,{
+          userId:userId
+        }) 
+        if(response.data.success) setActiveZap(false)
+    }else {
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/start/${zap.id}`,{
+        userId:userId
+      }) 
+      if(response.data.success) setActiveZap(true)
+    }
+  }
 
   if (!zap.trigger || !zap.trigger) {
     return <></>;
@@ -54,7 +78,7 @@ export default function Row({
         <div className="w-1/3">
           <ToggleButton
             isChecked={activeZap}
-            setIsChecked={() => setActiveZap(!activeZap)}
+            setIsChecked={() => handlePublishing()}
           />
         </div>
         <div

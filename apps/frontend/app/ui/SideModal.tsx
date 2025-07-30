@@ -368,7 +368,7 @@ export default function SideModal({
   }
   return (
     <div
-      className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-800 border-2 z-20  rounded transform-all ease-in-out duration-300 bg-[#FFFDF9]`}
+      className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-800 border-2 z-50  rounded transform-all ease-in-out duration-300 bg-[#FFFDF9]`}
     >
       <div className={`flex flex-col items-center w-full`}>
         <div className="flex justify-between w-full items-center bg-blue-300/10">
@@ -384,7 +384,7 @@ export default function SideModal({
               </div>
             )}
             {index + 1}.{" "}
-            {zap.selectedItems[0].metadata?.fields[0].fieldValue ||
+            {zap.selectedItems[index].metadata?.fields[0].fieldValue ||
               "Select an event"}{" "}
             <FiEdit3 size={16} />
           </div>

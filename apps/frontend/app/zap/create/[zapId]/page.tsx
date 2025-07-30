@@ -259,7 +259,11 @@ export default function Page1() {
                                 imagePath={item.imagePath}
                                 SelectCell={SelectCell}
                                 title={item.name || "Action"}
-                                subtitle="The task your Zap performs"
+                                subtitle={
+                                  zapState.selectedItems[index].metadata
+                                    ?.fields[0].fieldValue ||
+                                  "The task your Zap performs"
+                                }
                                 order={index + 1}
                               />
                             </div>

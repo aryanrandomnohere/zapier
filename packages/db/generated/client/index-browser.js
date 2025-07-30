@@ -228,6 +228,27 @@ exports.Prisma.ZapRunOutboxScalarFieldEnum = {
   zapRunId: 'zapRunId'
 };
 
+exports.Prisma.ZapChangeHistoryScalarFieldEnum = {
+  id: 'id',
+  zapId: 'zapId',
+  type: 'type',
+  message: 'message',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ZapNoteScalarFieldEnum = {
+  id: 'id',
+  zapId: 'zapId',
+  triggerId: 'triggerId',
+  stepId: 'stepId',
+  type: 'type',
+  content: 'content',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -259,6 +280,25 @@ exports.ZapRunStatus = exports.$Enums.ZapRunStatus = {
   FAILED: 'FAILED'
 };
 
+exports.ZapHistoryType = exports.$Enums.ZapHistoryType = {
+  ZAP_CREATED: 'ZAP_CREATED',
+  ZAP_TURNED_OFF: 'ZAP_TURNED_OFF',
+  ZAP_DELETED: 'ZAP_DELETED',
+  OWNER_CHANGED: 'OWNER_CHANGED',
+  ZAP_RESTORED: 'ZAP_RESTORED',
+  ZAP_TURNED_ON: 'ZAP_TURNED_ON',
+  VERSION_PUBLISHED: 'VERSION_PUBLISHED',
+  APPROVAL_REQUEST_SENT: 'APPROVAL_REQUEST_SENT',
+  APPROVAL_REQUEST_APPROVED: 'APPROVAL_REQUEST_APPROVED',
+  APPROVAL_REQUEST_DENIED: 'APPROVAL_REQUEST_DENIED',
+  APPROVAL_REQUEST_CANCELLED: 'APPROVAL_REQUEST_CANCELLED'
+};
+
+exports.ZapNoteType = exports.$Enums.ZapNoteType = {
+  ZAP_NOTE: 'ZAP_NOTE',
+  STEP_NOTE: 'STEP_NOTE'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Zap: 'Zap',
@@ -269,7 +309,9 @@ exports.Prisma.ModelName = {
   Action: 'Action',
   AvailableActions: 'AvailableActions',
   ZapRun: 'ZapRun',
-  ZapRunOutbox: 'ZapRunOutbox'
+  ZapRunOutbox: 'ZapRunOutbox',
+  ZapChangeHistory: 'ZapChangeHistory',
+  ZapNote: 'ZapNote'
 };
 
 /**

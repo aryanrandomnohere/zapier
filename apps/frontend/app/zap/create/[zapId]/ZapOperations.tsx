@@ -10,7 +10,7 @@ export default function ZapOperations({
   onClick: () => void;
 }) {
   return (
-    <div className="fixed px-1.5 pt-3 min-h-full left-11 top-[73px]  bg-[#FFFDF9] shadow-md justify-center z-40 border border-zinc-300 flex ">
+    <div className="fixed px-1 pl-2 pt-3 min-h-full left-11 top-[73px]  bg-[#FFFDF9] shadow-md justify-center z-40 border border-zinc-300 flex ">
       {children}
       <button
         onClick={onClick}

@@ -4,17 +4,17 @@ import { useParams } from "next/navigation";
 import {
   X,
   Search,
-  Calendar,
   ChevronDown,
   MoreHorizontal,
-  ChevronLeft,
-  ChevronRight,
+
   Trash2,
-  RotateCcw,
+  CalendarDays,
 } from "lucide-react";
-import SelectRunsDropdown from "./SelectRunsDropdown";
 import { IoReload } from "react-icons/io5";
 import { DatePickerModal } from "./DatePickerModal";
+import ZapRunIcons from "./ZapRunIcons";
+import OptionDropdown from "./OptionDropdown";
+import PaginatedMap from "./PaginatedMap";
 
 interface ZapRun {
   id: string;
@@ -38,15 +38,28 @@ export default function ZapRunList() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const [zapRunEdit, setZapRunEdit] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const runsPerPage = 4;
+
   const statusOptions = [
     { value: "", label: "All statuses" },
-    { value: "SUCCESS", label: "Success", icon: "✓", color: "text-green-600" },
-    { value: "FAILED", label: "Failed", icon: "✗", color: "text-red-600" },
-    { value: "RUNNING", label: "Running", icon: "▶", color: "text-blue-600" },
+    {
+      value: "SUCCESS",
+      label: "Success",
+      icon: "tick",
+      color: "text-green-600",
+    },
+    { value: "FAILED", label: "Failed", icon: "cross", color: "text-red-600" },
+    {
+      value: "RUNNING",
+      label: "Running",
+      icon: "play",
+      color: "text-blue-600",
+    },
     {
       value: "PENDING",
       label: "Pending",
-      icon: "⏸",
+      icon: "pending",
       color: "text-yellow-600",
     },
   ];
@@ -57,7 +70,7 @@ export default function ZapRunList() {
 
   async function fetchRuns() {
     const fromDate = new Date();
-    fromDate.setDate(fromDate.getDate() - 30); // Default to 30 days
+    fromDate.setDate(fromDate.getDate() - 30);
     const params: any = { fromDate: fromDate.toISOString() };
     if (statusFilter) params.status = statusFilter;
 
@@ -69,21 +82,6 @@ export default function ZapRunList() {
       setRuns(data);
     } catch (error) {
       console.error("Failed to fetch runs:", error);
-      // Mock data for demo
-      //   setRuns([
-      //     {
-      //       id: "1",
-      //       status: "SUCCESS",
-      //       createdAt: "2025-07-28T18:10:50.000Z",
-      //       zap: { name: "Test Zap", actions: [{ actionDetails: { id: "1", name: "Action 1" } }] }
-      //     },
-      //     {
-      //       id: "2",
-      //       status: "SUCCESS",
-      //       createdAt: "2025-07-28T17:18:04.000Z",
-      //       zap: { name: "Test Zap", actions: [{ actionDetails: { id: "1", name: "Action 1" } }] }
-      //     }
-      //   ]);
     }
   }
 
@@ -97,6 +95,14 @@ export default function ZapRunList() {
     return true;
   });
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredRuns.length / runsPerPage);
+  const paginatedRuns = filteredRuns.slice(
+    (currentPage - 1) * runsPerPage,
+    currentPage * runsPerPage,
+  );
+
+  
   const handleSelectAll = () => {
     const allRunIds = new Set(runs.map((run) => run.id));
     setSelectedRuns(allRunIds);
@@ -107,9 +113,11 @@ export default function ZapRunList() {
     setSelectedRuns(new Set());
     setShowDropdown(false);
   };
+
   const handleReFetchZap = () => {
     fetchRuns();
   };
+
   const handleDeleteZap = () => {
     if (selectedRuns.size < 1) return;
     console.log("Deleting zaps with ids", selectedRuns.entries());
@@ -131,7 +139,7 @@ export default function ZapRunList() {
   };
 
   return (
-    <div className=" bg-opacity-50 flex items-start justify-center px-1 pl-3 z-40">
+    <div className=" bg-opacity-50  flex items-start justify-center px-1 pl-3 z-40">
       <div className=" rounded-lg  w-full max-w-xs max-h-[90vh] overflow-hidden">
         {/* Header */}
         <div className="px-1 py-4 border-b border-gray-200 relative">
@@ -153,7 +161,7 @@ export default function ZapRunList() {
         </div>
 
         {/* Content */}
-        <div className="px-1 py-4 space-y-2 overflow-y-auto flex-1">
+        <div className="px-1 py-4 space-y-2 flex-1">
           {/* Search */}
           <div className="relative">
             <Search
@@ -170,63 +178,65 @@ export default function ZapRunList() {
           </div>
 
           {/* Date Filter */}
+          <div>
           <button
-            onClick={() => setIsDateModalOpen(true)}
-            className="w-full pl-10 pr-10 py-2 border-2 border-blue-500 rounded-md text-sm bg-white cursor-pointer"
+            onClick={() => setIsDateModalOpen(!isDateModalOpen)}
+            className="flex gap-2.5 items-center w-full px-4 text-start py-2 border-2 border-blue-500 rounded-md text-xs bg-white cursor-pointer"
           >
-            {dateFilter}
+           <CalendarDays size={18} /> {dateFilter}
           </button>
 
-          <DatePickerModal
-            isOpen={isDateModalOpen}
-            onClose={() => setIsDateModalOpen(false)}
-            onDateSelect={(date) => setDateFilter(date)}
-            selectedValue={dateFilter}
-            title="Date"
-          />
-
+            <DatePickerModal
+              isOpen={isDateModalOpen}
+              onClose={() => setIsDateModalOpen(false)}
+              onDateSelect={(date) => setDateFilter(date)}
+              selectedValue={dateFilter}
+              title="Date"
+            />
+          </div>
           {/* Status Filter */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-2">
+            <label className="block text-xs font-medium text-gray-700 mb-0.5">
               Status
             </label>
-            <div className="relative">
-              <button
-                onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                className="w-full px-4 py-2 border-2 border-blue-500 rounded-md text-xs bg-white text-left flex items-center justify-between hover:cursor-pointer "
-              >
-                <span>{statusFilter || "All statuses"}</span>
-                <ChevronDown size={16} className="text-gray-500" />
-              </button>
 
-              {showStatusDropdown && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-64 overflow-y-auto ">
-                  {statusOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setStatusFilter(option.value);
-                        setShowStatusDropdown(false);
-                      }}
-                      className="w-full px-4 py-2 text-left hover:cursor-pointer hover:bg-gray-50 flex items-center gap-3 text-xs"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={statusFilter === option.value}
-                        readOnly
-                        className="w-4 h-4 hover:cursor-pointer rounded"
-                      />
-                      {option.icon && (
-                        <span className={`${option.color} font-bold`}>
-                          {option.icon}
-                        </span>
-                      )}
-                      <span className={option.color}>{option.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <OptionDropdown
+              trigger={
+                <button
+                  onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                  className="w-full px-4 py-2 border-2 border-blue-500 rounded-md text-xs bg-white text-left flex items-center justify-between hover:cursor-pointer "
+                >
+                  <span>{statusFilter || "All statuses"}</span>
+                  <ChevronDown size={16} className="text-gray-500" />
+                </button>
+              }
+              showDropdown={showStatusDropdown}
+              setShowDropdown={setShowStatusDropdown}
+            >
+              {statusOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => {
+                    setStatusFilter(option.value);
+                    setShowStatusDropdown(false);
+                  }}
+                  className="w-full px-4 py-2 text-left hover:cursor-pointer hover:bg-gray-50 flex items-center gap-3 text-xs"
+                >
+                  <input
+                    type="checkbox"
+                    checked={statusFilter === option.value}
+                    readOnly
+                    className="w-4 h-4 hover:cursor-pointer rounded"
+                  />
+                  {option.icon && (
+                    <span className={`${option.color} font-bold`}>
+                      <ZapRunIcons icon={option.icon} />
+                    </span>
+                  )}
+                  <span className={option.color}>{option.label}</span>
+                </button>
+              ))}
+            </OptionDropdown>
           </div>
 
           {/* Results Count */}
@@ -258,7 +268,9 @@ export default function ZapRunList() {
               <div className="flex items-center gap-1">
                 <div
                   onClick={handleDeleteZap}
-                  className={`bg-[#D5D7FC] hover:bg-[#847DFE] p-3 rounded hover:cursor-pointer ${selectedRuns.size < 1 ? "cursor-not-allowed" : ""} `}
+                  className={`bg-[#D5D7FC] hover:bg-[#847DFE] p-3 rounded hover:cursor-pointer ${
+                    selectedRuns.size < 1 ? "cursor-not-allowed" : ""
+                  } `}
                 >
                   <Trash2 size={15} />
                 </div>
@@ -292,7 +304,11 @@ export default function ZapRunList() {
           </div>
 
           <button
-            className={`flex items-center ${selectedRuns.size === 0 ? "bg-[#ECE9DF] text-black" : "bg-blue-700 text-white"} gap-2 px-3 py-2  border border-gray-300 rounded text-sm text-gray-600 min-w-32`}
+            className={`flex items-center ${
+              selectedRuns.size === 0
+                ? "bg-[#ECE9DF] text-black cursor-not-allowed"
+                : "bg-blue-700 text-white hover:bg-blue-500 hover:cursor-pointer"
+            } gap-2 px-3 py-2  border border-gray-300 rounded text-sm   text-gray-600 min-w-32`}
           >
             <span>
               Replay{" "}
@@ -303,22 +319,27 @@ export default function ZapRunList() {
 
           {/* Runs List */}
           <div className="space-y-2">
-            {filteredRuns.map((run, index) => {
+            {paginatedRuns.map((run) => {
               const statusDisplay = getStatusDisplay(run.status);
 
               return (
-                <div className="flex flex-col">
+                <div className="flex flex-col" key={run.id}>
                   {zapRunEdit === run.id && (
-                    <div className="text-blue-600 underline text-xs self-end hover:cursor-pointer">
-                      {" "}
+                    <div
+                      onClick={() => setZapRunEdit(null)}
+                      className="text-blue-600 underline text-xs self-end hover:cursor-pointer"
+                    >
                       Exit Run View
                     </div>
                   )}
                   <div
-                    key={run.id}
                     onClick={() => setZapRunEdit(run.id)}
                     className={`border-2 rounded-md p-3 flex items-center gap-3 
-                      hover:cursor-pointer hover:bg-[#F7F6FD]   ${zapRunEdit === run.id ? "border-blue-700" : "border-gray-200"} hover:border-blue-700 
+                      hover:cursor-pointer hover:bg-[#F7F6FD]   ${
+                        zapRunEdit === run.id
+                          ? "border-blue-700"
+                          : "border-gray-200"
+                      } hover:border-blue-700 
                   `}
                   >
                     <input
@@ -332,7 +353,7 @@ export default function ZapRunList() {
                         <span
                           className={`${statusDisplay.color} font-bold text-xs`}
                         >
-                          {statusDisplay.icon}
+                          <ZapRunIcons icon={statusDisplay.icon || ""} />
                         </span>
                         <span
                           className={`${statusDisplay.color} text-xs font-medium`}
@@ -367,17 +388,40 @@ export default function ZapRunList() {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-center gap-2 pt-2">
-            <button className="p-2 text-[#584D4D] bg-[#ECE9DF] hover:text-gray-600">
-              <ChevronLeft size={18} color="black" />
-            </button>
-            <button className="p-1.5 px-3.5 bg-[#D5D7FC] text-black rounded text-base">
-              1
-            </button>
-            <button className="p-2 bg-[#ECE9DF] text-[#584D4D] hover:text-gray-600">
-              <ChevronRight size={18} color={"black"} />
-            </button>
-          </div>
+          {/* {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 pt-2">
+              <button
+                onClick={handlePrev}
+                disabled={currentPage === 1}
+                className="p-2 text-[#584D4D] bg-[#ECE9DF] hover:text-gray-600 disabled:opacity-50"
+              >
+                <ChevronLeft size={18} color="black" />
+              </button>
+
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => goToPage(i + 1)}
+                  className={`p-1.5 px-3.5 rounded text-base ${
+                    currentPage === i + 1
+                      ? "bg-[#D5D7FC] text-black"
+                      : "bg-[#ECE9DF] text-[#584D4D]"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+                className="p-2 bg-[#ECE9DF] text-[#584D4D] hover:text-gray-600 disabled:opacity-50"
+              >
+                <ChevronRight size={18} color="black" />
+              </button>
+            </div>
+          )} */}
+            <PaginatedMap currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
         </div>
       </div>
     </div>

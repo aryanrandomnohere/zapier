@@ -30,6 +30,7 @@ export interface zapInterface {
 
 export interface ItemType {
   id: string;
+  stepId: string;
   name: string;
   serviceType: string;
   appId: string;

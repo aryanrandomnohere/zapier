@@ -7,4 +7,26 @@ export const prisma = globalForPrisma.prisma || new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-export * from "../generated/client/index.js";
+// Export only types and enums, not the client itself
+export type {
+  User,
+  Zap,
+  Record,
+  Trigger,
+  UserConnection,
+  AvailableTriggers,
+  Action,
+  AvailableActions,
+  ZapRun,
+  ZapRunOutbox,
+  ZapChangeHistory,
+  ZapNote,
+  PrismaPromise,
+} from "../generated/client/index.js";
+
+// Export enums
+export {
+  $Enums,
+  ZapHistoryType,
+  ZapRunStatus,
+} from "../generated/client/index.js";

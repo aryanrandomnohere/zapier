@@ -1,14 +1,14 @@
 "use client";
 import { useState } from "react";
 import { zapInterface } from "../../../../../packages/types/src";
-import ToggleButton from "../buttons/ToggleButton";
-import { IoIosArrowForward } from "react-icons/io";
+
 import { useRouter } from "next/navigation";
 import { MdOutlineAttachEmail, MdOutlineWebhook } from "react-icons/md";
 import { SiSolana } from "react-icons/si";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import Row from "./Row";
 import useZaps from "@/app/hooks/useZaps";
+import RecoilProvider from "@/app/dashboard/RecoilProvider";
 export default function ZapRows() {
   const { zaps, loading, error } = useZaps();
   const router = useRouter();
@@ -19,11 +19,12 @@ export default function ZapRows() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col justify-center h-full">
+   <RecoilProvider> <div className="flex flex-col justify-center h-full">
       {zaps.map((zap: zapInterface) => (
         <Row key={zap.id} zap={zap} handleZapClick={handleZapClick} />
       ))}
     </div>
+    </RecoilProvider>
   );
 }
 

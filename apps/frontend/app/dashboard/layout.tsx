@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Navbar from "../components/AppLayout/Navbar";
+import Sidebar from "../ui/Sidebar";
 
 export const metadata: Metadata = {
   title: "Dashboard | Zapier",
@@ -9,9 +10,12 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <Navbar />
+    <div className="flex flex-col h-full w-full"> {/* This sets the entire page as a column flex container */}
+     <Navbar />
+     <div className="flex h-full w-full"> {/* This div should contain the sidebar and main content */}
+      <Sidebar />
       {children}
-    </>
+    </div>
+    </div>
   );
 }

@@ -15,6 +15,10 @@ import ZapOperations from "./ZapOperations";
 import { zapOperations } from "@repo/types";
 import LinkedAssets from "./LinkedAssets";
 import ZapRunDetails from "./ZapRunDetails";
+import ZapNotes from "./ZapNotes";
+import ZapHistory from "./ZapHistory";
+import AdvancedSettings from "./AdvancedSettings";
+import ZapDetails from "./ZapDetails";
 
 export default function LeftBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,18 +68,18 @@ export default function LeftBar() {
             onClick={() => handleClick(zapOperations.ZAPRUN)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
-          <Activity
+          {/* <Activity
             onClick={() => handleClick(zapOperations.STATUS)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
-          />
+          /> */}
           <Settings
             onClick={() => handleClick(zapOperations.ADVANCEDSETTINGS)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
           />
-          <FileText
+          {/* <FileText
             onClick={() => handleClick(zapOperations.VERSIONS)}
             className="w-4.5 h-4.5 hover:cursor-pointer hover:text-blue-300"
-          />
+          /> */}
         </div>
         {/* Bottom Glow Button */}
         <div className="css-1v3iq9f">
@@ -149,17 +153,17 @@ function CurrentOperation({ operation }: { operation: zapOperations }) {
     case zapOperations.LINKEDASSETS:
       return <LinkedAssets />;
     case zapOperations.ADVANCEDSETTINGS:
-      return <div>Advanced Settings</div>;
+      return <AdvancedSettings/>;
     case zapOperations.NOTES:
-      return <div>Notes</div>;
+      return <ZapNotes />;
     case zapOperations.STATUS:
       return <div>Status</div>;
     case zapOperations.CHANGEHISTORY:
-      return <div>Change History</div>;
+      return <ZapHistory />;
     case zapOperations.ZAPDETAILS:
-      return <div>Zap details</div>;
-    case zapOperations.VERSIONS:
-      return <div>Versions</div>;
+      return <ZapDetails/>;
+    // case zapOperations.VERSIONS:
+    //   return <div>Versions</div>;
     case zapOperations.ZAPRUN:
       return <ZapRunDetails />;
     default:

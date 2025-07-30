@@ -37,7 +37,7 @@ export default function page() {
           </div>
         </div>
       </div>
-      <div className="min-w-screen h-full flex flex-col gap-5 font-bold text-xl items-center justify-center  ">
+      <div className="min-w-full h-full flex flex-col gap-5 font-bold text-xl items-center justify-center  ">
         Start from scratch
         <div className="flex gap-2">
           <ServiceCards />

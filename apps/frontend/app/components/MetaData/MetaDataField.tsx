@@ -116,7 +116,7 @@ export default function MetaDataField({
 
   if (field.fieldInputType === "dropdown") {
     return (
-      <div className="flex flex-col gap-1 relative w-full">
+      <div className="relative flex flex-col gap-1 relative w-full">
         <div className="flex gap-1 text-xs font-bold">
           {field.fieldLabel}{" "}
           {field.required && <div className="text-red-400">*</div>}
