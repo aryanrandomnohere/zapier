@@ -96,7 +96,7 @@ export default function SideModal({
     });
   }, [StepIndex, optionChanged]);
 
-  const CheckValidity = (Index: onStepEnum) => {
+  const CheckStepValidity = (Index: onStepEnum) => {
     const currentStep =
       Index === onStepEnum.CONFIGURATION
         ? zap.selectedItems[index]?.metadata.optionConfiguration[configureId]
@@ -405,7 +405,7 @@ export default function SideModal({
         {/* selectedField */}
         <div className="flex items-center justify-start gap-0.5 h-10 p-1 w-full border-b border-black/10">
           <StepsStatus
-            checkValidity={CheckValidity}
+            checkValidity={CheckStepValidity}
             stepIndex={StepIndex}
             unique={onStepEnum.SETUP}
             step={zap.selectedItems[index]?.metadata}
@@ -416,7 +416,7 @@ export default function SideModal({
             !!zap.selectedItems[index].metadata.optionConfiguration[configureId]
               ?.configurationStep && (
               <StepsStatus
-                checkValidity={CheckValidity}
+                checkValidity={CheckStepValidity}
                 setIndex={setStepIndex}
                 stepIndex={StepIndex}
                 unique={onStepEnum.CONFIGURATION}
@@ -434,7 +434,7 @@ export default function SideModal({
           !!zap.selectedItems[index].metadata.optionConfiguration[configureId]
             ?.testStep ? (
             <StepsStatus
-              checkValidity={CheckValidity}
+              checkValidity={CheckStepValidity}
               stepIndex={StepIndex}
               unique={onStepEnum.TEST}
               step={
