@@ -2,7 +2,7 @@ import express from "express";
 import { prisma } from "../config/client.js";
 import { testActoinSchema } from "../types/index.js";
 import { Field } from "@repo/types";
-import { Parser, RunAction } from "@repo/apps";
+import { RunAction } from "@repo/apps";
 import { JsonObject } from "@repo/db/generated/client/runtime/library";
 const actionRouter = express.Router();
 

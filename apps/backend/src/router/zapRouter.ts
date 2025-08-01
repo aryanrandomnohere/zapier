@@ -6,7 +6,9 @@ import {
   TriggerCreateSchema,
   ZapCreateSchema,
 } from "../types/index.js";
+//@ts-ignore
 import { JsonObject } from "@repo/db/generated/client/runtime/library";
+
 const zapRouter = express.Router();
 interface extendedRequest extends Request {
   userId?: number;
@@ -126,7 +128,7 @@ zapRouter.post(
             triggerId: parsedBody.data.triggerId,
             configuration: parsedBody.data.triggerConfiguration,
             optionId: (parsedBody.data.triggerConfiguration as JsonObject)
-            .fields[0].fieldValue
+              .fields[0].fieldValue,
           },
         });
         res.status(200).json({
@@ -173,9 +175,9 @@ zapRouter.post(
       await prisma.zapChangeHistory.create({
         data: {
           zapId: Number(zapId), // integer
-          type: "ZAP_CREATED", 
+          type: "ZAP_CREATED",
           message: "Zap Created",
-          createdById: parsedBody.data.userId, 
+          createdById: parsedBody.data.userId,
         },
       });
       res
@@ -265,71 +267,69 @@ zapRouter.post(
   },
 );
 
-zapRouter.put("/stop/:zapId",async(req, res)=>{
-  const zapId = Number(req.params.zapId)
-  try{
-  await prisma.zap.update({
-    where:{
-      id:zapId
-    },
-    data:{
-      published:false
-    }
-  })
-  await prisma.zapChangeHistory.create({
-    data: {
+zapRouter.put("/stop/:zapId", async (req, res) => {
+  const zapId = Number(req.params.zapId);
+  try {
+    await prisma.zap.update({
+      where: {
+        id: zapId,
+      },
+      data: {
+        published: false,
+      },
+    });
+    await prisma.zapChangeHistory.create({
+      data: {
+        zapId,
+        type: "ZAP_TURNED_OFF",
+        message: "Zap turned off",
+        createdById: Number(req.body.userId),
+      },
+    });
+    res.status(200).json({ success: true, msg: "Zap stoped successfully" });
+  } catch (e) {
+    console.log("Error", e);
+    res.status(400).json({ msg: e, success: false });
+  }
+});
+
+zapRouter.put("/start/:zapId", async (req, res) => {
+  const zapId = Number(req.params.zapId);
+  const isPublisedAtleastOnce = await prisma.zapChangeHistory.findFirst({
+    where: {
       zapId,
-      type:"ZAP_TURNED_OFF",
-      message: "Zap turned off",
-      createdById:Number(req.body.userId),
+      type: "ZAP_TURNED_ON",
     },
   });
-  res.status(200).json({success:true, msg:"Zap stoped successfully"})
-  }catch(e){
-    console.log("Error",e)
-    res.status(400).json({msg:e, success:false})
-  }
-})
-
-zapRouter.put("/start/:zapId",async(req, res)=>{
-  const zapId = Number(req.params.zapId);
-    const isPublisedAtleastOnce = await prisma.zapChangeHistory.findFirst({
-      where:{
+  if (isPublisedAtleastOnce) {
+    await prisma.zap.update({
+      where: {
+        id: zapId,
+      },
+      data: {
+        published: true,
+      },
+    });
+    await prisma.zapChangeHistory.create({
+      data: {
         zapId,
-        type:"ZAP_TURNED_ON"
-      }
-    })
-    if(isPublisedAtleastOnce){
-      await prisma.zap.update({
-        where:{
-          id:zapId
-        },
-        data:{
-          published:true
-        }
-      })
-      await prisma.zapChangeHistory.create({
-        data: {
-          zapId,
-          type:"ZAP_TURNED_ON",
-          message: "Zap turned on",
-          createdById: Number(req.body.userId),
-        },
-      });
-      res.status(200).json({success:true, msg:"Zap published successfully"})
-      return;
-    }
-    res.status(200).json({success:false, msg:"Zap is not complete "})
+        type: "ZAP_TURNED_ON",
+        message: "Zap turned on",
+        createdById: Number(req.body.userId),
+      },
+    });
+    res.status(200).json({ success: true, msg: "Zap published successfully" });
     return;
-
-})
+  }
+  res.status(200).json({ success: false, msg: "Zap is not complete " });
+  return;
+});
 
 zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
   const body = req.body;
   const parsedData = ZapCreateSchema.safeParse(body);
   const userId = parsedData.data?.userId;
   if (!parsedData.success || !userId) {
-    console.log(userId, req.body);
     res.status(411).json({
       msg: "Incorrect inputs",
     });
@@ -409,7 +409,7 @@ zapRouter.post("/publish", async (req: extendedRequest, res: Response) => {
   await prisma.zapChangeHistory.create({
     data: {
       zapId,
-      type:"ZAP_TURNED_ON",
+      type: "ZAP_TURNED_ON",
       message: "Zap turned on",
       createdById: userId,
     },
