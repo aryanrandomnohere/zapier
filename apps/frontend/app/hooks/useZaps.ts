@@ -14,7 +14,6 @@ export default function useZaps() {
         headers: { authorization: `${localStorage.getItem("token")}` },
       })
       .then((response) => {
-        console.log(response.data.zaps);
         setZaps(response.data.zaps);
         setLoading(false);
       })
@@ -22,7 +21,6 @@ export default function useZaps() {
         setError(error);
       });
   }, []);
-  console.log(zaps);
   return {
     zaps,
     loading,

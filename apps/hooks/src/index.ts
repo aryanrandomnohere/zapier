@@ -45,7 +45,7 @@ app.post("/hooks/catch/:userId/:zapId", async (req: Request, res: Response) => {
         triggerOptionId: fields[0].fieldValue,
       },
     });
-    const matchedRecord = records.find((record) => 
+    const matchedRecord = records.find((record) =>
       isEqual(record.JsonData, req.body),
     );
 
