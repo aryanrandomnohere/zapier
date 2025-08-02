@@ -1,7 +1,6 @@
 import { prisma } from "@repo/db";
 import dotenv from "dotenv";
 dotenv.config();
-import { JsonObject } from "@repo/db/generated/client/runtime/library";
 import { Kafka } from "kafkajs";
 import { Field } from "@repo/types";
 import { RunAction } from "@repo/apps/src/index.js";

@@ -18,7 +18,7 @@ async function main() {
           { lastPolledAt: null },
           {
             lastPolledAt: {
-              lt: new Date(Date.now() - 1 * 60 * 1000),
+              lt: new Date(Date.now() - 15 * 60 * 1000),
             },
           },
         ],
