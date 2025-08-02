@@ -1,10 +1,6 @@
 import { selectedRecord } from "@/app/RecoilState/store/recordsAtom";
 import { itemStepMetaData, onStepEnum } from "@repo/types";
-import {
-  FaCircleExclamation,
-  FaExclamation,
-  FaRegCircle,
-} from "react-icons/fa6";
+import { FaRegCircle } from "react-icons/fa6";
 import { GoCheckCircleFill } from "react-icons/go";
 import { IoTimerOutline } from "react-icons/io5";
 import { useRecoilValue } from "recoil";
@@ -12,15 +8,17 @@ import { useRecoilValue } from "recoil";
 export default function StepsStatus({
   step,
   unique,
+  panelIndex,
   stepIndex,
   setIndex,
   checkValidity,
 }: {
   step: itemStepMetaData | null;
   unique: onStepEnum;
-  stepIndex: onStepEnum;
+  panelIndex: onStepEnum;
+  stepIndex: number;
   setIndex: (index: number) => void;
-  checkValidity: (index: onStepEnum) => boolean;
+  checkValidity: (onStepEnum: onStepEnum, panelIndex?: onStepEnum) => boolean;
 }) {
   const selectedRecordId = useRecoilValue(selectedRecord);
   if (!step) return;
@@ -38,12 +36,12 @@ export default function StepsStatus({
       disabled={!isClickable}
       key={unique}
       onClick={() => setIndex(unique)}
-      className={` text-center transition-opacity duration-300 ease-linear flex font-semibold items-center text-xs gap-1 px-1 mx-2 py-2.5 hover:cursor-pointer text-black ${stepIndex === unique ? "border-b-2 border-blue-700" : ""}`}
+      className={` text-center transition-opacity duration-300 ease-linear flex font-semibold items-center text-xs gap-1 px-0.5 mx-2 py-2.5 hover:cursor-pointer text-black ${panelIndex === unique ? "border-b-2 border-blue-700" : ""}`}
     >
       <span className="text-xs font-semibold">{step.stepName}</span>
-      {step.completed === null && unique == stepIndex ? (
+      {step.completed === null && unique == panelIndex ? (
         <FaRegCircle />
-      ) : step.completed === null && unique !== stepIndex ? (
+      ) : step.completed === null && unique !== panelIndex ? (
         <div className="text-black/30 ">
           <IoTimerOutline size={18} />
         </div>
@@ -52,11 +50,8 @@ export default function StepsStatus({
           <GoCheckCircleFill size={15} />
         </div>
       ) : (
-        <div className="  rounded-full">
-          <FaExclamation
-            className="text-black font-extrabold bg-yellow-400 p-1 border-0 rounded-full "
-            size={15}
-          />
+        <div className="text-black  font-extrabold bg-yellow-400 px-[7px] py-[1px] border-0 rounded-full ">
+          !
         </div>
       )}
     </button>

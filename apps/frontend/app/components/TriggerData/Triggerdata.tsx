@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Search, MoreHorizontal, ChevronRight } from "lucide-react";
+"use client";
+import React, { useState } from "react";
+import { Search } from "lucide-react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { FaSquare } from "react-icons/fa6";
-import {
-  ApiResponse,
-  itemTestMetaData,
-  onStepEnum,
-  RecordMetadata,
-  TriggerTestType,
-} from "@repo/types";
+import { itemTestMetaData, onStepEnum, RecordMetadata } from "@repo/types";
 import { mockRecords } from "./mockdata";
 import { RecordItem } from "./RecordItem";
 import Task from "../BuiltInTriggers/Task";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
 import {
   configureStepDetails,
@@ -25,6 +20,7 @@ import {
   recordsAtom,
   selectedRecord,
 } from "@/app/RecoilState/store/recordsAtom";
+import ConfirmRecord from "./ConfirmRecord";
 
 // Main Records Interface Component
 const TriggerData = ({
@@ -33,12 +29,14 @@ const TriggerData = ({
   appId,
   item,
   id,
+  handleComplete,
 }: {
   zapImage: string;
   item: itemTestMetaData;
   appId?: string;
   triggerName: string;
   id: string;
+  handleComplete: () => void;
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -50,8 +48,7 @@ const TriggerData = ({
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const { zapId } = useParams();
   const setMetaData = useSetRecoilState(selectedItemMetaData);
-  const [optionId, setConfigurationId] = useRecoilState(configureStepDetails);
-  const setOnStep = useSetRecoilState(onStep);
+  const [optionId] = useRecoilState(configureStepDetails);
   const [recordIsOpenId, setRecordIsOpenId] = useState("");
   // Mock API call function
   const fetchRecords = async () => {
@@ -68,11 +65,9 @@ const TriggerData = ({
     };
   };
   const testTrigger = async () => {
-    console.log("Testing record");
     const response = await axios.post(
       `http://localhost:3002/test/trigger/${zapId}`,
     );
-    console.log(response.data);
     return {
       records: response.data.records,
       total: response.data.records.length,
@@ -88,7 +83,6 @@ const TriggerData = ({
 
     try {
       // Make API call to xyz endpoint
-      console.log(appId);
       const response = !appId ? await fetchRecords() : await testTrigger();
 
       setRecords(response.records);
@@ -119,24 +113,6 @@ const TriggerData = ({
     record.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const handleContinue = () => {
-    if (zapState.selectedItems.length === 1)
-      setZapState((prev) => {
-        const updatedActions = [...prev.selectedItems];
-        updatedActions.splice(1, 0, { id: "", name: "", imagePath: "" });
-        return { ...prev, selectedItems: updatedActions };
-      });
-    else {
-      setMetaData((prev) => {
-        return { ...prev, index: 1 };
-      });
-      setConfigurationId(
-        zapState.selectedItems[1].metadata?.fields[0].fieldValue || "",
-      );
-      setOnStep(onStepEnum.SETUP);
-    }
-  };
-  console.log(records);
   return (
     <div className="flex flex-col w-full min-h-full  justify-end bg-white text-xs">
       <div className="">
@@ -153,10 +129,10 @@ const TriggerData = ({
                   className="w-8 h-8 p-1 border border-black/10 rounded"
                 />
                 <IoIosArrowRoundForward size={24} />
-                <FaSquare
-                  size={30}
-                  className="text-red-500 rounded p-1 border border-black/10"
-                />
+                <div className="text-red-500 rounded p-1 border border-black/10">
+                  {" "}
+                  <FaSquare size={30} />
+                </div>
               </div>
             </div>
             <div className="flex flex-col max-w-2/3">
@@ -232,17 +208,19 @@ const TriggerData = ({
                       : "No records found."}
                   </div>
                 ) : (
-                  filteredRecords.map((record) => (
-                    <RecordItem
-                      setIsOpen={setRecordIsOpenId}
-                      isOpen={recordIsOpenId}
-                      setSelectedRecord={setSelectedRecordId}
-                      selectedRecord={selectedRecordId}
-                      key={record.id}
-                      record={record}
-                      onRecordClick={handleRecordClick}
-                    />
-                  ))
+                  <div className="max-h-96">
+                    {filteredRecords.slice(0, 4).map((record) => (
+                      <RecordItem
+                        setIsOpen={setRecordIsOpenId}
+                        isOpen={recordIsOpenId}
+                        setSelectedRecord={setSelectedRecordId}
+                        selectedRecord={selectedRecordId}
+                        key={record.id}
+                        record={record}
+                        onRecordClick={handleRecordClick}
+                      />
+                    ))}{" "}
+                  </div>
                 )}
 
                 {loading && (
@@ -258,18 +236,20 @@ const TriggerData = ({
       <div className=" absolute w-full bottom-0">
         {" "}
         {selectedRecordId ? (
-          <div
-            className="w-full border-t border-black/10 self-start justify-start"
-            onClick={() => handleContinue()}
-          >
-            {" "}
-            <div className="flex gap-1 w-full my-4 px-2 ">
-              <button className="  px-2 w-full bg-blue-700 text-white hover:bg-blue-800 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer">
-                {" "}
-                Continue with selected record
-              </button>{" "}
+          zapState.selectedItems.length === 1 ? (
+            <ConfirmRecord handleContinue={handleComplete} />
+          ) : (
+            <div
+              onClick={handleComplete}
+              className="w-full border-t border-black/10 self-start justify-start"
+            >
+              <div className="flex gap-1 w-full my-4 px-2">
+                <button className="px-2 w-full bg-blue-700 text-white hover:bg-blue-800 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer">
+                  Continue with selected record
+                </button>
+              </div>
             </div>
-          </div>
+          )
         ) : !loading ? (
           <div className="w-full border-t border-black/10 self-start justify-start">
             <div className="flex gap-1 w-full my-4 px-2 ">

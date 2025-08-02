@@ -44,7 +44,7 @@ export const RecordItem: React.FC<RecordItemProps> = ({
   // ${  isModified ? 'bg-blue-50 border-blue-200' : 'bg-white' }.  ${isModified ? 'text-blue-900' : 'text-gray-900'}${isModified ? 'text-blue-700' : 'text-gray-600'}
   return (
     <div
-      className={`relative  border-2 rounded-lg p-2 mb-1.5 cursor-pointer text-sm ${selectedRecord == record.id ? "border-blue-700 bg-blue-700/5" : "border-gray-200 hover:bg-gray-50  "} transition-colors `}
+      className={`relative border-2 rounded-lg p-2 mb-1.5 cursor-pointer text-sm ${selectedRecord == record.id ? "border-blue-700 bg-blue-700/5" : "border-gray-200 hover:bg-gray-50  "} transition-colors `}
       onClick={() => {
         onRecordClick(record);
         setSelectedRecord(record.id);
@@ -52,14 +52,21 @@ export const RecordItem: React.FC<RecordItemProps> = ({
         else setIsOpen(record.id);
       }}
     >
-      <div className="flex items-center justify-between">
+      <div className=" flex items-center justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-1.5">
+          <div className=" relative flex items-center gap-1.5">
             <h3 className={`text-xs font-bold p-1 pl-0 `}>{record.title}</h3>
             {isModified && (
               <button className="p-1 hover:bg-blue-100 rounded">
                 <MoreHorizontal className="w-4 h-4" />
               </button>
+            )}
+            {isOpen === record.id && (
+              <FloatingModal>
+                <div className="overflow-y-auto max-h-96">
+                  <RecordJsonData data={record.JsonData} />
+                </div>
+              </FloatingModal>
             )}
           </div>
           <p className={`text-xs mt-0.5 `}>
@@ -72,13 +79,6 @@ export const RecordItem: React.FC<RecordItemProps> = ({
           className={`w-5 h-5 ${isModified ? "text-blue-600" : "text-gray-400"}`}
         />
       </div>
-      {isOpen === record.id && (
-        <FloatingModal>
-          <div className="overflow-y-auto max-h-96">
-            <RecordJsonData data={record.JsonData} />
-          </div>
-        </FloatingModal>
-      )}
     </div>
   );
 };

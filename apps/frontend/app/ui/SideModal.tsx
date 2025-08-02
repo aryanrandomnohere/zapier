@@ -1,10 +1,5 @@
 "use client";
-import {
-  SetterOrUpdater,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
 import {
   configureStepDetails,
@@ -19,41 +14,40 @@ import { BiSolidZap } from "react-icons/bi";
 import StepsStatus from "../components/MetaData/StepsStatus";
 import AddMetaData from "../components/MetaData/AddMetaData";
 import { useState, useMemo, useEffect } from "react";
-import {
-  itemStepMetaData,
-  onStepEnum,
-  selectedItemMetaDataType,
-} from "@repo/types";
+import { itemStepMetaData, onStepEnum } from "@repo/types";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { IoTimerOutline } from "react-icons/io5";
 import TestItem from "../components/TestItem";
 import { recordsAtom, selectedRecord } from "../RecoilState/store/recordsAtom";
-import SelectItem from "../components/ZapCreate/SelectItem";
 import { userAtom } from "../RecoilState/store/userAtom";
 import { getSession } from "next-auth/react";
+import ChangeItem from "../components/MetaData/ChangeItem";
 // Mock data for when metadata is not available
 
 export default function SideModal({
-  index,
-  setMetaData,
   handlePublish,
+  CheckStepValidity,
 }: {
-  index: number | null;
-  setMetaData: (arg1: number | null, arg2: boolean) => void;
   handlePublish: () => void;
+  CheckStepValidity: (
+    onStepEnum: onStepEnum,
+    panelIndex: onStepEnum,
+  ) => boolean;
 }) {
   const [zap, setZapState] = useRecoilState(zapCreateState);
-
   const [selectedStep, setSelectedStep] = useState<onStepEnum>(
     onStepEnum.SETUP,
   );
-  const [StepIndex, setStepIndex] = useRecoilState(onStep);
+  const [panelIndex, setpanelIndex] = useRecoilState(onStep);
   const configureId = useRecoilValue(configureStepDetails);
   const optionChanged = useRecoilState(OptionChanged);
   const setSelectedRecordId = useSetRecoilState(selectedRecord);
   const setSelectedRecords = useSetRecoilState(recordsAtom);
   const [user, setUser] = useRecoilState(userAtom);
-
+  const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
+  const index = metaData.index;
+  const setOnStep = useSetRecoilState(onStep);
+  const setConfigurationId = useSetRecoilState(configureStepDetails);
   if (index == null) return null;
 
   // const steps =
@@ -63,7 +57,6 @@ export default function SideModal({
   useEffect(() => {
     async function getUserInfo() {
       const response = await getSession();
-      console.log(response);
       setUser(response?.user);
     }
     getUserInfo();
@@ -71,7 +64,7 @@ export default function SideModal({
 
   const isCurrentStepValid = useMemo(() => {
     const currentStep =
-      StepIndex === onStepEnum.CONFIGURATION
+      panelIndex === onStepEnum.CONFIGURATION
         ? zap.selectedItems[index]?.metadata.optionConfiguration[configureId]
             .configurationStep
         : zap.selectedItems[index]?.metadata;
@@ -82,45 +75,13 @@ export default function SideModal({
     }
 
     // Check if all required fields in the current step have values
-    console.log(currentStep);
     return currentStep.fields.every((field) => {
       if (field.required) {
-        console.log(
-          "using some logic to check if it's valid or not",
-          field.fieldValue,
-        );
         return field.fieldValue && field.fieldValue.trim() !== "";
       }
-      console.log("Its valid");
       return true;
     });
-  }, [StepIndex, optionChanged]);
-
-  const CheckStepValidity = (Index: onStepEnum) => {
-    const currentStep =
-      Index === onStepEnum.CONFIGURATION
-        ? zap.selectedItems[index]?.metadata.optionConfiguration[configureId]
-            .configurationStep
-        : zap.selectedItems[index]?.metadata;
-    if (!currentStep?.fields) {
-      console.log("Field does not exist returnning");
-      return false;
-    }
-
-    // Check if all required fields in the current step have values
-    console.log(currentStep);
-    return currentStep.fields.every((field) => {
-      if (field.required) {
-        console.log(
-          "using some logic to check if it's valid or not",
-          field.fieldValue,
-        );
-        return field.fieldValue && field.fieldValue.trim() !== "";
-      }
-      console.log("Its valid");
-      return true;
-    });
-  };
+  }, [panelIndex, optionChanged]);
 
   const handleFieldChange = (
     fieldNumber: number,
@@ -164,7 +125,6 @@ export default function SideModal({
         };
       });
     } else if (type === onStepEnum.CONFIGURATION) {
-      console.log(value);
       setZapState((prev) => {
         const newState = { ...prev };
         const newSelectedItems = [...newState.selectedItems];
@@ -222,11 +182,18 @@ export default function SideModal({
       // Implement TEST field update logic here if needed
     }
   };
-
+  const handleComplete = () => {
+    setMetaData((prev) => {
+      return { ...prev, index: 1 };
+    });
+    setOnStep(onStepEnum.SETUP);
+    if (zap.selectedItems[1]?.metadata?.fields[0].fieldValue)
+      setConfigurationId(zap.selectedItems[1].metadata?.fields[0].fieldValue);
+  };
   const handleContinue = () => {
     if (!isCurrentStepValid) return;
 
-    if (StepIndex === onStepEnum.CONFIGURATION) {
+    if (panelIndex === onStepEnum.CONFIGURATION) {
       setZapState((prev) => {
         const newState = { ...prev };
         const newSelectedItems = [...newState.selectedItems];
@@ -244,6 +211,27 @@ export default function SideModal({
           ...existingItem.metadata.optionConfiguration[configureId]
             .configurationStep,
           completed: true,
+          stepName:
+            existingItem.metadata.optionConfiguration[configureId]
+              .configurationStep?.stepName || "",
+          type:
+            existingItem.metadata.optionConfiguration[configureId]
+              .configurationStep?.type || "",
+          stepNumber:
+            existingItem.metadata.optionConfiguration[configureId]
+              .configurationStep?.stepNumber || 0,
+          optionConfiguration:
+            existingItem.metadata.optionConfiguration[configureId]
+              .configurationStep?.optionConfiguration || {},
+          triggerType:
+            (existingItem.metadata.optionConfiguration[configureId]
+              .configurationStep?.triggerType as any) || "polling",
+          stepDescription:
+            existingItem.metadata.optionConfiguration[configureId]
+              .configurationStep?.stepDescription || "",
+          fields:
+            existingItem.metadata.optionConfiguration[configureId]
+              .configurationStep?.fields || [],
         };
 
         const updatedOptionConfig = {
@@ -271,7 +259,7 @@ export default function SideModal({
           selectedItems: newSelectedItems,
         };
       });
-    } else if (StepIndex === onStepEnum.TEST) {
+    } else if (panelIndex === onStepEnum.TEST) {
       setZapState((prev) => {
         const newState = { ...prev };
         const newSelectedItems = [...newState.selectedItems];
@@ -315,7 +303,7 @@ export default function SideModal({
           selectedItems: newSelectedItems,
         };
       });
-    } else if (StepIndex === onStepEnum.SETUP) {
+    } else if (panelIndex === onStepEnum.SETUP) {
       setZapState((prev) => {
         const newSelectedItems = [...prev.selectedItems];
         const existingItem = newSelectedItems[index];
@@ -340,26 +328,27 @@ export default function SideModal({
         };
       });
     } else {
-      setMetaData(null, false);
+      setMetaData({ index: null, isOpen: false });
     }
 
     // Step navigation
-    if (StepIndex === onStepEnum.SETUP) {
+    if (panelIndex === onStepEnum.SETUP) {
       const configStepExists =
         zap.selectedItems[index].metadata.optionConfiguration?.[configureId]
           ?.configurationStep;
 
-      setStepIndex(
+      setpanelIndex(
         configStepExists ? onStepEnum.CONFIGURATION : onStepEnum.TEST,
       );
-    } else if (StepIndex === onStepEnum.CONFIGURATION) {
-      setStepIndex(onStepEnum.TEST);
+    } else if (panelIndex === onStepEnum.CONFIGURATION) {
+      setpanelIndex(onStepEnum.TEST);
     }
   };
 
   if (!zap.selectedItems[index]?.metadata) {
     return (
       <div className="min-h-full relative flex flex-col items-center justify-center w-96 border-blue-600 border-1 z-20 mx-6 transform-all ease-in-out duration-300  bg-[#FFFDF9]">
+        <ChangeItem item={zap.selectedItems[index]} />
         <div className="text-sm text-gray-500 font-medium bg-gray-50 rounded-md p-4">
           We don't support this trigger yet
         </div>
@@ -393,7 +382,7 @@ export default function SideModal({
             <div
               onClick={() => {
                 console.log("closing");
-                setMetaData(null, false);
+                setMetaData({ index: null, isOpen: false });
               }}
               className="cursor-pointer"
             >
@@ -406,10 +395,11 @@ export default function SideModal({
         <div className="flex items-center justify-start gap-0.5 h-10 p-1 w-full border-b border-black/10">
           <StepsStatus
             checkValidity={CheckStepValidity}
-            stepIndex={StepIndex}
+            panelIndex={panelIndex}
             unique={onStepEnum.SETUP}
+            stepIndex={index}
             step={zap.selectedItems[index]?.metadata}
-            setIndex={setStepIndex}
+            setIndex={setpanelIndex}
           />
           <MdKeyboardArrowRight size={20} />
           {configureId &&
@@ -417,8 +407,9 @@ export default function SideModal({
               ?.configurationStep && (
               <StepsStatus
                 checkValidity={CheckStepValidity}
-                setIndex={setStepIndex}
-                stepIndex={StepIndex}
+                setIndex={setpanelIndex}
+                panelIndex={panelIndex}
+                stepIndex={index}
                 unique={onStepEnum.CONFIGURATION}
                 step={
                   zap.selectedItems[index].metadata.optionConfiguration[
@@ -435,14 +426,15 @@ export default function SideModal({
             ?.testStep ? (
             <StepsStatus
               checkValidity={CheckStepValidity}
-              stepIndex={StepIndex}
+              panelIndex={panelIndex}
               unique={onStepEnum.TEST}
+              stepIndex={index}
               step={
                 zap.selectedItems[index].metadata.optionConfiguration[
                   configureId
-                ].testStep
+                ].testStep as any
               }
-              setIndex={setStepIndex}
+              setIndex={setpanelIndex}
             />
           ) : (
             <div className="text-xs font-semibold flex items-center px-1 gap-1 py-2.5">
@@ -455,12 +447,12 @@ export default function SideModal({
             </div>
           )}
         </div>
-        {StepIndex === onStepEnum.SETUP && (
+        {panelIndex === onStepEnum.SETUP && (
           <div className="flex gap-1 w-full  px-2.5 ">
             <div className="self-start p-2 w-full">
               <AddMetaData
                 imagePath={zap.selectedItems[0].imagePath}
-                index={StepIndex}
+                index={panelIndex}
                 key={selectedStep}
                 item={zap.selectedItems[index]}
                 onFieldChange={handleFieldChange}
@@ -468,12 +460,12 @@ export default function SideModal({
             </div>
           </div>
         )}
-        {StepIndex === onStepEnum.CONFIGURATION && (
+        {panelIndex === onStepEnum.CONFIGURATION && (
           <div className="flex gap-1 w-full  px-2.5">
             <div className="self-start p-2 w-full">
               <AddMetaData
                 imagePath={zap.selectedItems[0].imagePath}
-                index={StepIndex}
+                index={panelIndex}
                 key={selectedStep}
                 item={zap.selectedItems[index]}
                 onFieldChange={handleFieldChange}
@@ -481,13 +473,14 @@ export default function SideModal({
             </div>
           </div>
         )}
-        {StepIndex === onStepEnum.TEST && (
+        {panelIndex === onStepEnum.TEST && (
           <div className="min-h-full w-full">
             {" "}
             <TestItem
               handlePublish={handlePublish}
               id={zap.selectedItems[index].id}
               type={zap.selectedItems[index].type}
+              handleComplete={handleComplete}
               item={
                 zap.selectedItems[index].metadata.optionConfiguration[
                   configureId
@@ -497,7 +490,7 @@ export default function SideModal({
           </div>
         )}
       </div>
-      {StepIndex != onStepEnum.TEST && (
+      {panelIndex != onStepEnum.TEST && (
         <div className="w-full border-t border-black/10">
           <div className="w-full my-4 px-2">
             <button
