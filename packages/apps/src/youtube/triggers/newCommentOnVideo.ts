@@ -1,34 +1,26 @@
+import { apiRequest } from "../utils/request.js";
+
 export default async function newCommentOnVideo(
   videoId: string,
   token: string,
   type: "test" | "polling",
   lastPolledAt?: string,
 ) {
-  const baseUrl = "https://www.googleapis.com/youtube/v3/commentThreads";
-  const params = new URLSearchParams({
+  const params: Record<string, string> = {
     part: "snippet",
     videoId,
     maxResults: type === "test" ? "3" : "1",
-    order: "time", // newest first
+    order: "time",
     textFormat: "plainText",
+  };
+
+  const data = await apiRequest<any>({
+    endpoint: "/commentThreads",
+    token,
+    params,
   });
 
-  const response = await fetch(`${baseUrl}?${params.toString()}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("YouTube API Error:", errorData);
-    throw new Error(`YouTube API error: ${errorData.error.message}`);
-  }
-
-  const data = await response.json();
-
-  if (data.items.length === 0) {
+  if (!data.items || data.items.length === 0) {
     console.log("❌ No comments found.");
     return;
   }
