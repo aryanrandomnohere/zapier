@@ -38,7 +38,9 @@ export default function ZapCell({
                   className="w-5 h-5 rounded-full"
                 />
               ) : (
-                <BiSolidZap className="text-white p-0.5 bg-black  rounded-full" />
+                <div className="text-white p-0.5 bg-black  rounded-full">
+                  <BiSolidZap />
+                </div>
               )}
               <div className="font-bold text-sm"> {title}</div>{" "}
             </div>

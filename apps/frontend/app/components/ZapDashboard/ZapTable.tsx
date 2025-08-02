@@ -10,10 +10,14 @@ export default function ZapTable() {
         <div className="flex w-3/3 min-w-full gap-0.5 items-center juspify-between">
           <div className="flex min-w-1/3">
             <div className=" p-2 border border-black/50">
-              <MdOutlineCheckBoxOutlineBlank className="text-black/50 text-2xl " />
+              <div style={{ color: "rgba(0,0,0,0.5)", fontSize: "1.5rem" }}>
+                <MdOutlineCheckBoxOutlineBlank />
+              </div>
             </div>
             <div className=" p-2 border border-l-0 border-black/50">
-              <RiArrowDownSFill className=" text-black/50 text-2xl" />
+              <div style={{ color: "rgba(0,0,0,0.5)", fontSize: "1.5rem" }}>
+                <RiArrowDownSFill />
+              </div>
             </div>
           </div>
           <div className=" text-center min-w-1/4">Name</div>

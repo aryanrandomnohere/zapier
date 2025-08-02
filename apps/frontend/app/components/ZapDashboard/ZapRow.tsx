@@ -8,7 +8,7 @@ import { SiSolana } from "react-icons/si";
 import { LuFileSpreadsheet } from "react-icons/lu";
 import Row from "./Row";
 import useZaps from "@/app/hooks/useZaps";
-import RecoilProvider from "@/app/dashboard/RecoilProvider";
+import RecoilProvider from "@/app/zap/dashboard/RecoilProvider";
 export default function ZapRows() {
   const { zaps, loading, error } = useZaps();
   const router = useRouter();
@@ -19,11 +19,13 @@ export default function ZapRows() {
   if (loading) return <div>Loading...</div>;
 
   return (
-   <RecoilProvider> <div className="flex flex-col justify-center h-full">
-      {zaps.map((zap: zapInterface) => (
-        <Row key={zap.id} zap={zap} handleZapClick={handleZapClick} />
-      ))}
-    </div>
+    <RecoilProvider>
+      {" "}
+      <div className="flex flex-col justify-center h-full">
+        {zaps.map((zap: zapInterface) => (
+          <Row key={zap.id} zap={zap} handleZapClick={handleZapClick} />
+        ))}
+      </div>
     </RecoilProvider>
   );
 }

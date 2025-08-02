@@ -15,24 +15,30 @@ export default function Row({
   handleZapClick: (arg: string) => void;
 }) {
   const [activeZap, setActiveZap] = useState<boolean>(zap.published);
-  const [user, setUser] = useRecoilState(userAtom)
- async function handlePublishing(){
-  let userId = user?.userId
-  if (!user) {
-    const session = await getSession();
-    setUser(session?.user);
-    userId = session?.user.userId
-  }
-    if(activeZap){
-        const response = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/stop/${zap.id}`,{
-          userId:userId
-        }) 
-        if(response.data.success) setActiveZap(false)
-    }else {
-      const response = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/start/${zap.id}`,{
-        userId:userId
-      }) 
-      if(response.data.success) setActiveZap(true)
+  const [user, setUser] = useRecoilState(userAtom);
+  async function handlePublishing() {
+    let userId = user?.userId;
+    if (!user) {
+      const session = await getSession();
+      setUser(session?.user);
+      userId = session?.user.userId;
+    }
+    if (activeZap) {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/stop/${zap.id}`,
+        {
+          userId: userId,
+        },
+      );
+      if (response.data.success) setActiveZap(false);
+    } else {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/start/${zap.id}`,
+        {
+          userId: userId,
+        },
+      );
+      if (response.data.success) setActiveZap(true);
     }
   }
 
@@ -85,7 +91,7 @@ export default function Row({
           onClick={() => handleZapClick(zap.id)}
           className="w-1/3 mr-20 ml-5 hover:cursor-pointer"
         >
-          <IoIosArrowForward className="text-2xl" />
+          <IoIosArrowForward size="20" />
         </div>
       </div>
     </div>
