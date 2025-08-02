@@ -39,7 +39,7 @@ export default function MetaDataField({
   const [selectFieldIsOpen, setSelectFieldIsOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [value, setValue] = useState(field.fieldValue);
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [configureStepIndex, setConfigureStepIndex] =
     useRecoilState(configureStepDetails);
   const setOptionChanged = useSetRecoilState(OptionChanged);
@@ -116,84 +116,84 @@ export default function MetaDataField({
 
   if (field.fieldInputType === "dropdown") {
     return (
-      <div className="relative flex flex-col gap-1 relative w-full">
+      <div className="relative flex flex-col gap-1 w-full">
         <div className="flex gap-1 text-xs font-bold">
           {field.fieldLabel}{" "}
           {field.required && <div className="text-red-400">*</div>}
         </div>
         <div
           onClick={() => setIsOpen(!isOpen)}
-          className="flex justify-between items-center px-3 py-2 border border-black/20 rounded hover:border-blue-500 cursor-pointer"
+          className="relative flex justify-between items-center px-3 py-2 border border-black/20 rounded hover:border-blue-500 cursor-pointer"
         >
           <div className="flex items-center gap-2 text-xs font-medium">
             {field.fieldValue || field.fieldPlaceholder}
           </div>
           <div className="text-xs text-gray-500">
-            <FaArrowRightArrowLeft className="text-black/50 rotate-90" />
+            <div className="text-black/50 rotate-90">
+              <FaArrowRightArrowLeft />
+            </div>
           </div>
-        </div>
-
-        {isOpen && (
-          <FloatingModal>
-            <div className="p-2">
-              <div className="flex items-center gap-2 px-2 py-1.5 bg-white mb-3.5 border border-black/20 rounded focus:border focus:border-blue-600">
-                <div className="text-gray-500">
-                  <IoSearch size={16} />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="outline-none w-full text-sm "
-                />
-              </div>
-            </div>
-            <div className="max-h-60 ">
-              {field.options
-                ?.filter((option) =>
-                  option.id.toLowerCase().includes(searchTerm.toLowerCase()),
-                )
-                .map((option: FieldOption, index: number) => (
-                  <div
-                    key={index}
-                    onClick={() => {
-                      if (stepIndex == onStepEnum.CONFIGURATION)
-                        onFieldChange(
-                          field.fieldNumber,
-                          option.id,
-                          onStepEnum.CONFIGURATION,
-                        );
-                      else
-                        onFieldChange(
-                          field.fieldNumber,
-                          option.id,
-                          onStepEnum.SETUP,
-                        );
-                      setIsOpen(false);
-                      setOptionChanged((option) => option++);
-                      if (stepIndex === onStepEnum.SETUP)
-                        setConfigureStepIndex(option.id);
-                    }}
-                    className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium"
-                  >
-                    <div className="flex items-center gap-1 font-semibold">
-                      {option.id}
-                      <div className="flex items-center gap-1 text-xs font-semibold bg-yellow-500/20 rounded px-1">
-                        {" "}
-                        <BiSolidZap
-                          className="border border-black rounded-full p-[0.5px]"
-                          size={11}
-                        />{" "}
-                        {option.type}
-                      </div>
-                    </div>
-                    <div>{option.description}</div>
+          {isOpen && (
+            <FloatingModal>
+              <div className="p-2">
+                <div className="flex items-center gap-2 px-2 py-1.5 bg-white mb-3.5 border border-black/20 rounded focus:border focus:border-blue-600">
+                  <div className="text-gray-500">
+                    <IoSearch size={16} />
                   </div>
-                ))}
-            </div>
-          </FloatingModal>
-        )}
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="outline-none w-full text-sm "
+                  />
+                </div>
+              </div>
+              <div className="max-h-60 ">
+                {field.options
+                  ?.filter((option) =>
+                    option.id.toLowerCase().includes(searchTerm.toLowerCase()),
+                  )
+                  .map((option: FieldOption, index: number) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        if (stepIndex == onStepEnum.CONFIGURATION)
+                          onFieldChange(
+                            field.fieldNumber,
+                            option.id,
+                            onStepEnum.CONFIGURATION,
+                          );
+                        else
+                          onFieldChange(
+                            field.fieldNumber,
+                            option.id,
+                            onStepEnum.SETUP,
+                          );
+                        setIsOpen(false);
+                        setOptionChanged((option) => option++);
+                        if (stepIndex === onStepEnum.SETUP)
+                          setConfigureStepIndex(option.id);
+                      }}
+                      className="flex flex-col gap-0.5 mb-2 mx-3 px-3 py-1.5  hover:bg-blue-50 cursor-pointer text-xs font-medium"
+                    >
+                      <div className="flex items-center gap-1 font-semibold">
+                        {option.id}
+                        <div className="flex items-center gap-1 text-xs font-semibold bg-yellow-500/20 rounded px-1">
+                          {" "}
+                          <div className="border border-black rounded-full p-[0.5px]">
+                            <BiSolidZap size={11} />{" "}
+                          </div>
+                          {option.type}
+                        </div>
+                      </div>
+                      <div>{option.description}</div>
+                    </div>
+                  ))}
+              </div>
+            </FloatingModal>
+          )}
+        </div>
       </div>
     );
   }
