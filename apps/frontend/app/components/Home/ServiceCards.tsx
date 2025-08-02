@@ -21,7 +21,7 @@ const ServiceCards = () => {
       ),
       title: "Zap",
       description: "Automated workflows",
-      href: "/dashboard",
+      href: "/zap/dashboard",
       working: true,
     },
     {

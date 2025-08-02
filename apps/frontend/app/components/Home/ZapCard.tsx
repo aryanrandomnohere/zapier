@@ -3,6 +3,7 @@ import Link from "next/link";
 
 interface ZapCardProps {
   name: string;
+  msg: string;
   lastEdited: string;
   triggerImage: string;
   actions: { imagePath: string }[];
@@ -12,6 +13,7 @@ interface ZapCardProps {
 export function ZapCard({
   name,
   lastEdited,
+  msg,
   triggerImage,
   actions,
   id,
@@ -21,7 +23,7 @@ export function ZapCard({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center justify-center gap-1">
           <span className="text-xs bg-yellow-300 text-black font-bold px-2 py-0.5 rounded">
-            Not published
+            {msg}
           </span>
           <button className="text-gray-500 text-sm font-bold" title="Help">
             <CircleQuestionMark size={18} />
