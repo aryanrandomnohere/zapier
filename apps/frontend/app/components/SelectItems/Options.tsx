@@ -5,13 +5,15 @@ import { topApps, products, extendedItems } from "./TempItems";
 export default function Options({
   type,
   onClose,
+  index,
 }: {
   type: "actions" | "triggers";
   onClose: () => void;
+  index?: number;
 }) {
   const { items } = useItems(type);
-  const builtInItems = items.filter((item) => item.serviceType != "app");
-  const apps = items.filter((item) => item.serviceType === "app");
+  const builtInItems = items.filter((item) => item.serviceType === "builtIn");
+  const apps = items.filter((item) => item.serviceType !== "builtIn");
 
   const Items = [...builtInItems, ...extendedItems];
   const Apps = [...apps, ...topApps];
@@ -26,6 +28,7 @@ export default function Options({
             title="Popular built-in tools (Working)"
             items={Items}
             onClose={onClose}
+            index={index}
           />
         </div>
         <div>
@@ -33,6 +36,7 @@ export default function Options({
             title="New Zapier products"
             items={products}
             onClose={onClose}
+            index={index}
           />
         </div>
       </div>

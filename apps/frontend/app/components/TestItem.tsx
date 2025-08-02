@@ -1,3 +1,4 @@
+"use client";
 import { itemTestMetaData } from "@repo/types";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
@@ -16,11 +17,13 @@ export default function TestItem({
   type,
   id,
   handlePublish,
+  handleComplete,
 }: {
   item: itemTestMetaData;
   type: string;
   id: string;
   handlePublish: () => void;
+  handleComplete: () => void;
 }) {
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
@@ -96,6 +99,7 @@ export default function TestItem({
         <div>
           <Triggerdata
             appId={zap.selectedItems[metadata.index].appId || "google"}
+            handleComplete={handleComplete}
             id={id}
             triggerName={zap.selectedItems[metadata.index].name}
             item={item}
