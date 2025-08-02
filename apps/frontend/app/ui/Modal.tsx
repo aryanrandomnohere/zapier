@@ -23,6 +23,7 @@ interface OpenProps {
 interface WindowProps {
   children: ReactNode;
   name: string;
+  portTo?: DocumentFragment | Element | HTMLElement | null;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -35,7 +36,7 @@ export const useModal = () => {
   return context;
 };
 
-export default function Modal({ children }: { children: ReactNode }) {
+function Modal({ children }: { children: ReactNode }) {
   const [openName, setOpenName] = useState("");
   const open = (name: string) => setOpenName(name);
   const close = () => setOpenName("");
@@ -46,7 +47,7 @@ export default function Modal({ children }: { children: ReactNode }) {
   );
 }
 
-function Window({ children, name }: WindowProps) {
+function Window({ children, name, portTo }: WindowProps) {
   const { openName, close } = useModal();
 
   // Using framer-motion's AnimatePresence for smooth enter/exit animations
@@ -87,7 +88,7 @@ function Window({ children, name }: WindowProps) {
         </>
       )}
     </AnimatePresence>,
-    document.body,
+    portTo || document.body,
   );
 }
 
@@ -99,3 +100,4 @@ function Open({ children, opens }: OpenProps) {
 
 Modal.Open = Open;
 Modal.Window = Window;
+export default Modal;

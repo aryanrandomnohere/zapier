@@ -27,7 +27,7 @@ export default function TopBar() {
             }
           />
           <Link
-            href={"/dashboard"}
+            href={"/zap/dashboard"}
             className="flex gap-1 items-center py-2 px-2 hover:bg-white/20 hover:cursor-pointer"
           >
             <span className="" style={{ color: "#ff4f00" }}>

@@ -3,15 +3,20 @@ import { X, ChevronDown } from "lucide-react";
 
 export default function AdvancedSettings() {
   const [isOpen, setIsOpen] = useState(true);
-  const [autoreplayOverride, setAutoreplayOverride] = useState("Use account setting (Always replay)");
-  const [errorRatioOption, setErrorRatioOption] = useState("Turn off if errors occur (recommended)");
-  const [pathExecutionOption, setPathExecutionOption] = useState("Parallel execution");
+  const [autoreplayOverride, setAutoreplayOverride] = useState(
+    "Use account setting (Always replay)",
+  );
+  const [errorRatioOption, setErrorRatioOption] = useState(
+    "Turn off if errors occur (recommended)",
+  );
+  const [pathExecutionOption, setPathExecutionOption] =
+    useState("Parallel execution");
   const [showAutoreplayDropdown, setShowAutoreplayDropdown] = useState(false);
 
   const autoreplayOptions = [
     "Use account setting (Always replay)",
     "Always replay",
-    "Never replay"
+    "Never replay",
   ];
 
   if (!isOpen) return null;
@@ -22,8 +27,9 @@ export default function AdvancedSettings() {
         {/* Header */}
         <div className="px-1 py-4 border-b border-gray-200 relative">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold text-gray-900">Advanced settings</h2>
-            
+            <h2 className="text-base font-semibold text-gray-900">
+              Advanced settings
+            </h2>
           </div>
           <p className="text-xs text-gray-600 mt-1">
             Choose how your Zap{" "}
@@ -45,10 +51,12 @@ export default function AdvancedSettings() {
               Set Autoreplay settings for this Zap if an error occurs. This
               overrides your account settings for Autoreplay.
             </p>
-            
+
             <div className="relative">
               <button
-                onClick={() => setShowAutoreplayDropdown(!showAutoreplayDropdown)}
+                onClick={() =>
+                  setShowAutoreplayDropdown(!showAutoreplayDropdown)
+                }
                 className="w-full px-4 py-2 border-2 border-blue-500 rounded-md text-xs bg-white text-left flex items-center justify-between hover:cursor-pointer"
               >
                 <span>{autoreplayOverride}</span>
@@ -80,27 +88,32 @@ export default function AdvancedSettings() {
               Error ratio override
             </h3>
             <p className="text-xs text-gray-600 mb-3">
-              Determine whether this Zap should continue to run if it
-              encounters a high number of errors.{" "}
+              Determine whether this Zap should continue to run if it encounters
+              a high number of errors.{" "}
               <a href="#" className="text-blue-600 underline">
                 Learn more
               </a>
               .
             </p>
-            
+
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-xs text-gray-700">
                 <input
                   type="radio"
                   name="errorRatio"
                   value="Turn off if errors occur (recommended)"
-                  checked={errorRatioOption === "Turn off if errors occur (recommended)"}
+                  checked={
+                    errorRatioOption ===
+                    "Turn off if errors occur (recommended)"
+                  }
                   onChange={(e) => setErrorRatioOption(e.target.value)}
                   className="w-4 h-4"
                 />
-                <span className="font-medium">Turn off if errors occur (recommended)</span>
+                <span className="font-medium">
+                  Turn off if errors occur (recommended)
+                </span>
               </label>
-              
+
               <label className="flex items-center gap-2 text-xs text-gray-700">
                 <input
                   type="radio"
@@ -125,7 +138,7 @@ export default function AdvancedSettings() {
                 Limited time option
               </span>
             </div>
-            
+
             <div className="space-y-2 mb-3">
               <label className="flex items-center gap-2 text-xs text-gray-700">
                 <input
@@ -137,10 +150,11 @@ export default function AdvancedSettings() {
                   className="w-4 h-4"
                 />
                 <span className="font-medium">
-                  Parallel execution <span className="italic text-gray-500">(previous)</span>
+                  Parallel execution{" "}
+                  <span className="italic text-gray-500">(previous)</span>
                 </span>
               </label>
-              
+
               <label className="flex items-center gap-2 text-xs text-gray-700">
                 <input
                   type="radio"
@@ -151,15 +165,16 @@ export default function AdvancedSettings() {
                   className="w-4 h-4"
                 />
                 <span>
-                  Sequential execution <span className="italic text-gray-500">(new)</span>
+                  Sequential execution{" "}
+                  <span className="italic text-gray-500">(new)</span>
                 </span>
               </label>
             </div>
-            
+
             <p className="text-xs text-gray-600">
-              This option will be available till September 30, 2025.
-              After this date all Zaps will move to Sequential
-              execution and this setting will be removed.
+              This option will be available till September 30, 2025. After this
+              date all Zaps will move to Sequential execution and this setting
+              will be removed.
             </p>
           </div>
         </div>

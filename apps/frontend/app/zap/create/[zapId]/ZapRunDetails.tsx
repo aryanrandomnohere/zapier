@@ -6,7 +6,6 @@ import {
   Search,
   ChevronDown,
   MoreHorizontal,
-
   Trash2,
   CalendarDays,
 } from "lucide-react";
@@ -102,7 +101,6 @@ export default function ZapRunList() {
     currentPage * runsPerPage,
   );
 
-  
   const handleSelectAll = () => {
     const allRunIds = new Set(runs.map((run) => run.id));
     setSelectedRuns(allRunIds);
@@ -179,12 +177,12 @@ export default function ZapRunList() {
 
           {/* Date Filter */}
           <div>
-          <button
-            onClick={() => setIsDateModalOpen(!isDateModalOpen)}
-            className="flex gap-2.5 items-center w-full px-4 text-start py-2 border-2 border-blue-500 rounded-md text-xs bg-white cursor-pointer"
-          >
-           <CalendarDays size={18} /> {dateFilter}
-          </button>
+            <button
+              onClick={() => setIsDateModalOpen(!isDateModalOpen)}
+              className="flex gap-2.5 items-center w-full px-4 text-start py-2 border-2 border-blue-500 rounded-md text-xs bg-white cursor-pointer"
+            >
+              <CalendarDays size={18} /> {dateFilter}
+            </button>
 
             <DatePickerModal
               isOpen={isDateModalOpen}
@@ -421,7 +419,11 @@ export default function ZapRunList() {
               </button>
             </div>
           )} */}
-            <PaginatedMap currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
+          <PaginatedMap
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
         </div>
       </div>
     </div>

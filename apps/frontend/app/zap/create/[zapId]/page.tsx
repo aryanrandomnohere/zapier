@@ -1,6 +1,6 @@
 "use client";
 import ZapCell from "@/app/components/ZapDashboard/ZapCell";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import AddCell from "../../../components/ZapCreate/AddCell";
 import Modal from "../../../ui/Modal";
 import SelectItem from "@/app/components/ZapCreate/SelectItem";
@@ -22,7 +22,7 @@ import {
 } from "@/app/RecoilState/store/recordsAtom";
 import { useRouter } from "next/navigation";
 import ActionButton from "@/app/components/buttons/ActionButton";
-import { ClockFadingIcon, Play, Undo } from "lucide-react";
+import { Play } from "lucide-react";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 export default function Page1() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
@@ -32,32 +32,83 @@ export default function Page1() {
   const setOnStep = useSetRecoilState(onStep);
   const setRecords = useSetRecoilState<RecordMetadata[]>(recordsAtom);
   const setSelectedRecordId = useSetRecoilState(selectedRecord);
+  const configureId = useRecoilValue(configureStepDetails);
   const [user, setUser] = useRecoilState(userAtom);
+  const selectedRecordId = useRecoilValue(selectedRecord);
   const { zapId } = useParams();
   const router = useRouter();
   const addCell = (order: number) => {
     setZapState((prev) => {
       const updatedActions = [...prev.selectedItems];
+      //@ts-ignore
       updatedActions.splice(order, 0, { id: "", name: "", imagePath: "" });
       return { ...prev, selectedItems: updatedActions };
     });
   };
 
-  const handleCloseSideModal = (index: number | null, isOpen: boolean) => {
-    setMetaData(() => ({ index, isOpen }));
+  const CheckStepValidity = (
+    Index: onStepEnum,
+    index?: number,
+    specificCongigId?: string | null,
+  ) => {
+    if (metaData.index === null || metaData.index === undefined) {
+      return false;
+    }
+    const ofIndex = index ?? metaData.index;
+    const stepConfigurationId = specificCongigId || configureId;
+
+    const currentStep =
+      Index === onStepEnum.CONFIGURATION
+        ? zapState.selectedItems[ofIndex]?.metadata.optionConfiguration[
+            stepConfigurationId
+          ].configurationStep
+        : zapState.selectedItems[ofIndex]?.metadata;
+    if (!currentStep?.fields) {
+      console.log("Field does not exist returnning");
+      return false;
+    }
+
+    // Check if all required fields in the current step have values
+    return currentStep.fields.every((field) => {
+      if (field.required) {
+        return field.fieldValue && field.fieldValue.trim() !== "";
+      }
+      return true;
+    });
   };
-  const checkStack = () => {
-    return false;
-  };
+
   const checkPublishability = () => {
-    return true;
+    let isPublishable = true;
+    zapState.selectedItems.map((step, i) => {
+      if (
+        !(
+          CheckStepValidity(
+            onStepEnum.SETUP,
+            i,
+            step.metadata.fields[0].fieldValue,
+          ) &&
+          CheckStepValidity(
+            onStepEnum.CONFIGURATION,
+            i,
+            step.metadata.fields[0].fieldValue,
+          ) &&
+          CheckStepValidity(
+            onStepEnum.TEST,
+            i,
+            step.metadata.fields[0].fieldValue,
+          ) &&
+          !!selectedRecordId
+        )
+      )
+        isPublishable = false;
+    });
+    return isPublishable;
   };
   const handleMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest(".zap-cell")) {
       return;
     }
-
     setZapState((prev) => ({
       ...prev,
       isDragging: true,
@@ -87,15 +138,10 @@ export default function Page1() {
       zapState.selectedItems[index]?.metadata &&
       zapState.selectedItems[index].metadata?.fields[0].fieldValue
     ) {
-      console.log(
-        "Setting seelcted configuration Id",
-        zapState.selectedItems[index].metadata?.fields[0].fieldValue,
-      );
       setConfigurationId(
         zapState.selectedItems[index].metadata?.fields[0].fieldValue,
       );
     } else {
-      console.log("Configuration id does not exizst");
       setConfigurationId("");
       setOnStep(onStepEnum.SETUP);
     }
@@ -104,7 +150,16 @@ export default function Page1() {
   }
 
   async function handlePublish() {
-    console.log(user?.userId);
+    console.log({
+      triggerId: zapState.selectedItems[0].id,
+      zapId: Number(zapId),
+      userId: Number(user?.userId || 8),
+      triggerConfiguration: zapState.selectedItems[0].metadata || {},
+      actions: zapState.selectedItems.slice(1).map((item: ItemType) => ({
+        actionId: item.id,
+        configuration: item.metadata,
+      })),
+    });
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/publish`,
       {
@@ -123,10 +178,13 @@ export default function Page1() {
         },
       },
     );
-    console.log(response);
     if (response.data.zapId) {
-      router.push("/dashboard");
+      router.push("/zap/dashboard");
     }
+  }
+
+  function handleTest() {
+    console.log("Testing the zap");
   }
 
   function handleSetMetaData(index: number) {
@@ -165,9 +223,12 @@ export default function Page1() {
   }, []);
   return (
     <>
-      <div className="flex  w-full  bg-[#FFFDF9] border-b border-zinc-200 justify-end items-center">
+      <div
+        className="flex  w-full  bg-[#FFFDF9] border-b border-zinc-200 justify-end items-center"
+        id=" zap-create "
+      >
         {" "}
-        <ActionButton disabled={checkStack()}>
+        {/* <ActionButton disabled={checkStack()}>
           <div className="flex gap-2">
             {" "}
             <Undo size={18} /> Undo
@@ -175,8 +236,8 @@ export default function Page1() {
         </ActionButton>
         <ActionButton disabled={true}>
           <ClockFadingIcon size={18} />{" "}
-        </ActionButton>
-        <ActionButton disabled={checkPublishability()}>
+        </ActionButton> */}
+        <ActionButton disabled={checkPublishability()} onClick={handleTest}>
           <div className="flex gap-2">
             {" "}
             <Play size={18} /> Test Run
@@ -190,8 +251,7 @@ export default function Page1() {
         {metaData.isOpen && (
           <div className=" fixed flex max-w-96 min-h-4/5 max-h-4/5   right-2 z-50 transform-all duration-300 mt-4">
             <SideModal
-              index={metaData.index || 0}
-              setMetaData={handleCloseSideModal}
+              CheckStepValidity={CheckStepValidity}
               handlePublish={handlePublish}
             />
           </div>

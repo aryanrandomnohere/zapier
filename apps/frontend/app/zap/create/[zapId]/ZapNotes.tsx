@@ -162,23 +162,21 @@ export default function ZapNotes() {
 
   return (
     <div className=" space-x-3">
-     
-
       <div className="p-4">
-         {/* Header */}
-         <div className=" border-b mb-4   border-zinc-300">
-      <div className="flex items-center justify-between">
-        <h2 className=" font-semibold text-gray-900">Notes</h2>
-      </div>
-        {/* Learn about notes link */}
-        <div className="mb-6">
-          <a href="#" className="text-blue-600 text-xs underline">
-            Learn about notes
-          </a>
-          <span className="text-xs text-gray-600 ml-1">
-            to document Zaps and steps.
-          </span>
-        </div>
+        {/* Header */}
+        <div className=" border-b mb-4   border-zinc-300">
+          <div className="flex items-center justify-between">
+            <h2 className=" font-semibold text-gray-900">Notes</h2>
+          </div>
+          {/* Learn about notes link */}
+          <div className="mb-6">
+            <a href="#" className="text-blue-600 text-xs underline">
+              Learn about notes
+            </a>
+            <span className="text-xs text-gray-600 ml-1">
+              to document Zaps and steps.
+            </span>
+          </div>
         </div>
 
         {/* Zap Notes Section */}

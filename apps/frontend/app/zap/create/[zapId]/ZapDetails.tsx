@@ -12,7 +12,7 @@ export default function ZapDetails() {
     "Work Projects",
     "Personal",
     "Marketing",
-    "Sales"
+    "Sales",
   ];
 
   // const timezoneOptions = [
@@ -41,13 +41,11 @@ export default function ZapDetails() {
         <div className="px-1 py-4 space-y-6 flex-1">
           {/* Folder Section */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">
-              Folder
-            </h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-2">Folder</h3>
             <p className="text-xs text-gray-600 mb-3">
               Move this Zap to another folder to help organize your account.
             </p>
-            
+
             <div className="relative">
               <button
                 onClick={() => setShowFolderDropdown(!showFolderDropdown)}
@@ -129,9 +127,10 @@ export default function ZapDetails() {
               Create a template
             </h3>
             <p className="text-xs text-gray-600 mb-4">
-              Allow teammates to create their own Zaps using your Zap as a template.
+              Allow teammates to create their own Zaps using your Zap as a
+              template.
             </p>
-            
+
             <button className="w-full px-4 py-3 bg-[#D5D7FC] border border-gray-300 rounded-md text-sm text-gray-700 text-left flex items-center gap-2 hover:cursor-pointer hover:bg-[#847EFE] hover:border-gray-400 transition-colors">
               <FileText size={16} className="text-gray-500" />
               <span>Create template</span>

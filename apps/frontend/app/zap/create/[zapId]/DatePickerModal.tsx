@@ -1,18 +1,39 @@
 import { useState } from "react";
 import { Calendar, Clock, ChevronLeft, ChevronRight, X } from "lucide-react";
 
+type Preset = {
+  label: string;
+  value: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+};
+
+type DayInfo = {
+  day: number;
+  isCurrentMonth: boolean;
+  isNextMonth: boolean;
+  date: Date;
+};
+
+type DatePickerModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onDateSelect: (date: string) => void;
+  selectedValue?: string;
+  title?: string;
+};
+
 export const DatePickerModal = ({
   isOpen,
   onClose,
   onDateSelect,
   selectedValue = "Last 30 days",
   title = "Date",
-}) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 5)); // June 2025
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [activePreset, setActivePreset] = useState("Last 30 days");
+}: DatePickerModalProps) => {
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 5)); // June 2025
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [activePreset, setActivePreset] = useState<string>("Last 30 days");
 
-  const presets = [
+  const presets: Preset[] = [
     { label: "Last 24 hours", value: "24h", icon: Clock },
     { label: "Last 7 days", value: "7d", icon: Calendar },
     { label: "Last 30 days", value: "30d", icon: Calendar },
@@ -36,7 +57,7 @@ export const DatePickerModal = ({
 
   const weekDays = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
-  const getDaysInMonth = (date) => {
+  const getDaysInMonth = (date: Date): DayInfo[] => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
@@ -44,7 +65,7 @@ export const DatePickerModal = ({
     const daysInMonth = lastDay.getDate();
     const startingDayOfWeek = firstDay.getDay();
 
-    const days = [];
+    const days: DayInfo[] = [];
 
     // Previous month days
     const prevMonth = new Date(year, month - 1, 0);
@@ -82,7 +103,7 @@ export const DatePickerModal = ({
     return days;
   };
 
-  const navigateMonth = (direction) => {
+  const navigateMonth = (direction: number) => {
     setCurrentMonth((prev) => {
       const newMonth = new Date(prev);
       newMonth.setMonth(prev.getMonth() + direction);
@@ -90,14 +111,14 @@ export const DatePickerModal = ({
     });
   };
 
-  const handlePresetClick = (preset) => {
+  const handlePresetClick = (preset: Preset) => {
     setActivePreset(preset.label);
     setSelectedDate(null);
   };
 
-  const handleDateClick = (dayInfo) => {
+  const handleDateClick = (dayInfo: DayInfo) => {
     setSelectedDate(dayInfo.date);
-    setActivePreset(null);
+    setActivePreset("");
   };
 
   const handleDone = () => {
@@ -131,17 +152,6 @@ export const DatePickerModal = ({
 
         {/* Content */}
         <div className="p-2 space-y-4">
-          {/* Current Selection Display */}
-          {/* <div className="relative">
-            <Calendar size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <div className="w-full pl-10 pr-10 py-2 border-2 border-blue-500 rounded-md text-xs bg-white">
-              {selectedValue}
-            </div>
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 bg-gray-300 rounded-full flex items-center justify-center">
-              <X size={12} className="text-white" />
-            </div>
-          </div> */}
-
           {/* Preset Buttons */}
           <div className="grid grid-cols-2 gap-2">
             {presets.map((preset) => {
@@ -242,41 +252,3 @@ export const DatePickerModal = ({
     </div>
   );
 };
-
-// Example usage component
-const DatePickerExample = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("Last 30 days");
-
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
-    console.log("Selected date:", date);
-  };
-
-  return (
-    <div className="p-5 space-y-2">
-      <h1 className="text-2xl font-bold">Date Picker Modal Example</h1>
-
-      <div className="space-y-4">
-        <label className="block text-xs font-medium text-gray-700">Date</label>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-1.5 px-2 py-1.5 border border-gray-300 rounded-md bg-white hover:border-gray-400 transition-colors"
-        >
-          <Calendar size={16} className="text-gray-400" />
-          <span className="text-xs">{selectedDate}</span>
-        </button>
-      </div>
-
-      <DatePickerModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onDateSelect={handleDateSelect}
-        selectedValue={selectedDate}
-        title="Select Date Range"
-      />
-    </div>
-  );
-};
-
-export default DatePickerExample;

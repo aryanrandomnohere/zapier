@@ -1,7 +1,5 @@
-import ZapTable from "../components/ZapDashboard/ZapTable";
+import ZapTable from "../../components/ZapDashboard/ZapTable";
 import Button from "./Button";
-import CreateButton from "./CreateButton";
-import RecoilProvider from "./RecoilProvider";
 export default function Page() {
   return (
     <>

@@ -34,14 +34,14 @@ interface HistoryListProps {
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
   };
-  return date.toLocaleDateString('en-US', options);
+  return date.toLocaleDateString("en-US", options);
 };
 
 export default function HistoryList({ history }: HistoryListProps) {
@@ -54,9 +54,7 @@ export default function HistoryList({ history }: HistoryListProps) {
         >
           {/* Left: Icon + Message */}
           <div className="flex self-start justify-center gap-3 flex-1">
-            <div className="flex-shrink-0">
-              {GetHistoryIcon(item.type)}
-            </div>
+            <div className="flex-shrink-0">{GetHistoryIcon(item.type)}</div>
             <div className="flex flex-col">
               <span className="text-sm font-medium text-gray-900">
                 {item.message}
@@ -71,7 +69,8 @@ export default function HistoryList({ history }: HistoryListProps) {
             </span>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-500 text-white text-xs font-medium">
-                {item.createdBy.firstname.charAt(0)}{item.createdBy.lastname.charAt(0)}
+                {item.createdBy.firstname.charAt(0)}
+                {item.createdBy.lastname.charAt(0)}
               </div>
               <span className="text-xs font-medium text-gray-700 whitespace-nowrap">
                 {item.createdBy.firstname}

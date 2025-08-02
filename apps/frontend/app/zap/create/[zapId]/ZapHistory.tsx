@@ -51,7 +51,7 @@ const statusOptions = [
 export interface User {
   id: number;
   firstname: string;
-  lastname:string;
+  lastname: string;
   imageUrl?: string; // optional
 }
 
@@ -132,7 +132,7 @@ export default function ZapHistory() {
             onClick={() => setIsDateModalOpen(!isDateModalOpen)}
             className="flex gap-2.5 text-xs items-center w-full px-4 text-start py-2 border-2 border-blue-500 rounded-md bg-white cursor-pointer"
           >
-           <CalendarDays size={18} /> {dateFilter}
+            <CalendarDays size={18} /> {dateFilter}
           </button>
 
           <DatePickerModal
@@ -191,8 +191,12 @@ export default function ZapHistory() {
         ) : (
           <p>Loaing history...</p>
         )}
-        
-        <PaginatedMap currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
+
+        <PaginatedMap
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   );

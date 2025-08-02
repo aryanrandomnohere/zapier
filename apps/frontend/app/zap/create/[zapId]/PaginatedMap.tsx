@@ -1,17 +1,26 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-export default function PaginatedMap({totalPages, currentPage, setCurrentPage}:{totalPages:number, currentPage:number, setCurrentPage:(param:number)=>void}) {
-    const goToPage = (page: number) => {
-        if (page < 1 || page > totalPages) return;
-        setCurrentPage(page);
-      };
-    
-      const handlePrev = () => goToPage(currentPage - 1);
-      const handleNext = () => goToPage(currentPage + 1);
-    
+export default function PaginatedMap({
+  totalPages,
+  currentPage,
+  setCurrentPage,
+}: {
+  totalPages: number;
+  currentPage: number;
+  setCurrentPage: (param: number) => void;
+}) {
+  const goToPage = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  const handlePrev = () => goToPage(currentPage - 1);
+  const handleNext = () => goToPage(currentPage + 1);
+
   return (
-    <>{totalPages > 1 && (
+    <>
+      {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 pt-2">
           <button
             onClick={handlePrev}
@@ -43,6 +52,7 @@ export default function PaginatedMap({totalPages, currentPage, setCurrentPage}:{
             <ChevronRight size={18} color="black" />
           </button>
         </div>
-      )}</>
-  )
+      )}
+    </>
+  );
 }

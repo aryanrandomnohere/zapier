@@ -153,7 +153,7 @@ function CurrentOperation({ operation }: { operation: zapOperations }) {
     case zapOperations.LINKEDASSETS:
       return <LinkedAssets />;
     case zapOperations.ADVANCEDSETTINGS:
-      return <AdvancedSettings/>;
+      return <AdvancedSettings />;
     case zapOperations.NOTES:
       return <ZapNotes />;
     case zapOperations.STATUS:
@@ -161,7 +161,7 @@ function CurrentOperation({ operation }: { operation: zapOperations }) {
     case zapOperations.CHANGEHISTORY:
       return <ZapHistory />;
     case zapOperations.ZAPDETAILS:
-      return <ZapDetails/>;
+      return <ZapDetails />;
     // case zapOperations.VERSIONS:
     //   return <div>Versions</div>;
     case zapOperations.ZAPRUN:
