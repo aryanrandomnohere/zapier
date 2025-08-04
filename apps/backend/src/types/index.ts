@@ -13,7 +13,6 @@ export const logInSchema = z.object({
 export const ZapCreateSchema = z.object({
   triggerId: z.string(),
   zapId: z.number(),
-  userId: z.number(),
   triggerConfiguration: z.any(),
   actions: z.array(
     z.object({
@@ -26,13 +25,11 @@ export const ZapCreateSchema = z.object({
 export const TriggerCreateSchema = z.object({
   triggerId: z.string(),
   triggerConfiguration: z.any(),
-  userId: z.number(),
 });
 
 export const ActionCreationSchema = z.object({
   actionId: z.string(),
   actionConfiguration: z.any(),
-  userId: z.number(),
   sortingOrder: z.number(),
 });
 
@@ -50,7 +47,20 @@ export const SetRecordSchema = z.object({
   recordId: z.string(),
 });
 
-export const testActoinSchema = z.object({
-  userId: z.number(),
+export const testActionSchema = z.object({
   actionId: z.string(),
+});
+
+export const googleAuthSchema = z.object({
+  email: z.string().email(),
+  firstname: z.string().min(1, "First name is required"),
+  lastname: z.string().min(1, "Last name is required"),
+  picture: z.string().url().optional(),
+  email_verified: z.boolean(),
+});
+
+export const createFolderSchema = z.object({
+  name: z.string().min(1),
+  parentId: z.number().optional(),
+  type: z.enum(["subfolder", "root"]),
 });
