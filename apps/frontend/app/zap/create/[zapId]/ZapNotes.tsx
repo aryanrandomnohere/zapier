@@ -40,6 +40,9 @@ export default function ZapNotes() {
       // Uncomment and modify for your actual API
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${zapId}/notes`,
+        {
+          withCredentials: true,
+        },
       );
 
       // Extract ZAP_NOTE content
@@ -84,6 +87,9 @@ export default function ZapNotes() {
             note: s.note,
           })),
           userId: Number(user?.id) || 8,
+        },
+        {
+          withCredentials: true,
         },
       );
 

@@ -32,12 +32,15 @@ export async function GET(req: NextRequest) {
     await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/createConnection/${params.zapId}`,
       {
-        userId: Number(params.userId),
+        userId: Number(params.userId) || 2,
         appId: "google",
         identifier: email,
         access_token: tokens.access_token,
         refresh_token: tokens.refresh_token,
         expiry_date: tokens.expiry_date,
+      },
+      {
+        withCredentials: true,
       },
     );
 

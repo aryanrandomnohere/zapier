@@ -1,28 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, Folder, FileText } from "lucide-react";
+import { useParams } from "next/navigation";
+import useZaps from "@/app/hooks/useZaps";
 
 export default function ZapDetails() {
-  const [selectedFolder, setSelectedFolder] = useState("Home");
   const [showFolderDropdown, setShowFolderDropdown] = useState(false);
+  const { zapId } = useParams();
+  const { zaps } = useZaps();
+  const requiredZap = zaps.find((zap) => Number(zap.id) === Number(zapId));
+  console.log(requiredZap?.folder.name);
+  const [selectedFolder, setSelectedFolder] = useState(
+    requiredZap?.folder.name || "",
+  );
+
   // const [selectedTimezone, setSelectedTimezone] = useState("Choose a timezone");
   // const [showTimezoneDropdown, setShowTimezoneDropdown] = useState(false);
 
-  const folderOptions = [
-    "Home",
-    "Work Projects",
-    "Personal",
-    "Marketing",
-    "Sales",
-  ];
-
-  // const timezoneOptions = [
-  //   "Choose a timezone",
-  //   "UTC",
-  //   "America/New_York",
-  //   "America/Los_Angeles",
-  //   "Europe/London",
-  //   "Asia/Tokyo"
-  // ];
+  const folderOptions = [`${requiredZap?.folder.name}`];
+  useEffect(() => {
+    setSelectedFolder(requiredZap?.folder.name || "");
+  }, [requiredZap?.folder.name]);
 
   return (
     <div className="bg-opacity-50 flex items-start justify-center px-1 pl-3 z-40">
@@ -131,7 +128,7 @@ export default function ZapDetails() {
               template.
             </p>
 
-            <button className="w-full px-4 py-3 bg-[#D5D7FC] border border-gray-300 rounded-md text-sm text-gray-700 text-left flex items-center gap-2 hover:cursor-pointer hover:bg-[#847EFE] hover:border-gray-400 transition-colors">
+            <button className="w-full px-4 py-2 bg-[#D5D7FC] border border-gray-300 rounded-md text-xs text-gray-700 text-left flex items-center gap-2 hover:cursor-pointer hover:bg-[#847EFE] hover:border-gray-400 transition-colors">
               <FileText size={16} className="text-gray-500" />
               <span>Create template</span>
             </button>

@@ -1,52 +1,15 @@
-import { useEffect, useState } from "react";
-import { DatePickerModal } from "./DatePickerModal";
-import OptionDropdown from "./OptionDropdown";
+import React, { useState, useEffect } from "react";
 import { CalendarDays, ChevronDown } from "lucide-react";
-import ZapRunIcons from "./ZapRunIcons";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import HistoryList from "./HistoryList";
-import PaginatedMap from "./PaginatedMap";
-
-const statusOptions = [
-  { value: "", label: "All statuses" },
-  {
-    value: "ZAP_CREATED",
-    label: "Zap Created",
-    icon: "calender",
-    color: "text-green-600",
-  },
-  {
-    value: "ZAP_TURNED_OFF",
-    label: "Zap turned off",
-    icon: "closedtoggle",
-    color: "text-red-600",
-  },
-  {
-    value: "ZAP_DELETED",
-    label: "Zap deleted",
-    icon: "bin",
-    color: "text-blue-600",
-  },
-  {
-    value: "OWNER_CHANGED",
-    label: "Owner changed",
-    icon: "swapowner",
-    color: "text-yellow-600",
-  },
-  {
-    value: "ZAP_RESTORED",
-    label: "Zap restored",
-    icon: "reversearrow",
-    color: "text-yellow-600",
-  },
-  {
-    value: "ZAP_TURNED_ON",
-    label: "Zap turned on",
-    icon: "opentoggle",
-    color: "text-yellow-600",
-  },
-];
+import { DatePickerModal } from "./DatePickerModal";
+import OptionDropdown from "./OptionDropdown";
+import ZapRunIcons from "./ZapRunIcons";
+import {
+  InlineLoading,
+  LoadingSpinner,
+} from "../../../components/ui/LoadingSpinner";
+import { ListSkeleton } from "../../../components/ui/Skeleton";
 
 export interface User {
   id: number;
@@ -76,28 +39,99 @@ export interface ZapHistoryItem {
 }
 
 export default function ZapHistory() {
-  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
-  const [dateFilter, setDateFilter] = useState<string>("Last 30 days");
-  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<string>("");
   const [history, setHistory] = useState<ZapHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const runsPerPage = 4;
+  const [runsPerPage] = useState(10);
+  const [dateFilter, setDateFilter] = useState("All time");
+  const [statusFilter, setStatusFilter] = useState("All types");
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const { zapId } = useParams();
 
-  const totalPages = Math.ceil(history.length / runsPerPage);
+  const statusOptions = [
+    { value: "All types", label: "All types", color: "text-gray-900" },
+    {
+      value: "ZAP_CREATED",
+      label: "Created",
+      icon: "zap",
+      color: "text-green-600",
+    },
+    {
+      value: "ZAP_TURNED_OFF",
+      label: "Turned off",
+      icon: "pause",
+      color: "text-orange-600",
+    },
+    {
+      value: "ZAP_TURNED_ON",
+      label: "Turned on",
+      icon: "play",
+      color: "text-green-600",
+    },
+    {
+      value: "VERSION_PUBLISHED",
+      label: "Published",
+      icon: "check",
+      color: "text-blue-600",
+    },
+  ];
+
   const paginatedHistory = history.slice(
     (currentPage - 1) * runsPerPage,
     currentPage * runsPerPage,
   );
 
+  // Generate pagination numbers
+  const getPaginationNumbers = () => {
+    const totalPages = Math.ceil(history.length / runsPerPage);
+    const numbers = [];
+    const maxVisible = 5; // Show max 5 page numbers
+
+    if (totalPages <= maxVisible) {
+      // Show all pages if total is 5 or less
+      for (let i = 1; i <= totalPages; i++) {
+        numbers.push(i);
+      }
+    } else {
+      // Show first page, last page, and pages around current
+      numbers.push(1);
+
+      if (currentPage > 3) {
+        numbers.push("...");
+      }
+
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        if (!numbers.includes(i)) {
+          numbers.push(i);
+        }
+      }
+
+      if (currentPage < totalPages - 2) {
+        numbers.push("...");
+      }
+
+      if (totalPages > 1) {
+        numbers.push(totalPages);
+      }
+    }
+
+    return numbers;
+  };
+
   useEffect(() => {
     const fetchHistory = async () => {
       console.log("Fetching history");
+      setLoading(true);
       try {
         const res = await axios.get<ZapHistoryItem[]>(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/zap-history/${zapId}`,
+          {
+            withCredentials: true,
+          },
         );
         console.log(res.data);
         setHistory(res.data);
@@ -111,8 +145,8 @@ export default function ZapHistory() {
   }, []);
 
   return (
-    <div className=" bg-opacity-50  flex items-start justify-center px-1 pl-3">
-      <div className=" rounded-lg  w-full min-w-xs max-h-[90vh] space-y-6">
+    <div className="bg-opacity-50 flex items-start justify-center px-1 pl-3">
+      <div className="rounded-lg w-full min-w-xs max-h-[90vh] space-y-6">
         {/* Header */}
         <div className="px-1 py-4 border-b border-gray-200 relative">
           <div className="flex items-center justify-between">
@@ -151,7 +185,7 @@ export default function ZapHistory() {
             trigger={
               <div
                 onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                className="w-full px-4 py-2 border-2 border-blue-500 rounded-md text-xs bg-white text-left flex items-center justify-between hover:cursor-pointer "
+                className="w-full px-4 py-2 border-2 border-blue-500 rounded-md text-xs bg-white text-left flex items-center justify-between hover:cursor-pointer"
               >
                 <span>All types</span>
                 <ChevronDown size={16} className="text-gray-500" />
@@ -185,18 +219,76 @@ export default function ZapHistory() {
             ))}
           </OptionDropdown>
         </div>
-
-        {!loading ? (
-          <HistoryList history={paginatedHistory} />
+        {loading ? (
+          <div className="space-y-4">
+            <InlineLoading text="Loading history..." size="md" />
+            <ListSkeleton count={5} />
+          </div>
         ) : (
-          <p>Loaing history...</p>
-        )}
+          <>
+            {paginatedHistory.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-500 text-sm">No history found</p>
+              </div>
+            ) : (
+              <>
+                <div className="space-y-2">
+                  {paginatedHistory.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-3 border border-gray-200 rounded-md hover:bg-gray-50"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-medium text-gray-600">
+                            {item.createdBy.firstname.charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            {item.message}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(item.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {item.createdBy.firstname} {item.createdBy.lastname}
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-        <PaginatedMap
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-        />
+                {/* Pagination */}
+                {Math.ceil(history.length / runsPerPage) > 1 && (
+                  <div className="flex items-center justify-center gap-1 pt-4">
+                    {getPaginationNumbers().map((pageNum, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          if (typeof pageNum === "number") {
+                            setCurrentPage(pageNum);
+                          }
+                        }}
+                        disabled={pageNum === "..."}
+                        className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                          pageNum === currentPage
+                            ? "bg-blue-600 text-white"
+                            : pageNum === "..."
+                              ? "text-gray-400 cursor-default"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

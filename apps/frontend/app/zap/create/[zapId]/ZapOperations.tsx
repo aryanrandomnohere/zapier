@@ -16,7 +16,7 @@ export default function ZapOperations({
         onClick={onClick}
         className=" text-gray-500 hover:text-gray-700 hover:cursor-pointer font-extrabold text-lg self-start max-w-fit z-50 "
       >
-        <RxCross2 className="transform rotate-0" color="black" size={21} />
+        <RxCross2 color="black" size={21} />
       </button>
     </div>
   );

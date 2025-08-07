@@ -1,10 +1,21 @@
 import DropDownMenu from "@/app/ui/DropDownMenu";
 
-export default function ZapActions({ trigger }: { trigger: React.ReactNode }) {
+export default function ZapActions({
+  trigger,
+  handleRename,
+}: {
+  trigger: React.ReactNode;
+  handleRename: () => void;
+}) {
   return (
-    <DropDownMenu trigger={trigger}>
+    <DropDownMenu type="normal" trigger={trigger}>
       <ul className="text-white text-sm p-1 space-y-1.5">
-        <li className="px-2 py-0.5 hover:bg-zinc-700 cursor-pointer">Rename</li>
+        <li
+          onClick={handleRename}
+          className="px-2 py-0.5 hover:bg-zinc-700 cursor-pointer"
+        >
+          Rename
+        </li>
         <li className="px-2 py-0.5 hover:bg-zinc-700 cursor-pointer">
           Duplicate
         </li>

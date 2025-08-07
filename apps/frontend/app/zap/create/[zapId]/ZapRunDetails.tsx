@@ -13,7 +13,10 @@ import { IoReload } from "react-icons/io5";
 import { DatePickerModal } from "./DatePickerModal";
 import ZapRunIcons from "./ZapRunIcons";
 import OptionDropdown from "./OptionDropdown";
-import PaginatedMap from "./PaginatedMap";
+import {
+  InlineLoading,
+  TableLoading,
+} from "@/app/components/ui/LoadingSpinner";
 
 interface ZapRun {
   id: string;
@@ -38,6 +41,7 @@ export default function ZapRunList() {
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const [zapRunEdit, setZapRunEdit] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const runsPerPage = 4;
 
   const statusOptions = [
@@ -68,6 +72,7 @@ export default function ZapRunList() {
   }, [zapId, statusFilter, dateFilter]);
 
   async function fetchRuns() {
+    setLoading(true);
     const fromDate = new Date();
     fromDate.setDate(fromDate.getDate() - 30);
     const params: any = { fromDate: fromDate.toISOString() };
@@ -76,11 +81,13 @@ export default function ZapRunList() {
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap-runs/${zapId}`,
-        { params },
+        { params, withCredentials: true },
       );
       setRuns(data);
     } catch (error) {
       console.error("Failed to fetch runs:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -100,6 +107,45 @@ export default function ZapRunList() {
     (currentPage - 1) * runsPerPage,
     currentPage * runsPerPage,
   );
+
+  // Generate pagination numbers
+  const getPaginationNumbers = () => {
+    const numbers = [];
+    const maxVisible = 5; // Show max 5 page numbers
+
+    if (totalPages <= maxVisible) {
+      // Show all pages if total is 5 or less
+      for (let i = 1; i <= totalPages; i++) {
+        numbers.push(i);
+      }
+    } else {
+      // Show first page, last page, and pages around current
+      numbers.push(1);
+
+      if (currentPage > 3) {
+        numbers.push("...");
+      }
+
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        if (!numbers.includes(i)) {
+          numbers.push(i);
+        }
+      }
+
+      if (currentPage < totalPages - 2) {
+        numbers.push("...");
+      }
+
+      if (totalPages > 1) {
+        numbers.push(totalPages);
+      }
+    }
+
+    return numbers;
+  };
 
   const handleSelectAll = () => {
     const allRunIds = new Set(runs.map((run) => run.id));
@@ -317,72 +363,112 @@ export default function ZapRunList() {
 
           {/* Runs List */}
           <div className="space-y-2">
-            {paginatedRuns.map((run) => {
-              const statusDisplay = getStatusDisplay(run.status);
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <InlineLoading text="Loading Zap runs..." />
+              </div>
+            ) : (
+              <>
+                {paginatedRuns.map((run) => {
+                  const statusDisplay = getStatusDisplay(run.status);
 
-              return (
-                <div className="flex flex-col" key={run.id}>
-                  {zapRunEdit === run.id && (
-                    <div
-                      onClick={() => setZapRunEdit(null)}
-                      className="text-blue-600 underline text-xs self-end hover:cursor-pointer"
-                    >
-                      Exit Run View
-                    </div>
-                  )}
-                  <div
-                    onClick={() => setZapRunEdit(run.id)}
-                    className={`border-2 rounded-md p-3 flex items-center gap-3 
-                      hover:cursor-pointer hover:bg-[#F7F6FD]   ${
-                        zapRunEdit === run.id
-                          ? "border-blue-700"
-                          : "border-gray-200"
-                      } hover:border-blue-700 
-                  `}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedRuns.has(run.id)}
-                      onChange={() => handleRunSelection(run.id)}
-                      className="w-4 h-4 hover:cursor-pointer rounded"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`${statusDisplay.color} font-bold text-xs`}
+                  return (
+                    <div className="flex flex-col" key={run.id}>
+                      {zapRunEdit === run.id && (
+                        <div
+                          onClick={() => setZapRunEdit(null)}
+                          className="text-blue-600 underline text-xs self-end hover:cursor-pointer"
                         >
-                          <ZapRunIcons icon={statusDisplay.icon || ""} />
-                        </span>
-                        <span
-                          className={`${statusDisplay.color} text-xs font-medium`}
-                        >
-                          {statusDisplay.label}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          {run.zap.actions.length} task
-                        </span>
+                          Exit Run View
+                        </div>
+                      )}
+                      <div
+                        onClick={() => setZapRunEdit(run.id)}
+                        className={`border-2 rounded-md p-3 flex items-center gap-3 
+                          hover:cursor-pointer hover:bg-[#F7F6FD]   ${
+                            zapRunEdit === run.id
+                              ? "border-blue-700"
+                              : "border-gray-200"
+                          } hover:border-blue-700 
+                      `}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedRuns.has(run.id)}
+                          onChange={() => handleRunSelection(run.id)}
+                          className="w-4 h-4 hover:cursor-pointer rounded"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`${statusDisplay.color} font-bold text-xs`}
+                            >
+                              <ZapRunIcons icon={statusDisplay.icon || ""} />
+                            </span>
+                            <span
+                              className={`${statusDisplay.color} text-xs font-medium`}
+                            >
+                              {statusDisplay.label}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {run.zap.actions.length} task
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {new Date(run.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )}{" "}
+                            {new Date(run.createdAt).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                                hour12: true,
+                              },
+                            )}
+                          </p>
+                        </div>
+                        <button className="text-gray-400 hover:text-gray-600">
+                          <MoreHorizontal size={16} />
+                        </button>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {new Date(run.createdAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}{" "}
-                        {new Date(run.createdAt).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          second: "2-digit",
-                          hour12: true,
-                        })}
-                      </p>
                     </div>
-                    <button className="text-gray-400 hover:text-gray-600">
-                      <MoreHorizontal size={16} />
-                    </button>
+                  );
+                })}
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-1 pt-4">
+                    {getPaginationNumbers().map((pageNum, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          if (typeof pageNum === "number") {
+                            setCurrentPage(pageNum);
+                          }
+                        }}
+                        disabled={pageNum === "..."}
+                        className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                          pageNum === currentPage
+                            ? "bg-blue-600 text-white"
+                            : pageNum === "..."
+                              ? "text-gray-400 cursor-default"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    ))}
                   </div>
-                </div>
-              );
-            })}
+                )}
+              </>
+            )}
           </div>
 
           {/* Pagination */}
@@ -419,11 +505,6 @@ export default function ZapRunList() {
               </button>
             </div>
           )} */}
-          <PaginatedMap
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={totalPages}
-          />
         </div>
       </div>
     </div>

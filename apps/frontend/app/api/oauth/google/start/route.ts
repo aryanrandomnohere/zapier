@@ -23,33 +23,33 @@ export async function GET(req: Request) {
     "https://www.googleapis.com/auth/youtube.upload",
     "https://www.googleapis.com/auth/youtube.force-ssl",
 
-    // Gmail
-    "https://www.googleapis.com/auth/gmail.readonly",
-    "https://www.googleapis.com/auth/gmail.send",
-    "https://www.googleapis.com/auth/gmail.modify",
+    // // Gmail
+    // "https://www.googleapis.com/auth/gmail.readonly",
+    // "https://www.googleapis.com/auth/gmail.send",
+    // "https://www.googleapis.com/auth/gmail.modify",
 
-    // Google Drive
-    "https://www.googleapis.com/auth/drive.readonly",
-    "https://www.googleapis.com/auth/drive.file",
-    "https://www.googleapis.com/auth/drive",
+    // // Google Drive
+    // "https://www.googleapis.com/auth/drive.readonly",
+    // "https://www.googleapis.com/auth/drive.file",
+    // "https://www.googleapis.com/auth/drive",
 
-    // Google Calendar
-    "https://www.googleapis.com/auth/calendar.readonly",
-    "https://www.googleapis.com/auth/calendar",
+    // // Google Calendar
+    // "https://www.googleapis.com/auth/calendar.readonly",
+    // "https://www.googleapis.com/auth/calendar",
 
-    // Google Sheets
-    "https://www.googleapis.com/auth/spreadsheets.readonly",
-    "https://www.googleapis.com/auth/spreadsheets",
+    // // Google Sheets
+    // "https://www.googleapis.com/auth/spreadsheets.readonly",
+    // "https://www.googleapis.com/auth/spreadsheets",
 
-    // Google Docs
-    "https://www.googleapis.com/auth/documents.readonly",
-    "https://www.googleapis.com/auth/documents",
+    // // Google Docs
+    // "https://www.googleapis.com/auth/documents.readonly",
+    // "https://www.googleapis.com/auth/documents",
 
-    // Google Photos
-    "https://www.googleapis.com/auth/photoslibrary.readonly",
+    // // Google Photos
+    // "https://www.googleapis.com/auth/photoslibrary.readonly",
 
-    // Google Analytics (if needed)
-    "https://www.googleapis.com/auth/analytics.readonly",
+    // // Google Analytics (if needed)
+    // "https://www.googleapis.com/auth/analytics.readonly",
   ];
   console.log({
     zapId,

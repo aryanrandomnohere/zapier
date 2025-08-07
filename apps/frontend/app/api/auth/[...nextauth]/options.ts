@@ -1,51 +1,62 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { NextAuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
+import { Session, User } from "next-auth";
 import bcrypt from "bcryptjs";
 import { prisma } from "@repo/db";
-import { JWT } from "next-auth/jwt";
-import { Session, TokenSet } from "next-auth";
+import axios from "axios";
 
-export default {
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Email and Password",
       credentials: {
         email: { label: "Email", type: "text" },
-        firstname: { label: "First name", type: "text" },
-        lastname: { label: "Last name", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(
+        credentials: Record<"email" | "password", string> | undefined,
+      ): Promise<any | null> {
         if (!credentials?.email || !credentials?.password) return null;
 
-        let user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+        try {
+          const url = "http://localhost:3001/api/v1/auth/login";
+          console.log("Credentials login attempt for:", credentials.email);
 
-        const hashedPassword = await bcrypt.hash(credentials.password, 10);
-
-        // If user doesn't exist, create
-        if (!user) {
-          user = await prisma.user.create({
-            data: {
+          const response = await axios.post(
+            url,
+            {
               email: credentials.email,
-              firstname: credentials.firstname,
-              zapmail: Date.now().toString(36),
-              lastname: credentials.lastname,
-              password: hashedPassword,
-              type: "credentials",
-              verified: false,
+              password: credentials.password,
             },
-          });
-        }
+            {
+              withCredentials: true,
+            },
+          );
 
-        // Otherwise, return existing
-        return {
-          id: user.id.toString(),
-          name: `${user.firstname || ""} ${user.lastname || ""}`,
-          email: user.email,
-          image: user.imageUrl || null,
-        };
+          if (!response.data.user) {
+            console.log("No user found");
+            return null;
+          }
+
+          const user = response.data.user;
+          return {
+            id: user.id.toString(),
+            name: `${user.firstname || ""} ${user.lastname || ""}`.trim(),
+            email: user.email,
+            image: user.imageUrl || null,
+            userId: user.id,
+            zapmail: user.zapmail,
+            backendToken: response.data.token,
+          };
+        } catch (error: any) {
+          console.error(
+            "Credentials auth error:",
+            error.response?.data || error.message,
+          );
+          return null;
+        }
       },
     }),
 
@@ -56,66 +67,94 @@ export default {
     }),
   ],
 
-  secret: process.env.NEXTAUTH_SECRET, // used for signing JWT
+  secret: process.env.NEXTAUTH_SECRET,
+
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
-    encryption: false, // disables JWE encryption so your backend can decode
   },
 
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({
+      user,
+      account,
+      profile,
+    }: {
+      user: User;
+      account: any;
+      profile?: any;
+    }) {
       try {
-        const existingUser = await prisma.user.findUnique({
-          where: { email: user.email || profile?.email },
-        });
+        if (account?.provider === "google") {
+          console.log("Processing Google sign-in");
 
-        if (!existingUser) {
-          const response = await prisma.user.create({
-            data: {
-              email: profile.email,
-              firstname: profile.name?.split(" ")[0],
-              lastname: profile.name?.split(" ")[1],
-              imageUrl: profile.picture,
-              zapmail: Date.now().toString(36),
-              password: null,
-              type: "google",
-              verified: profile.email_verified,
+          const response = await axios.post(
+            `http://localhost:3001/api/v1/auth/google`,
+            {
+              email_verified: profile?.email_verified,
+              firstname: profile?.given_name,
+              lastname: profile?.family_name,
+              picture: profile?.picture,
+              email: profile?.email,
             },
-            select: {
-              id: true,
-              zapmail: true,
+            {
+              withCredentials: true,
             },
-          });
-          console.log(response);
-          user.userId = response.id;
-          user.zapmail = response.zapmail;
-        } else {
-          user.userId = existingUser.id;
-          user.zapmail = existingUser.zapmail;
+          );
+
+          console.log("Response from google", response.data);
+
+          if (response.data.user) {
+            (user as any).userId = response.data.user.id;
+            (user as any).zapmail = response.data.zapmail;
+          }
+        } else if (account?.provider === "credentials") {
+          console.log(
+            "Processing credentials sign-in - token available for cookie setting",
+          );
         }
+
         return true;
-      } catch (error) {
-        console.error("Sign-in error:", error);
+      } catch (error: any) {
+        console.error("Sign-in error:", error.response?.data || error.message);
         return false;
       }
     },
 
-    async jwt({ token, user }) {
+    async jwt({
+      token,
+      user,
+    }: {
+      token: JWT;
+      user?: User | undefined;
+    }): Promise<JWT> {
       if (user) {
-        token.userId = user.userId;
-        token.zapmail = user.zapmail;
+        token.userId = (user as any).userId;
+        token.zapmail = (user as any).zapmail;
+        if ((user as any).backendToken) {
+          token.backendToken = (user as any).backendToken;
+        }
       }
       return token;
     },
 
-    async session({ session, token }) {
-      if (session.user && token.userId) {
-        session.user.userId = token.userId;
-        session.user.zapmail = token.zapmail;
+    async session({
+      session,
+      token,
+    }: {
+      session: Session;
+      token: JWT;
+    }): Promise<Session> {
+      if (session.user) {
+        (session.user as any).userId = token.userId;
+        (session.user as any).zapmail = token.zapmail;
+        if (token.backendToken) {
+          (session.user as any).backendToken = token.backendToken;
+        }
       }
       return session;
     },
@@ -125,3 +164,5 @@ export default {
     signIn: "/sign-up",
   },
 };
+
+export default authOptions;

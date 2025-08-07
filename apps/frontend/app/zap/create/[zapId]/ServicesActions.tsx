@@ -20,7 +20,7 @@ export default function ServicesActions({ trigger }: ServicesActionsProps) {
           <nav className="space-y-1">
             {/* Zaps - Active/Enabled */}
             <Link
-              href="/dashboard"
+              href="/zap/dashboard"
               className="flex items-center justify-between  p-0.5 hover:bg-zinc-700 rounded group"
             >
               <div className="flex items-center space-x-3">
