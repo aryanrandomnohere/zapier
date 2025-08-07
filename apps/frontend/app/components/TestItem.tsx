@@ -11,6 +11,7 @@ import DataInForm from "./DataInField/FieldData";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useParams } from "next/navigation";
+import { userAtom } from "../RecoilState/store/userAtom";
 
 export default function TestItem({
   item,
@@ -27,6 +28,7 @@ export default function TestItem({
 }) {
   const [zap, setZap] = useRecoilState(zapCreateState);
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
+  const [user, setUser] = useRecoilState(userAtom);
   const { zapId } = useParams();
   console.log(type);
   useEffect(() => {
@@ -34,24 +36,32 @@ export default function TestItem({
       let triggerSaved = false;
       if (!metadata || metadata.index === null || metadata.index === undefined)
         return;
-      const session = await getSession();
+      let userId = user?.userId;
+      if (!user) {
+        const session = await getSession();
+        setUser(session?.user);
+        userId = session?.user.userId;
+      }
       const body =
         type == "trigger"
           ? {
               triggerId: zap.selectedItems[0].id,
               triggerConfiguration: zap.selectedItems[0].metadata,
-              userId: session?.user.userId,
+              userId: userId,
             }
           : {
               actionId: id,
               actionConfiguration: zap.selectedItems[metadata.index].metadata,
-              userId: session?.user.userId,
+              userId: userId,
               sortingOrder: metadata.index,
             };
 
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${type === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
         body,
+        {
+          withCredentials: true,
+        },
       );
       if (response.data.success) {
         triggerSaved = true;
@@ -76,10 +86,9 @@ export default function TestItem({
             <div className="flex gap-6 ">
               {" "}
               <div className="flex items-center">
-                <FaSquare
-                  size={30}
-                  className="text-red-500 rounded p-1 border border-black/10"
-                />
+                <div className="text-red-500 rounded p-1 border border-black/10">
+                  <FaSquare size={30} />
+                </div>
                 <IoIosArrowRoundForward size={24} />
                 <img
                   src={zap.selectedItems[metadata.index].imagePath}
@@ -113,6 +122,7 @@ export default function TestItem({
             handlePublish={handlePublish}
             fields={
               zap.selectedItems[metadata.index]?.metadata?.optionConfiguration[
+                //@ts-ignore
                 zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue
               ].configurationStep.fields
             }

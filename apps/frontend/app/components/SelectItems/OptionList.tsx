@@ -1,11 +1,14 @@
 import { ItemType, onStepEnum } from "@repo/types";
-import { RiPushpinLine } from "react-icons/ri";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
-import { onStep, selectedItemMetaData } from "@/app/RecoilState/currentZap";
-import { userAtom } from "@/app/RecoilState/store/userAtom";
-import axios from "axios";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { zapCreateState } from "../../RecoilState/store/zapCreate";
+import { selectedItemMetaData, onStep } from "../../RecoilState/currentZap";
+import { useRecoilValue } from "recoil";
+import { userAtom } from "../../RecoilState/store/userAtom";
 import { useParams } from "next/navigation";
+import axios from "axios";
+import { RiPushpinLine } from "react-icons/ri";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
+import { useState } from "react";
 
 type MockItem = {
   id: string;
@@ -26,13 +29,11 @@ export default function OptionList({
 }) {
   const [Item, setItem] = useRecoilState(zapCreateState);
   const setMetaData = useSetRecoilState(selectedItemMetaData);
-  const user = useRecoilValue(userAtom);
   const setOnStep = useSetRecoilState(onStep);
+  const user = useRecoilValue(userAtom);
   const { zapId } = useParams();
+  const [updatingStep, setUpdatingStep] = useState<string | null>(null);
 
-  if (!items) return null;
-
-  // --- API update function (for real items) ---
   async function handleUpdateStep({
     availabelStepId,
     ItemType,
@@ -42,33 +43,43 @@ export default function OptionList({
     ItemType: string;
     metaData: any;
   }) {
-    const body =
-      ItemType === "trigger"
-        ? {
-            triggerId: availabelStepId,
-            triggerConfiguration: metaData,
-            userId: user?.userId || Number(8),
-          }
-        : {
-            actionId: availabelStepId,
-            actionConfiguration: metaData,
-            userId: Number(user?.userId) || 8,
-            sortingOrder: Item.selectedItems.length - 1,
-          };
+    setUpdatingStep(availabelStepId);
+    try {
+      const body =
+        ItemType === "trigger"
+          ? {
+              triggerId: availabelStepId,
+              triggerConfiguration: metaData,
+              userId: user?.userId || Number(8),
+            }
+          : {
+              actionId: availabelStepId,
+              actionConfiguration: metaData,
+              userId: Number(user?.userId) || 8,
+              sortingOrder: Item.selectedItems.length - 1,
+            };
 
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${ItemType === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
-      body,
-    );
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${ItemType === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
+        body,
+        {
+          withCredentials: true,
+        },
+      );
 
-    if (Item.selectedCell)
-      setItem((prev) => {
-        const updated = structuredClone(prev);
-        updated.selectedItems[
-          ItemType === "trigger" ? 0 : updated.selectedCell || 1
-        ].stepId = response.data.stepId;
-        return updated;
-      });
+      if (Item.selectedCell)
+        setItem((prev: any) => {
+          const updated = structuredClone(prev);
+          updated.selectedItems[
+            ItemType === "trigger" ? 0 : updated.selectedCell || 1
+          ].stepId = response.data.stepId;
+          return updated;
+        });
+    } catch (error) {
+      console.error("Error updating step:", error);
+    } finally {
+      setUpdatingStep(null);
+    }
   }
 
   // --- Handle click for both real and mock items ---
@@ -89,7 +100,7 @@ export default function OptionList({
       : (item as ItemType);
 
     // Update Recoil state
-    setItem((zap) => {
+    setItem((zap: any) => {
       if (finalIndex === null) return zap;
 
       if (finalIndex === 0) {
@@ -133,21 +144,29 @@ export default function OptionList({
   return (
     <div className="flex flex-col gap-1 w-full">
       <div className="font-semibold text-sm text-stone-500">{title}</div>
-      {items.map((item, index: number) => (
+      {items?.map((item, index: number) => (
         <div
           onClick={() => handleClick(item)}
           key={item.id}
-          className="flex p-1.5 hover:cursor-pointer transform transition-all duration-200 ease-in-out rounded group hover:bg-blue-500/10 min-w items-center gap-2 text-sm font-semibold justify-start hover:justify-between group-hover:justify-between"
+          className={`flex p-1.5 hover:cursor-pointer transform transition-all duration-300 ease-in-out rounded group hover:bg-blue-500/10 min-w items-center gap-2 text-sm font-semibold justify-start hover:justify-between group-hover:justify-between hover:scale-105 ${
+            updatingStep === item.id ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
           <div className="flex gap-1.5 items-center">
-            <img
-              src={item.imagePath}
-              alt="LOGO"
-              className="w-5 h-5 hover:cursor-pointer"
-            />
-            {item.name}
+            {updatingStep === item.id ? (
+              <LoadingSpinner size="sm" color="primary" />
+            ) : (
+              <img
+                src={item.imagePath}
+                alt="LOGO"
+                className="w-5 h-5 hover:cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-110"
+              />
+            )}
+            <span className={updatingStep === item.id ? "text-gray-400" : ""}>
+              {item.name}
+            </span>
           </div>
-          <div className="hidden group-hover:flex text-blue-400">
+          <div className="hidden group-hover:flex text-blue-400 transform transition-all duration-300 ease-in-out">
             <RiPushpinLine size={16} />
           </div>
         </div>
