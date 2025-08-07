@@ -36,8 +36,8 @@ const DataInForm: React.FC<DataInFormProps> = ({
     <div className="w-full flex flex-col  max-w-md">
       {/* Header - Outside the box */}
       <div className="mb-0 ml-2 mx-3">
-        <h2 className="text-xs font-medium text-gray-900 mb-2">Data In</h2>
-        <div className="h-0.5 w-12 bg-blue-500 mb-0"></div>
+        <h2 className="text-xs font-medium text-gray-900 mb-2 pl-3">Data In</h2>
+        <div className="h-0.5 w-12 bg-blue-500 mb-0 pl-3"></div>
       </div>
 
       {/* Main container */}

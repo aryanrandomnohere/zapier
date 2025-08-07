@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-export default function useOutsideClick(ref: React.RefObject<HTMLElement>) {
+export default function useOutsideClick(
+  ref: React.RefObject<HTMLElement>,
+  specificFunction?: () => void,
+) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -9,9 +12,15 @@ export default function useOutsideClick(ref: React.RefObject<HTMLElement>) {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener(
+      "mousedown",
+      specificFunction || handleClickOutside,
+    );
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        specificFunction || handleClickOutside,
+      );
     };
   }, []);
   return { open, setOpen };
