@@ -22,6 +22,9 @@ import { recordsAtom, selectedRecord } from "../RecoilState/store/recordsAtom";
 import { userAtom } from "../RecoilState/store/userAtom";
 import { getSession } from "next-auth/react";
 import ChangeItem from "../components/MetaData/ChangeItem";
+import { triggerTested } from "../RecoilState/store/triggerAtom";
+import axios from "axios";
+import { useParams } from "next/navigation";
 // Mock data for when metadata is not available
 
 export default function SideModal({
@@ -31,7 +34,7 @@ export default function SideModal({
   handlePublish: () => void;
   CheckStepValidity: (
     onStepEnum: onStepEnum,
-    panelIndex: onStepEnum,
+    panelIndex?: onStepEnum,
   ) => boolean;
 }) {
   const [zap, setZapState] = useRecoilState(zapCreateState);
@@ -48,6 +51,8 @@ export default function SideModal({
   const index = metaData.index;
   const setOnStep = useSetRecoilState(onStep);
   const setConfigurationId = useSetRecoilState(configureStepDetails);
+  const setTestedTrigger = useSetRecoilState(triggerTested);
+  const { zapId } = useParams();
   if (index == null) return null;
 
   // const steps =
@@ -90,9 +95,10 @@ export default function SideModal({
   ) => {
     if (!zap.selectedItems[index]?.metadata) return;
     if (type === onStepEnum.SETUP) {
-      if (zap.selectedItems[index].id === "webhook") {
+      if (zap.selectedItems[index].type === "trigger") {
         setSelectedRecordId("");
         setSelectedRecords([]);
+        setTestedTrigger(false);
       }
       setZapState((prev) => {
         const newState = { ...prev };
@@ -190,8 +196,41 @@ export default function SideModal({
     if (zap.selectedItems[1]?.metadata?.fields[0].fieldValue)
       setConfigurationId(zap.selectedItems[1].metadata?.fields[0].fieldValue);
   };
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!isCurrentStepValid) return;
+    let triggerSaved = false;
+    if (!metaData || metaData.index === null || metaData.index === undefined)
+      return;
+    let userId = user?.userId;
+    if (!user) {
+      const session = await getSession();
+      setUser(session?.user);
+      userId = session?.user.userId;
+    }
+    const body =
+      zap.selectedItems[index].type == "trigger"
+        ? {
+            triggerId: zap.selectedItems[0].id,
+            triggerConfiguration: zap.selectedItems[0].metadata,
+            userId: userId,
+          }
+        : {
+            actionId: zap.selectedItems[index].id,
+            actionConfiguration: zap.selectedItems[metaData.index].metadata,
+            userId: userId,
+            sortingOrder: metaData.index,
+          };
+
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${zap.selectedItems[index].type === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
+      body,
+      {
+        withCredentials: true,
+      },
+    );
+    if (response.data.success) {
+      triggerSaved = true;
+    }
 
     if (panelIndex === onStepEnum.CONFIGURATION) {
       setZapState((prev) => {
@@ -344,6 +383,7 @@ export default function SideModal({
       setpanelIndex(onStepEnum.TEST);
     }
   };
+  console.log(zap.selectedItems[index], configureId);
 
   if (!zap.selectedItems[index]?.metadata) {
     return (

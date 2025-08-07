@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation"; // Assuming App Router
+import { BoltIcon } from "../components/ZapDashboard/FolderIcon";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +14,7 @@ const Sidebar: React.FC = () => {
     <div
       // Main Sidebar Container: Fixed height, controls its own width based on isOpen
       // This div itself is fixed and takes full height of its parent (which is the viewport in Layout.tsx)
-      className={`fixed h-full bg-[#FFFDF9] border-r border-gray-200 shadow-md z-50   ${
+      className={`fixed h-full bg-[#FFFDF9]  z-50   ${
         isOpen ? "w-64" : "w-12"
       }`}
     >
@@ -37,9 +38,9 @@ const Sidebar: React.FC = () => {
             {isOpen ? (
               <Link
                 href="/zap/create"
-                className="flex min-w-full items-center justify-center gap-2"
+                className="flex min-w-full items-center justify-center gap-6"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M12 5v14m-7-7h14"
                     stroke="currentColor"
@@ -55,7 +56,7 @@ const Sidebar: React.FC = () => {
                 className="flex items-center justify-center w-full h-full"
               >
                 {/* Ensure the icon size is explicitly controlled for collapsed state */}
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M12 5v14m-7-7h14"
                     stroke="currentColor"
@@ -71,10 +72,10 @@ const Sidebar: React.FC = () => {
         {/* Navigation Links */}
         {/* Crucial: flex-grow makes this section take all available space, overflow-y-auto handles scrolling */}
         <nav
-          className={`flex-grow w-full ${isOpen ? "px-4" : "px-2.5"} overflow-y-auto custom-scrollbar`}
+          className={`flex flex-col w-full ${isOpen ? "px-4" : "px-2.5"}   overflow-y-auto custom-scrollbar`}
         >
           {/* Home & Discover */}
-          <div className="mb-4 space-y-1">
+          <div className="mb-4 space-y-2.5">
             <Link
               href="/home"
               // Removed redundant ${isOpen ? "px-2.5": ""} here, p-1 and gap-3 define spacing
@@ -83,7 +84,7 @@ const Sidebar: React.FC = () => {
               } ${isActive("/app/home") ? "bg-gray-100" : ""}`}
             >
               {/* Set consistent icon size here */}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   fill="#2D2E2E"
                   d="m12 5.16 11 6.34V9.2l-2-1.16V5h-2v1.89l-7-4.04L1 9.2v2.3l2-1.15V21h18v-8.33l-2-1.16V19H5V9.2l7-4.04Z"
@@ -99,7 +100,7 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/templates") ? "bg-gray-100" : ""}`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   fill="#2D2E2E"
                   d="M12 2C7.53 2 3.74 4.95 2.46 9h2.13a8.058 8.058 0 0 1 4.54-4.46L6.78 11H2.05C1.46 16.89 6.1 22 12 22c5.51 0 10-4.49 10-10S17.51 2 12 2Zm-.56 2.03c.57-.04.57-.04 1.09 0L15.07 11H8.9l2.54-6.97ZM4.07 13h2.71l2.35 6.46c-2.7-1.05-4.69-3.5-5.06-6.46Zm7.37 6.97L8.9 13h6.17l-2.54 6.97c-.51.04-.52.04-1.09 0Zm3.41-.5L17.2 13h2.73c-.37 2.97-2.38 5.43-5.08 6.47ZM17.2 11l-2.35-6.47A8.007 8.007 0 0 1 19.93 11H17.2Z"
@@ -113,7 +114,7 @@ const Sidebar: React.FC = () => {
           <hr className="border-gray-200 my-4" />
 
           {/* Main Tools */}
-          <div className="mb-4 space-y-1">
+          <div className="mb-4 space-y-2.5">
             <Link
               href="/zap/dashboard"
               // Removed redundant ${isOpen ? "px-2.5": ""} here
@@ -121,12 +122,16 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               } ${isActive("/zap/dashboard") ? "bg-gray-100" : ""}`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path
-                  fill="#2D2E2E"
-                  d="M9 23.66 20.54 9.91H15V.16L3.46 13.91H9v9.75Z"
-                />
-              </svg>
+              {!isOpen ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    fill="#2D2E2E"
+                    d="M9 23.66 20.54 9.91H15V.16L3.46 13.91H9v9.75Z"
+                  />
+                </svg>
+              ) : (
+                <BoltIcon />
+              )}
               {isOpen && <span className="text-sm font-medium">Zaps</span>}
             </Link>
 
@@ -137,7 +142,7 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               }`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   fill="#2D2E2E"
                   d="M12 2.998h9.002v4.501H12V2.998ZM12 7.499H2.998V12H12V7.5ZM12 12h9.002v4.501H12v-4.5ZM2.998 16.501H12v4.501H2.998v-4.5Z"
@@ -153,7 +158,7 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               }`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   fill="#2D2E2E"
                   d="M7.5 7.5v9h9V21H3V3h18v13.5h-4.5v-9h-9Z"
@@ -169,14 +174,14 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               }`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   fill="#2D2E2E"
                   d="M7 2H2v5h5V2ZM22 12H2v5h20v-5ZM22 12H7V7h5V2h10v10ZM7 22v-5h5l-5 5Z"
                 />
               </svg>
               {isOpen && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-6">
                   <span className="text-sm">Chatbots</span>
                   {/* CORRECTED: Removed conditional px-2.5 */}
                   <span className="bg-purple-100 text-purple-700 text-xs px-2.5 py-0.5 rounded-full font-medium">
@@ -193,7 +198,7 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               }`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path fill="#2D2E2E" d="M21 3H3v4.5h13.5V21H21V3Z" />
                 <path
                   fill="#2D2E2E"
@@ -201,7 +206,7 @@ const Sidebar: React.FC = () => {
                 />
               </svg>
               {isOpen && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-6">
                   <span className="text-sm">Canvas</span>
                   {/* CORRECTED: Removed conditional px-2.5 */}
                   <span className="bg-purple-100 text-purple-700 text-xs px-2.5 py-0.5 rounded-full font-medium">
@@ -218,7 +223,7 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/assets/agents") ? "bg-gray-100" : ""}`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <g fill="#2D2E2E" clipPath="url(#navCentral_svg__a)">
                   <path d="M3 3h4.5v4.5H3zM16.5 3H21v4.5h-4.5zM16.5 16.5H21V21h-4.5zM3 16.5h4.5V21H3zM7.5 7.5h9v9h-9z" />
                 </g>
@@ -229,13 +234,13 @@ const Sidebar: React.FC = () => {
                 </defs>
               </svg>
               {isOpen && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-6">
                   <span className="text-sm">Agents</span>
                   {/* CORRECTED: Removed conditional px-2.5 */}
                   <span className="bg-purple-100 text-purple-700 text-xs px-2.5 py-0.5 rounded-full font-medium">
                     Beta
                   </span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path fill="#2D2E2E" d="M5 3H3v18h18v-2H5V3Z" />
                     <path
                       fill="#2D2E2E"
@@ -251,7 +256,7 @@ const Sidebar: React.FC = () => {
           <hr className="border-gray-200 my-4" />
 
           {/* Secondary Tools */}
-          <div className="mb-4 space-y-1">
+          <div className="mb-4 space-y-2.5">
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
@@ -259,7 +264,7 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/assets/connections") ? "bg-gray-100" : ""}`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   fill="#2D2E2E"
                   d="M3 11h8V3H3v8Zm2-6h4v4H5V5ZM3 21h8v-8H3v8Zm2-6h4v4H5v-4ZM13 21h8v-8h-8v8Zm2-6h4v4h-4v-4ZM18 6V3h-2v3h-3v2h3v3h2V8h3V6h-3Z"
@@ -275,7 +280,7 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/history") ? "bg-gray-100" : ""}`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   fill="#2D2E2E"
                   d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm-1-8.47-3.22 2.7 1.29 1.54 3.93-3.3V7h-2v4.53Z"
@@ -290,7 +295,7 @@ const Sidebar: React.FC = () => {
                 isOpen ? "" : "justify-center"
               }`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path
                   fill="#2D2E2E"
                   d="M12 14.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5ZM5 14.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5ZM19 14.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z"
