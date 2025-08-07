@@ -1,4 +1,6 @@
-declare class AnyNull extends NullTypesEnumValue {}
+declare class AnyNull extends NullTypesEnumValue {
+  #private;
+}
 
 declare type Args<T, F extends Operation> = T extends {
   [K: symbol]: {
@@ -14,7 +16,11 @@ declare type Args<T, F extends Operation> = T extends {
   ? T[symbol]["types"]["operations"][F]["args"]
   : any;
 
-declare class DbNull extends NullTypesEnumValue {}
+declare class DbNull extends NullTypesEnumValue {
+  #private;
+}
+
+export declare function Decimal(n: Decimal.Value): Decimal;
 
 export declare namespace Decimal {
   export type Constructor = typeof Decimal;
@@ -303,12 +309,14 @@ declare type Exact<A, W> =
 export declare function getRuntime(): GetRuntimeOutput;
 
 declare type GetRuntimeOutput = {
-  id: Runtime;
+  id: RuntimeName;
   prettyName: string;
   isEdge: boolean;
 };
 
-declare class JsonNull extends NullTypesEnumValue {}
+declare class JsonNull extends NullTypesEnumValue {
+  #private;
+}
 
 /**
  * Generates more strict variant of an enum which, unlike regular enum,
@@ -370,6 +378,7 @@ declare type Operation =
   | "createManyAndReturn"
   | "update"
   | "updateMany"
+  | "updateManyAndReturn"
   | "upsert"
   | "delete"
   | "deleteMany"
@@ -389,19 +398,14 @@ declare namespace Public {
 }
 export { Public };
 
-declare type Runtime =
-  | "edge-routine"
+declare type RuntimeName =
   | "workerd"
   | "deno"
-  | "lagon"
-  | "react-native"
   | "netlify"
-  | "electron"
   | "node"
   | "bun"
   | "edge-light"
-  | "fastly"
-  | "unknown";
+  | "";
 
 declare function validator<V>(): <S>(select: Exact<S, V>) => S;
 

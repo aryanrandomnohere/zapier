@@ -22,6 +22,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>;
  */
 export type Zap = $Result.DefaultSelection<Prisma.$ZapPayload>;
 /**
+ * Model Folder
+ *
+ */
+export type Folder = $Result.DefaultSelection<Prisma.$FolderPayload>;
+/**
  * Model Record
  *
  */
@@ -90,6 +95,13 @@ export namespace $Enums {
 
   export type ZapRunStatus = (typeof ZapRunStatus)[keyof typeof ZapRunStatus];
 
+  export const ZapNoteType: {
+    ZAP_NOTE: "ZAP_NOTE";
+    STEP_NOTE: "STEP_NOTE";
+  };
+
+  export type ZapNoteType = (typeof ZapNoteType)[keyof typeof ZapNoteType];
+
   export const ZapHistoryType: {
     ZAP_CREATED: "ZAP_CREATED";
     ZAP_TURNED_OFF: "ZAP_TURNED_OFF";
@@ -106,26 +118,19 @@ export namespace $Enums {
 
   export type ZapHistoryType =
     (typeof ZapHistoryType)[keyof typeof ZapHistoryType];
-
-  export const ZapNoteType: {
-    ZAP_NOTE: "ZAP_NOTE";
-    STEP_NOTE: "STEP_NOTE";
-  };
-
-  export type ZapNoteType = (typeof ZapNoteType)[keyof typeof ZapNoteType];
 }
 
 export type ZapRunStatus = $Enums.ZapRunStatus;
 
 export const ZapRunStatus: typeof $Enums.ZapRunStatus;
 
-export type ZapHistoryType = $Enums.ZapHistoryType;
-
-export const ZapHistoryType: typeof $Enums.ZapHistoryType;
-
 export type ZapNoteType = $Enums.ZapNoteType;
 
 export const ZapNoteType: typeof $Enums.ZapNoteType;
+
+export type ZapHistoryType = $Enums.ZapHistoryType;
+
+export const ZapHistoryType: typeof $Enums.ZapHistoryType;
 
 /**
  * ##  Prisma Client ʲˢ
@@ -143,7 +148,7 @@ export const ZapNoteType: typeof $Enums.ZapNoteType;
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = "log" extends keyof ClientOptions
+  const U = "log" extends keyof ClientOptions
     ? ClientOptions["log"] extends Array<Prisma.LogLevel | Prisma.LogDefinition>
       ? Prisma.GetEvents<ClientOptions["log"]>
       : never
@@ -175,7 +180,7 @@ export class PrismaClient<
     callback: (
       event: V extends "query" ? Prisma.QueryEvent : Prisma.LogEvent,
     ) => void,
-  ): void;
+  ): PrismaClient;
 
   /**
    * Connect with the database
@@ -281,7 +286,17 @@ export class PrismaClient<
     },
   ): $Utils.JsPromise<R>;
 
-  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb, ExtArgs>;
+  $extends: $Extensions.ExtendsHook<
+    "extends",
+    Prisma.TypeMapCb<ClientOptions>,
+    ExtArgs,
+    $Utils.Call<
+      Prisma.TypeMapCb<ClientOptions>,
+      {
+        extArgs: ExtArgs;
+      }
+    >
+  >;
 
   /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
@@ -291,7 +306,7 @@ export class PrismaClient<
    * const users = await prisma.user.findMany()
    * ```
    */
-  get user(): Prisma.UserDelegate<ExtArgs>;
+  get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.zap`: Exposes CRUD operations for the **Zap** model.
@@ -301,7 +316,17 @@ export class PrismaClient<
    * const zaps = await prisma.zap.findMany()
    * ```
    */
-  get zap(): Prisma.ZapDelegate<ExtArgs>;
+  get zap(): Prisma.ZapDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.folder`: Exposes CRUD operations for the **Folder** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more Folders
+   * const folders = await prisma.folder.findMany()
+   * ```
+   */
+  get folder(): Prisma.FolderDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.record`: Exposes CRUD operations for the **Record** model.
@@ -311,7 +336,7 @@ export class PrismaClient<
    * const records = await prisma.record.findMany()
    * ```
    */
-  get record(): Prisma.RecordDelegate<ExtArgs>;
+  get record(): Prisma.RecordDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.trigger`: Exposes CRUD operations for the **Trigger** model.
@@ -321,7 +346,7 @@ export class PrismaClient<
    * const triggers = await prisma.trigger.findMany()
    * ```
    */
-  get trigger(): Prisma.TriggerDelegate<ExtArgs>;
+  get trigger(): Prisma.TriggerDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.userConnection`: Exposes CRUD operations for the **UserConnection** model.
@@ -331,7 +356,7 @@ export class PrismaClient<
    * const userConnections = await prisma.userConnection.findMany()
    * ```
    */
-  get userConnection(): Prisma.UserConnectionDelegate<ExtArgs>;
+  get userConnection(): Prisma.UserConnectionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.availableTriggers`: Exposes CRUD operations for the **AvailableTriggers** model.
@@ -341,7 +366,10 @@ export class PrismaClient<
    * const availableTriggers = await prisma.availableTriggers.findMany()
    * ```
    */
-  get availableTriggers(): Prisma.AvailableTriggersDelegate<ExtArgs>;
+  get availableTriggers(): Prisma.AvailableTriggersDelegate<
+    ExtArgs,
+    ClientOptions
+  >;
 
   /**
    * `prisma.action`: Exposes CRUD operations for the **Action** model.
@@ -351,7 +379,7 @@ export class PrismaClient<
    * const actions = await prisma.action.findMany()
    * ```
    */
-  get action(): Prisma.ActionDelegate<ExtArgs>;
+  get action(): Prisma.ActionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.availableActions`: Exposes CRUD operations for the **AvailableActions** model.
@@ -361,7 +389,10 @@ export class PrismaClient<
    * const availableActions = await prisma.availableActions.findMany()
    * ```
    */
-  get availableActions(): Prisma.AvailableActionsDelegate<ExtArgs>;
+  get availableActions(): Prisma.AvailableActionsDelegate<
+    ExtArgs,
+    ClientOptions
+  >;
 
   /**
    * `prisma.zapRun`: Exposes CRUD operations for the **ZapRun** model.
@@ -371,7 +402,7 @@ export class PrismaClient<
    * const zapRuns = await prisma.zapRun.findMany()
    * ```
    */
-  get zapRun(): Prisma.ZapRunDelegate<ExtArgs>;
+  get zapRun(): Prisma.ZapRunDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.zapRunOutbox`: Exposes CRUD operations for the **ZapRunOutbox** model.
@@ -381,7 +412,7 @@ export class PrismaClient<
    * const zapRunOutboxes = await prisma.zapRunOutbox.findMany()
    * ```
    */
-  get zapRunOutbox(): Prisma.ZapRunOutboxDelegate<ExtArgs>;
+  get zapRunOutbox(): Prisma.ZapRunOutboxDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.zapChangeHistory`: Exposes CRUD operations for the **ZapChangeHistory** model.
@@ -391,7 +422,10 @@ export class PrismaClient<
    * const zapChangeHistories = await prisma.zapChangeHistory.findMany()
    * ```
    */
-  get zapChangeHistory(): Prisma.ZapChangeHistoryDelegate<ExtArgs>;
+  get zapChangeHistory(): Prisma.ZapChangeHistoryDelegate<
+    ExtArgs,
+    ClientOptions
+  >;
 
   /**
    * `prisma.zapNote`: Exposes CRUD operations for the **ZapNote** model.
@@ -401,7 +435,7 @@ export class PrismaClient<
    * const zapNotes = await prisma.zapNote.findMany()
    * ```
    */
-  get zapNote(): Prisma.ZapNoteDelegate<ExtArgs>;
+  get zapNote(): Prisma.ZapNoteDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -422,7 +456,6 @@ export namespace Prisma {
   export import PrismaClientRustPanicError = runtime.PrismaClientRustPanicError;
   export import PrismaClientInitializationError = runtime.PrismaClientInitializationError;
   export import PrismaClientValidationError = runtime.PrismaClientValidationError;
-  export import NotFoundError = runtime.NotFoundError;
 
   /**
    * Re-export of sql-template-tag
@@ -459,7 +492,7 @@ export namespace Prisma {
   export import Exact = $Public.Exact;
 
   /**
-   * Prisma Client JS version: 5.22.0
+   * Prisma Client JS version: 6.13.0
    * Query Engine version: 605197351a3c8bdd595af2d2a9bc3025bca48ea2
    */
   export type PrismaVersion = {
@@ -739,7 +772,7 @@ export namespace Prisma {
     O extends unknown
       ?
           | (K extends keyof O ? { [P in K]: O[P] } & O : O)
-          | ({ [P in keyof O as P extends K ? K : never]-?: O[P] } & O)
+          | ({ [P in keyof O as P extends K ? P : never]-?: O[P] } & O)
       : never
   >;
 
@@ -863,6 +896,7 @@ export namespace Prisma {
   export const ModelName: {
     User: "User";
     Zap: "Zap";
+    Folder: "Folder";
     Record: "Record";
     Trigger: "Trigger";
     UserConnection: "UserConnection";
@@ -881,25 +915,29 @@ export namespace Prisma {
     db?: Datasource;
   };
 
-  interface TypeMapCb
+  interface TypeMapCb<ClientOptions = {}>
     extends $Utils.Fn<
-      { extArgs: $Extensions.InternalArgs; clientOptions: PrismaClientOptions },
+      { extArgs: $Extensions.InternalArgs },
       $Utils.Record<string, any>
     > {
     returns: Prisma.TypeMap<
       this["params"]["extArgs"],
-      this["params"]["clientOptions"]
+      ClientOptions extends { omit: infer OmitOptions } ? OmitOptions : {}
     >;
   }
 
   export type TypeMap<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    ClientOptions = {},
+    GlobalOmitOptions = {},
   > = {
+    globalOmitOptions: {
+      omit: GlobalOmitOptions;
+    };
     meta: {
       modelProps:
         | "user"
         | "zap"
+        | "folder"
         | "record"
         | "trigger"
         | "userConnection"
@@ -1050,6 +1088,76 @@ export namespace Prisma {
           count: {
             args: Prisma.ZapCountArgs<ExtArgs>;
             result: $Utils.Optional<ZapCountAggregateOutputType> | number;
+          };
+        };
+      };
+      Folder: {
+        payload: Prisma.$FolderPayload<ExtArgs>;
+        fields: Prisma.FolderFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.FolderFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.FolderFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>;
+          };
+          findFirst: {
+            args: Prisma.FolderFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.FolderFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>;
+          };
+          findMany: {
+            args: Prisma.FolderFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>[];
+          };
+          create: {
+            args: Prisma.FolderCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>;
+          };
+          createMany: {
+            args: Prisma.FolderCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.FolderCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>[];
+          };
+          delete: {
+            args: Prisma.FolderDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>;
+          };
+          update: {
+            args: Prisma.FolderUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>;
+          };
+          deleteMany: {
+            args: Prisma.FolderDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.FolderUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.FolderUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$FolderPayload>;
+          };
+          aggregate: {
+            args: Prisma.FolderAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateFolder>;
+          };
+          groupBy: {
+            args: Prisma.FolderGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<FolderGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.FolderCountArgs<ExtArgs>;
+            result: $Utils.Optional<FolderCountAggregateOutputType> | number;
           };
         };
       };
@@ -1810,16 +1918,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      *
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     *
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     *
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1834,7 +1950,37 @@ export namespace Prisma {
       timeout?: number;
       isolationLevel?: Prisma.TransactionIsolationLevel;
     };
+    /**
+     * Global configuration for omitting model fields by default.
+     *
+     * @example
+     * ```
+     * const prisma = new PrismaClient({
+     *   omit: {
+     *     user: {
+     *       password: true
+     *     }
+     *   }
+     * })
+     * ```
+     */
+    omit?: Prisma.GlobalOmitConfig;
   }
+  export type GlobalOmitConfig = {
+    user?: UserOmit;
+    zap?: ZapOmit;
+    folder?: FolderOmit;
+    record?: RecordOmit;
+    trigger?: TriggerOmit;
+    userConnection?: UserConnectionOmit;
+    availableTriggers?: AvailableTriggersOmit;
+    action?: ActionOmit;
+    availableActions?: AvailableActionsOmit;
+    zapRun?: ZapRunOmit;
+    zapRunOutbox?: ZapRunOutboxOmit;
+    zapChangeHistory?: ZapChangeHistoryOmit;
+    zapNote?: ZapNoteOmit;
+  };
 
   /* Types for Logging */
   export type LogLevel = "info" | "query" | "warn" | "error";
@@ -1843,20 +1989,14 @@ export namespace Prisma {
     emit: "stdout" | "event";
   };
 
-  export type GetLogType<T extends LogLevel | LogDefinition> =
-    T extends LogDefinition
-      ? T["emit"] extends "event"
-        ? T["level"]
-        : never
-      : never;
-  export type GetEvents<T extends any> =
-    T extends Array<LogLevel | LogDefinition>
-      ?
-          | GetLogType<T[0]>
-          | GetLogType<T[1]>
-          | GetLogType<T[2]>
-          | GetLogType<T[3]>
-      : never;
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T["level"] : T
+  >;
+
+  export type GetEvents<T extends any[]> =
+    T extends Array<LogLevel | LogDefinition> ? GetLogType<T[number]> : never;
 
   export type QueryEvent = {
     timestamp: Date;
@@ -1884,6 +2024,7 @@ export namespace Prisma {
     | "createManyAndReturn"
     | "update"
     | "updateMany"
+    | "updateManyAndReturn"
     | "upsert"
     | "delete"
     | "deleteMany"
@@ -1944,6 +2085,7 @@ export namespace Prisma {
     connections: number;
     changeHistory: number;
     notes: number;
+    Folder: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -1953,6 +2095,7 @@ export namespace Prisma {
     connections?: boolean | UserCountOutputTypeCountConnectionsArgs;
     changeHistory?: boolean | UserCountOutputTypeCountChangeHistoryArgs;
     notes?: boolean | UserCountOutputTypeCountNotesArgs;
+    Folder?: boolean | UserCountOutputTypeCountFolderArgs;
   };
 
   // Custom InputTypes
@@ -2002,6 +2145,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: ZapNoteWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFolderArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: FolderWhereInput;
   };
 
   /**
@@ -2082,6 +2234,53 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: ZapNoteWhereInput;
+  };
+
+  /**
+   * Count Type FolderCountOutputType
+   */
+
+  export type FolderCountOutputType = {
+    children: number;
+    zaps: number;
+  };
+
+  export type FolderCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    children?: boolean | FolderCountOutputTypeCountChildrenArgs;
+    zaps?: boolean | FolderCountOutputTypeCountZapsArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * FolderCountOutputType without action
+   */
+  export type FolderCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the FolderCountOutputType
+     */
+    select?: FolderCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * FolderCountOutputType without action
+   */
+  export type FolderCountOutputTypeCountChildrenArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: FolderWhereInput;
+  };
+
+  /**
+   * FolderCountOutputType without action
+   */
+  export type FolderCountOutputTypeCountZapsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ZapWhereInput;
   };
 
   /**
@@ -2496,6 +2695,7 @@ export namespace Prisma {
       connections?: boolean | User$connectionsArgs<ExtArgs>;
       changeHistory?: boolean | User$changeHistoryArgs<ExtArgs>;
       notes?: boolean | User$notesArgs<ExtArgs>;
+      Folder?: boolean | User$FolderArgs<ExtArgs>;
       _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["user"]
@@ -2534,6 +2734,22 @@ export namespace Prisma {
     updatedAt?: boolean;
   };
 
+  export type UserOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "firstname"
+    | "lastname"
+    | "email"
+    | "zapmail"
+    | "type"
+    | "verified"
+    | "password"
+    | "imageUrl"
+    | "createdAt"
+    | "updatedAt",
+    ExtArgs["result"]["user"]
+  >;
   export type UserInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -2541,6 +2757,7 @@ export namespace Prisma {
     connections?: boolean | User$connectionsArgs<ExtArgs>;
     changeHistory?: boolean | User$changeHistoryArgs<ExtArgs>;
     notes?: boolean | User$notesArgs<ExtArgs>;
+    Folder?: boolean | User$FolderArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -2556,6 +2773,7 @@ export namespace Prisma {
       connections: Prisma.$UserConnectionPayload<ExtArgs>[];
       changeHistory: Prisma.$ZapChangeHistoryPayload<ExtArgs>[];
       notes: Prisma.$ZapNotePayload<ExtArgs>[];
+      Folder: Prisma.$FolderPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -2581,12 +2799,13 @@ export namespace Prisma {
 
   type UserCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<UserFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<UserFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: UserCountAggregateInputType | true;
   };
 
   export interface UserDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["User"];
@@ -2606,9 +2825,15 @@ export namespace Prisma {
     findUnique<T extends UserFindUniqueArgs>(
       args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique"> | null,
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -2626,9 +2851,15 @@ export namespace Prisma {
     findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(
       args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow">,
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -2647,9 +2878,15 @@ export namespace Prisma {
     findFirst<T extends UserFindFirstArgs>(
       args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst"> | null,
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -2669,9 +2906,15 @@ export namespace Prisma {
     findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(
       args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow">,
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -2693,7 +2936,12 @@ export namespace Prisma {
     findMany<T extends UserFindManyArgs>(
       args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -2711,9 +2959,15 @@ export namespace Prisma {
     create<T extends UserCreateArgs>(
       args: SelectSubset<T, UserCreateArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -2757,7 +3011,12 @@ export namespace Prisma {
     createManyAndReturn<T extends UserCreateManyAndReturnArgs>(
       args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn">
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -2775,9 +3034,15 @@ export namespace Prisma {
     delete<T extends UserDeleteArgs>(
       args: SelectSubset<T, UserDeleteArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -2798,9 +3063,15 @@ export namespace Prisma {
     update<T extends UserUpdateArgs>(
       args: SelectSubset<T, UserUpdateArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -2860,9 +3131,15 @@ export namespace Prisma {
     upsert<T extends UserUpsertArgs>(
       args: SelectSubset<T, UserUpsertArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -3014,17 +3291,29 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     zap<T extends User$zapArgs<ExtArgs> = {}>(
       args?: Subset<T, User$zapArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     connections<T extends User$connectionsArgs<ExtArgs> = {}>(
       args?: Subset<T, User$connectionsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      | $Result.GetResult<Prisma.$UserConnectionPayload<ExtArgs>, T, "findMany">
+      | $Result.GetResult<
+          Prisma.$UserConnectionPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
       | Null
     >;
     changeHistory<T extends User$changeHistoryArgs<ExtArgs> = {}>(
@@ -3033,14 +3322,32 @@ export namespace Prisma {
       | $Result.GetResult<
           Prisma.$ZapChangeHistoryPayload<ExtArgs>,
           T,
-          "findMany"
+          "findMany",
+          GlobalOmitOptions
         >
       | Null
     >;
     notes<T extends User$notesArgs<ExtArgs> = {}>(
       args?: Subset<T, User$notesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$ZapNotePayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    Folder<T extends User$FolderArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$FolderArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$FolderPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3107,6 +3414,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null;
@@ -3127,6 +3438,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null;
@@ -3146,6 +3461,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3197,6 +3516,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null;
@@ -3247,6 +3570,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null;
@@ -3292,6 +3619,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null;
@@ -3325,6 +3656,10 @@ export namespace Prisma {
      */
     select?: UserSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
      * The data used to create many Users.
      */
     data: UserCreateManyInput | UserCreateManyInput[];
@@ -3341,6 +3676,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3382,6 +3721,10 @@ export namespace Prisma {
      */
     select?: UserSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null;
@@ -3409,6 +3752,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3442,6 +3789,10 @@ export namespace Prisma {
      */
     select?: ZapSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapInclude<ExtArgs> | null;
@@ -3463,6 +3814,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserConnection
      */
     select?: UserConnectionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3487,6 +3842,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapChangeHistory
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3514,6 +3873,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -3528,6 +3891,32 @@ export namespace Prisma {
   };
 
   /**
+   * User.Folder
+   */
+  export type User$FolderArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[];
+    cursor?: FolderWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[];
+  };
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<
@@ -3537,6 +3926,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the User
      */
     select?: UserSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -3558,11 +3951,13 @@ export namespace Prisma {
   export type ZapAvgAggregateOutputType = {
     id: number | null;
     userId: number | null;
+    folderId: number | null;
   };
 
   export type ZapSumAggregateOutputType = {
     id: number | null;
     userId: number | null;
+    folderId: number | null;
   };
 
   export type ZapMinAggregateOutputType = {
@@ -3574,6 +3969,7 @@ export namespace Prisma {
     published: boolean | null;
     RecordId: string | null;
     userId: number | null;
+    folderId: number | null;
   };
 
   export type ZapMaxAggregateOutputType = {
@@ -3585,6 +3981,7 @@ export namespace Prisma {
     published: boolean | null;
     RecordId: string | null;
     userId: number | null;
+    folderId: number | null;
   };
 
   export type ZapCountAggregateOutputType = {
@@ -3596,17 +3993,20 @@ export namespace Prisma {
     published: number;
     RecordId: number;
     userId: number;
+    folderId: number;
     _all: number;
   };
 
   export type ZapAvgAggregateInputType = {
     id?: true;
     userId?: true;
+    folderId?: true;
   };
 
   export type ZapSumAggregateInputType = {
     id?: true;
     userId?: true;
+    folderId?: true;
   };
 
   export type ZapMinAggregateInputType = {
@@ -3618,6 +4018,7 @@ export namespace Prisma {
     published?: true;
     RecordId?: true;
     userId?: true;
+    folderId?: true;
   };
 
   export type ZapMaxAggregateInputType = {
@@ -3629,6 +4030,7 @@ export namespace Prisma {
     published?: true;
     RecordId?: true;
     userId?: true;
+    folderId?: true;
   };
 
   export type ZapCountAggregateInputType = {
@@ -3640,6 +4042,7 @@ export namespace Prisma {
     published?: true;
     RecordId?: true;
     userId?: true;
+    folderId?: true;
     _all?: true;
   };
 
@@ -3739,6 +4142,7 @@ export namespace Prisma {
     published: boolean;
     RecordId: string | null;
     userId: number;
+    folderId: number;
     _count: ZapCountAggregateOutputType | null;
     _avg: ZapAvgAggregateOutputType | null;
     _sum: ZapSumAggregateOutputType | null;
@@ -3770,6 +4174,7 @@ export namespace Prisma {
       published?: boolean;
       RecordId?: boolean;
       userId?: boolean;
+      folderId?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
       trigger?: boolean | Zap$triggerArgs<ExtArgs>;
       actions?: boolean | Zap$actionsArgs<ExtArgs>;
@@ -3778,6 +4183,7 @@ export namespace Prisma {
       record?: boolean | Zap$recordArgs<ExtArgs>;
       changeHistory?: boolean | Zap$changeHistoryArgs<ExtArgs>;
       notes?: boolean | Zap$notesArgs<ExtArgs>;
+      folder?: boolean | FolderDefaultArgs<ExtArgs>;
       _count?: boolean | ZapCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["zap"]
@@ -3795,8 +4201,10 @@ export namespace Prisma {
       published?: boolean;
       RecordId?: boolean;
       userId?: boolean;
+      folderId?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
       record?: boolean | Zap$recordArgs<ExtArgs>;
+      folder?: boolean | FolderDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["zap"]
   >;
@@ -3810,8 +4218,23 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: boolean;
     userId?: boolean;
+    folderId?: boolean;
   };
 
+  export type ZapOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "triggerId"
+    | "name"
+    | "lastEdited"
+    | "createdAt"
+    | "published"
+    | "RecordId"
+    | "userId"
+    | "folderId",
+    ExtArgs["result"]["zap"]
+  >;
   export type ZapInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -3823,6 +4246,7 @@ export namespace Prisma {
     record?: boolean | Zap$recordArgs<ExtArgs>;
     changeHistory?: boolean | Zap$changeHistoryArgs<ExtArgs>;
     notes?: boolean | Zap$notesArgs<ExtArgs>;
+    folder?: boolean | FolderDefaultArgs<ExtArgs>;
     _count?: boolean | ZapCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type ZapIncludeCreateManyAndReturn<
@@ -3830,6 +4254,7 @@ export namespace Prisma {
   > = {
     user?: boolean | UserDefaultArgs<ExtArgs>;
     record?: boolean | Zap$recordArgs<ExtArgs>;
+    folder?: boolean | FolderDefaultArgs<ExtArgs>;
   };
 
   export type $ZapPayload<
@@ -3845,6 +4270,7 @@ export namespace Prisma {
       record: Prisma.$RecordPayload<ExtArgs> | null;
       changeHistory: Prisma.$ZapChangeHistoryPayload<ExtArgs>[];
       notes: Prisma.$ZapNotePayload<ExtArgs>[];
+      folder: Prisma.$FolderPayload<ExtArgs>;
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -3856,6 +4282,7 @@ export namespace Prisma {
         published: boolean;
         RecordId: string | null;
         userId: number;
+        folderId: number;
       },
       ExtArgs["result"]["zap"]
     >;
@@ -3867,12 +4294,13 @@ export namespace Prisma {
 
   type ZapCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<ZapFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<ZapFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: ZapCountAggregateInputType | true;
   };
 
   export interface ZapDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["Zap"];
@@ -3892,9 +4320,15 @@ export namespace Prisma {
     findUnique<T extends ZapFindUniqueArgs>(
       args: SelectSubset<T, ZapFindUniqueArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findUnique"> | null,
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -3912,9 +4346,15 @@ export namespace Prisma {
     findUniqueOrThrow<T extends ZapFindUniqueOrThrowArgs>(
       args: SelectSubset<T, ZapFindUniqueOrThrowArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findUniqueOrThrow">,
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -3933,9 +4373,15 @@ export namespace Prisma {
     findFirst<T extends ZapFindFirstArgs>(
       args?: SelectSubset<T, ZapFindFirstArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findFirst"> | null,
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -3955,9 +4401,15 @@ export namespace Prisma {
     findFirstOrThrow<T extends ZapFindFirstOrThrowArgs>(
       args?: SelectSubset<T, ZapFindFirstOrThrowArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findFirstOrThrow">,
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -3979,7 +4431,12 @@ export namespace Prisma {
     findMany<T extends ZapFindManyArgs>(
       args?: SelectSubset<T, ZapFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -3997,9 +4454,15 @@ export namespace Prisma {
     create<T extends ZapCreateArgs>(
       args: SelectSubset<T, ZapCreateArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -4043,7 +4506,12 @@ export namespace Prisma {
     createManyAndReturn<T extends ZapCreateManyAndReturnArgs>(
       args?: SelectSubset<T, ZapCreateManyAndReturnArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "createManyAndReturn">
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -4061,9 +4529,15 @@ export namespace Prisma {
     delete<T extends ZapDeleteArgs>(
       args: SelectSubset<T, ZapDeleteArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -4084,9 +4558,15 @@ export namespace Prisma {
     update<T extends ZapUpdateArgs>(
       args: SelectSubset<T, ZapUpdateArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -4146,9 +4626,15 @@ export namespace Prisma {
     upsert<T extends ZapUpsertArgs>(
       args: SelectSubset<T, ZapUpsertArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$ZapPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -4300,15 +4786,22 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     user<T extends UserDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, UserDefaultArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     trigger<T extends Zap$triggerArgs<ExtArgs> = {}>(
       args?: Subset<T, Zap$triggerArgs<ExtArgs>>,
@@ -4316,25 +4809,45 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$TriggerPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     actions<T extends Zap$actionsArgs<ExtArgs> = {}>(
       args?: Subset<T, Zap$actionsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$ActionPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     zapRuns<T extends Zap$zapRunsArgs<ExtArgs> = {}>(
       args?: Subset<T, Zap$zapRunsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$ZapRunPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     records<T extends Zap$recordsArgs<ExtArgs> = {}>(
       args?: Subset<T, Zap$recordsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$RecordPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     record<T extends Zap$recordArgs<ExtArgs> = {}>(
       args?: Subset<T, Zap$recordArgs<ExtArgs>>,
@@ -4342,10 +4855,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$RecordPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     changeHistory<T extends Zap$changeHistoryArgs<ExtArgs> = {}>(
       args?: Subset<T, Zap$changeHistoryArgs<ExtArgs>>,
@@ -4353,14 +4868,35 @@ export namespace Prisma {
       | $Result.GetResult<
           Prisma.$ZapChangeHistoryPayload<ExtArgs>,
           T,
-          "findMany"
+          "findMany",
+          GlobalOmitOptions
         >
       | Null
     >;
     notes<T extends Zap$notesArgs<ExtArgs> = {}>(
       args?: Subset<T, Zap$notesArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$ZapNotePayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    folder<T extends FolderDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, FolderDefaultArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      | $Result.GetResult<
+          Prisma.$FolderPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4410,6 +4946,7 @@ export namespace Prisma {
     readonly published: FieldRef<"Zap", "Boolean">;
     readonly RecordId: FieldRef<"Zap", "String">;
     readonly userId: FieldRef<"Zap", "Int">;
+    readonly folderId: FieldRef<"Zap", "Int">;
   }
 
   // Custom InputTypes
@@ -4423,6 +4960,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Zap
      */
     select?: ZapSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4444,6 +4985,10 @@ export namespace Prisma {
      */
     select?: ZapSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapInclude<ExtArgs> | null;
@@ -4463,6 +5008,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Zap
      */
     select?: ZapSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4514,6 +5063,10 @@ export namespace Prisma {
      */
     select?: ZapSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapInclude<ExtArgs> | null;
@@ -4564,6 +5117,10 @@ export namespace Prisma {
      */
     select?: ZapSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapInclude<ExtArgs> | null;
@@ -4609,6 +5166,10 @@ export namespace Prisma {
      */
     select?: ZapSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapInclude<ExtArgs> | null;
@@ -4642,6 +5203,10 @@ export namespace Prisma {
      */
     select?: ZapSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * The data used to create many Zaps.
      */
     data: ZapCreateManyInput | ZapCreateManyInput[];
@@ -4662,6 +5227,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Zap
      */
     select?: ZapSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4703,6 +5272,10 @@ export namespace Prisma {
      */
     select?: ZapSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapInclude<ExtArgs> | null;
@@ -4730,6 +5303,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Zap
      */
     select?: ZapSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4763,6 +5340,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -4779,6 +5360,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Action
      */
     select?: ActionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4802,6 +5387,10 @@ export namespace Prisma {
      */
     select?: ZapRunSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunInclude<ExtArgs> | null;
@@ -4823,6 +5412,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Record
      */
     select?: RecordSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4846,6 +5439,10 @@ export namespace Prisma {
      */
     select?: RecordSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: RecordInclude<ExtArgs> | null;
@@ -4862,6 +5459,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapChangeHistory
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -4889,6 +5490,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -4913,9 +5518,1394 @@ export namespace Prisma {
      */
     select?: ZapSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model Folder
+   */
+
+  export type AggregateFolder = {
+    _count: FolderCountAggregateOutputType | null;
+    _avg: FolderAvgAggregateOutputType | null;
+    _sum: FolderSumAggregateOutputType | null;
+    _min: FolderMinAggregateOutputType | null;
+    _max: FolderMaxAggregateOutputType | null;
+  };
+
+  export type FolderAvgAggregateOutputType = {
+    id: number | null;
+    userId: number | null;
+    parentId: number | null;
+  };
+
+  export type FolderSumAggregateOutputType = {
+    id: number | null;
+    userId: number | null;
+    parentId: number | null;
+  };
+
+  export type FolderMinAggregateOutputType = {
+    id: number | null;
+    name: string | null;
+    userId: number | null;
+    type: string | null;
+    parentId: number | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type FolderMaxAggregateOutputType = {
+    id: number | null;
+    name: string | null;
+    userId: number | null;
+    type: string | null;
+    parentId: number | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type FolderCountAggregateOutputType = {
+    id: number;
+    name: number;
+    userId: number;
+    type: number;
+    parentId: number;
+    createdAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type FolderAvgAggregateInputType = {
+    id?: true;
+    userId?: true;
+    parentId?: true;
+  };
+
+  export type FolderSumAggregateInputType = {
+    id?: true;
+    userId?: true;
+    parentId?: true;
+  };
+
+  export type FolderMinAggregateInputType = {
+    id?: true;
+    name?: true;
+    userId?: true;
+    type?: true;
+    parentId?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type FolderMaxAggregateInputType = {
+    id?: true;
+    name?: true;
+    userId?: true;
+    type?: true;
+    parentId?: true;
+    createdAt?: true;
+    updatedAt?: true;
+  };
+
+  export type FolderCountAggregateInputType = {
+    id?: true;
+    name?: true;
+    userId?: true;
+    type?: true;
+    parentId?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type FolderAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which Folder to aggregate.
+     */
+    where?: FolderWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Folders to fetch.
+     */
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: FolderWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Folders from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Folders.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned Folders
+     **/
+    _count?: true | FolderCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: FolderAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: FolderSumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: FolderMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: FolderMaxAggregateInputType;
+  };
+
+  export type GetFolderAggregateType<T extends FolderAggregateArgs> = {
+    [P in keyof T & keyof AggregateFolder]: P extends "_count" | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFolder[P]>
+      : GetScalarType<T[P], AggregateFolder[P]>;
+  };
+
+  export type FolderGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: FolderWhereInput;
+    orderBy?:
+      | FolderOrderByWithAggregationInput
+      | FolderOrderByWithAggregationInput[];
+    by: FolderScalarFieldEnum[] | FolderScalarFieldEnum;
+    having?: FolderScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: FolderCountAggregateInputType | true;
+    _avg?: FolderAvgAggregateInputType;
+    _sum?: FolderSumAggregateInputType;
+    _min?: FolderMinAggregateInputType;
+    _max?: FolderMaxAggregateInputType;
+  };
+
+  export type FolderGroupByOutputType = {
+    id: number;
+    name: string;
+    userId: number;
+    type: string;
+    parentId: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+    _count: FolderCountAggregateOutputType | null;
+    _avg: FolderAvgAggregateOutputType | null;
+    _sum: FolderSumAggregateOutputType | null;
+    _min: FolderMinAggregateOutputType | null;
+    _max: FolderMaxAggregateOutputType | null;
+  };
+
+  type GetFolderGroupByPayload<T extends FolderGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<FolderGroupByOutputType, T["by"]> & {
+          [P in keyof T & keyof FolderGroupByOutputType]: P extends "_count"
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FolderGroupByOutputType[P]>
+            : GetScalarType<T[P], FolderGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type FolderSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      name?: boolean;
+      userId?: boolean;
+      type?: boolean;
+      parentId?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+      parent?: boolean | Folder$parentArgs<ExtArgs>;
+      children?: boolean | Folder$childrenArgs<ExtArgs>;
+      zaps?: boolean | Folder$zapsArgs<ExtArgs>;
+      _count?: boolean | FolderCountOutputTypeDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["folder"]
+  >;
+
+  export type FolderSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      name?: boolean;
+      userId?: boolean;
+      type?: boolean;
+      parentId?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+      parent?: boolean | Folder$parentArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["folder"]
+  >;
+
+  export type FolderSelectScalar = {
+    id?: boolean;
+    name?: boolean;
+    userId?: boolean;
+    type?: boolean;
+    parentId?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type FolderOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "name" | "userId" | "type" | "parentId" | "createdAt" | "updatedAt",
+    ExtArgs["result"]["folder"]
+  >;
+  export type FolderInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+    parent?: boolean | Folder$parentArgs<ExtArgs>;
+    children?: boolean | Folder$childrenArgs<ExtArgs>;
+    zaps?: boolean | Folder$zapsArgs<ExtArgs>;
+    _count?: boolean | FolderCountOutputTypeDefaultArgs<ExtArgs>;
+  };
+  export type FolderIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+    parent?: boolean | Folder$parentArgs<ExtArgs>;
+  };
+
+  export type $FolderPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "Folder";
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
+      parent: Prisma.$FolderPayload<ExtArgs> | null;
+      children: Prisma.$FolderPayload<ExtArgs>[];
+      zaps: Prisma.$ZapPayload<ExtArgs>[];
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: number;
+        name: string;
+        userId: number;
+        type: string;
+        parentId: number | null;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+      ExtArgs["result"]["folder"]
+    >;
+    composites: {};
+  };
+
+  type FolderGetPayload<
+    S extends boolean | null | undefined | FolderDefaultArgs,
+  > = $Result.GetResult<Prisma.$FolderPayload, S>;
+
+  type FolderCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<FolderFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+    select?: FolderCountAggregateInputType | true;
+  };
+
+  export interface FolderDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["Folder"];
+      meta: { name: "Folder" };
+    };
+    /**
+     * Find zero or one Folder that matches the filter.
+     * @param {FolderFindUniqueArgs} args - Arguments to find a Folder
+     * @example
+     * // Get one Folder
+     * const folder = await prisma.folder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FolderFindUniqueArgs>(
+      args: SelectSubset<T, FolderFindUniqueArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one Folder that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FolderFindUniqueOrThrowArgs} args - Arguments to find a Folder
+     * @example
+     * // Get one Folder
+     * const folder = await prisma.folder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FolderFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, FolderFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first Folder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderFindFirstArgs} args - Arguments to find a Folder
+     * @example
+     * // Get one Folder
+     * const folder = await prisma.folder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FolderFindFirstArgs>(
+      args?: SelectSubset<T, FolderFindFirstArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first Folder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderFindFirstOrThrowArgs} args - Arguments to find a Folder
+     * @example
+     * // Get one Folder
+     * const folder = await prisma.folder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FolderFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, FolderFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more Folders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Folders
+     * const folders = await prisma.folder.findMany()
+     *
+     * // Get first 10 Folders
+     * const folders = await prisma.folder.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const folderWithIdOnly = await prisma.folder.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends FolderFindManyArgs>(
+      args?: SelectSubset<T, FolderFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create a Folder.
+     * @param {FolderCreateArgs} args - Arguments to create a Folder.
+     * @example
+     * // Create one Folder
+     * const Folder = await prisma.folder.create({
+     *   data: {
+     *     // ... data to create a Folder
+     *   }
+     * })
+     *
+     */
+    create<T extends FolderCreateArgs>(
+      args: SelectSubset<T, FolderCreateArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many Folders.
+     * @param {FolderCreateManyArgs} args - Arguments to create many Folders.
+     * @example
+     * // Create many Folders
+     * const folder = await prisma.folder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends FolderCreateManyArgs>(
+      args?: SelectSubset<T, FolderCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many Folders and returns the data saved in the database.
+     * @param {FolderCreateManyAndReturnArgs} args - Arguments to create many Folders.
+     * @example
+     * // Create many Folders
+     * const folder = await prisma.folder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many Folders and only return the `id`
+     * const folderWithIdOnly = await prisma.folder.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends FolderCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, FolderCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a Folder.
+     * @param {FolderDeleteArgs} args - Arguments to delete one Folder.
+     * @example
+     * // Delete one Folder
+     * const Folder = await prisma.folder.delete({
+     *   where: {
+     *     // ... filter to delete one Folder
+     *   }
+     * })
+     *
+     */
+    delete<T extends FolderDeleteArgs>(
+      args: SelectSubset<T, FolderDeleteArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one Folder.
+     * @param {FolderUpdateArgs} args - Arguments to update one Folder.
+     * @example
+     * // Update one Folder
+     * const folder = await prisma.folder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends FolderUpdateArgs>(
+      args: SelectSubset<T, FolderUpdateArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more Folders.
+     * @param {FolderDeleteManyArgs} args - Arguments to filter Folders to delete.
+     * @example
+     * // Delete a few Folders
+     * const { count } = await prisma.folder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends FolderDeleteManyArgs>(
+      args?: SelectSubset<T, FolderDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more Folders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Folders
+     * const folder = await prisma.folder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends FolderUpdateManyArgs>(
+      args: SelectSubset<T, FolderUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one Folder.
+     * @param {FolderUpsertArgs} args - Arguments to update or create a Folder.
+     * @example
+     * // Update or create a Folder
+     * const folder = await prisma.folder.upsert({
+     *   create: {
+     *     // ... data to create a Folder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Folder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FolderUpsertArgs>(
+      args: SelectSubset<T, FolderUpsertArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of Folders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderCountArgs} args - Arguments to filter Folders to count.
+     * @example
+     * // Count the number of Folders
+     * const count = await prisma.folder.count({
+     *   where: {
+     *     // ... the filter for the Folders we want to count
+     *   }
+     * })
+     **/
+    count<T extends FolderCountArgs>(
+      args?: Subset<T, FolderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], FolderCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a Folder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends FolderAggregateArgs>(
+      args: Subset<T, FolderAggregateArgs>,
+    ): Prisma.PrismaPromise<GetFolderAggregateType<T>>;
+
+    /**
+     * Group by Folder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FolderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends FolderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<"skip", Keys<T>>,
+        Extends<"take", Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FolderGroupByArgs["orderBy"] }
+        : { orderBy?: FolderGroupByArgs["orderBy"] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T["orderBy"]>>
+      >,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T["by"] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      "Field ",
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ];
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, FolderGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors
+      ? GetFolderGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the Folder model
+     */
+    readonly fields: FolderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Folder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FolderClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    parent<T extends Folder$parentArgs<ExtArgs> = {}>(
+      args?: Subset<T, Folder$parentArgs<ExtArgs>>,
+    ): Prisma__FolderClient<
+      $Result.GetResult<
+        Prisma.$FolderPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    children<T extends Folder$childrenArgs<ExtArgs> = {}>(
+      args?: Subset<T, Folder$childrenArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$FolderPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    zaps<T extends Folder$zapsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Folder$zapsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the Folder model
+   */
+  interface FolderFieldRefs {
+    readonly id: FieldRef<"Folder", "Int">;
+    readonly name: FieldRef<"Folder", "String">;
+    readonly userId: FieldRef<"Folder", "Int">;
+    readonly type: FieldRef<"Folder", "String">;
+    readonly parentId: FieldRef<"Folder", "Int">;
+    readonly createdAt: FieldRef<"Folder", "DateTime">;
+    readonly updatedAt: FieldRef<"Folder", "DateTime">;
+  }
+
+  // Custom InputTypes
+  /**
+   * Folder findUnique
+   */
+  export type FolderFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * Filter, which Folder to fetch.
+     */
+    where: FolderWhereUniqueInput;
+  };
+
+  /**
+   * Folder findUniqueOrThrow
+   */
+  export type FolderFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * Filter, which Folder to fetch.
+     */
+    where: FolderWhereUniqueInput;
+  };
+
+  /**
+   * Folder findFirst
+   */
+  export type FolderFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * Filter, which Folder to fetch.
+     */
+    where?: FolderWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Folders to fetch.
+     */
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Folders.
+     */
+    cursor?: FolderWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Folders from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Folders.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Folders.
+     */
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[];
+  };
+
+  /**
+   * Folder findFirstOrThrow
+   */
+  export type FolderFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * Filter, which Folder to fetch.
+     */
+    where?: FolderWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Folders to fetch.
+     */
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Folders.
+     */
+    cursor?: FolderWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Folders from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Folders.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Folders.
+     */
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[];
+  };
+
+  /**
+   * Folder findMany
+   */
+  export type FolderFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * Filter, which Folders to fetch.
+     */
+    where?: FolderWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Folders to fetch.
+     */
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing Folders.
+     */
+    cursor?: FolderWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Folders from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Folders.
+     */
+    skip?: number;
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[];
+  };
+
+  /**
+   * Folder create
+   */
+  export type FolderCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a Folder.
+     */
+    data: XOR<FolderCreateInput, FolderUncheckedCreateInput>;
+  };
+
+  /**
+   * Folder createMany
+   */
+  export type FolderCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many Folders.
+     */
+    data: FolderCreateManyInput | FolderCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * Folder createManyAndReturn
+   */
+  export type FolderCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * The data used to create many Folders.
+     */
+    data: FolderCreateManyInput | FolderCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * Folder update
+   */
+  export type FolderUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a Folder.
+     */
+    data: XOR<FolderUpdateInput, FolderUncheckedUpdateInput>;
+    /**
+     * Choose, which Folder to update.
+     */
+    where: FolderWhereUniqueInput;
+  };
+
+  /**
+   * Folder updateMany
+   */
+  export type FolderUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update Folders.
+     */
+    data: XOR<FolderUpdateManyMutationInput, FolderUncheckedUpdateManyInput>;
+    /**
+     * Filter which Folders to update
+     */
+    where?: FolderWhereInput;
+  };
+
+  /**
+   * Folder upsert
+   */
+  export type FolderUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the Folder to update in case it exists.
+     */
+    where: FolderWhereUniqueInput;
+    /**
+     * In case the Folder found by the `where` argument doesn't exist, create a new Folder with this data.
+     */
+    create: XOR<FolderCreateInput, FolderUncheckedCreateInput>;
+    /**
+     * In case the Folder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FolderUpdateInput, FolderUncheckedUpdateInput>;
+  };
+
+  /**
+   * Folder delete
+   */
+  export type FolderDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    /**
+     * Filter which Folder to delete.
+     */
+    where: FolderWhereUniqueInput;
+  };
+
+  /**
+   * Folder deleteMany
+   */
+  export type FolderDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which Folders to delete
+     */
+    where?: FolderWhereInput;
+  };
+
+  /**
+   * Folder.parent
+   */
+  export type Folder$parentArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    where?: FolderWhereInput;
+  };
+
+  /**
+   * Folder.children
+   */
+  export type Folder$childrenArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
+    where?: FolderWhereInput;
+    orderBy?: FolderOrderByWithRelationInput | FolderOrderByWithRelationInput[];
+    cursor?: FolderWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: FolderScalarFieldEnum | FolderScalarFieldEnum[];
+  };
+
+  /**
+   * Folder.zaps
+   */
+  export type Folder$zapsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Zap
+     */
+    select?: ZapSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZapInclude<ExtArgs> | null;
+    where?: ZapWhereInput;
+    orderBy?: ZapOrderByWithRelationInput | ZapOrderByWithRelationInput[];
+    cursor?: ZapWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: ZapScalarFieldEnum | ZapScalarFieldEnum[];
+  };
+
+  /**
+   * Folder without action
+   */
+  export type FolderDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Folder
+     */
+    select?: FolderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Folder
+     */
+    omit?: FolderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FolderInclude<ExtArgs> | null;
   };
 
   /**
@@ -5174,6 +7164,19 @@ export namespace Prisma {
     triggerOptionId?: boolean;
   };
 
+  export type RecordOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "type"
+    | "zapId"
+    | "createdAt"
+    | "pulledAt"
+    | "title"
+    | "JsonData"
+    | "triggerOptionId",
+    ExtArgs["result"]["record"]
+  >;
   export type RecordInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -5216,12 +7219,13 @@ export namespace Prisma {
 
   type RecordCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<RecordFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<RecordFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: RecordCountAggregateInputType | true;
   };
 
   export interface RecordDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["Record"];
@@ -5241,9 +7245,15 @@ export namespace Prisma {
     findUnique<T extends RecordFindUniqueArgs>(
       args: SelectSubset<T, RecordFindUniqueArgs<ExtArgs>>,
     ): Prisma__RecordClient<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findUnique"> | null,
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -5261,9 +7271,15 @@ export namespace Prisma {
     findUniqueOrThrow<T extends RecordFindUniqueOrThrowArgs>(
       args: SelectSubset<T, RecordFindUniqueOrThrowArgs<ExtArgs>>,
     ): Prisma__RecordClient<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findUniqueOrThrow">,
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -5282,9 +7298,15 @@ export namespace Prisma {
     findFirst<T extends RecordFindFirstArgs>(
       args?: SelectSubset<T, RecordFindFirstArgs<ExtArgs>>,
     ): Prisma__RecordClient<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findFirst"> | null,
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -5304,9 +7326,15 @@ export namespace Prisma {
     findFirstOrThrow<T extends RecordFindFirstOrThrowArgs>(
       args?: SelectSubset<T, RecordFindFirstOrThrowArgs<ExtArgs>>,
     ): Prisma__RecordClient<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findFirstOrThrow">,
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -5328,7 +7356,12 @@ export namespace Prisma {
     findMany<T extends RecordFindManyArgs>(
       args?: SelectSubset<T, RecordFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -5346,9 +7379,15 @@ export namespace Prisma {
     create<T extends RecordCreateArgs>(
       args: SelectSubset<T, RecordCreateArgs<ExtArgs>>,
     ): Prisma__RecordClient<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -5395,7 +7434,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$RecordPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -5414,9 +7454,15 @@ export namespace Prisma {
     delete<T extends RecordDeleteArgs>(
       args: SelectSubset<T, RecordDeleteArgs<ExtArgs>>,
     ): Prisma__RecordClient<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -5437,9 +7483,15 @@ export namespace Prisma {
     update<T extends RecordUpdateArgs>(
       args: SelectSubset<T, RecordUpdateArgs<ExtArgs>>,
     ): Prisma__RecordClient<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -5499,9 +7551,15 @@ export namespace Prisma {
     upsert<T extends RecordUpsertArgs>(
       args: SelectSubset<T, RecordUpsertArgs<ExtArgs>>,
     ): Prisma__RecordClient<
-      $Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$RecordPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -5653,15 +7711,22 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     zap<T extends ZapDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapDefaultArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      | $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     zapSingle<T extends Record$zapSingleArgs<ExtArgs> = {}>(
       args?: Subset<T, Record$zapSingleArgs<ExtArgs>>,
@@ -5669,10 +7734,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5736,6 +7803,10 @@ export namespace Prisma {
      */
     select?: RecordSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: RecordInclude<ExtArgs> | null;
@@ -5756,6 +7827,10 @@ export namespace Prisma {
      */
     select?: RecordSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: RecordInclude<ExtArgs> | null;
@@ -5775,6 +7850,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Record
      */
     select?: RecordSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -5826,6 +7905,10 @@ export namespace Prisma {
      */
     select?: RecordSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: RecordInclude<ExtArgs> | null;
@@ -5876,6 +7959,10 @@ export namespace Prisma {
      */
     select?: RecordSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: RecordInclude<ExtArgs> | null;
@@ -5921,6 +8008,10 @@ export namespace Prisma {
      */
     select?: RecordSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: RecordInclude<ExtArgs> | null;
@@ -5954,6 +8045,10 @@ export namespace Prisma {
      */
     select?: RecordSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
+    /**
      * The data used to create many Records.
      */
     data: RecordCreateManyInput | RecordCreateManyInput[];
@@ -5974,6 +8069,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Record
      */
     select?: RecordSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6015,6 +8114,10 @@ export namespace Prisma {
      */
     select?: RecordSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: RecordInclude<ExtArgs> | null;
@@ -6042,6 +8145,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Record
      */
     select?: RecordSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6075,6 +8182,10 @@ export namespace Prisma {
      */
     select?: ZapSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapInclude<ExtArgs> | null;
@@ -6091,6 +8202,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Record
      */
     select?: RecordSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Record
+     */
+    omit?: RecordOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -6369,6 +8484,20 @@ export namespace Prisma {
     triggerId?: boolean;
   };
 
+  export type TriggerOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "zapId"
+    | "optionId"
+    | "optionType"
+    | "published"
+    | "configuration"
+    | "lastPolledAt"
+    | "connectionId"
+    | "triggerId",
+    ExtArgs["result"]["trigger"]
+  >;
   export type TriggerInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -6418,12 +8547,13 @@ export namespace Prisma {
 
   type TriggerCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<TriggerFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<TriggerFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: TriggerCountAggregateInputType | true;
   };
 
   export interface TriggerDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["Trigger"];
@@ -6446,10 +8576,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$TriggerPayload<ExtArgs>,
         T,
-        "findUnique"
+        "findUnique",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -6470,10 +8602,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$TriggerPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -6492,9 +8626,15 @@ export namespace Prisma {
     findFirst<T extends TriggerFindFirstArgs>(
       args?: SelectSubset<T, TriggerFindFirstArgs<ExtArgs>>,
     ): Prisma__TriggerClient<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "findFirst"> | null,
+      $Result.GetResult<
+        Prisma.$TriggerPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -6514,9 +8654,15 @@ export namespace Prisma {
     findFirstOrThrow<T extends TriggerFindFirstOrThrowArgs>(
       args?: SelectSubset<T, TriggerFindFirstOrThrowArgs<ExtArgs>>,
     ): Prisma__TriggerClient<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "findFirstOrThrow">,
+      $Result.GetResult<
+        Prisma.$TriggerPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -6538,7 +8684,12 @@ export namespace Prisma {
     findMany<T extends TriggerFindManyArgs>(
       args?: SelectSubset<T, TriggerFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$TriggerPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -6556,9 +8707,15 @@ export namespace Prisma {
     create<T extends TriggerCreateArgs>(
       args: SelectSubset<T, TriggerCreateArgs<ExtArgs>>,
     ): Prisma__TriggerClient<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$TriggerPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -6605,7 +8762,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$TriggerPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -6624,9 +8782,15 @@ export namespace Prisma {
     delete<T extends TriggerDeleteArgs>(
       args: SelectSubset<T, TriggerDeleteArgs<ExtArgs>>,
     ): Prisma__TriggerClient<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$TriggerPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -6647,9 +8811,15 @@ export namespace Prisma {
     update<T extends TriggerUpdateArgs>(
       args: SelectSubset<T, TriggerUpdateArgs<ExtArgs>>,
     ): Prisma__TriggerClient<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$TriggerPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -6709,9 +8879,15 @@ export namespace Prisma {
     upsert<T extends TriggerUpsertArgs>(
       args: SelectSubset<T, TriggerUpsertArgs<ExtArgs>>,
     ): Prisma__TriggerClient<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$TriggerPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -6863,15 +9039,22 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     zap<T extends ZapDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapDefaultArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      | $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     userConnection<T extends Trigger$userConnectionArgs<ExtArgs> = {}>(
       args?: Subset<T, Trigger$userConnectionArgs<ExtArgs>>,
@@ -6879,10 +9062,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserConnectionPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     type<T extends AvailableTriggersDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, AvailableTriggersDefaultArgs<ExtArgs>>,
@@ -6890,11 +9075,13 @@ export namespace Prisma {
       | $Result.GetResult<
           Prisma.$AvailableTriggersPayload<ExtArgs>,
           T,
-          "findUniqueOrThrow"
+          "findUniqueOrThrow",
+          GlobalOmitOptions
         >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     note<T extends Trigger$noteArgs<ExtArgs> = {}>(
       args?: Subset<T, Trigger$noteArgs<ExtArgs>>,
@@ -6902,10 +9089,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapNotePayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6970,6 +9159,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -6990,6 +9183,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -7009,6 +9206,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Trigger
      */
     select?: TriggerSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7062,6 +9263,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -7114,6 +9319,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -7161,6 +9370,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -7194,6 +9407,10 @@ export namespace Prisma {
      */
     select?: TriggerSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * The data used to create many Triggers.
      */
     data: TriggerCreateManyInput | TriggerCreateManyInput[];
@@ -7214,6 +9431,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Trigger
      */
     select?: TriggerSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7255,6 +9476,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -7282,6 +9507,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Trigger
      */
     select?: TriggerSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7315,6 +9544,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserConnectionInclude<ExtArgs> | null;
@@ -7332,6 +9565,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -7348,6 +9585,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Trigger
      */
     select?: TriggerSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -7621,6 +9862,19 @@ export namespace Prisma {
     expiredAt?: boolean;
   };
 
+  export type UserConnectionOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "userId"
+    | "appId"
+    | "identifier"
+    | "accessToken"
+    | "refreshToken"
+    | "createdAt"
+    | "expiredAt",
+    ExtArgs["result"]["userConnection"]
+  >;
   export type UserConnectionInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -7666,12 +9920,16 @@ export namespace Prisma {
 
   type UserConnectionCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<UserConnectionFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<
+    UserConnectionFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
     select?: UserConnectionCountAggregateInputType | true;
   };
 
   export interface UserConnectionDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["UserConnection"];
@@ -7694,10 +9952,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserConnectionPayload<ExtArgs>,
         T,
-        "findUnique"
+        "findUnique",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -7718,10 +9978,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserConnectionPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -7743,10 +10005,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserConnectionPayload<ExtArgs>,
         T,
-        "findFirst"
+        "findFirst",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -7769,10 +10033,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserConnectionPayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        "findFirstOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -7794,7 +10060,12 @@ export namespace Prisma {
     findMany<T extends UserConnectionFindManyArgs>(
       args?: SelectSubset<T, UserConnectionFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$UserConnectionPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$UserConnectionPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -7812,9 +10083,15 @@ export namespace Prisma {
     create<T extends UserConnectionCreateArgs>(
       args: SelectSubset<T, UserConnectionCreateArgs<ExtArgs>>,
     ): Prisma__UserConnectionClient<
-      $Result.GetResult<Prisma.$UserConnectionPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$UserConnectionPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -7861,7 +10138,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserConnectionPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -7880,9 +10158,15 @@ export namespace Prisma {
     delete<T extends UserConnectionDeleteArgs>(
       args: SelectSubset<T, UserConnectionDeleteArgs<ExtArgs>>,
     ): Prisma__UserConnectionClient<
-      $Result.GetResult<Prisma.$UserConnectionPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$UserConnectionPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -7903,9 +10187,15 @@ export namespace Prisma {
     update<T extends UserConnectionUpdateArgs>(
       args: SelectSubset<T, UserConnectionUpdateArgs<ExtArgs>>,
     ): Prisma__UserConnectionClient<
-      $Result.GetResult<Prisma.$UserConnectionPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$UserConnectionPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -7965,9 +10255,15 @@ export namespace Prisma {
     upsert<T extends UserConnectionUpsertArgs>(
       args: SelectSubset<T, UserConnectionUpsertArgs<ExtArgs>>,
     ): Prisma__UserConnectionClient<
-      $Result.GetResult<Prisma.$UserConnectionPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$UserConnectionPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -8120,25 +10416,44 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     User<T extends UserDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, UserDefaultArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     trigger<T extends UserConnection$triggerArgs<ExtArgs> = {}>(
       args?: Subset<T, UserConnection$triggerArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$TriggerPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     action<T extends UserConnection$actionArgs<ExtArgs> = {}>(
       args?: Subset<T, UserConnection$actionArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$ActionPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8202,6 +10517,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserConnectionInclude<ExtArgs> | null;
@@ -8222,6 +10541,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserConnectionInclude<ExtArgs> | null;
@@ -8241,6 +10564,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserConnection
      */
     select?: UserConnectionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8294,6 +10621,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserConnectionInclude<ExtArgs> | null;
@@ -8346,6 +10677,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserConnectionInclude<ExtArgs> | null;
@@ -8393,6 +10728,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserConnectionInclude<ExtArgs> | null;
@@ -8426,6 +10765,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * The data used to create many UserConnections.
      */
     data: UserConnectionCreateManyInput | UserConnectionCreateManyInput[];
@@ -8446,6 +10789,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserConnection
      */
     select?: UserConnectionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8490,6 +10837,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserConnectionInclude<ExtArgs> | null;
@@ -8517,6 +10868,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserConnection
      */
     select?: UserConnectionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8550,6 +10905,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -8574,6 +10933,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -8595,6 +10958,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserConnection
      */
     select?: UserConnectionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -8820,6 +11187,12 @@ export namespace Prisma {
     imagePath?: boolean;
   };
 
+  export type AvailableTriggersOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "name" | "type" | "serviceType" | "appId" | "metadata" | "imagePath",
+    ExtArgs["result"]["availableTriggers"]
+  >;
   export type AvailableTriggersInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -8858,12 +11231,16 @@ export namespace Prisma {
 
   type AvailableTriggersCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<AvailableTriggersFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<
+    AvailableTriggersFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
     select?: AvailableTriggersCountAggregateInputType | true;
   };
 
   export interface AvailableTriggersDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["AvailableTriggers"];
@@ -8886,10 +11263,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableTriggersPayload<ExtArgs>,
         T,
-        "findUnique"
+        "findUnique",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -8910,10 +11289,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableTriggersPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -8935,10 +11316,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableTriggersPayload<ExtArgs>,
         T,
-        "findFirst"
+        "findFirst",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -8961,10 +11344,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableTriggersPayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        "findFirstOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -8989,7 +11374,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableTriggersPayload<ExtArgs>,
         T,
-        "findMany"
+        "findMany",
+        GlobalOmitOptions
       >
     >;
 
@@ -9008,9 +11394,15 @@ export namespace Prisma {
     create<T extends AvailableTriggersCreateArgs>(
       args: SelectSubset<T, AvailableTriggersCreateArgs<ExtArgs>>,
     ): Prisma__AvailableTriggersClient<
-      $Result.GetResult<Prisma.$AvailableTriggersPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$AvailableTriggersPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -9057,7 +11449,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableTriggersPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -9076,9 +11469,15 @@ export namespace Prisma {
     delete<T extends AvailableTriggersDeleteArgs>(
       args: SelectSubset<T, AvailableTriggersDeleteArgs<ExtArgs>>,
     ): Prisma__AvailableTriggersClient<
-      $Result.GetResult<Prisma.$AvailableTriggersPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$AvailableTriggersPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -9099,9 +11498,15 @@ export namespace Prisma {
     update<T extends AvailableTriggersUpdateArgs>(
       args: SelectSubset<T, AvailableTriggersUpdateArgs<ExtArgs>>,
     ): Prisma__AvailableTriggersClient<
-      $Result.GetResult<Prisma.$AvailableTriggersPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$AvailableTriggersPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -9161,9 +11566,15 @@ export namespace Prisma {
     upsert<T extends AvailableTriggersUpsertArgs>(
       args: SelectSubset<T, AvailableTriggersUpsertArgs<ExtArgs>>,
     ): Prisma__AvailableTriggersClient<
-      $Result.GetResult<Prisma.$AvailableTriggersPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$AvailableTriggersPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -9319,12 +11730,19 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     triggers<T extends AvailableTriggers$triggersArgs<ExtArgs> = {}>(
       args?: Subset<T, AvailableTriggers$triggersArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$TriggerPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$TriggerPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9387,6 +11805,10 @@ export namespace Prisma {
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableTriggersInclude<ExtArgs> | null;
@@ -9407,6 +11829,10 @@ export namespace Prisma {
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableTriggersInclude<ExtArgs> | null;
@@ -9426,6 +11852,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AvailableTriggers
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9481,6 +11911,10 @@ export namespace Prisma {
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableTriggersInclude<ExtArgs> | null;
@@ -9535,6 +11969,10 @@ export namespace Prisma {
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableTriggersInclude<ExtArgs> | null;
@@ -9584,6 +12022,10 @@ export namespace Prisma {
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableTriggersInclude<ExtArgs> | null;
@@ -9620,6 +12062,10 @@ export namespace Prisma {
      */
     select?: AvailableTriggersSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
+    /**
      * The data used to create many AvailableTriggers.
      */
     data: AvailableTriggersCreateManyInput | AvailableTriggersCreateManyInput[];
@@ -9636,6 +12082,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AvailableTriggers
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -9683,6 +12133,10 @@ export namespace Prisma {
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableTriggersInclude<ExtArgs> | null;
@@ -9717,6 +12171,10 @@ export namespace Prisma {
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableTriggersInclude<ExtArgs> | null;
@@ -9749,6 +12207,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -9772,6 +12234,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AvailableTriggers
      */
     select?: AvailableTriggersSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the AvailableTriggers
+     */
+    omit?: AvailableTriggersOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10044,6 +12510,19 @@ export namespace Prisma {
     connectionId?: boolean;
   };
 
+  export type ActionOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "zapId"
+    | "success"
+    | "configuration"
+    | "optionId"
+    | "actionId"
+    | "sortingOrder"
+    | "connectionId",
+    ExtArgs["result"]["action"]
+  >;
   export type ActionInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -10095,12 +12574,13 @@ export namespace Prisma {
 
   type ActionCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<ActionFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<ActionFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: ActionCountAggregateInputType | true;
   };
 
   export interface ActionDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["Action"];
@@ -10120,9 +12600,15 @@ export namespace Prisma {
     findUnique<T extends ActionFindUniqueArgs>(
       args: SelectSubset<T, ActionFindUniqueArgs<ExtArgs>>,
     ): Prisma__ActionClient<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findUnique"> | null,
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -10140,9 +12626,15 @@ export namespace Prisma {
     findUniqueOrThrow<T extends ActionFindUniqueOrThrowArgs>(
       args: SelectSubset<T, ActionFindUniqueOrThrowArgs<ExtArgs>>,
     ): Prisma__ActionClient<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findUniqueOrThrow">,
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -10161,9 +12653,15 @@ export namespace Prisma {
     findFirst<T extends ActionFindFirstArgs>(
       args?: SelectSubset<T, ActionFindFirstArgs<ExtArgs>>,
     ): Prisma__ActionClient<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findFirst"> | null,
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -10183,9 +12681,15 @@ export namespace Prisma {
     findFirstOrThrow<T extends ActionFindFirstOrThrowArgs>(
       args?: SelectSubset<T, ActionFindFirstOrThrowArgs<ExtArgs>>,
     ): Prisma__ActionClient<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findFirstOrThrow">,
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -10207,7 +12711,12 @@ export namespace Prisma {
     findMany<T extends ActionFindManyArgs>(
       args?: SelectSubset<T, ActionFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -10225,9 +12734,15 @@ export namespace Prisma {
     create<T extends ActionCreateArgs>(
       args: SelectSubset<T, ActionCreateArgs<ExtArgs>>,
     ): Prisma__ActionClient<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -10274,7 +12789,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ActionPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -10293,9 +12809,15 @@ export namespace Prisma {
     delete<T extends ActionDeleteArgs>(
       args: SelectSubset<T, ActionDeleteArgs<ExtArgs>>,
     ): Prisma__ActionClient<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -10316,9 +12838,15 @@ export namespace Prisma {
     update<T extends ActionUpdateArgs>(
       args: SelectSubset<T, ActionUpdateArgs<ExtArgs>>,
     ): Prisma__ActionClient<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -10378,9 +12906,15 @@ export namespace Prisma {
     upsert<T extends ActionUpsertArgs>(
       args: SelectSubset<T, ActionUpsertArgs<ExtArgs>>,
     ): Prisma__ActionClient<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$ActionPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -10532,15 +13066,22 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     zap<T extends ZapDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapDefaultArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      | $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     actionDetails<T extends AvailableActionsDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, AvailableActionsDefaultArgs<ExtArgs>>,
@@ -10548,11 +13089,13 @@ export namespace Prisma {
       | $Result.GetResult<
           Prisma.$AvailableActionsPayload<ExtArgs>,
           T,
-          "findUniqueOrThrow"
+          "findUniqueOrThrow",
+          GlobalOmitOptions
         >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     userConnection<T extends Action$userConnectionArgs<ExtArgs> = {}>(
       args?: Subset<T, Action$userConnectionArgs<ExtArgs>>,
@@ -10560,15 +13103,23 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserConnectionPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     zapRunFailures<T extends Action$zapRunFailuresArgs<ExtArgs> = {}>(
       args?: Subset<T, Action$zapRunFailuresArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$ZapRunPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     note<T extends Action$noteArgs<ExtArgs> = {}>(
       args?: Subset<T, Action$noteArgs<ExtArgs>>,
@@ -10576,10 +13127,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapNotePayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10643,6 +13196,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -10663,6 +13220,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -10682,6 +13243,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Action
      */
     select?: ActionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10733,6 +13298,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -10783,6 +13352,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -10828,6 +13401,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -10861,6 +13438,10 @@ export namespace Prisma {
      */
     select?: ActionSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * The data used to create many Actions.
      */
     data: ActionCreateManyInput | ActionCreateManyInput[];
@@ -10881,6 +13462,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Action
      */
     select?: ActionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10922,6 +13507,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -10949,6 +13538,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Action
      */
     select?: ActionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -10982,6 +13575,10 @@ export namespace Prisma {
      */
     select?: UserConnectionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the UserConnection
+     */
+    omit?: UserConnectionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: UserConnectionInclude<ExtArgs> | null;
@@ -10998,6 +13595,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRun
      */
     select?: ZapRunSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11021,6 +13622,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -11037,6 +13642,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Action
      */
     select?: ActionSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11262,6 +13871,12 @@ export namespace Prisma {
     metadata?: boolean;
   };
 
+  export type AvailableActionsOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "name" | "type" | "serviceType" | "appId" | "imagePath" | "metadata",
+    ExtArgs["result"]["availableActions"]
+  >;
   export type AvailableActionsInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -11300,12 +13915,16 @@ export namespace Prisma {
 
   type AvailableActionsCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<AvailableActionsFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<
+    AvailableActionsFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
     select?: AvailableActionsCountAggregateInputType | true;
   };
 
   export interface AvailableActionsDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["AvailableActions"];
@@ -11328,10 +13947,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableActionsPayload<ExtArgs>,
         T,
-        "findUnique"
+        "findUnique",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -11352,10 +13973,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableActionsPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -11377,10 +14000,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableActionsPayload<ExtArgs>,
         T,
-        "findFirst"
+        "findFirst",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -11403,10 +14028,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableActionsPayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        "findFirstOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -11428,7 +14055,12 @@ export namespace Prisma {
     findMany<T extends AvailableActionsFindManyArgs>(
       args?: SelectSubset<T, AvailableActionsFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$AvailableActionsPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$AvailableActionsPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -11446,9 +14078,15 @@ export namespace Prisma {
     create<T extends AvailableActionsCreateArgs>(
       args: SelectSubset<T, AvailableActionsCreateArgs<ExtArgs>>,
     ): Prisma__AvailableActionsClient<
-      $Result.GetResult<Prisma.$AvailableActionsPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$AvailableActionsPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -11495,7 +14133,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AvailableActionsPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -11514,9 +14153,15 @@ export namespace Prisma {
     delete<T extends AvailableActionsDeleteArgs>(
       args: SelectSubset<T, AvailableActionsDeleteArgs<ExtArgs>>,
     ): Prisma__AvailableActionsClient<
-      $Result.GetResult<Prisma.$AvailableActionsPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$AvailableActionsPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -11537,9 +14182,15 @@ export namespace Prisma {
     update<T extends AvailableActionsUpdateArgs>(
       args: SelectSubset<T, AvailableActionsUpdateArgs<ExtArgs>>,
     ): Prisma__AvailableActionsClient<
-      $Result.GetResult<Prisma.$AvailableActionsPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$AvailableActionsPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -11599,9 +14250,15 @@ export namespace Prisma {
     upsert<T extends AvailableActionsUpsertArgs>(
       args: SelectSubset<T, AvailableActionsUpsertArgs<ExtArgs>>,
     ): Prisma__AvailableActionsClient<
-      $Result.GetResult<Prisma.$AvailableActionsPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$AvailableActionsPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -11754,12 +14411,19 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     actions<T extends AvailableActions$actionsArgs<ExtArgs> = {}>(
       args?: Subset<T, AvailableActions$actionsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ActionPayload<ExtArgs>, T, "findMany"> | Null
+      | $Result.GetResult<
+          Prisma.$ActionPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -11822,6 +14486,10 @@ export namespace Prisma {
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableActionsInclude<ExtArgs> | null;
@@ -11842,6 +14510,10 @@ export namespace Prisma {
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableActionsInclude<ExtArgs> | null;
@@ -11861,6 +14533,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AvailableActions
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -11916,6 +14592,10 @@ export namespace Prisma {
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableActionsInclude<ExtArgs> | null;
@@ -11970,6 +14650,10 @@ export namespace Prisma {
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableActionsInclude<ExtArgs> | null;
@@ -12019,6 +14703,10 @@ export namespace Prisma {
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableActionsInclude<ExtArgs> | null;
@@ -12055,6 +14743,10 @@ export namespace Prisma {
      */
     select?: AvailableActionsSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
+    /**
      * The data used to create many AvailableActions.
      */
     data: AvailableActionsCreateManyInput | AvailableActionsCreateManyInput[];
@@ -12071,6 +14763,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AvailableActions
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12118,6 +14814,10 @@ export namespace Prisma {
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableActionsInclude<ExtArgs> | null;
@@ -12152,6 +14852,10 @@ export namespace Prisma {
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: AvailableActionsInclude<ExtArgs> | null;
@@ -12184,6 +14888,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -12205,6 +14913,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AvailableActions
      */
     select?: AvailableActionsSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the AvailableActions
+     */
+    omit?: AvailableActionsOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -12469,6 +15181,19 @@ export namespace Prisma {
     metaData?: boolean;
   };
 
+  export type ZapRunOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "zapId"
+    | "createdAt"
+    | "completedAt"
+    | "status"
+    | "failureReason"
+    | "failedActionId"
+    | "metaData",
+    ExtArgs["result"]["zapRun"]
+  >;
   export type ZapRunInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -12514,12 +15239,13 @@ export namespace Prisma {
 
   type ZapRunCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<ZapRunFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<ZapRunFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: ZapRunCountAggregateInputType | true;
   };
 
   export interface ZapRunDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["ZapRun"];
@@ -12539,9 +15265,15 @@ export namespace Prisma {
     findUnique<T extends ZapRunFindUniqueArgs>(
       args: SelectSubset<T, ZapRunFindUniqueArgs<ExtArgs>>,
     ): Prisma__ZapRunClient<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findUnique"> | null,
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -12559,9 +15291,15 @@ export namespace Prisma {
     findUniqueOrThrow<T extends ZapRunFindUniqueOrThrowArgs>(
       args: SelectSubset<T, ZapRunFindUniqueOrThrowArgs<ExtArgs>>,
     ): Prisma__ZapRunClient<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findUniqueOrThrow">,
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -12580,9 +15318,15 @@ export namespace Prisma {
     findFirst<T extends ZapRunFindFirstArgs>(
       args?: SelectSubset<T, ZapRunFindFirstArgs<ExtArgs>>,
     ): Prisma__ZapRunClient<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findFirst"> | null,
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -12602,9 +15346,15 @@ export namespace Prisma {
     findFirstOrThrow<T extends ZapRunFindFirstOrThrowArgs>(
       args?: SelectSubset<T, ZapRunFindFirstOrThrowArgs<ExtArgs>>,
     ): Prisma__ZapRunClient<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findFirstOrThrow">,
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -12626,7 +15376,12 @@ export namespace Prisma {
     findMany<T extends ZapRunFindManyArgs>(
       args?: SelectSubset<T, ZapRunFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -12644,9 +15399,15 @@ export namespace Prisma {
     create<T extends ZapRunCreateArgs>(
       args: SelectSubset<T, ZapRunCreateArgs<ExtArgs>>,
     ): Prisma__ZapRunClient<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -12693,7 +15454,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapRunPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -12712,9 +15474,15 @@ export namespace Prisma {
     delete<T extends ZapRunDeleteArgs>(
       args: SelectSubset<T, ZapRunDeleteArgs<ExtArgs>>,
     ): Prisma__ZapRunClient<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -12735,9 +15503,15 @@ export namespace Prisma {
     update<T extends ZapRunUpdateArgs>(
       args: SelectSubset<T, ZapRunUpdateArgs<ExtArgs>>,
     ): Prisma__ZapRunClient<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -12797,9 +15571,15 @@ export namespace Prisma {
     upsert<T extends ZapRunUpsertArgs>(
       args: SelectSubset<T, ZapRunUpsertArgs<ExtArgs>>,
     ): Prisma__ZapRunClient<
-      $Result.GetResult<Prisma.$ZapRunPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$ZapRunPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -12951,6 +15731,7 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     failedAction<T extends ZapRun$failedActionArgs<ExtArgs> = {}>(
@@ -12959,18 +15740,26 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ActionPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     zap<T extends ZapDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapDefaultArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      | $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     zapRunOutBox<T extends ZapRun$zapRunOutBoxArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapRun$zapRunOutBoxArgs<ExtArgs>>,
@@ -12978,10 +15767,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapRunOutboxPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -13045,6 +15836,10 @@ export namespace Prisma {
      */
     select?: ZapRunSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunInclude<ExtArgs> | null;
@@ -13065,6 +15860,10 @@ export namespace Prisma {
      */
     select?: ZapRunSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunInclude<ExtArgs> | null;
@@ -13084,6 +15883,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRun
      */
     select?: ZapRunSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -13135,6 +15938,10 @@ export namespace Prisma {
      */
     select?: ZapRunSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunInclude<ExtArgs> | null;
@@ -13185,6 +15992,10 @@ export namespace Prisma {
      */
     select?: ZapRunSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunInclude<ExtArgs> | null;
@@ -13230,6 +16041,10 @@ export namespace Prisma {
      */
     select?: ZapRunSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunInclude<ExtArgs> | null;
@@ -13263,6 +16078,10 @@ export namespace Prisma {
      */
     select?: ZapRunSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
+    /**
      * The data used to create many ZapRuns.
      */
     data: ZapRunCreateManyInput | ZapRunCreateManyInput[];
@@ -13283,6 +16102,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRun
      */
     select?: ZapRunSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -13324,6 +16147,10 @@ export namespace Prisma {
      */
     select?: ZapRunSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunInclude<ExtArgs> | null;
@@ -13351,6 +16178,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRun
      */
     select?: ZapRunSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -13384,6 +16215,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -13401,6 +16236,10 @@ export namespace Prisma {
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunOutboxInclude<ExtArgs> | null;
@@ -13417,6 +16256,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRun
      */
     select?: ZapRunSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRun
+     */
+    omit?: ZapRunOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -13593,6 +16436,9 @@ export namespace Prisma {
     zapRunId?: boolean;
   };
 
+  export type ZapRunOutboxOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<"id" | "zapRunId", ExtArgs["result"]["zapRunOutbox"]>;
   export type ZapRunOutboxInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -13627,12 +16473,16 @@ export namespace Prisma {
 
   type ZapRunOutboxCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<ZapRunOutboxFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<
+    ZapRunOutboxFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
     select?: ZapRunOutboxCountAggregateInputType | true;
   };
 
   export interface ZapRunOutboxDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["ZapRunOutbox"];
@@ -13655,10 +16505,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapRunOutboxPayload<ExtArgs>,
         T,
-        "findUnique"
+        "findUnique",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -13679,10 +16531,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapRunOutboxPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -13704,10 +16558,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapRunOutboxPayload<ExtArgs>,
         T,
-        "findFirst"
+        "findFirst",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -13730,10 +16586,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapRunOutboxPayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        "findFirstOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -13755,7 +16613,12 @@ export namespace Prisma {
     findMany<T extends ZapRunOutboxFindManyArgs>(
       args?: SelectSubset<T, ZapRunOutboxFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapRunOutboxPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$ZapRunOutboxPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -13773,9 +16636,15 @@ export namespace Prisma {
     create<T extends ZapRunOutboxCreateArgs>(
       args: SelectSubset<T, ZapRunOutboxCreateArgs<ExtArgs>>,
     ): Prisma__ZapRunOutboxClient<
-      $Result.GetResult<Prisma.$ZapRunOutboxPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$ZapRunOutboxPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -13822,7 +16691,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapRunOutboxPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -13841,9 +16711,15 @@ export namespace Prisma {
     delete<T extends ZapRunOutboxDeleteArgs>(
       args: SelectSubset<T, ZapRunOutboxDeleteArgs<ExtArgs>>,
     ): Prisma__ZapRunOutboxClient<
-      $Result.GetResult<Prisma.$ZapRunOutboxPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$ZapRunOutboxPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -13864,9 +16740,15 @@ export namespace Prisma {
     update<T extends ZapRunOutboxUpdateArgs>(
       args: SelectSubset<T, ZapRunOutboxUpdateArgs<ExtArgs>>,
     ): Prisma__ZapRunOutboxClient<
-      $Result.GetResult<Prisma.$ZapRunOutboxPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$ZapRunOutboxPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -13926,9 +16808,15 @@ export namespace Prisma {
     upsert<T extends ZapRunOutboxUpsertArgs>(
       args: SelectSubset<T, ZapRunOutboxUpsertArgs<ExtArgs>>,
     ): Prisma__ZapRunOutboxClient<
-      $Result.GetResult<Prisma.$ZapRunOutboxPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$ZapRunOutboxPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -14081,6 +16969,7 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     zapRun<T extends ZapRunDefaultArgs<ExtArgs> = {}>(
@@ -14089,11 +16978,13 @@ export namespace Prisma {
       | $Result.GetResult<
           Prisma.$ZapRunPayload<ExtArgs>,
           T,
-          "findUniqueOrThrow"
+          "findUniqueOrThrow",
+          GlobalOmitOptions
         >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -14151,6 +17042,10 @@ export namespace Prisma {
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunOutboxInclude<ExtArgs> | null;
@@ -14171,6 +17066,10 @@ export namespace Prisma {
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunOutboxInclude<ExtArgs> | null;
@@ -14190,6 +17089,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRunOutbox
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -14243,6 +17146,10 @@ export namespace Prisma {
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunOutboxInclude<ExtArgs> | null;
@@ -14295,6 +17202,10 @@ export namespace Prisma {
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunOutboxInclude<ExtArgs> | null;
@@ -14342,6 +17253,10 @@ export namespace Prisma {
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunOutboxInclude<ExtArgs> | null;
@@ -14375,6 +17290,10 @@ export namespace Prisma {
      */
     select?: ZapRunOutboxSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
+    /**
      * The data used to create many ZapRunOutboxes.
      */
     data: ZapRunOutboxCreateManyInput | ZapRunOutboxCreateManyInput[];
@@ -14395,6 +17314,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRunOutbox
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -14439,6 +17362,10 @@ export namespace Prisma {
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapRunOutboxInclude<ExtArgs> | null;
@@ -14466,6 +17393,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRunOutbox
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -14498,6 +17429,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapRunOutbox
      */
     select?: ZapRunOutboxSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapRunOutbox
+     */
+    omit?: ZapRunOutboxOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -14757,6 +17692,12 @@ export namespace Prisma {
     createdAt?: boolean;
   };
 
+  export type ZapChangeHistoryOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "zapId" | "type" | "message" | "createdById" | "createdAt",
+    ExtArgs["result"]["zapChangeHistory"]
+  >;
   export type ZapChangeHistoryInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -14798,12 +17739,16 @@ export namespace Prisma {
 
   type ZapChangeHistoryCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<ZapChangeHistoryFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<
+    ZapChangeHistoryFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
     select?: ZapChangeHistoryCountAggregateInputType | true;
   };
 
   export interface ZapChangeHistoryDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["ZapChangeHistory"];
@@ -14826,10 +17771,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapChangeHistoryPayload<ExtArgs>,
         T,
-        "findUnique"
+        "findUnique",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -14850,10 +17797,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapChangeHistoryPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -14875,10 +17824,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapChangeHistoryPayload<ExtArgs>,
         T,
-        "findFirst"
+        "findFirst",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -14901,10 +17852,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapChangeHistoryPayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        "findFirstOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -14926,7 +17879,12 @@ export namespace Prisma {
     findMany<T extends ZapChangeHistoryFindManyArgs>(
       args?: SelectSubset<T, ZapChangeHistoryFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapChangeHistoryPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$ZapChangeHistoryPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -14944,9 +17902,15 @@ export namespace Prisma {
     create<T extends ZapChangeHistoryCreateArgs>(
       args: SelectSubset<T, ZapChangeHistoryCreateArgs<ExtArgs>>,
     ): Prisma__ZapChangeHistoryClient<
-      $Result.GetResult<Prisma.$ZapChangeHistoryPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$ZapChangeHistoryPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -14993,7 +17957,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapChangeHistoryPayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -15012,9 +17977,15 @@ export namespace Prisma {
     delete<T extends ZapChangeHistoryDeleteArgs>(
       args: SelectSubset<T, ZapChangeHistoryDeleteArgs<ExtArgs>>,
     ): Prisma__ZapChangeHistoryClient<
-      $Result.GetResult<Prisma.$ZapChangeHistoryPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$ZapChangeHistoryPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -15035,9 +18006,15 @@ export namespace Prisma {
     update<T extends ZapChangeHistoryUpdateArgs>(
       args: SelectSubset<T, ZapChangeHistoryUpdateArgs<ExtArgs>>,
     ): Prisma__ZapChangeHistoryClient<
-      $Result.GetResult<Prisma.$ZapChangeHistoryPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$ZapChangeHistoryPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -15097,9 +18074,15 @@ export namespace Prisma {
     upsert<T extends ZapChangeHistoryUpsertArgs>(
       args: SelectSubset<T, ZapChangeHistoryUpsertArgs<ExtArgs>>,
     ): Prisma__ZapChangeHistoryClient<
-      $Result.GetResult<Prisma.$ZapChangeHistoryPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$ZapChangeHistoryPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -15252,23 +18235,36 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     zap<T extends ZapDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapDefaultArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      | $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, UserDefaultArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -15330,6 +18326,10 @@ export namespace Prisma {
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapChangeHistoryInclude<ExtArgs> | null;
@@ -15350,6 +18350,10 @@ export namespace Prisma {
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapChangeHistoryInclude<ExtArgs> | null;
@@ -15369,6 +18373,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapChangeHistory
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -15424,6 +18432,10 @@ export namespace Prisma {
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapChangeHistoryInclude<ExtArgs> | null;
@@ -15478,6 +18490,10 @@ export namespace Prisma {
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapChangeHistoryInclude<ExtArgs> | null;
@@ -15527,6 +18543,10 @@ export namespace Prisma {
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapChangeHistoryInclude<ExtArgs> | null;
@@ -15563,6 +18583,10 @@ export namespace Prisma {
      */
     select?: ZapChangeHistorySelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
+    /**
      * The data used to create many ZapChangeHistories.
      */
     data: ZapChangeHistoryCreateManyInput | ZapChangeHistoryCreateManyInput[];
@@ -15583,6 +18607,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapChangeHistory
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -15630,6 +18658,10 @@ export namespace Prisma {
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapChangeHistoryInclude<ExtArgs> | null;
@@ -15664,6 +18696,10 @@ export namespace Prisma {
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapChangeHistoryInclude<ExtArgs> | null;
@@ -15695,6 +18731,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapChangeHistory
      */
     select?: ZapChangeHistorySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapChangeHistory
+     */
+    omit?: ZapChangeHistoryOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -15982,6 +19022,20 @@ export namespace Prisma {
     updatedAt?: boolean;
   };
 
+  export type ZapNoteOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "zapId"
+    | "triggerId"
+    | "stepId"
+    | "type"
+    | "content"
+    | "createdById"
+    | "createdAt"
+    | "updatedAt",
+    ExtArgs["result"]["zapNote"]
+  >;
   export type ZapNoteInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -16032,12 +19086,13 @@ export namespace Prisma {
 
   type ZapNoteCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<ZapNoteFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<ZapNoteFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
     select?: ZapNoteCountAggregateInputType | true;
   };
 
   export interface ZapNoteDelegate<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > {
     [K: symbol]: {
       types: Prisma.TypeMap<ExtArgs>["model"]["ZapNote"];
@@ -16060,10 +19115,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapNotePayload<ExtArgs>,
         T,
-        "findUnique"
+        "findUnique",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -16084,10 +19141,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapNotePayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -16106,9 +19165,15 @@ export namespace Prisma {
     findFirst<T extends ZapNoteFindFirstArgs>(
       args?: SelectSubset<T, ZapNoteFindFirstArgs<ExtArgs>>,
     ): Prisma__ZapNoteClient<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "findFirst"> | null,
+      $Result.GetResult<
+        Prisma.$ZapNotePayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -16128,9 +19193,15 @@ export namespace Prisma {
     findFirstOrThrow<T extends ZapNoteFindFirstOrThrowArgs>(
       args?: SelectSubset<T, ZapNoteFindFirstOrThrowArgs<ExtArgs>>,
     ): Prisma__ZapNoteClient<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "findFirstOrThrow">,
+      $Result.GetResult<
+        Prisma.$ZapNotePayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -16152,7 +19223,12 @@ export namespace Prisma {
     findMany<T extends ZapNoteFindManyArgs>(
       args?: SelectSubset<T, ZapNoteFindManyArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<
+        Prisma.$ZapNotePayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
     >;
 
     /**
@@ -16170,9 +19246,15 @@ export namespace Prisma {
     create<T extends ZapNoteCreateArgs>(
       args: SelectSubset<T, ZapNoteCreateArgs<ExtArgs>>,
     ): Prisma__ZapNoteClient<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "create">,
+      $Result.GetResult<
+        Prisma.$ZapNotePayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -16219,7 +19301,8 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ZapNotePayload<ExtArgs>,
         T,
-        "createManyAndReturn"
+        "createManyAndReturn",
+        GlobalOmitOptions
       >
     >;
 
@@ -16238,9 +19321,15 @@ export namespace Prisma {
     delete<T extends ZapNoteDeleteArgs>(
       args: SelectSubset<T, ZapNoteDeleteArgs<ExtArgs>>,
     ): Prisma__ZapNoteClient<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<
+        Prisma.$ZapNotePayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -16261,9 +19350,15 @@ export namespace Prisma {
     update<T extends ZapNoteUpdateArgs>(
       args: SelectSubset<T, ZapNoteUpdateArgs<ExtArgs>>,
     ): Prisma__ZapNoteClient<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "update">,
+      $Result.GetResult<
+        Prisma.$ZapNotePayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -16323,9 +19418,15 @@ export namespace Prisma {
     upsert<T extends ZapNoteUpsertArgs>(
       args: SelectSubset<T, ZapNoteUpsertArgs<ExtArgs>>,
     ): Prisma__ZapNoteClient<
-      $Result.GetResult<Prisma.$ZapNotePayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<
+        Prisma.$ZapNotePayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
       never,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
 
     /**
@@ -16477,15 +19578,22 @@ export namespace Prisma {
     T,
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise";
     zap<T extends ZapDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapDefaultArgs<ExtArgs>>,
     ): Prisma__ZapClient<
-      | $Result.GetResult<Prisma.$ZapPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     trigger<T extends ZapNote$triggerArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapNote$triggerArgs<ExtArgs>>,
@@ -16493,10 +19601,12 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$TriggerPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     step<T extends ZapNote$stepArgs<ExtArgs> = {}>(
       args?: Subset<T, ZapNote$stepArgs<ExtArgs>>,
@@ -16504,18 +19614,26 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ActionPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        "findUniqueOrThrow",
+        GlobalOmitOptions
       > | null,
       null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, UserDefaultArgs<ExtArgs>>,
     ): Prisma__UserClient<
-      | $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow">
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
       | Null,
       Null,
-      ExtArgs
+      ExtArgs,
+      GlobalOmitOptions
     >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -16580,6 +19698,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -16600,6 +19722,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -16619,6 +19745,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapNote
      */
     select?: ZapNoteSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -16672,6 +19802,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -16724,6 +19858,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -16771,6 +19909,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -16804,6 +19946,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelectCreateManyAndReturn<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * The data used to create many ZapNotes.
      */
     data: ZapNoteCreateManyInput | ZapNoteCreateManyInput[];
@@ -16824,6 +19970,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapNote
      */
     select?: ZapNoteSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -16865,6 +20015,10 @@ export namespace Prisma {
      */
     select?: ZapNoteSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ZapNoteInclude<ExtArgs> | null;
@@ -16892,6 +20046,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapNote
      */
     select?: ZapNoteSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -16925,6 +20083,10 @@ export namespace Prisma {
      */
     select?: TriggerSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Trigger
+     */
+    omit?: TriggerOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: TriggerInclude<ExtArgs> | null;
@@ -16942,6 +20104,10 @@ export namespace Prisma {
      */
     select?: ActionSelect<ExtArgs> | null;
     /**
+     * Omit specific fields from the Action
+     */
+    omit?: ActionOmit<ExtArgs> | null;
+    /**
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
@@ -16958,6 +20124,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the ZapNote
      */
     select?: ZapNoteSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ZapNote
+     */
+    omit?: ZapNoteOmit<ExtArgs> | null;
     /**
      * Choose, which related nodes to fetch as well
      */
@@ -17004,10 +20174,24 @@ export namespace Prisma {
     published: "published";
     RecordId: "RecordId";
     userId: "userId";
+    folderId: "folderId";
   };
 
   export type ZapScalarFieldEnum =
     (typeof ZapScalarFieldEnum)[keyof typeof ZapScalarFieldEnum];
+
+  export const FolderScalarFieldEnum: {
+    id: "id";
+    name: "name";
+    userId: "userId";
+    type: "type";
+    parentId: "parentId";
+    createdAt: "createdAt";
+    updatedAt: "updatedAt";
+  };
+
+  export type FolderScalarFieldEnum =
+    (typeof FolderScalarFieldEnum)[keyof typeof FolderScalarFieldEnum];
 
   export const RecordScalarFieldEnum: {
     id: "id";
@@ -17327,6 +20511,7 @@ export namespace Prisma {
     connections?: UserConnectionListRelationFilter;
     changeHistory?: ZapChangeHistoryListRelationFilter;
     notes?: ZapNoteListRelationFilter;
+    Folder?: FolderListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -17345,6 +20530,7 @@ export namespace Prisma {
     connections?: UserConnectionOrderByRelationAggregateInput;
     changeHistory?: ZapChangeHistoryOrderByRelationAggregateInput;
     notes?: ZapNoteOrderByRelationAggregateInput;
+    Folder?: FolderOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -17367,6 +20553,7 @@ export namespace Prisma {
       connections?: UserConnectionListRelationFilter;
       changeHistory?: ZapChangeHistoryListRelationFilter;
       notes?: ZapNoteListRelationFilter;
+      Folder?: FolderListRelationFilter;
     },
     "id" | "email" | "zapmail"
   >;
@@ -17423,6 +20610,7 @@ export namespace Prisma {
     published?: BoolFilter<"Zap"> | boolean;
     RecordId?: StringNullableFilter<"Zap"> | string | null;
     userId?: IntFilter<"Zap"> | number;
+    folderId?: IntFilter<"Zap"> | number;
     user?: XOR<UserRelationFilter, UserWhereInput>;
     trigger?: XOR<TriggerNullableRelationFilter, TriggerWhereInput> | null;
     actions?: ActionListRelationFilter;
@@ -17431,6 +20619,7 @@ export namespace Prisma {
     record?: XOR<RecordNullableRelationFilter, RecordWhereInput> | null;
     changeHistory?: ZapChangeHistoryListRelationFilter;
     notes?: ZapNoteListRelationFilter;
+    folder?: XOR<FolderRelationFilter, FolderWhereInput>;
   };
 
   export type ZapOrderByWithRelationInput = {
@@ -17442,6 +20631,7 @@ export namespace Prisma {
     published?: SortOrder;
     RecordId?: SortOrderInput | SortOrder;
     userId?: SortOrder;
+    folderId?: SortOrder;
     user?: UserOrderByWithRelationInput;
     trigger?: TriggerOrderByWithRelationInput;
     actions?: ActionOrderByRelationAggregateInput;
@@ -17450,6 +20640,7 @@ export namespace Prisma {
     record?: RecordOrderByWithRelationInput;
     changeHistory?: ZapChangeHistoryOrderByRelationAggregateInput;
     notes?: ZapNoteOrderByRelationAggregateInput;
+    folder?: FolderOrderByWithRelationInput;
   };
 
   export type ZapWhereUniqueInput = Prisma.AtLeast<
@@ -17465,6 +20656,7 @@ export namespace Prisma {
       createdAt?: DateTimeFilter<"Zap"> | Date | string;
       published?: BoolFilter<"Zap"> | boolean;
       userId?: IntFilter<"Zap"> | number;
+      folderId?: IntFilter<"Zap"> | number;
       user?: XOR<UserRelationFilter, UserWhereInput>;
       trigger?: XOR<TriggerNullableRelationFilter, TriggerWhereInput> | null;
       actions?: ActionListRelationFilter;
@@ -17473,6 +20665,7 @@ export namespace Prisma {
       record?: XOR<RecordNullableRelationFilter, RecordWhereInput> | null;
       changeHistory?: ZapChangeHistoryListRelationFilter;
       notes?: ZapNoteListRelationFilter;
+      folder?: XOR<FolderRelationFilter, FolderWhereInput>;
     },
     "id" | "RecordId"
   >;
@@ -17486,6 +20679,7 @@ export namespace Prisma {
     published?: SortOrder;
     RecordId?: SortOrderInput | SortOrder;
     userId?: SortOrder;
+    folderId?: SortOrder;
     _count?: ZapCountOrderByAggregateInput;
     _avg?: ZapAvgOrderByAggregateInput;
     _max?: ZapMaxOrderByAggregateInput;
@@ -17509,6 +20703,90 @@ export namespace Prisma {
     published?: BoolWithAggregatesFilter<"Zap"> | boolean;
     RecordId?: StringNullableWithAggregatesFilter<"Zap"> | string | null;
     userId?: IntWithAggregatesFilter<"Zap"> | number;
+    folderId?: IntWithAggregatesFilter<"Zap"> | number;
+  };
+
+  export type FolderWhereInput = {
+    AND?: FolderWhereInput | FolderWhereInput[];
+    OR?: FolderWhereInput[];
+    NOT?: FolderWhereInput | FolderWhereInput[];
+    id?: IntFilter<"Folder"> | number;
+    name?: StringFilter<"Folder"> | string;
+    userId?: IntFilter<"Folder"> | number;
+    type?: StringFilter<"Folder"> | string;
+    parentId?: IntNullableFilter<"Folder"> | number | null;
+    createdAt?: DateTimeFilter<"Folder"> | Date | string;
+    updatedAt?: DateTimeFilter<"Folder"> | Date | string;
+    user?: XOR<UserRelationFilter, UserWhereInput>;
+    parent?: XOR<FolderNullableRelationFilter, FolderWhereInput> | null;
+    children?: FolderListRelationFilter;
+    zaps?: ZapListRelationFilter;
+  };
+
+  export type FolderOrderByWithRelationInput = {
+    id?: SortOrder;
+    name?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    parentId?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    user?: UserOrderByWithRelationInput;
+    parent?: FolderOrderByWithRelationInput;
+    children?: FolderOrderByRelationAggregateInput;
+    zaps?: ZapOrderByRelationAggregateInput;
+  };
+
+  export type FolderWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: number;
+      userId?: number;
+      AND?: FolderWhereInput | FolderWhereInput[];
+      OR?: FolderWhereInput[];
+      NOT?: FolderWhereInput | FolderWhereInput[];
+      name?: StringFilter<"Folder"> | string;
+      type?: StringFilter<"Folder"> | string;
+      parentId?: IntNullableFilter<"Folder"> | number | null;
+      createdAt?: DateTimeFilter<"Folder"> | Date | string;
+      updatedAt?: DateTimeFilter<"Folder"> | Date | string;
+      user?: XOR<UserRelationFilter, UserWhereInput>;
+      parent?: XOR<FolderNullableRelationFilter, FolderWhereInput> | null;
+      children?: FolderListRelationFilter;
+      zaps?: ZapListRelationFilter;
+    },
+    "id" | "userId"
+  >;
+
+  export type FolderOrderByWithAggregationInput = {
+    id?: SortOrder;
+    name?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    parentId?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: FolderCountOrderByAggregateInput;
+    _avg?: FolderAvgOrderByAggregateInput;
+    _max?: FolderMaxOrderByAggregateInput;
+    _min?: FolderMinOrderByAggregateInput;
+    _sum?: FolderSumOrderByAggregateInput;
+  };
+
+  export type FolderScalarWhereWithAggregatesInput = {
+    AND?:
+      | FolderScalarWhereWithAggregatesInput
+      | FolderScalarWhereWithAggregatesInput[];
+    OR?: FolderScalarWhereWithAggregatesInput[];
+    NOT?:
+      | FolderScalarWhereWithAggregatesInput
+      | FolderScalarWhereWithAggregatesInput[];
+    id?: IntWithAggregatesFilter<"Folder"> | number;
+    name?: StringWithAggregatesFilter<"Folder"> | string;
+    userId?: IntWithAggregatesFilter<"Folder"> | number;
+    type?: StringWithAggregatesFilter<"Folder"> | string;
+    parentId?: IntNullableWithAggregatesFilter<"Folder"> | number | null;
+    createdAt?: DateTimeWithAggregatesFilter<"Folder"> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<"Folder"> | Date | string;
   };
 
   export type RecordWhereInput = {
@@ -18378,6 +21656,7 @@ export namespace Prisma {
     connections?: UserConnectionCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -18396,6 +21675,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserUpdateInput = {
@@ -18413,6 +21693,7 @@ export namespace Prisma {
     connections?: UserConnectionUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -18431,6 +21712,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -18488,6 +21770,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateInput = {
@@ -18499,6 +21782,7 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    folderId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -18521,6 +21805,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateInput = {
@@ -18532,6 +21817,7 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -18549,6 +21835,7 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    folderId: number;
   };
 
   export type ZapUpdateManyMutationInput = {
@@ -18568,6 +21855,80 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
+  };
+
+  export type FolderCreateInput = {
+    name: string;
+    type?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutFolderInput;
+    parent?: FolderCreateNestedOneWithoutChildrenInput;
+    children?: FolderCreateNestedManyWithoutParentInput;
+    zaps?: ZapCreateNestedManyWithoutFolderInput;
+  };
+
+  export type FolderUncheckedCreateInput = {
+    id?: number;
+    name: string;
+    userId: number;
+    type?: string;
+    parentId?: number | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: FolderUncheckedCreateNestedManyWithoutParentInput;
+    zaps?: ZapUncheckedCreateNestedManyWithoutFolderInput;
+  };
+
+  export type FolderUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutFolderNestedInput;
+    parent?: FolderUpdateOneWithoutChildrenNestedInput;
+    children?: FolderUpdateManyWithoutParentNestedInput;
+    zaps?: ZapUpdateManyWithoutFolderNestedInput;
+  };
+
+  export type FolderUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    name?: StringFieldUpdateOperationsInput | string;
+    userId?: IntFieldUpdateOperationsInput | number;
+    type?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: FolderUncheckedUpdateManyWithoutParentNestedInput;
+    zaps?: ZapUncheckedUpdateManyWithoutFolderNestedInput;
+  };
+
+  export type FolderCreateManyInput = {
+    id?: number;
+    name: string;
+    userId: number;
+    type?: string;
+    parentId?: number | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type FolderUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type FolderUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    name?: StringFieldUpdateOperationsInput | string;
+    userId?: IntFieldUpdateOperationsInput | number;
+    type?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type RecordCreateInput = {
@@ -19416,6 +22777,12 @@ export namespace Prisma {
     none?: ZapNoteWhereInput;
   };
 
+  export type FolderListRelationFilter = {
+    every?: FolderWhereInput;
+    some?: FolderWhereInput;
+    none?: FolderWhereInput;
+  };
+
   export type SortOrderInput = {
     sort: SortOrder;
     nulls?: NullsOrder;
@@ -19434,6 +22801,10 @@ export namespace Prisma {
   };
 
   export type ZapNoteOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type FolderOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -19597,6 +22968,11 @@ export namespace Prisma {
     isNot?: RecordWhereInput | null;
   };
 
+  export type FolderRelationFilter = {
+    is?: FolderWhereInput;
+    isNot?: FolderWhereInput;
+  };
+
   export type ActionOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -19618,11 +22994,13 @@ export namespace Prisma {
     published?: SortOrder;
     RecordId?: SortOrder;
     userId?: SortOrder;
+    folderId?: SortOrder;
   };
 
   export type ZapAvgOrderByAggregateInput = {
     id?: SortOrder;
     userId?: SortOrder;
+    folderId?: SortOrder;
   };
 
   export type ZapMaxOrderByAggregateInput = {
@@ -19634,6 +23012,7 @@ export namespace Prisma {
     published?: SortOrder;
     RecordId?: SortOrder;
     userId?: SortOrder;
+    folderId?: SortOrder;
   };
 
   export type ZapMinOrderByAggregateInput = {
@@ -19645,11 +23024,87 @@ export namespace Prisma {
     published?: SortOrder;
     RecordId?: SortOrder;
     userId?: SortOrder;
+    folderId?: SortOrder;
   };
 
   export type ZapSumOrderByAggregateInput = {
     id?: SortOrder;
     userId?: SortOrder;
+    folderId?: SortOrder;
+  };
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null;
+  };
+
+  export type FolderNullableRelationFilter = {
+    is?: FolderWhereInput | null;
+    isNot?: FolderWhereInput | null;
+  };
+
+  export type FolderCountOrderByAggregateInput = {
+    id?: SortOrder;
+    name?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    parentId?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type FolderAvgOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    parentId?: SortOrder;
+  };
+
+  export type FolderMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    name?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    parentId?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type FolderMinOrderByAggregateInput = {
+    id?: SortOrder;
+    name?: SortOrder;
+    userId?: SortOrder;
+    type?: SortOrder;
+    parentId?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type FolderSumOrderByAggregateInput = {
+    id?: SortOrder;
+    userId?: SortOrder;
+    parentId?: SortOrder;
+  };
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedFloatNullableFilter<$PrismaModel>;
+    _sum?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedIntNullableFilter<$PrismaModel>;
+    _max?: NestedIntNullableFilter<$PrismaModel>;
   };
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -20320,6 +23775,18 @@ export namespace Prisma {
     connect?: ZapNoteWhereUniqueInput | ZapNoteWhereUniqueInput[];
   };
 
+  export type FolderCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<FolderCreateWithoutUserInput, FolderUncheckedCreateWithoutUserInput>
+      | FolderCreateWithoutUserInput[]
+      | FolderUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | FolderCreateOrConnectWithoutUserInput
+      | FolderCreateOrConnectWithoutUserInput[];
+    createMany?: FolderCreateManyUserInputEnvelope;
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+  };
+
   export type ZapUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<ZapCreateWithoutUserInput, ZapUncheckedCreateWithoutUserInput>
@@ -20377,6 +23844,18 @@ export namespace Prisma {
       | ZapNoteCreateOrConnectWithoutCreatedByInput[];
     createMany?: ZapNoteCreateManyCreatedByInputEnvelope;
     connect?: ZapNoteWhereUniqueInput | ZapNoteWhereUniqueInput[];
+  };
+
+  export type FolderUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<FolderCreateWithoutUserInput, FolderUncheckedCreateWithoutUserInput>
+      | FolderCreateWithoutUserInput[]
+      | FolderUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | FolderCreateOrConnectWithoutUserInput
+      | FolderCreateOrConnectWithoutUserInput[];
+    createMany?: FolderCreateManyUserInputEnvelope;
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
   };
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -20516,6 +23995,31 @@ export namespace Prisma {
     deleteMany?: ZapNoteScalarWhereInput | ZapNoteScalarWhereInput[];
   };
 
+  export type FolderUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<FolderCreateWithoutUserInput, FolderUncheckedCreateWithoutUserInput>
+      | FolderCreateWithoutUserInput[]
+      | FolderUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | FolderCreateOrConnectWithoutUserInput
+      | FolderCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | FolderUpsertWithWhereUniqueWithoutUserInput
+      | FolderUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: FolderCreateManyUserInputEnvelope;
+    set?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    disconnect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    delete?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    update?:
+      | FolderUpdateWithWhereUniqueWithoutUserInput
+      | FolderUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | FolderUpdateManyWithWhereWithoutUserInput
+      | FolderUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[];
+  };
+
   export type IntFieldUpdateOperationsInput = {
     set?: number;
     increment?: number;
@@ -20645,6 +24149,31 @@ export namespace Prisma {
     deleteMany?: ZapNoteScalarWhereInput | ZapNoteScalarWhereInput[];
   };
 
+  export type FolderUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<FolderCreateWithoutUserInput, FolderUncheckedCreateWithoutUserInput>
+      | FolderCreateWithoutUserInput[]
+      | FolderUncheckedCreateWithoutUserInput[];
+    connectOrCreate?:
+      | FolderCreateOrConnectWithoutUserInput
+      | FolderCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | FolderUpsertWithWhereUniqueWithoutUserInput
+      | FolderUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: FolderCreateManyUserInputEnvelope;
+    set?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    disconnect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    delete?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    update?:
+      | FolderUpdateWithWhereUniqueWithoutUserInput
+      | FolderUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | FolderUpdateManyWithWhereWithoutUserInput
+      | FolderUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[];
+  };
+
   export type UserCreateNestedOneWithoutZapInput = {
     create?: XOR<UserCreateWithoutZapInput, UserUncheckedCreateWithoutZapInput>;
     connectOrCreate?: UserCreateOrConnectWithoutZapInput;
@@ -20732,6 +24261,15 @@ export namespace Prisma {
       | ZapNoteCreateOrConnectWithoutZapInput[];
     createMany?: ZapNoteCreateManyZapInputEnvelope;
     connect?: ZapNoteWhereUniqueInput | ZapNoteWhereUniqueInput[];
+  };
+
+  export type FolderCreateNestedOneWithoutZapsInput = {
+    create?: XOR<
+      FolderCreateWithoutZapsInput,
+      FolderUncheckedCreateWithoutZapsInput
+    >;
+    connectOrCreate?: FolderCreateOrConnectWithoutZapsInput;
+    connect?: FolderWhereUniqueInput;
   };
 
   export type TriggerUncheckedCreateNestedOneWithoutZapInput = {
@@ -20993,6 +24531,23 @@ export namespace Prisma {
     deleteMany?: ZapNoteScalarWhereInput | ZapNoteScalarWhereInput[];
   };
 
+  export type FolderUpdateOneRequiredWithoutZapsNestedInput = {
+    create?: XOR<
+      FolderCreateWithoutZapsInput,
+      FolderUncheckedCreateWithoutZapsInput
+    >;
+    connectOrCreate?: FolderCreateOrConnectWithoutZapsInput;
+    upsert?: FolderUpsertWithoutZapsInput;
+    connect?: FolderWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        FolderUpdateToOneWithWhereWithoutZapsInput,
+        FolderUpdateWithoutZapsInput
+      >,
+      FolderUncheckedUpdateWithoutZapsInput
+    >;
+  };
+
   export type TriggerUncheckedUpdateOneWithoutZapNestedInput = {
     create?: XOR<
       TriggerCreateWithoutZapInput,
@@ -21146,6 +24701,228 @@ export namespace Prisma {
       | ZapNoteUpdateManyWithWhereWithoutZapInput
       | ZapNoteUpdateManyWithWhereWithoutZapInput[];
     deleteMany?: ZapNoteScalarWhereInput | ZapNoteScalarWhereInput[];
+  };
+
+  export type UserCreateNestedOneWithoutFolderInput = {
+    create?: XOR<
+      UserCreateWithoutFolderInput,
+      UserUncheckedCreateWithoutFolderInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutFolderInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type FolderCreateNestedOneWithoutChildrenInput = {
+    create?: XOR<
+      FolderCreateWithoutChildrenInput,
+      FolderUncheckedCreateWithoutChildrenInput
+    >;
+    connectOrCreate?: FolderCreateOrConnectWithoutChildrenInput;
+    connect?: FolderWhereUniqueInput;
+  };
+
+  export type FolderCreateNestedManyWithoutParentInput = {
+    create?:
+      | XOR<
+          FolderCreateWithoutParentInput,
+          FolderUncheckedCreateWithoutParentInput
+        >
+      | FolderCreateWithoutParentInput[]
+      | FolderUncheckedCreateWithoutParentInput[];
+    connectOrCreate?:
+      | FolderCreateOrConnectWithoutParentInput
+      | FolderCreateOrConnectWithoutParentInput[];
+    createMany?: FolderCreateManyParentInputEnvelope;
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+  };
+
+  export type ZapCreateNestedManyWithoutFolderInput = {
+    create?:
+      | XOR<ZapCreateWithoutFolderInput, ZapUncheckedCreateWithoutFolderInput>
+      | ZapCreateWithoutFolderInput[]
+      | ZapUncheckedCreateWithoutFolderInput[];
+    connectOrCreate?:
+      | ZapCreateOrConnectWithoutFolderInput
+      | ZapCreateOrConnectWithoutFolderInput[];
+    createMany?: ZapCreateManyFolderInputEnvelope;
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+  };
+
+  export type FolderUncheckedCreateNestedManyWithoutParentInput = {
+    create?:
+      | XOR<
+          FolderCreateWithoutParentInput,
+          FolderUncheckedCreateWithoutParentInput
+        >
+      | FolderCreateWithoutParentInput[]
+      | FolderUncheckedCreateWithoutParentInput[];
+    connectOrCreate?:
+      | FolderCreateOrConnectWithoutParentInput
+      | FolderCreateOrConnectWithoutParentInput[];
+    createMany?: FolderCreateManyParentInputEnvelope;
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+  };
+
+  export type ZapUncheckedCreateNestedManyWithoutFolderInput = {
+    create?:
+      | XOR<ZapCreateWithoutFolderInput, ZapUncheckedCreateWithoutFolderInput>
+      | ZapCreateWithoutFolderInput[]
+      | ZapUncheckedCreateWithoutFolderInput[];
+    connectOrCreate?:
+      | ZapCreateOrConnectWithoutFolderInput
+      | ZapCreateOrConnectWithoutFolderInput[];
+    createMany?: ZapCreateManyFolderInputEnvelope;
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+  };
+
+  export type UserUpdateOneRequiredWithoutFolderNestedInput = {
+    create?: XOR<
+      UserCreateWithoutFolderInput,
+      UserUncheckedCreateWithoutFolderInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutFolderInput;
+    upsert?: UserUpsertWithoutFolderInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutFolderInput,
+        UserUpdateWithoutFolderInput
+      >,
+      UserUncheckedUpdateWithoutFolderInput
+    >;
+  };
+
+  export type FolderUpdateOneWithoutChildrenNestedInput = {
+    create?: XOR<
+      FolderCreateWithoutChildrenInput,
+      FolderUncheckedCreateWithoutChildrenInput
+    >;
+    connectOrCreate?: FolderCreateOrConnectWithoutChildrenInput;
+    upsert?: FolderUpsertWithoutChildrenInput;
+    disconnect?: FolderWhereInput | boolean;
+    delete?: FolderWhereInput | boolean;
+    connect?: FolderWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        FolderUpdateToOneWithWhereWithoutChildrenInput,
+        FolderUpdateWithoutChildrenInput
+      >,
+      FolderUncheckedUpdateWithoutChildrenInput
+    >;
+  };
+
+  export type FolderUpdateManyWithoutParentNestedInput = {
+    create?:
+      | XOR<
+          FolderCreateWithoutParentInput,
+          FolderUncheckedCreateWithoutParentInput
+        >
+      | FolderCreateWithoutParentInput[]
+      | FolderUncheckedCreateWithoutParentInput[];
+    connectOrCreate?:
+      | FolderCreateOrConnectWithoutParentInput
+      | FolderCreateOrConnectWithoutParentInput[];
+    upsert?:
+      | FolderUpsertWithWhereUniqueWithoutParentInput
+      | FolderUpsertWithWhereUniqueWithoutParentInput[];
+    createMany?: FolderCreateManyParentInputEnvelope;
+    set?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    disconnect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    delete?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    update?:
+      | FolderUpdateWithWhereUniqueWithoutParentInput
+      | FolderUpdateWithWhereUniqueWithoutParentInput[];
+    updateMany?:
+      | FolderUpdateManyWithWhereWithoutParentInput
+      | FolderUpdateManyWithWhereWithoutParentInput[];
+    deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[];
+  };
+
+  export type ZapUpdateManyWithoutFolderNestedInput = {
+    create?:
+      | XOR<ZapCreateWithoutFolderInput, ZapUncheckedCreateWithoutFolderInput>
+      | ZapCreateWithoutFolderInput[]
+      | ZapUncheckedCreateWithoutFolderInput[];
+    connectOrCreate?:
+      | ZapCreateOrConnectWithoutFolderInput
+      | ZapCreateOrConnectWithoutFolderInput[];
+    upsert?:
+      | ZapUpsertWithWhereUniqueWithoutFolderInput
+      | ZapUpsertWithWhereUniqueWithoutFolderInput[];
+    createMany?: ZapCreateManyFolderInputEnvelope;
+    set?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    disconnect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    delete?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    update?:
+      | ZapUpdateWithWhereUniqueWithoutFolderInput
+      | ZapUpdateWithWhereUniqueWithoutFolderInput[];
+    updateMany?:
+      | ZapUpdateManyWithWhereWithoutFolderInput
+      | ZapUpdateManyWithWhereWithoutFolderInput[];
+    deleteMany?: ZapScalarWhereInput | ZapScalarWhereInput[];
+  };
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null;
+    increment?: number;
+    decrement?: number;
+    multiply?: number;
+    divide?: number;
+  };
+
+  export type FolderUncheckedUpdateManyWithoutParentNestedInput = {
+    create?:
+      | XOR<
+          FolderCreateWithoutParentInput,
+          FolderUncheckedCreateWithoutParentInput
+        >
+      | FolderCreateWithoutParentInput[]
+      | FolderUncheckedCreateWithoutParentInput[];
+    connectOrCreate?:
+      | FolderCreateOrConnectWithoutParentInput
+      | FolderCreateOrConnectWithoutParentInput[];
+    upsert?:
+      | FolderUpsertWithWhereUniqueWithoutParentInput
+      | FolderUpsertWithWhereUniqueWithoutParentInput[];
+    createMany?: FolderCreateManyParentInputEnvelope;
+    set?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    disconnect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    delete?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+    update?:
+      | FolderUpdateWithWhereUniqueWithoutParentInput
+      | FolderUpdateWithWhereUniqueWithoutParentInput[];
+    updateMany?:
+      | FolderUpdateManyWithWhereWithoutParentInput
+      | FolderUpdateManyWithWhereWithoutParentInput[];
+    deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[];
+  };
+
+  export type ZapUncheckedUpdateManyWithoutFolderNestedInput = {
+    create?:
+      | XOR<ZapCreateWithoutFolderInput, ZapUncheckedCreateWithoutFolderInput>
+      | ZapCreateWithoutFolderInput[]
+      | ZapUncheckedCreateWithoutFolderInput[];
+    connectOrCreate?:
+      | ZapCreateOrConnectWithoutFolderInput
+      | ZapCreateOrConnectWithoutFolderInput[];
+    upsert?:
+      | ZapUpsertWithWhereUniqueWithoutFolderInput
+      | ZapUpsertWithWhereUniqueWithoutFolderInput[];
+    createMany?: ZapCreateManyFolderInputEnvelope;
+    set?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    disconnect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    delete?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    update?:
+      | ZapUpdateWithWhereUniqueWithoutFolderInput
+      | ZapUpdateWithWhereUniqueWithoutFolderInput[];
+    updateMany?:
+      | ZapUpdateManyWithWhereWithoutFolderInput
+      | ZapUpdateManyWithWhereWithoutFolderInput[];
+    deleteMany?: ZapScalarWhereInput | ZapScalarWhereInput[];
   };
 
   export type ZapCreateNestedOneWithoutRecordsInput = {
@@ -22422,6 +26199,33 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>;
     _max?: NestedDateTimeFilter<$PrismaModel>;
   };
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedFloatNullableFilter<$PrismaModel>;
+    _sum?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedIntNullableFilter<$PrismaModel>;
+    _max?: NestedIntNullableFilter<$PrismaModel>;
+  };
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null;
+    lt?: number | FloatFieldRefInput<$PrismaModel>;
+    lte?: number | FloatFieldRefInput<$PrismaModel>;
+    gt?: number | FloatFieldRefInput<$PrismaModel>;
+    gte?: number | FloatFieldRefInput<$PrismaModel>;
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null;
+  };
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<
@@ -22603,6 +26407,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateWithoutUserInput = {
@@ -22613,6 +26418,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     published?: boolean;
     RecordId?: string | null;
+    folderId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -22736,6 +26542,40 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type FolderCreateWithoutUserInput = {
+    name: string;
+    type?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    parent?: FolderCreateNestedOneWithoutChildrenInput;
+    children?: FolderCreateNestedManyWithoutParentInput;
+    zaps?: ZapCreateNestedManyWithoutFolderInput;
+  };
+
+  export type FolderUncheckedCreateWithoutUserInput = {
+    id?: number;
+    name: string;
+    type?: string;
+    parentId?: number | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: FolderUncheckedCreateNestedManyWithoutParentInput;
+    zaps?: ZapUncheckedCreateNestedManyWithoutFolderInput;
+  };
+
+  export type FolderCreateOrConnectWithoutUserInput = {
+    where: FolderWhereUniqueInput;
+    create: XOR<
+      FolderCreateWithoutUserInput,
+      FolderUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type FolderCreateManyUserInputEnvelope = {
+    data: FolderCreateManyUserInput | FolderCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type ZapUpsertWithWhereUniqueWithoutUserInput = {
     where: ZapWhereUniqueInput;
     update: XOR<ZapUpdateWithoutUserInput, ZapUncheckedUpdateWithoutUserInput>;
@@ -22767,6 +26607,7 @@ export namespace Prisma {
     published?: BoolFilter<"Zap"> | boolean;
     RecordId?: StringNullableFilter<"Zap"> | string | null;
     userId?: IntFilter<"Zap"> | number;
+    folderId?: IntFilter<"Zap"> | number;
   };
 
   export type UserConnectionUpsertWithWhereUniqueWithoutUserInput = {
@@ -22894,6 +26735,47 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ZapNote"> | Date | string;
   };
 
+  export type FolderUpsertWithWhereUniqueWithoutUserInput = {
+    where: FolderWhereUniqueInput;
+    update: XOR<
+      FolderUpdateWithoutUserInput,
+      FolderUncheckedUpdateWithoutUserInput
+    >;
+    create: XOR<
+      FolderCreateWithoutUserInput,
+      FolderUncheckedCreateWithoutUserInput
+    >;
+  };
+
+  export type FolderUpdateWithWhereUniqueWithoutUserInput = {
+    where: FolderWhereUniqueInput;
+    data: XOR<
+      FolderUpdateWithoutUserInput,
+      FolderUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type FolderUpdateManyWithWhereWithoutUserInput = {
+    where: FolderScalarWhereInput;
+    data: XOR<
+      FolderUpdateManyMutationInput,
+      FolderUncheckedUpdateManyWithoutUserInput
+    >;
+  };
+
+  export type FolderScalarWhereInput = {
+    AND?: FolderScalarWhereInput | FolderScalarWhereInput[];
+    OR?: FolderScalarWhereInput[];
+    NOT?: FolderScalarWhereInput | FolderScalarWhereInput[];
+    id?: IntFilter<"Folder"> | number;
+    name?: StringFilter<"Folder"> | string;
+    userId?: IntFilter<"Folder"> | number;
+    type?: StringFilter<"Folder"> | string;
+    parentId?: IntNullableFilter<"Folder"> | number | null;
+    createdAt?: DateTimeFilter<"Folder"> | Date | string;
+    updatedAt?: DateTimeFilter<"Folder"> | Date | string;
+  };
+
   export type UserCreateWithoutZapInput = {
     firstname?: string | null;
     lastname?: string | null;
@@ -22908,6 +26790,7 @@ export namespace Prisma {
     connections?: UserConnectionCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutZapInput = {
@@ -22925,6 +26808,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutZapInput = {
@@ -23167,6 +27051,35 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type FolderCreateWithoutZapsInput = {
+    name: string;
+    type?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutFolderInput;
+    parent?: FolderCreateNestedOneWithoutChildrenInput;
+    children?: FolderCreateNestedManyWithoutParentInput;
+  };
+
+  export type FolderUncheckedCreateWithoutZapsInput = {
+    id?: number;
+    name: string;
+    userId: number;
+    type?: string;
+    parentId?: number | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: FolderUncheckedCreateNestedManyWithoutParentInput;
+  };
+
+  export type FolderCreateOrConnectWithoutZapsInput = {
+    where: FolderWhereUniqueInput;
+    create: XOR<
+      FolderCreateWithoutZapsInput,
+      FolderUncheckedCreateWithoutZapsInput
+    >;
+  };
+
   export type UserUpsertWithoutZapInput = {
     update: XOR<UserUpdateWithoutZapInput, UserUncheckedUpdateWithoutZapInput>;
     create: XOR<UserCreateWithoutZapInput, UserUncheckedCreateWithoutZapInput>;
@@ -23192,6 +27105,7 @@ export namespace Prisma {
     connections?: UserConnectionUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutZapInput = {
@@ -23209,6 +27123,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TriggerUpsertWithoutZapInput = {
@@ -23487,6 +27402,351 @@ export namespace Prisma {
     >;
   };
 
+  export type FolderUpsertWithoutZapsInput = {
+    update: XOR<
+      FolderUpdateWithoutZapsInput,
+      FolderUncheckedUpdateWithoutZapsInput
+    >;
+    create: XOR<
+      FolderCreateWithoutZapsInput,
+      FolderUncheckedCreateWithoutZapsInput
+    >;
+    where?: FolderWhereInput;
+  };
+
+  export type FolderUpdateToOneWithWhereWithoutZapsInput = {
+    where?: FolderWhereInput;
+    data: XOR<
+      FolderUpdateWithoutZapsInput,
+      FolderUncheckedUpdateWithoutZapsInput
+    >;
+  };
+
+  export type FolderUpdateWithoutZapsInput = {
+    name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutFolderNestedInput;
+    parent?: FolderUpdateOneWithoutChildrenNestedInput;
+    children?: FolderUpdateManyWithoutParentNestedInput;
+  };
+
+  export type FolderUncheckedUpdateWithoutZapsInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    name?: StringFieldUpdateOperationsInput | string;
+    userId?: IntFieldUpdateOperationsInput | number;
+    type?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: FolderUncheckedUpdateManyWithoutParentNestedInput;
+  };
+
+  export type UserCreateWithoutFolderInput = {
+    firstname?: string | null;
+    lastname?: string | null;
+    email: string;
+    zapmail: string;
+    type: string;
+    verified?: boolean;
+    password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    zap?: ZapCreateNestedManyWithoutUserInput;
+    connections?: UserConnectionCreateNestedManyWithoutUserInput;
+    changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
+    notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
+  };
+
+  export type UserUncheckedCreateWithoutFolderInput = {
+    id?: number;
+    firstname?: string | null;
+    lastname?: string | null;
+    email: string;
+    zapmail: string;
+    type: string;
+    verified?: boolean;
+    password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    zap?: ZapUncheckedCreateNestedManyWithoutUserInput;
+    connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
+    changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
+    notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
+  };
+
+  export type UserCreateOrConnectWithoutFolderInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutFolderInput,
+      UserUncheckedCreateWithoutFolderInput
+    >;
+  };
+
+  export type FolderCreateWithoutChildrenInput = {
+    name: string;
+    type?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutFolderInput;
+    parent?: FolderCreateNestedOneWithoutChildrenInput;
+    zaps?: ZapCreateNestedManyWithoutFolderInput;
+  };
+
+  export type FolderUncheckedCreateWithoutChildrenInput = {
+    id?: number;
+    name: string;
+    userId: number;
+    type?: string;
+    parentId?: number | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    zaps?: ZapUncheckedCreateNestedManyWithoutFolderInput;
+  };
+
+  export type FolderCreateOrConnectWithoutChildrenInput = {
+    where: FolderWhereUniqueInput;
+    create: XOR<
+      FolderCreateWithoutChildrenInput,
+      FolderUncheckedCreateWithoutChildrenInput
+    >;
+  };
+
+  export type FolderCreateWithoutParentInput = {
+    name: string;
+    type?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutFolderInput;
+    children?: FolderCreateNestedManyWithoutParentInput;
+    zaps?: ZapCreateNestedManyWithoutFolderInput;
+  };
+
+  export type FolderUncheckedCreateWithoutParentInput = {
+    id?: number;
+    name: string;
+    userId: number;
+    type?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    children?: FolderUncheckedCreateNestedManyWithoutParentInput;
+    zaps?: ZapUncheckedCreateNestedManyWithoutFolderInput;
+  };
+
+  export type FolderCreateOrConnectWithoutParentInput = {
+    where: FolderWhereUniqueInput;
+    create: XOR<
+      FolderCreateWithoutParentInput,
+      FolderUncheckedCreateWithoutParentInput
+    >;
+  };
+
+  export type FolderCreateManyParentInputEnvelope = {
+    data: FolderCreateManyParentInput | FolderCreateManyParentInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type ZapCreateWithoutFolderInput = {
+    triggerId?: string | null;
+    name?: string;
+    lastEdited?: Date | string;
+    createdAt?: Date | string;
+    published?: boolean;
+    user: UserCreateNestedOneWithoutZapInput;
+    trigger?: TriggerCreateNestedOneWithoutZapInput;
+    actions?: ActionCreateNestedManyWithoutZapInput;
+    zapRuns?: ZapRunCreateNestedManyWithoutZapInput;
+    records?: RecordCreateNestedManyWithoutZapInput;
+    record?: RecordCreateNestedOneWithoutZapSingleInput;
+    changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
+    notes?: ZapNoteCreateNestedManyWithoutZapInput;
+  };
+
+  export type ZapUncheckedCreateWithoutFolderInput = {
+    id?: number;
+    triggerId?: string | null;
+    name?: string;
+    lastEdited?: Date | string;
+    createdAt?: Date | string;
+    published?: boolean;
+    RecordId?: string | null;
+    userId: number;
+    trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
+    actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
+    zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
+    records?: RecordUncheckedCreateNestedManyWithoutZapInput;
+    changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutZapInput;
+    notes?: ZapNoteUncheckedCreateNestedManyWithoutZapInput;
+  };
+
+  export type ZapCreateOrConnectWithoutFolderInput = {
+    where: ZapWhereUniqueInput;
+    create: XOR<
+      ZapCreateWithoutFolderInput,
+      ZapUncheckedCreateWithoutFolderInput
+    >;
+  };
+
+  export type ZapCreateManyFolderInputEnvelope = {
+    data: ZapCreateManyFolderInput | ZapCreateManyFolderInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type UserUpsertWithoutFolderInput = {
+    update: XOR<
+      UserUpdateWithoutFolderInput,
+      UserUncheckedUpdateWithoutFolderInput
+    >;
+    create: XOR<
+      UserCreateWithoutFolderInput,
+      UserUncheckedCreateWithoutFolderInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutFolderInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutFolderInput,
+      UserUncheckedUpdateWithoutFolderInput
+    >;
+  };
+
+  export type UserUpdateWithoutFolderInput = {
+    firstname?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastname?: NullableStringFieldUpdateOperationsInput | string | null;
+    email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    verified?: BoolFieldUpdateOperationsInput | boolean;
+    password?: NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    zap?: ZapUpdateManyWithoutUserNestedInput;
+    connections?: UserConnectionUpdateManyWithoutUserNestedInput;
+    changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
+    notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutFolderInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    firstname?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastname?: NullableStringFieldUpdateOperationsInput | string | null;
+    email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    verified?: BoolFieldUpdateOperationsInput | boolean;
+    password?: NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    zap?: ZapUncheckedUpdateManyWithoutUserNestedInput;
+    connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
+    changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+    notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
+  };
+
+  export type FolderUpsertWithoutChildrenInput = {
+    update: XOR<
+      FolderUpdateWithoutChildrenInput,
+      FolderUncheckedUpdateWithoutChildrenInput
+    >;
+    create: XOR<
+      FolderCreateWithoutChildrenInput,
+      FolderUncheckedCreateWithoutChildrenInput
+    >;
+    where?: FolderWhereInput;
+  };
+
+  export type FolderUpdateToOneWithWhereWithoutChildrenInput = {
+    where?: FolderWhereInput;
+    data: XOR<
+      FolderUpdateWithoutChildrenInput,
+      FolderUncheckedUpdateWithoutChildrenInput
+    >;
+  };
+
+  export type FolderUpdateWithoutChildrenInput = {
+    name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutFolderNestedInput;
+    parent?: FolderUpdateOneWithoutChildrenNestedInput;
+    zaps?: ZapUpdateManyWithoutFolderNestedInput;
+  };
+
+  export type FolderUncheckedUpdateWithoutChildrenInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    name?: StringFieldUpdateOperationsInput | string;
+    userId?: IntFieldUpdateOperationsInput | number;
+    type?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    zaps?: ZapUncheckedUpdateManyWithoutFolderNestedInput;
+  };
+
+  export type FolderUpsertWithWhereUniqueWithoutParentInput = {
+    where: FolderWhereUniqueInput;
+    update: XOR<
+      FolderUpdateWithoutParentInput,
+      FolderUncheckedUpdateWithoutParentInput
+    >;
+    create: XOR<
+      FolderCreateWithoutParentInput,
+      FolderUncheckedCreateWithoutParentInput
+    >;
+  };
+
+  export type FolderUpdateWithWhereUniqueWithoutParentInput = {
+    where: FolderWhereUniqueInput;
+    data: XOR<
+      FolderUpdateWithoutParentInput,
+      FolderUncheckedUpdateWithoutParentInput
+    >;
+  };
+
+  export type FolderUpdateManyWithWhereWithoutParentInput = {
+    where: FolderScalarWhereInput;
+    data: XOR<
+      FolderUpdateManyMutationInput,
+      FolderUncheckedUpdateManyWithoutParentInput
+    >;
+  };
+
+  export type ZapUpsertWithWhereUniqueWithoutFolderInput = {
+    where: ZapWhereUniqueInput;
+    update: XOR<
+      ZapUpdateWithoutFolderInput,
+      ZapUncheckedUpdateWithoutFolderInput
+    >;
+    create: XOR<
+      ZapCreateWithoutFolderInput,
+      ZapUncheckedCreateWithoutFolderInput
+    >;
+  };
+
+  export type ZapUpdateWithWhereUniqueWithoutFolderInput = {
+    where: ZapWhereUniqueInput;
+    data: XOR<
+      ZapUpdateWithoutFolderInput,
+      ZapUncheckedUpdateWithoutFolderInput
+    >;
+  };
+
+  export type ZapUpdateManyWithWhereWithoutFolderInput = {
+    where: ZapScalarWhereInput;
+    data: XOR<
+      ZapUpdateManyMutationInput,
+      ZapUncheckedUpdateManyWithoutFolderInput
+    >;
+  };
+
   export type ZapCreateWithoutRecordsInput = {
     triggerId?: string | null;
     name?: string;
@@ -23500,6 +27760,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateWithoutRecordsInput = {
@@ -23511,6 +27772,7 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    folderId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -23539,6 +27801,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutZapInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateWithoutRecordInput = {
@@ -23549,6 +27812,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     published?: boolean;
     userId: number;
+    folderId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -23598,6 +27862,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutRecordsInput = {
@@ -23609,6 +27874,7 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -23649,6 +27915,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutZapNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutRecordInput = {
@@ -23659,6 +27926,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -23680,6 +27948,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateWithoutTriggerInput = {
@@ -23691,6 +27960,7 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    folderId: number;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
     records?: RecordUncheckedCreateNestedManyWithoutZapInput;
@@ -23829,6 +28099,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutTriggerInput = {
@@ -23840,6 +28111,7 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
     records?: RecordUncheckedUpdateManyWithoutZapNestedInput;
@@ -23987,6 +28259,7 @@ export namespace Prisma {
     zap?: ZapCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutConnectionsInput = {
@@ -24004,6 +28277,7 @@ export namespace Prisma {
     zap?: ZapUncheckedCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutConnectionsInput = {
@@ -24126,6 +28400,7 @@ export namespace Prisma {
     zap?: ZapUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConnectionsInput = {
@@ -24143,6 +28418,7 @@ export namespace Prisma {
     zap?: ZapUncheckedUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TriggerUpsertWithWhereUniqueWithoutUserConnectionInput = {
@@ -24294,6 +28570,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateWithoutActionsInput = {
@@ -24305,6 +28582,7 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    folderId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
     records?: RecordUncheckedCreateNestedManyWithoutZapInput;
@@ -24480,6 +28758,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutActionsInput = {
@@ -24491,6 +28770,7 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
     records?: RecordUncheckedUpdateManyWithoutZapNestedInput;
@@ -24764,6 +29044,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateWithoutZapRunsInput = {
@@ -24775,6 +29056,7 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    folderId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     records?: RecordUncheckedCreateNestedManyWithoutZapInput;
@@ -24883,6 +29165,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutZapRunsInput = {
@@ -24894,6 +29177,7 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     records?: RecordUncheckedUpdateManyWithoutZapNestedInput;
@@ -25022,6 +29306,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutZapInput;
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateWithoutChangeHistoryInput = {
@@ -25033,6 +29318,7 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    folderId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -25062,6 +29348,7 @@ export namespace Prisma {
     zap?: ZapCreateNestedManyWithoutUserInput;
     connections?: UserConnectionCreateNestedManyWithoutUserInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutChangeHistoryInput = {
@@ -25079,6 +29366,7 @@ export namespace Prisma {
     zap?: ZapUncheckedCreateNestedManyWithoutUserInput;
     connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutChangeHistoryInput = {
@@ -25122,6 +29410,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutZapNestedInput;
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutChangeHistoryInput = {
@@ -25133,6 +29422,7 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -25174,6 +29464,7 @@ export namespace Prisma {
     zap?: ZapUpdateManyWithoutUserNestedInput;
     connections?: UserConnectionUpdateManyWithoutUserNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutChangeHistoryInput = {
@@ -25191,6 +29482,7 @@ export namespace Prisma {
     zap?: ZapUncheckedUpdateManyWithoutUserNestedInput;
     connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type ZapCreateWithoutNotesInput = {
@@ -25206,6 +29498,7 @@ export namespace Prisma {
     records?: RecordCreateNestedManyWithoutZapInput;
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
   };
 
   export type ZapUncheckedCreateWithoutNotesInput = {
@@ -25217,6 +29510,7 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    folderId: number;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -25310,6 +29604,7 @@ export namespace Prisma {
     zap?: ZapCreateNestedManyWithoutUserInput;
     connections?: UserConnectionCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutNotesInput = {
@@ -25327,6 +29622,7 @@ export namespace Prisma {
     zap?: ZapUncheckedCreateNestedManyWithoutUserInput;
     connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutNotesInput = {
@@ -25367,6 +29663,7 @@ export namespace Prisma {
     records?: RecordUpdateManyWithoutZapNestedInput;
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutNotesInput = {
@@ -25378,6 +29675,7 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -25515,6 +29813,7 @@ export namespace Prisma {
     zap?: ZapUpdateManyWithoutUserNestedInput;
     connections?: UserConnectionUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutNotesInput = {
@@ -25532,6 +29831,7 @@ export namespace Prisma {
     zap?: ZapUncheckedUpdateManyWithoutUserNestedInput;
     connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type ZapCreateManyUserInput = {
@@ -25542,6 +29842,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     published?: boolean;
     RecordId?: string | null;
+    folderId: number;
   };
 
   export type UserConnectionCreateManyUserInput = {
@@ -25573,6 +29874,15 @@ export namespace Prisma {
     updatedAt?: Date | string;
   };
 
+  export type FolderCreateManyUserInput = {
+    id?: number;
+    name: string;
+    type?: string;
+    parentId?: number | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
   export type ZapUpdateWithoutUserInput = {
     triggerId?: NullableStringFieldUpdateOperationsInput | string | null;
     name?: StringFieldUpdateOperationsInput | string;
@@ -25586,6 +29896,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutUserInput = {
@@ -25596,6 +29907,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
+    folderId?: IntFieldUpdateOperationsInput | number;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -25612,6 +29924,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
+    folderId?: IntFieldUpdateOperationsInput | number;
   };
 
   export type UserConnectionUpdateWithoutUserInput = {
@@ -25701,6 +30014,36 @@ export namespace Prisma {
     stepId?: NullableStringFieldUpdateOperationsInput | string | null;
     type?: EnumZapNoteTypeFieldUpdateOperationsInput | $Enums.ZapNoteType;
     content?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type FolderUpdateWithoutUserInput = {
+    name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    parent?: FolderUpdateOneWithoutChildrenNestedInput;
+    children?: FolderUpdateManyWithoutParentNestedInput;
+    zaps?: ZapUpdateManyWithoutFolderNestedInput;
+  };
+
+  export type FolderUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: FolderUncheckedUpdateManyWithoutParentNestedInput;
+    zaps?: ZapUncheckedUpdateManyWithoutFolderNestedInput;
+  };
+
+  export type FolderUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    parentId?: NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -25919,6 +30262,100 @@ export namespace Prisma {
     createdById?: IntFieldUpdateOperationsInput | number;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type FolderCreateManyParentInput = {
+    id?: number;
+    name: string;
+    userId: number;
+    type?: string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type ZapCreateManyFolderInput = {
+    id?: number;
+    triggerId?: string | null;
+    name?: string;
+    lastEdited?: Date | string;
+    createdAt?: Date | string;
+    published?: boolean;
+    RecordId?: string | null;
+    userId: number;
+  };
+
+  export type FolderUpdateWithoutParentInput = {
+    name?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutFolderNestedInput;
+    children?: FolderUpdateManyWithoutParentNestedInput;
+    zaps?: ZapUpdateManyWithoutFolderNestedInput;
+  };
+
+  export type FolderUncheckedUpdateWithoutParentInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    name?: StringFieldUpdateOperationsInput | string;
+    userId?: IntFieldUpdateOperationsInput | number;
+    type?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    children?: FolderUncheckedUpdateManyWithoutParentNestedInput;
+    zaps?: ZapUncheckedUpdateManyWithoutFolderNestedInput;
+  };
+
+  export type FolderUncheckedUpdateManyWithoutParentInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    name?: StringFieldUpdateOperationsInput | string;
+    userId?: IntFieldUpdateOperationsInput | number;
+    type?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ZapUpdateWithoutFolderInput = {
+    triggerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    name?: StringFieldUpdateOperationsInput | string;
+    lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    published?: BoolFieldUpdateOperationsInput | boolean;
+    user?: UserUpdateOneRequiredWithoutZapNestedInput;
+    trigger?: TriggerUpdateOneWithoutZapNestedInput;
+    actions?: ActionUpdateManyWithoutZapNestedInput;
+    zapRuns?: ZapRunUpdateManyWithoutZapNestedInput;
+    records?: RecordUpdateManyWithoutZapNestedInput;
+    record?: RecordUpdateOneWithoutZapSingleNestedInput;
+    changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
+    notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+  };
+
+  export type ZapUncheckedUpdateWithoutFolderInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    triggerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    name?: StringFieldUpdateOperationsInput | string;
+    lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    published?: BoolFieldUpdateOperationsInput | boolean;
+    RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
+    userId?: IntFieldUpdateOperationsInput | number;
+    trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
+    actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
+    zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
+    records?: RecordUncheckedUpdateManyWithoutZapNestedInput;
+    changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutZapNestedInput;
+    notes?: ZapNoteUncheckedUpdateManyWithoutZapNestedInput;
+  };
+
+  export type ZapUncheckedUpdateManyWithoutFolderInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    triggerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    name?: StringFieldUpdateOperationsInput | string;
+    lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    published?: BoolFieldUpdateOperationsInput | boolean;
+    RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
+    userId?: IntFieldUpdateOperationsInput | number;
   };
 
   export type TriggerCreateManyUserConnectionInput = {
@@ -26178,118 +30615,6 @@ export namespace Prisma {
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
-
-  /**
-   * Aliases for legacy arg types
-   */
-  /**
-   * @deprecated Use UserCountOutputTypeDefaultArgs instead
-   */
-  export type UserCountOutputTypeArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = UserCountOutputTypeDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use ZapCountOutputTypeDefaultArgs instead
-   */
-  export type ZapCountOutputTypeArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = ZapCountOutputTypeDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use UserConnectionCountOutputTypeDefaultArgs instead
-   */
-  export type UserConnectionCountOutputTypeArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = UserConnectionCountOutputTypeDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use AvailableTriggersCountOutputTypeDefaultArgs instead
-   */
-  export type AvailableTriggersCountOutputTypeArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = AvailableTriggersCountOutputTypeDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use ActionCountOutputTypeDefaultArgs instead
-   */
-  export type ActionCountOutputTypeArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = ActionCountOutputTypeDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use AvailableActionsCountOutputTypeDefaultArgs instead
-   */
-  export type AvailableActionsCountOutputTypeArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = AvailableActionsCountOutputTypeDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use UserDefaultArgs instead
-   */
-  export type UserArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = UserDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use ZapDefaultArgs instead
-   */
-  export type ZapArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = ZapDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use RecordDefaultArgs instead
-   */
-  export type RecordArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = RecordDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use TriggerDefaultArgs instead
-   */
-  export type TriggerArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = TriggerDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use UserConnectionDefaultArgs instead
-   */
-  export type UserConnectionArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = UserConnectionDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use AvailableTriggersDefaultArgs instead
-   */
-  export type AvailableTriggersArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = AvailableTriggersDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use ActionDefaultArgs instead
-   */
-  export type ActionArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = ActionDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use AvailableActionsDefaultArgs instead
-   */
-  export type AvailableActionsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = AvailableActionsDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use ZapRunDefaultArgs instead
-   */
-  export type ZapRunArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = ZapRunDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use ZapRunOutboxDefaultArgs instead
-   */
-  export type ZapRunOutboxArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = ZapRunOutboxDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use ZapChangeHistoryDefaultArgs instead
-   */
-  export type ZapChangeHistoryArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = ZapChangeHistoryDefaultArgs<ExtArgs>;
-  /**
-   * @deprecated Use ZapNoteDefaultArgs instead
-   */
-  export type ZapNoteArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = ZapNoteDefaultArgs<ExtArgs>;
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
