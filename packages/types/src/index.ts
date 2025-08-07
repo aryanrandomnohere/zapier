@@ -137,6 +137,7 @@ export interface SessionType {
   image: string;
   zapmail: string;
   userId: string;
+  backendToken: string;
 }
 
 export interface currnetZap {
@@ -153,3 +154,67 @@ export enum zapOperations {
   ADVANCEDSETTINGS,
   VERSIONS,
 }
+
+export interface folderInterface {
+  id: number;
+  name: string;
+  userId: number;
+  type: "root" | "subfolder" | "personal";
+  parentId: number | null;
+  user: {
+    firstname: string;
+    lastname: string;
+  };
+}
+
+export interface zapInterface {
+  id: string;
+  name: string;
+  published: boolean;
+  triggerId: string;
+  lastEdited: string;
+  userId: number;
+  folder: folderInterface;
+  actions: {
+    id: string;
+    zapId: string;
+    actionId: string;
+    sortingOrder: number;
+    actionDetails: {
+      id: string;
+      imagePath: string;
+      name: string;
+    };
+  }[];
+  trigger: {
+    id: string;
+    zapId: string;
+    triggerId: string;
+    type: {
+      id: string;
+      name: string;
+      imagePath: string;
+    };
+  };
+}
+
+export interface IconProps {
+  className?: string;
+}
+
+export interface ToggleButtonProps {
+  isChecked: boolean;
+  setIsChecked: () => void;
+}
+
+export interface AppIconProps {
+  imagePath: string | null;
+  name: string;
+}
+
+export interface RowProps {
+  zap: zapInterface;
+  handleZapClick: (id: string) => void;
+}
+
+export type TabType = "Zaps" | "Folders";

@@ -9,6 +9,7 @@ declare module "next-auth" {
       image: string;
       zapmail: string;
       userId: string;
+      backendToken: string;
     };
   }
 
