@@ -6,6 +6,7 @@ export default async function RunTrigger(
   type: "test" | "polling",
 ) {
   try {
+    console.log(trigger);
     const { serviceType, appId }: { serviceType: string; appId: string } =
       trigger.type;
 
@@ -16,6 +17,7 @@ export default async function RunTrigger(
 
     const triggerFn =
       appTriggers[trigger.optionId.toLowerCase().replace(/\s+/g, "_")];
+    console.log(trigger.optionId.toLowerCase().replace(/\s+/g, "_"));
     if (!triggerFn)
       throw new Error(`No trigger function for optionId: ${trigger.optionId}`);
 

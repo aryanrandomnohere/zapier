@@ -14,6 +14,8 @@ export default async function sendEmailAction({
   metadata: any;
 }) {
   // Helper to fetch field value by label
+  console.log("this email is being sent to", fields);
+
   const getFieldValue = (label: string) =>
     fields.find((x) => String(x.fieldLabel).toLowerCase() === label)
       ?.fieldValue || "";
@@ -30,6 +32,12 @@ export default async function sendEmailAction({
 
   // Validate required fields
   if (!parsedTo || !parsedSubject || !parsedBody) {
+    console.log(
+      "some fields are missing i am returnin ",
+      parsedBody,
+      parsedTo,
+      parsedSubject,
+    );
     return {
       success: false,
       error: "Missing required email fields (to, subject, body)",
@@ -46,10 +54,9 @@ export default async function sendEmailAction({
       pass: process.env.SMTP_SECRET,
     },
   });
-
   // Send mail
   const info = await transporter.sendMail({
-    from: process.env.SMTP_USERNAME, // use configured email
+    from: "aryanrathoreop@gmail.com",
     to: parsedTo,
     subject: parsedSubject,
     text: parsedBody,
@@ -57,6 +64,7 @@ export default async function sendEmailAction({
 
   // Return result
   if (info.messageId) {
+    console.log("message sent", info.messageId);
     return { success: true, id: info.messageId, msg: "Message sent" };
   } else {
     return { success: false, error: "Message failed to send" };

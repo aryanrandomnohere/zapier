@@ -1,6 +1,7 @@
 import { serviceActionMap } from "../maps/actionMap.js";
 
 function normalizeId(str: string) {
+  console.log(str.toLowerCase().replace(/\s+/g, "_"));
   return str.toLowerCase().replace(/\s+/g, "_");
 }
 
@@ -10,7 +11,6 @@ export default async function RunAction(currentAction: any, metadata: any) {
     if (!actionDetails) {
       return { success: false, error: "Missing action details" };
     }
-
     const { serviceType, id: actionId } = actionDetails;
 
     // Normalize keys
@@ -23,6 +23,7 @@ export default async function RunAction(currentAction: any, metadata: any) {
       serviceActionMap[normServiceType]?.[normActionId]?.[normOptionId];
 
     if (!actionFn) {
+      console.log("no action found for", optionId);
       return { success: false, error: `No action found for ${optionId}` };
     }
 
@@ -30,6 +31,7 @@ export default async function RunAction(currentAction: any, metadata: any) {
     const fields =
       configuration?.optionConfiguration?.[optionId]?.configurationStep?.fields;
     if (!fields) {
+      console.log("missing configuration for", optionId);
       return { success: false, error: `Missing configuration for ${optionId}` };
     }
 

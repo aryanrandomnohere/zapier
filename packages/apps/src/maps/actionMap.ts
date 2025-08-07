@@ -5,7 +5,6 @@ export const builtInActions: Record<string, Record<string, Function>> = {
     send_outbound_email: sendEmail,
   },
 };
-
 export const serviceActionMap: Record<
   string,
   Record<string, Record<string, Function>>
@@ -13,5 +12,5 @@ export const serviceActionMap: Record<
   google: {
     // youtube: { someYoutubeAction: fn }
   },
-  builtIn: builtInActions,
+  builtin: builtInActions,
 };
