@@ -1,24 +1,21 @@
-export default function ToggleButton({
+import { ToggleButtonProps } from "@repo/types";
+
+export const ToggleButton: React.FC<ToggleButtonProps> = ({
   isChecked,
   setIsChecked,
-}: {
-  isChecked: boolean;
-  setIsChecked: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}) => {
   return (
-    <div>
-      <label className="inline-flex items-center  cursor-pointer">
-        <input
-          type="checkbox"
-          checked={isChecked}
-          onChange={() => setIsChecked(!isChecked)}
-          className="sr-only peer"
-        />
-        <div className="relative w-[29.5px] h-4 bg-gray-200 peer-focus:outline-none   rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:start-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all dark:border-gray-600 peer-checked:bg-black dark:peer-checked:bg-blue-500"></div>
-        <span className="ms-1 text-sm font-medium text-gray-900 dark:text-gray-300">
-          {isChecked ? "On" : "Off"}
-        </span>
-      </label>
+    <div
+      className={`relative w-9 h-5 rounded-full cursor-pointer transition-colors duration-200 ${
+        isChecked ? "bg-blue-500" : "bg-gray-300"
+      }`}
+      onClick={setIsChecked}
+    >
+      <div
+        className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform duration-200 ${
+          isChecked ? "translate-x-4" : "translate-x-0.5"
+        }`}
+      />
     </div>
   );
-}
+};
