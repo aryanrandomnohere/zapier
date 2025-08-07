@@ -4,15 +4,17 @@
   "private": true,
   "type": "module",
   "main": "./src/index.ts",
-"scripts": {
+  "scripts": {
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev"
-  },
-  "dependencies": {
-    "@prisma/client": "^5.10.2"
+    "db:migrate": "prisma migrate dev",
+    "db:backup": "node dist/backup-db.js",
+    "db:seed": "node dist/seed-db.js"
   },
   "devDependencies": {
-    "prisma": "^5.10.2",
+    "@prisma/client": "^6.13.0",
+    "liam": "^0.0.1",
+    "prisma": "^5.22.0",
+    "prisma-erd-generator": "^2.0.4",
     "typescript": "^5.3.3"
   }
 }
