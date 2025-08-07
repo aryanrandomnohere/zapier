@@ -1,0 +1,442 @@
+[
+  {
+    "id": "email",
+    "name": "Email",
+    "type": "trigger",
+    "serviceType": "builtIn",
+    "appId": "email",
+    "metadata": {
+      "fields": [
+        {
+          "name": "emailEvent",
+          "options": [
+            {
+              "id": "New inbound Email",
+              "type": "instant",
+              "description": "Triggers when an email is forwarded to your own custom zapiermail.com address",
+              "optionIndex": 0
+            },
+            {
+              "id": "New Read Receipt",
+              "type": "instant",
+              "description": "Triggers when an email that you’ve enabled read receipts on via our Send Outbound Email trigger is opened",
+              "optionIndex": 1
+            }
+          ],
+          "required": true,
+          "fieldLabel": "Trigger Event",
+          "fieldValue": "",
+          "fieldNumber": 0,
+          "fieldInputType": "dropdown",
+          "fieldPlaceholder": "Choose an event"
+        }
+      ],
+      "stepName": "Setup",
+      "completed": false,
+      "stepNumber": 1,
+      "stepDescription": "Select the app and trigger event.",
+      "optionConfiguration": {
+        "New inbound Email": {
+          "testStep": {
+            "does": "We’re listening!",
+            "task": {
+              "title": "Your Final Email",
+              "subtitle": "You’ll need to configure your application with this email.",
+              "description": "Send an email to the ZapierMail address defined above to trigger this Zap.",
+              "learnMoreUrl": "/",
+              "learnMoreText": "Learn more about using emails"
+            },
+            "type": "trigger",
+            "stepName": "Test",
+            "aboutDoes": "To confirm your trigger is set up correctly, we'll find recent emails in your account: Email by Zapier",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "email_address",
+                "required": false,
+                "fieldLabel": "Email Address",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "@devlocstudio.in"
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": 2,
+            "stepDescription": "Enter the email on which you want us to listen."
+          }
+        }
+      }
+    },
+    "imagePath": "https://zapier-images.imgix.net/storage/services/8e4d4d03bfde581f2550934c589fb077.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64"
+  },
+  {
+    "id": "youtube",
+    "name": "Youtube",
+    "type": "trigger",
+    "serviceType": "google",
+    "appId": "youtube",
+    "metadata": {
+      "fields": [
+        {
+          "name": "triggerEvent",
+          "options": [
+            {
+              "id": "New Comment on Video",
+              "type": "Polling",
+              "description": "Triggers when a new comment is posted on a specific YouTube video",
+              "optionIndex": 0
+            },
+            {
+              "id": "New Live Stream",
+              "type": "Polling",
+              "description": "Triggers when a new live stream is created or becomes active for a specific YouTube channel.",
+              "optionIndex": 1
+            },
+            {
+              "id": "New Video by Search",
+              "type": "Polling",
+              "description": "Triggers when a new video is uploaded that matches a specific search string.",
+              "optionIndex": 2
+            },
+            {
+              "id": "New Video in Channel",
+              "type": "Polling",
+              "description": "Triggers when a new video is uploaded to a specific YouTube channel.",
+              "optionIndex": 3
+            },
+            {
+              "id": "New Video in Playlist",
+              "type": "Polling",
+              "description": "Triggers when a new video is added to a specific playlist. Note: does not work for your 'watch later' playlist",
+              "optionIndex": 4
+            }
+          ],
+          "required": true,
+          "fieldLabel": "Trigger Event",
+          "fieldValue": "",
+          "fieldNumber": 0,
+          "fieldInputType": "dropdown",
+          "fieldPlaceholder": "Select a trigger event"
+        },
+        {
+          "appId": "google",
+          "required": true,
+          "fieldLabel": "Account",
+          "fieldValue": "",
+          "fieldNumber": 1,
+          "fieldInputType": "connection",
+          "fieldPlaceholder": "Google Account"
+        }
+      ],
+      "stepName": "Setup",
+      "completed": false,
+      "stepNumber": 1,
+      "stepDescription": "Select the app and trigger event.",
+      "optionConfiguration": {
+        "New Live Stream": {
+          "testStep": {
+            "does": "Test your trigger",
+            "type": "trigger",
+            "stepName": "Test",
+            "testType": "system_triggered",
+            "aboutDoes": "To confirm your trigger is set up correctly, we'll find a recent live stream in your account:",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "channelid",
+                "required": true,
+                "fieldLabel": "Channel ID",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": 2,
+            "stepDescription": "The YouTube Channel ID to monitor for new live streams. The Channel ID looks something like 'UCsample-channel-id-123' or 'channel/UCsample-channel-id-123'."
+          }
+        },
+        "New Video by Search": {
+          "testStep": {
+            "does": "Test your trigger",
+            "type": "trigger",
+            "stepName": "Test",
+            "testType": "system_triggered",
+            "aboutDoes": "To confirm your trigger is set up correctly, we'll find recent video search results in your account:",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "query",
+                "required": true,
+                "fieldLabel": "Query",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": 2,
+            "stepDescription": "Search for videos that match this query."
+          }
+        },
+        "New Comment on Video": {
+          "testStep": {
+            "does": "Test your trigger",
+            "type": "trigger",
+            "stepName": "Test",
+            "aboutDoes": "To confirm your trigger is set up correctly, we'll find recent requests in your account:",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "videoid",
+                "required": true,
+                "fieldLabel": "Video ID",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": 2,
+            "stepDescription": "The YouTube video ID to monitor for new comments. You can find this in the video URL (e.g., 'dQw4w9WgXcQ' from here)"
+          }
+        },
+        "New Video in Channel": {
+          "testStep": {
+            "does": "Test your trigger",
+            "type": "trigger",
+            "stepName": "Test",
+            "testType": "system_triggered",
+            "aboutDoes": "To confirm your trigger is set up correctly, we'll find recent video uploads in this channel:",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "Channel",
+                "required": true,
+                "fieldLabel": "Channel",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": 2,
+            "stepDescription": "Watch for new videos uploaded within this channel. The Channel ID looks something like 'channel/UClKO7be7O9cUGL94PHnAeOA'."
+          }
+        },
+        "New Video in Playlist": {
+          "testStep": {
+            "does": "Test your trigger",
+            "type": "trigger",
+            "stepName": "Test",
+            "testType": "system_triggered",
+            "aboutDoes": "To confirm your trigger is set up correctly, we'll find recently added videos in this playlist:",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "playlistid",
+                "required": true,
+                "fieldLabel": "Playlist Id",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "dropdown",
+                "fieldPlaceholder": "Choose Value"
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": 2,
+            "stepDescription": "Watch for new videos added to this playlist. The Playlist ID is found in the URL of the playlist. For example, given https://www.youtube.com/playlist?list=PL8955AC078D8F3731 the ID is PL8955AC078D8F3731."
+          }
+        }
+      }
+    },
+    "imagePath": "https://zapier-images.imgix.net/storage/services/7633e61620664fb3a71911729ebce5ea.png?auto=format&fit=crop&h=20&ixlib=react-9.8.1&q=50&w=20"
+  },
+  {
+    "id": "webhook",
+    "name": "Webhooks",
+    "type": "trigger",
+    "serviceType": "builtIn",
+    "appId": "webhook",
+    "metadata": {
+      "fields": [
+        {
+          "name": "triggerEvent",
+          "options": [
+            {
+              "id": "Catch Hook",
+              "type": "instant",
+              "description": "Triggers when a POST, PUT, or GET request is made to a Zapier URL.",
+              "optionIndex": 0
+            },
+            {
+              "id": "Catch Raw Hook",
+              "type": "instant",
+              "description": "Triggers when a POST, PUT, or GET request is made to a Zapier URL. Gives the request body unparsed (max 2 MB) and also includes headers.",
+              "optionIndex": 1
+            },
+            {
+              "id": "Retrieve Poll",
+              "type": "polling",
+              "description": "Triggers when a request to a URL returns new entries.",
+              "optionIndex": 2
+            }
+          ],
+          "required": true,
+          "fieldLabel": "Trigger Event",
+          "fieldValue": "",
+          "fieldNumber": 0,
+          "fieldInputType": "dropdown",
+          "fieldPlaceholder": "Select a trigger event"
+        }
+      ],
+      "stepName": "Setup",
+      "completed": false,
+      "stepNumber": 1,
+      "stepDescription": "Select the app and trigger event.",
+      "optionConfiguration": {
+        "Catch Hook": {
+          "testStep": {
+            "does": "We’re listening!",
+            "task": {
+              "title": "Your webhook URL",
+              "subtitle": "You’ll need to configure your application with this Zap’s webhook URL.",
+              "description": "We’ve generated a custom webhook URL for you to send requests to. You can silent/ if your application prefers getting an empty response.",
+              "learnMoreUrl": "https://help.zapier.com/hc/en-us/articles/8496288690317-Trigger-Zaps-from-webhooks",
+              "learnMoreText": "Learn more about using webhooks"
+            },
+            "type": "trigger",
+            "stepName": "Test",
+            "aboutDoes": "To confirm your trigger is set up correctly, we'll find recent requests in your account: Webhooks by Zapier",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "Child Key",
+                "required": false,
+                "fieldLabel": "Pick off a Child Key",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": 2,
+            "stepDescription": "Define the scheduling frequency."
+          }
+        },
+        "Retrieve Poll": {
+          "testStep": {
+            "does": "Test your trigger",
+            "type": "trigger",
+            "stepName": "Test",
+            "testType": "system_triggered",
+            "aboutDoes": "We'll poll your webhook URL and look for new entries to make sure your trigger is working.",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "url",
+                "required": true,
+                "fieldLabel": "URL",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              },
+              {
+                "name": "key",
+                "required": false,
+                "fieldLabel": "Key",
+                "fieldValue": "",
+                "fieldNumber": 1,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              },
+              {
+                "name": "deduplication_key",
+                "required": false,
+                "fieldLabel": "Deduplication Key",
+                "fieldValue": "",
+                "fieldNumber": 2,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              },
+              {
+                "name": "xpath",
+                "required": false,
+                "fieldLabel": "Xpath",
+                "fieldValue": "",
+                "fieldNumber": 3,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              },
+              {
+                "name": "basic_auth",
+                "required": false,
+                "fieldLabel": "Basic Auth",
+                "fieldValue": "",
+                "fieldNumber": 4,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text.."
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": -1,
+            "stepDescription": "Define the scheduling frequency."
+          }
+        },
+        "Catch Raw Hook": {
+          "testStep": {
+            "does": "We’re listening!",
+            "type": "trigger",
+            "stepName": "Test",
+            "testType": "user_triggered",
+            "aboutDoes": "To confirm your trigger is set up correctly, we'll find recent requests in your account: Webhooks by Zapier",
+            "completed": false,
+            "stepNumber": 3,
+            "description": "We’ve generated a custom webhook URL for you to send requests to. You can add silent/ if your application prefers getting an empty response. Learn more about using webhooks."
+          },
+          "configurationStep": null
+        }
+      }
+    },
+    "imagePath": "https://zapier-images.imgix.net/storage/services/6aafbb717d42f8b42f5be2e4e89e1a15.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64"
+  }
+]
