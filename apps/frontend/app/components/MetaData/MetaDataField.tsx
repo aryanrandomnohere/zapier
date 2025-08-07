@@ -5,13 +5,13 @@ import {
   OptionChanged,
 } from "@/app/RecoilState/currentZap";
 import { Field, FieldOption, onStepEnum, SessionType } from "@repo/types";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiSolidZap } from "react-icons/bi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import FloatingModal from "../../ui/FloatingModal";
-import { FilePlus, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import DittoComponent from "./SelectActionField";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 import { useParams } from "next/navigation";
@@ -197,6 +197,16 @@ export default function MetaDataField({
       </div>
     );
   }
+  console.log(
+    "selected",
+    selectedField,
+    "passed",
+    field.fieldLabel,
+    selectedField === field.fieldLabel,
+  );
+  console.log(selectFieldIsOpen);
+  console.log(stepIndex !== onStepEnum.SETUP);
+  console.log(type === "action");
 
   if (field.fieldInputType === "text") {
     return (
@@ -210,7 +220,6 @@ export default function MetaDataField({
           onClick={() => setEditingField("")}
           type={field.fieldInputType}
           placeholder={field.fieldPlaceholder}
-          // defaultValue={field.fieldValue || ""}
           value={field.fieldValue || ""}
           onChange={(e) => {
             if (stepIndex == onStepEnum.CONFIGURATION)
@@ -239,7 +248,7 @@ export default function MetaDataField({
                 fieldLabel={field.fieldLabel}
                 imagePath={imagePath}
                 fieldNumber={field.fieldNumber}
-                onStepEnum={onStepEnum.CONFIGURATION}
+                currentStep={onStepEnum.CONFIGURATION}
                 currentValue={field.fieldValue || ""}
                 cursorPosition={
                   inputRef.current?.selectionStart ||
@@ -286,7 +295,7 @@ export default function MetaDataField({
                   onClick={() => {
                     console.log(user?.id);
                     const popup = window.open(
-                      `/api/oauth/google/start?userId=${user?.id || "8"}&zapId=${zapId}`,
+                      `/api/oauth/google/start?userId=${user?.id || "2"}&zapId=${zapId}`,
                       "oauthPopup",
                       "width=500,height=600",
                     );
@@ -310,7 +319,7 @@ export default function MetaDataField({
                   onClick={() => {
                     console.log(user?.id);
                     const popup = window.open(
-                      `/api/oauth/google/start?userId=${user?.id || "8"}&zapId=${zapId}`,
+                      `/api/oauth/google/start?userId=${user?.id || "2"}&zapId=${zapId}`,
                       "oauthPopup",
                       "width=500,height=600",
                     );
