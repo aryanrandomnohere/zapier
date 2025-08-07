@@ -42,6 +42,7 @@ async function main() {
                   actionDetails: {
                     select: {
                       id: true,
+                      serviceType: true,
                     },
                   },
                 },
@@ -73,6 +74,7 @@ async function main() {
 
         return;
       }
+      console.log(currentAction, zapRunDetails.metaData);
       const RunDetails = await RunAction(
         currentAction,
         zapRunDetails?.metaData,

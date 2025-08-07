@@ -18,7 +18,7 @@ async function main() {
           { lastPolledAt: null },
           {
             lastPolledAt: {
-              lt: new Date(Date.now() - 15 * 60 * 1000),
+              lt: new Date(Date.now() - 1 * 60 * 1000),
             },
           },
         ],
@@ -33,6 +33,7 @@ async function main() {
       for (const trigger of pollingTriggers) {
         try {
           const record = await RunTrigger(trigger, "polling");
+          console.log(record);
           if (!record) {
             console.log("No new record polled");
             await prisma.trigger.update({
