@@ -11,7 +11,7 @@ export default function useZaps() {
     setLoading(true);
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap`, {
-        headers: { authorization: `${localStorage.getItem("token")}` },
+        withCredentials: true,
       })
       .then((response) => {
         setZaps(response.data.zaps);
