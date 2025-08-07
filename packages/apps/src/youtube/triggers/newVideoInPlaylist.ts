@@ -1,36 +1,31 @@
 import { apiRequest } from "../utils/request.js";
 
-export default async function newVideoBySearch(
+export default async function newVideoInPlaylist(
   type: "test" | "polling",
-  keywords: string,
+  playlistId: string,
   token: string,
-  lastPolledAt: string,
+  lastPolledAt?: string,
 ) {
   const params: Record<string, string> = {
     part: "snippet",
-    order: "date",
-    q: keywords,
+    playlistId,
     maxResults: type === "test" ? "3" : "1",
   };
 
-  console.log(lastPolledAt);
-  if (type === "polling") {
-    params.publishedAfter = lastPolledAt
-      ? new Date(lastPolledAt).toISOString()
-      : new Date().toISOString();
-  }
-
   const data = await apiRequest<any>({
-    endpoint: "/search",
+    endpoint: "/playlistItems",
     token,
     params,
     baseUrl: "https://youtube.googleapis.com/youtube/v3",
   });
 
   if (!data.items || data.items.length === 0) {
-    console.log("No videos found.");
+    console.log("No new videos in playlist.");
     return;
   }
+
+  // YouTube doesn't expose published date on playlistItems reliably.
+  // Optional: you can store videoId to deduplicate yourself.
 
   return type === "test"
     ? data.items.map((item: any) => item.snippet)

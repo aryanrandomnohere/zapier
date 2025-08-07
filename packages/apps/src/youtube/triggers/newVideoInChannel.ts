@@ -1,23 +1,21 @@
 import { apiRequest } from "../utils/request.js";
 
-export default async function newVideoBySearch(
+export default async function newVideoInChannel(
   type: "test" | "polling",
-  keywords: string,
+  channelId: string,
   token: string,
-  lastPolledAt: string,
+  lastPolledAt?: string,
 ) {
   const params: Record<string, string> = {
     part: "snippet",
+    channelId,
     order: "date",
-    q: keywords,
+    type: "video",
     maxResults: type === "test" ? "3" : "1",
   };
 
-  console.log(lastPolledAt);
-  if (type === "polling") {
-    params.publishedAfter = lastPolledAt
-      ? new Date(lastPolledAt).toISOString()
-      : new Date().toISOString();
+  if (type === "polling" && lastPolledAt) {
+    params.publishedAfter = new Date(lastPolledAt).toISOString();
   }
 
   const data = await apiRequest<any>({
@@ -28,7 +26,7 @@ export default async function newVideoBySearch(
   });
 
   if (!data.items || data.items.length === 0) {
-    console.log("No videos found.");
+    console.log("No new videos in channel.");
     return;
   }
 
