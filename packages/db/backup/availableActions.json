@@ -1,0 +1,82 @@
+[
+  {
+    "id": "email",
+    "name": "Email",
+    "type": "action",
+    "serviceType": "builtIn",
+    "appId": "email",
+    "imagePath": "https://zapier-images.imgix.net/storage/services/8e4d4d03bfde581f2550934c589fb077.png?auto=format%2Ccompress&fit=crop&h=64&ixlib=python-3.0.0&q=50&w=64",
+    "metadata": {
+      "fields": [
+        {
+          "name": "actionEvent",
+          "options": [
+            {
+              "id": "Send Outbound Email",
+              "type": "instant",
+              "description": "Send up to 5 emails per day on Free or Trial Zapier plans, or up to 10 emails per hour on paid Zapier plans from a custom zapiermail.com address",
+              "optionIndex": 0
+            }
+          ],
+          "required": true,
+          "fieldLabel": "Action event",
+          "fieldValue": "",
+          "fieldNumber": 0,
+          "fieldInputType": "dropdown",
+          "fieldPlaceholder": "Choose an event"
+        }
+      ],
+      "stepName": "Setup",
+      "completed": false,
+      "stepNumber": 1,
+      "stepDescription": "Select the app and trigger event.",
+      "optionConfiguration": {
+        "Send Outbound Email": {
+          "testStep": {
+            "does": "Send outbound email",
+            "type": "action",
+            "stepName": "Test",
+            "aboutDoes": "To test Email by Zapier, we’ll create a new outbound email. This is what will be created:",
+            "completed": false,
+            "stepNumber": 3
+          },
+          "configurationStep": {
+            "fields": [
+              {
+                "name": "to",
+                "required": true,
+                "fieldLabel": "To",
+                "fieldValue": "",
+                "fieldNumber": 0,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text or insert data..."
+              },
+              {
+                "name": "subject",
+                "required": true,
+                "fieldLabel": "Subject",
+                "fieldValue": "",
+                "fieldNumber": 1,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text or insert data..."
+              },
+              {
+                "name": "body",
+                "required": true,
+                "fieldLabel": "Body (HTML or Plain)",
+                "fieldValue": "",
+                "fieldNumber": 2,
+                "fieldInputType": "text",
+                "fieldPlaceholder": "Enter text or insert data..."
+              }
+            ],
+            "stepName": "Configure",
+            "completed": false,
+            "stepNumber": 2,
+            "stepDescription": "Define the scheduling frequency."
+          }
+        }
+      }
+    }
+  }
+]
