@@ -2,13 +2,29 @@
 import useZaps from "../../hooks/useZaps";
 import CardScroller from "./CardScroller";
 import { ZapCard } from "./ZapCard";
+import { InlineLoading, CardLoading } from "../ui/LoadingSpinner";
 
 export default function Unfinished() {
   const { zaps, loading, error } = useZaps();
   console.log(zaps);
   if (loading) {
-    return <>Loading. . .</>;
+    return (
+      <div className="flex justify-center py-8">
+        <InlineLoading text="Loading Zaps..." />
+      </div>
+    );
   }
+
+  // Commented out skeleton loading
+  // return (
+  //   <div className="space-y-10">
+  //     <CardScroller title="Unfinished Zaps">
+  //       {Array.from({ length: 4 }).map((_, index) => (
+  //         <CardLoading key={index} />
+  //       ))}
+  //     </CardScroller>
+  //   </div>
+  // );
 
   return (
     <div className="space-y-10">

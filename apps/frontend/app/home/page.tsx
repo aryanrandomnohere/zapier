@@ -4,7 +4,7 @@ import ServiceCards from "../components/Home/ServiceCards";
 export default function page() {
   return (
     <div
-      className="w-full min-h-screen flex flex-col"
+      className="w-full flex flex-col"
       style={{ backgroundColor: "#F5F3EB" }}
     >
       <div className="flex justify-center bg-white border-b border-black/10 py-9">
