@@ -21,6 +21,8 @@ import {
   selectedRecord,
 } from "@/app/RecoilState/store/recordsAtom";
 import ConfirmRecord from "./ConfirmRecord";
+import SkipTest from "./SkipTest";
+import { triggerTested } from "@/app/RecoilState/store/triggerAtom";
 
 // Main Records Interface Component
 const TriggerData = ({
@@ -41,7 +43,7 @@ const TriggerData = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [triedFetching, setTriedFetching] = useState(false);
+  const [triedFetching, setTriedFetching] = useRecoilState(triggerTested);
   const [records, setRecords] = useRecoilState<RecordMetadata[]>(recordsAtom);
   const [selectedRecordId, setSelectedRecordId] =
     useRecoilState(selectedRecord);
@@ -55,6 +57,9 @@ const TriggerData = ({
     // Simulate API delay
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/records/${zapId}/${optionId}`,
+      {
+        withCredentials: true,
+      },
     );
 
     // Mock data that matches the screenshot
@@ -67,6 +72,9 @@ const TriggerData = ({
   const testTrigger = async () => {
     const response = await axios.post(
       `http://localhost:3002/test/trigger/${zapId}`,
+      {
+        withCredentials: true,
+      },
     );
     return {
       records: response.data.records,
@@ -105,6 +113,9 @@ const TriggerData = ({
         zapId: Number(zapId),
         recordId: record.id,
       },
+      {
+        withCredentials: true,
+      },
     );
   };
 
@@ -131,7 +142,7 @@ const TriggerData = ({
                 <IoIosArrowRoundForward size={24} />
                 <div className="text-red-500 rounded p-1 border border-black/10">
                   {" "}
-                  <FaSquare size={30} />
+                  <FaSquare size={22} />
                 </div>
               </div>
             </div>
@@ -260,11 +271,18 @@ const TriggerData = ({
                 Test Trigger
               </button>{" "}
               {!loading && filteredRecords.length <= 0 && triedFetching && (
-                <button
-                  className={`w-1/2 bg-blue-700 text-white hover:bg-blue-800" py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer`}
-                >
-                  Skip test
-                </button>
+                <>
+                  {zapState.selectedItems.length === 1 ? (
+                    <SkipTest handleSkip={handleComplete} />
+                  ) : (
+                    <button
+                      onClick={handleComplete}
+                      className="w-1/2 bg-blue-700 text-white hover:bg-blue-800 py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer"
+                    >
+                      Skip test
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </div>
