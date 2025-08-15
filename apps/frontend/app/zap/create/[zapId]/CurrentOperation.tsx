@@ -1,12 +1,10 @@
 import { zapOperations } from "@repo/types";
-import { lazy } from "react";
-
-const LinkedAssets = lazy(() => import("./LinkedAssets"));
-const ZapRunDetails = lazy(() => import("./ZapRunDetails"));
-const ZapNotes = lazy(() => import("./ZapNotes"));
-const ZapHistory = lazy(() => import("./ZapHistory"));
-const AdvancedSettings = lazy(() => import("./AdvancedSettings"));
-const ZapDetails = lazy(() => import("./ZapDetails"));
+import LinkedAssets from "./LinkedAssets";
+import ZapRunDetails from "./ZapRunDetails";
+import ZapNotes from "./ZapNotes";
+import ZapHistory from "./ZapHistory";
+import AdvancedSettings from "./AdvancedSettings";
+import ZapDetails from "./ZapDetails";
 
 export default function CurrentOperation({ operation }: { operation: zapOperations }) {
     switch (operation) {

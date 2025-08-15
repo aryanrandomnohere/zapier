@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
-import { lazy } from "react";
-
-const DropDownMenu = lazy(() => import("@/app/ui/DropDownMenu"));
+import DropDownMenu from "@/app/ui/DropDownMenu";
 
 export default function CanvasActions({
   trigger,

@@ -12,12 +12,10 @@ import {
 } from "lucide-react";
 import { IoReload } from "react-icons/io5";
 
-import { lazy } from "react";
-import { DatePickerModal } from "./DatePickerModal";
 import { InlineLoading } from "@/app/components/ui/LoadingSpinner";
-
-const ZapRunIcons = lazy(() => import("./ZapRunIcons"));
-const OptionDropdown = lazy(() => import("./OptionDropdown"));
+import ZapRunIcons from "./ZapRunIcons";
+import OptionDropdown from "./OptionDropdown";
+import { DatePickerModal } from "./DatePickerModal";
 
 
 interface ZapRun {

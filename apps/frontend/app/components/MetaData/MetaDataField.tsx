@@ -15,9 +15,8 @@ import { userAtom } from "@/app/RecoilState/store/userAtom";
 import { useParams } from "next/navigation";
 import { getSession } from "next-auth/react";
 import useOutsideClick from "@/app/hooks/useOutsideClick";
-import { lazy } from "react";
-const FloatingModal = lazy(() => import("@/app/ui/FloatingModal"));
-const DittoComponent = lazy(() => import("./SelectActionField"));
+import DittoComponent from "./SelectActionField";
+import FloatingModal from "@/app/ui/FloatingModal";
 
 interface MetaDataFieldProps {
   field: Field;

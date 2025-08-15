@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-  import { lazy } from "react";
-
-const DropDownMenu = lazy(() => import("@/app/ui/DropDownMenu"));
+import DropDownMenu from "@/app/ui/DropDownMenu";
 
 interface ServicesActionsProps {
   trigger: React.ReactNode;

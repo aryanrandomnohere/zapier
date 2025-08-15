@@ -9,7 +9,6 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import { RiPushpinLine } from "react-icons/ri";
 import { useState } from "react";
-import { lazy } from "react";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 
 type MockItem = {

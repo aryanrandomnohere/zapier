@@ -7,7 +7,6 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 import { BoltIcon } from "@/app/components/ZapDashboard/FolderIcon";
-import { lazy } from "react";
 export default function ZapNotes() {
   const [zapNote, setZapNote] = useState<string>("");
   const [stepNotes, setStepNotes] = useState<

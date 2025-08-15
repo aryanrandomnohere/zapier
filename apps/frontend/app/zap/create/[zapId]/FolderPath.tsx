@@ -5,8 +5,7 @@ import { useParams } from "next/navigation";
 import useZaps from "@/app/hooks/useZaps";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { lazy } from "react";
-const ZapActions = lazy(() => import("./ZapActions"));
+import ZapActions from "./ZapActions";
 
 export default function ZapHeader() {
   const { zapId } = useParams();

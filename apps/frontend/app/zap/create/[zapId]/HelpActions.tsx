@@ -1,10 +1,9 @@
 "use client";
-import { lazy } from "react";
 import { MdHelpOutline } from "react-icons/md";
 import { FiUsers } from "react-icons/fi";
 import { LuGraduationCap } from "react-icons/lu";
 import { PiUserFocus } from "react-icons/pi";
-const DropDownMenu = lazy(() => import("@/app/ui/DropDownMenu"));
+import DropDownMenu from "@/app/ui/DropDownMenu";
 
 export default function HelpActions({ trigger }: { trigger: React.ReactNode }) {
   return (

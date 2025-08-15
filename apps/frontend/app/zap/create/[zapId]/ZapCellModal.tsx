@@ -1,8 +1,7 @@
 import React from 'react';
-import { lazy } from 'react';
 import Modal from '@/app/ui/Modal'; 
-const ZapCell = lazy(() => import('../../../components/ZapDashboard/ZapCell'));
-const SelectItem = lazy(() => import('../../../components/ZapCreate/SelectItem'));
+import ZapCell from '@/app/components/ZapDashboard/ZapCell';
+import SelectItem from '@/app/components/ZapCreate/SelectItem';
 
 interface ZapCellModalProps {
   // ZapCell props

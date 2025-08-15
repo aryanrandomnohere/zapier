@@ -1,5 +1,5 @@
 "use client";
-import { lazy, useCallback, useEffect, useRef, useState } from "react";
+import {  useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../../../RecoilState/store/zapCreate";
 import axios from "axios";
@@ -20,10 +20,9 @@ import ActionButton from "@/app/components/buttons/ActionButton";
 import { Play } from "lucide-react";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 import ZapCellModal from "./ZapCellModal";
-const ZapCell = lazy(() => import("@/app/components/ZapDashboard/ZapCell"));
-const SideModal = lazy(() => import("@/app/ui/SideModal"));
-const AddCell = lazy(() => import("../../../components/ZapCreate/AddCell"));
-
+import ZapCell from "@/app/components/ZapDashboard/ZapCell";
+import SideModal from "@/app/ui/SideModal";
+import AddCell from "@/app/components/ZapCreate/AddCell";
 
 export default function CreatePage() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
@@ -264,12 +263,12 @@ export default function CreatePage() {
       </div>
       <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden relative bg-[rgb(249,247,243)] dot-background-alt">
         {metaData.isOpen && (
-          <div className=" fixed flex max-w-96 min-h-4/5 max-h-4/5   right-2 z-50 transform-all duration-300 mt-4">
-            <SideModal
+                 <div className=" fixed flex max-w-96 min-h-4/5 max-h-4/5   right-2 z-50 transform-all duration-300 mt-4"> <SideModal
               CheckStepValidity={CheckStepValidity}
                 handlePublish={handlePublish}
-              />
+                />
           </div>
+         
         )}
 
         <div

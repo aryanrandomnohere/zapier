@@ -10,10 +10,8 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { userAtom } from "../RecoilState/store/userAtom";
-import { lazy } from "react";
-
-const Triggerdata = lazy(() => import("./TriggerData/Triggerdata"));
-const DataInForm = lazy(() => import("./DataInField/FieldData"));
+import Triggerdata from "./TriggerData/Triggerdata";
+import DataInForm from "./DataInField/FieldData";
 
 export default function TestItem({
   item,

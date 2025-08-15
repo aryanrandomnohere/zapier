@@ -9,10 +9,9 @@ import {
   Settings,
 } from "lucide-react";
 import {  useState } from "react";
-import { lazy } from "react";
+import ZapOperations from "./ZapOperations";
+import CurrentOperation from "./CurrentOperation";
 
-const ZapOperations = lazy(() => import("./ZapOperations"));
-const CurrentOperation = lazy(() => import("./CurrentOperation"));
 export default function LeftBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentOperation, setCurrentOperation] =

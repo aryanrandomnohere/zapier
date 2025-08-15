@@ -1,7 +1,6 @@
 "use client";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
-import { lazy } from "react";
 import {
   configureStepDetails,
   onStep,
@@ -24,10 +23,10 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 // Mock data for when metadata is not available
 
-const ChangeItem = lazy(() => import("../components/MetaData/ChangeItem"));
-const AddMetaData = lazy(() => import("../components/MetaData/AddMetaData"));
-const StepsStatus = lazy(() => import("../components/MetaData/StepsStatus"));
-const TestItem = lazy(() => import("../components/TestItem"));
+import ChangeItem from "../components/MetaData/ChangeItem";
+import AddMetaData from "../components/MetaData/AddMetaData";
+import StepsStatus from "../components/MetaData/StepsStatus";
+import TestItem from "../components/TestItem";
 
 export default function SideModal({
   handlePublish,
