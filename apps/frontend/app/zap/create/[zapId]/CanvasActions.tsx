@@ -1,5 +1,8 @@
-import DropDownMenu from "@/app/ui/DropDownMenu";
+"use client";
 import React from "react";
+import { lazy } from "react";
+
+const DropDownMenu = lazy(() => import("@/app/ui/DropDownMenu"));
 
 export default function CanvasActions({
   trigger,
@@ -7,7 +10,7 @@ export default function CanvasActions({
   trigger: React.ReactNode;
 }) {
   return (
-    <DropDownMenu trigger={trigger}>
+    <DropDownMenu type="normal" trigger={trigger}>
       <ul className="text-white text-sm p-1 space-y-1.5">
         <li className="px-2 py-0.5  hover:bg-violet-600  cursor-pointer">
           Custom zoom

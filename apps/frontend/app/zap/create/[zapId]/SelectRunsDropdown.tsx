@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { ChevronDown, Trash2, RotateCcw } from "lucide-react";
 

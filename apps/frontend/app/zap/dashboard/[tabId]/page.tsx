@@ -1,33 +1,27 @@
 "use client";
-import { ZapRows } from "@/app/components/ZapDashboard/ZapRow";
+import FolderRows from "@/app/components/ZapDashboard/FolderRows";
+import useFolders from "@/app/hooks/useFolders";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
-import useZaps from "@/app/hooks/useZaps";
-import ZapTable from "@/app/components/ZapDashboard/ZapTable";
 
 export default function Page() {
-  const { zaps, loading } = useZaps();
+  const { folders } = useFolders();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
-  const totalPages = Math.ceil(zaps.length / itemsPerPage);
+  const totalPages = Math.ceil((folders?.length || 0) / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentZaps = zaps.slice(startIndex, endIndex);
-  const currentFolders = zaps
-    .filter((zap) => zap.folder && zap.folder.type != "subfolder")
-    .map((zap) => zap.folder);
-  // Generate pagination numbers
+  const currentFolders = folders?.slice(startIndex, endIndex) || [];
+
   const getPaginationNumbers = () => {
     const numbers = [];
-    const maxVisible = 5; // Show max 5 page numbers
+    const maxVisible = 5;
 
     if (totalPages <= maxVisible) {
-      // Show all pages if total is 5 or less
       for (let i = 1; i <= totalPages; i++) {
         numbers.push(i);
       }
     } else {
-      // Show first page, last page, and pages around current
       numbers.push(1);
 
       if (currentPage > 3) {
@@ -54,16 +48,33 @@ export default function Page() {
 
     return numbers;
   };
-  console.log(currentZaps);
+
   return (
     <>
-      <ZapTable zaps={currentZaps} loading={loading} />{" "}
-      {/* ✅ use paginated data */}
-      <div className="flex items-center justify-between py-4">
+      <div className="bg-[#FFFDF9] border border-[#F3F0E8] rounded-lg">
+        <table className="w-full">
+          <thead className=" border-b border-gray-200">
+            <tr>
+              <th className="text-left py-3 px-6 w-full text-sm font-medium text-gray-700">
+                Name
+              </th>
+              <th className="text-left py-3 px-6 min-w-48 text-sm font-medium text-gray-700">
+                Owner
+              </th>
+              <th className="text-left py-3 px-6 min-w-48 text-sm font-medium text-gray-700">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <FolderRows folders={currentFolders} /> {/* ✅ pass sliced data */}
+        </table>
+      </div>
+      <div className="flex items-center justify-between  py-4 ">
         <span className="text-sm text-gray-600">
-          {startIndex + 1}–{Math.min(endIndex, zaps.length)} of {zaps.length}
+          {startIndex + 1}–{Math.min(endIndex, folders?.length || 0)} of{" "}
+          {folders?.length || 0}
         </span>
-        <div className="flex items-center ">
+        <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">
               {itemsPerPage} per page
@@ -73,7 +84,7 @@ export default function Page() {
         </div>
       </div>
       {totalPages > 1 && (
-        <div className="flex my-4 items-center justify-center gap-2 ">
+        <div className="flex items-center justify-center gap-1 mt-4">
           {getPaginationNumbers().map((pageNum, index) => (
             <button
               key={index}

@@ -1,12 +1,16 @@
+"use client";
 import { useEffect, useState } from "react";
 import { ChevronDown, Folder, FileText } from "lucide-react";
 import { useParams } from "next/navigation";
 import useZaps from "@/app/hooks/useZaps";
+import useFolders from "@/app/hooks/useFolders";
+import axios from "axios";
 
 export default function ZapDetails() {
   const [showFolderDropdown, setShowFolderDropdown] = useState(false);
   const { zapId } = useParams();
   const { zaps } = useZaps();
+  const { folders } = useFolders();
   const requiredZap = zaps.find((zap) => Number(zap.id) === Number(zapId));
   console.log(requiredZap?.folder.name);
   const [selectedFolder, setSelectedFolder] = useState(
@@ -16,7 +20,12 @@ export default function ZapDetails() {
   // const [selectedTimezone, setSelectedTimezone] = useState("Choose a timezone");
   // const [showTimezoneDropdown, setShowTimezoneDropdown] = useState(false);
 
-  const folderOptions = [`${requiredZap?.folder.name}`];
+  const folderOptions = folders?.map((folder) => {
+    return {
+      name: folder.name,
+      id: folder.id,
+    };
+  });
   useEffect(() => {
     setSelectedFolder(requiredZap?.folder.name || "");
   }, [requiredZap?.folder.name]);
@@ -57,17 +66,34 @@ export default function ZapDetails() {
 
               {showFolderDropdown && (
                 <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
-                  {folderOptions.map((option) => (
+                  {folderOptions?.map((option) => (
                     <button
-                      key={option}
+                      key={option.id}
                       onClick={() => {
-                        setSelectedFolder(option);
+                        setSelectedFolder(option.name);
                         setShowFolderDropdown(false);
+                        axios
+                          .put(
+                            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/move`,
+                            {
+                              zapId: Number(zapId),
+                              folderId: Number(option.id),
+                            },
+                            {
+                              withCredentials: true,
+                            },
+                          )
+                          .then((res) => {
+                            console.log(res);
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
                       }}
                       className="w-full px-4 py-2 text-left hover:cursor-pointer hover:bg-gray-50 text-sm flex items-center gap-2"
                     >
                       <Folder size={16} className="text-gray-500" />
-                      {option}
+                      {option.name}
                     </button>
                   ))}
                 </div>

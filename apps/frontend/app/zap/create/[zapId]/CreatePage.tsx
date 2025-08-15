@@ -1,14 +1,9 @@
 "use client";
-import ZapCell from "@/app/components/ZapDashboard/ZapCell";
-import { useEffect, useRef } from "react";
-import AddCell from "../../../components/ZapCreate/AddCell";
-import Modal from "../../../ui/Modal";
-import SelectItem from "@/app/components/ZapCreate/SelectItem";
+import { lazy, useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../../../RecoilState/store/zapCreate";
 import axios from "axios";
 import { ItemType, onStepEnum, RecordMetadata } from "@repo/types";
-import SideModal from "@/app/ui/SideModal";
 import {
   configureStepDetails,
   onStep,
@@ -24,10 +19,17 @@ import { useRouter } from "next/navigation";
 import ActionButton from "@/app/components/buttons/ActionButton";
 import { Play } from "lucide-react";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
+import ZapCellModal from "./ZapCellModal";
+const ZapCell = lazy(() => import("@/app/components/ZapDashboard/ZapCell"));
+const SideModal = lazy(() => import("@/app/ui/SideModal"));
+const AddCell = lazy(() => import("../../../components/ZapCreate/AddCell"));
+
+
 export default function CreatePage() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
   const canvasRef = useRef<HTMLDivElement | null>(null);
+  const [loading, setLoading] = useState(false);
   const setConfigurationId = useSetRecoilState(configureStepDetails);
   const [onStepValue, setOnStep] = useRecoilState(onStep);
   const setRecords = useSetRecoilState<RecordMetadata[]>(recordsAtom);
@@ -37,16 +39,18 @@ export default function CreatePage() {
   const selectedRecordId = useRecoilValue(selectedRecord);
   const { zapId } = useParams();
   const router = useRouter();
-  const addCell = (order: number) => {
+
+
+  const addCell = useCallback((order: number) => {
     setZapState((prev) => {
       const updatedActions = [...prev.selectedItems];
       //@ts-ignore
       updatedActions.splice(order, 0, { id: "", name: "", imagePath: "" });
       return { ...prev, selectedItems: updatedActions };
     });
-  };
+  }, [zapState, setZapState]);
 
-  const CheckStepValidity = (
+  const CheckStepValidity = useCallback((
     Index: onStepEnum,
     index?: number,
     specificCongigId?: string | null,
@@ -75,9 +79,9 @@ export default function CreatePage() {
       }
       return true;
     });
-  };
+  }, [metaData, zapState, configureId]);
 
-  const checkPublishability = () => {
+  const checkPublishability = useCallback(() => {
     let isPublishable = true;
     zapState.selectedItems.map((step, i) => {
       if (
@@ -110,8 +114,8 @@ export default function CreatePage() {
       }
     });
     return isPublishable;
-  };
-  const handleMouseDown = (e: React.MouseEvent) => {
+  }, [CheckStepValidity, zapState]);
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest(".zap-cell")) {
       return;
@@ -124,20 +128,20 @@ export default function CreatePage() {
         y: e.clientY - prev.position.y,
       },
     }));
-  };
+  }, [zapState, setZapState]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setZapState((prev) => ({ ...prev, isDragging: false }));
-  };
+  }, [setZapState]);
 
-  const handleMouseMove = (e: globalThis.MouseEvent) => {
+  const handleMouseMove = useCallback((e: globalThis.MouseEvent) => {
     if (!zapState.isDragging) return;
     const newX = e.clientX - zapState.initialPosition.x;
     const newY = e.clientY - zapState.initialPosition.y;
     setZapState((prev) => ({ ...prev, position: { x: newX, y: newY } }));
-  };
+  }, [zapState, setZapState]);
 
-  function SelectCell(index: number) {
+  const SelectCell = useCallback((index: number) => {
     setMetaData((prev) => {
       return { ...prev, index };
     });
@@ -155,9 +159,9 @@ export default function CreatePage() {
     }
 
     setZapState((prev) => ({ ...prev, selectedCell: index }));
-  }
+  }, [setMetaData, setConfigurationId, setOnStep, setZapState]);
 
-  async function handlePublish() {
+  const handlePublish = useCallback(async () => { 
     console.log({
       triggerId: zapState.selectedItems[0].id,
       zapId: Number(zapId),
@@ -187,15 +191,15 @@ export default function CreatePage() {
     if (response.data.zapId) {
       router.push("/zap/dashboard");
     }
-  }
+  }, [zapState, zapId, user, router]);
 
-  function handleTest() {
+  const handleTest = useCallback(() => {  
     console.log("Testing the zap");
-  }
+  }, [zapState]);
 
-  function handleSetMetaData(index: number) {
+  const handleSetMetaData = useCallback((index: number) => {  
     setMetaData((prev) => ({ ...prev, isOpen: true, index: index }));
-  }
+  }, [setMetaData]);
 
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
@@ -207,7 +211,8 @@ export default function CreatePage() {
   }, [zapState.isDragging, zapState.initialPosition]);
 
   useEffect(() => {
-    async function handleLoadZap() {
+    const handleLoadZap = async () => {
+      setLoading(true);
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/loadzap/${zapId}`,
         {
@@ -227,6 +232,7 @@ export default function CreatePage() {
         const session = await getSession();
         setUser(session?.user);
       }
+      setLoading(false);
     }
     handleLoadZap();
   }, []);
@@ -261,8 +267,8 @@ export default function CreatePage() {
           <div className=" fixed flex max-w-96 min-h-4/5 max-h-4/5   right-2 z-50 transform-all duration-300 mt-4">
             <SideModal
               CheckStepValidity={CheckStepValidity}
-              handlePublish={handlePublish}
-            />
+                handlePublish={handlePublish}
+              />
           </div>
         )}
 
@@ -277,30 +283,44 @@ export default function CreatePage() {
           <div className="absolute flex flex-col top-1/2 left-4/9  -translate-x-2/6 -translate-y-2/4">
             {!zapState.selectedItems[0]?.imagePath &&
             !zapState.selectedItems[0]?.name ? (
-              <Modal>
-                <Modal.Open opens="select">
-                  <div>
-                    <ZapCell
-                      SelectCell={SelectCell}
-                      imagePath={zapState.selectedItems[0]?.imagePath}
-                      title={zapState.selectedItems[0]?.name || "Trigger"}
-                      subtitle={
-                        zapState.selectedItems[0]?.metadata?.fields[0]
-                          .fieldValue || "An event that starts your Zap"
-                      }
-                      order={1}
-                    />
-                  </div>
-                </Modal.Open>
+              // <Modal>
+              //   <Modal.Open opens="select">
+              //     <div>
+              //       <ZapCell
+              //         loading={loading}
+              //         SelectCell={SelectCell}
+              //         imagePath={zapState.selectedItems[0]?.imagePath}
+              //         title={zapState.selectedItems[0]?.name || "Trigger"}
+              //         subtitle={
+              //           zapState.selectedItems[0]?.metadata?.fields[0]
+              //             .fieldValue || "An event that starts your Zap"
+              //         }
+              //         order={1}
+              //       />
+              //     </div>
+              //   </Modal.Open>
 
-                <Modal.Window name="select">
-                  <SelectItem type="triggers" />
-                </Modal.Window>
-              </Modal>
+              //   <Modal.Window name="select">
+              //     <SelectItem type="triggers" />
+              //   </Modal.Window>
+              // </Modal>
+              <ZapCellModal
+  loading={loading}
+  SelectCell={SelectCell}
+  imagePath={zapState.selectedItems[0]?.imagePath}
+  title={zapState.selectedItems[0]?.name || "Trigger"}
+  subtitle={
+    zapState.selectedItems[0]?.metadata?.fields[0].fieldValue || 
+    "An event that starts your Zap"
+  }
+  order={1}
+  type="triggers"
+/>
             ) : (
               <div onClick={() => handleSetMetaData(0)}>
                 {" "}
                 <ZapCell
+                  loading={loading}
                   SelectCell={SelectCell}
                   imagePath={zapState.selectedItems[0]?.imagePath}
                   title={zapState.selectedItems[0]?.name || "Trigger"}
@@ -321,32 +341,26 @@ export default function CreatePage() {
                     {!zapState.selectedItems[index]?.imagePath &&
                     !zapState.selectedItems[index]?.name ? (
                       <div className="zap-cell">
-                        <Modal>
-                          <Modal.Open opens="select">
-                            <div>
-                              <ZapCell
-                                imagePath={item.imagePath}
-                                SelectCell={SelectCell}
-                                title={item.name || "Action"}
-                                subtitle={
-                                  zapState.selectedItems[index].metadata
-                                    ?.fields[0].fieldValue ||
-                                  "The task your Zap performs"
-                                }
-                                order={index + 1}
-                              />
-                            </div>
-                          </Modal.Open>
-
-                          <Modal.Window name="select">
-                            <SelectItem type="actions" />
-                          </Modal.Window>
-                        </Modal>
+                       
+                         <ZapCellModal
+    key={index}
+    loading={loading}
+    SelectCell={SelectCell}
+    imagePath={item.imagePath}
+    title={item.name || "Action"}
+    subtitle={
+      zapState.selectedItems[index + 1]?.metadata?.fields[0]?.fieldValue ||
+      "The task your Zap performs"
+    }
+    order={index + 2}
+    type="actions"
+  />
                       </div>
                     ) : (
                       <div onClick={() => handleSetMetaData(index)}>
                         {" "}
                         <ZapCell
+                          loading={loading}
                           imagePath={item.imagePath}
                           SelectCell={SelectCell}
                           title={item.name || "Action"}

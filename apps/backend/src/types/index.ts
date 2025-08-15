@@ -61,6 +61,6 @@ export const googleAuthSchema = z.object({
 
 export const createFolderSchema = z.object({
   name: z.string().min(1),
-  parentId: z.number().optional(),
   type: z.enum(["subfolder", "root"]),
+  parentId: z.number().optional(),
 });

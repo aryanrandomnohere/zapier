@@ -52,6 +52,7 @@ userRouter.post("/createConnection/:zapId", async (req, res) => {
         refreshToken: parsedBody.data.refresh_token || "",
         expiredAt: new Date(parsedBody.data.expiry_date!),
       });
+
       const connection = await tx.userConnection.create({
         data: {
           userId: Number(parsedBody.data.userId),

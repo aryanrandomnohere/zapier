@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+"use client";
+import React from "react";
 export default function OptionDropdown({
   children,
   trigger,

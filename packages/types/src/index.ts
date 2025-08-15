@@ -174,6 +174,10 @@ export interface zapInterface {
   triggerId: string;
   lastEdited: string;
   userId: number;
+  user: {
+    firstname: string;
+    lastname: string;
+  };
   folder: folderInterface;
   actions: {
     id: string;
@@ -217,4 +221,4 @@ export interface RowProps {
   handleZapClick: (id: string) => void;
 }
 
-export type TabType = "Zaps" | "Folders";
+export type TabType = "Zaps" | "folders";

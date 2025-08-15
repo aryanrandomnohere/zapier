@@ -1,3 +1,4 @@
+"use client";
 import {
   ReactElement,
   ReactNode,
@@ -5,6 +6,7 @@ import {
   createContext,
   useContext,
   useState,
+  useEffect,
 } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,8 +40,19 @@ export const useModal = () => {
 
 function Modal({ children }: { children: ReactNode }) {
   const [openName, setOpenName] = useState("");
-  const open = (name: string) => setOpenName(name);
-  const close = () => setOpenName("");
+  const open = (name: string) => {
+    console.log("Modal opening:", name);
+    setOpenName(name);
+  };
+  const close = () => {
+    console.log("Modal closing from close function");
+    setOpenName("");
+  };
+
+  useEffect(() => {
+    console.log("Modal state changed:", openName);
+  }, [openName]);
+
   return (
     <ModalContext.Provider value={{ openName, open, close }}>
       {children}
@@ -56,12 +69,16 @@ function Window({ children, name, portTo }: WindowProps) {
       {openName === name && (
         <>
           <motion.div
-            className="fixed inset-0 w-full h-screen bg-black/60 bg-opacity-5 z-[1000] flex items-center justify-center p-1"
+            className="fixed inset-0 w-full h-screen bg-black/60 bg-opacity-5 z-[9999] flex items-center justify-center p-1"
+            data-modal-backdrop
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            onClick={close}
+            onClick={(e) => {
+              e.stopPropagation();
+              close();
+            }}
           >
             <motion.div
               className="flex flex-col w-auto h-auto max-w-full max-h-full bg-zinc-100 rounded-lg shadow-xl overflow-auto"
@@ -72,23 +89,17 @@ function Window({ children, name, portTo }: WindowProps) {
                 duration: 0.4,
                 ease: [0.16, 1, 0.3, 1], // Custom bezier curve for a smoother feel
               }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent<HTMLDivElement>) =>
+                e.stopPropagation()
+              }
             >
-              {/* <div
-                className="self-end p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full text-2xl cursor-pointer transition-colors duration-200"
-                onClick={close}
-              >\
-                <HiXMark />
-              </div> */}
-              <div className="px-5 py-4">
-                {cloneElement(children as React.ReactElement)}
-              </div>
+              <div className="px-5 py-4">{children}</div>
             </motion.div>
           </motion.div>
         </>
       )}
     </AnimatePresence>,
-    portTo || document.body,
+    document.body || portTo,
   );
 }
 

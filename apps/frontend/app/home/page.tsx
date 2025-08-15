@@ -4,17 +4,17 @@ import ServiceCards from "../components/Home/ServiceCards";
 export default function page() {
   return (
     <div
-      className="w-full flex flex-col"
+      className="w-full flex flex-col  "
       style={{ backgroundColor: "#F5F3EB" }}
     >
-      <div className="flex justify-center bg-white border-b border-black/10 py-9">
-        <div className=" w-full flex flex-col gap-5 items-center">
+      <div className="flex justify-center bg-white border-b border-black/10 py-14">
+        <div className=" w-full flex flex-col gap-2 items-center">
           <div className="font-bold text-3xl">
             What would you like to automate?
           </div>
           <div className="flex items-center min-w-2/3 gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-600 bg-transparent shadow-sm">
             <span className="text-xl">✨</span>
-            <span className="flex-1">
+            <span className="">
               Example: When I add a reaction to a Slack message, create a card
               in Trello.
             </span>
@@ -37,7 +37,7 @@ export default function page() {
           </div>
         </div>
       </div>
-      <div className="min-w-full h-full flex flex-col gap-5 font-bold text-xl items-center justify-center  ">
+      <div className="min-w-full h-full flex flex-col gap-5 font-bold text-2xl items-center justify-center  ">
         Start from scratch
         <div className="flex gap-2">
           <ServiceCards />

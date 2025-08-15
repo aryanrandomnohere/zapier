@@ -8,6 +8,13 @@ export default function useOutsideClick(
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Don't close dropdown if clicking inside a modal
+      console.log("handleClickOutside");
+      const target = event.target as HTMLElement;
+      if (target && target.closest("[data-modal-backdrop]")) {
+        return;
+      }
+
       if (ref.current && !ref.current.contains(event.target as Node)) {
         setOpen(false);
       }

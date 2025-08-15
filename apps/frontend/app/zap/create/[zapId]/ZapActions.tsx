@@ -1,3 +1,4 @@
+"use client";
 import DropDownMenu from "@/app/ui/DropDownMenu";
 
 export default function ZapActions({

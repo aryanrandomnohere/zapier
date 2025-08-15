@@ -1,3 +1,4 @@
+"use client";
 import { RowProps } from "@repo/types";
 import { useState } from "react";
 import { ToggleButton } from "../buttons/ToggleButton";
@@ -129,14 +130,14 @@ export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
         <div className="flex items-center justify-between">
           <div className="w-6 h-6 bg-[#AEE0FC] rounded-full flex items-center justify-center">
             <span className="text-black text-xs font-semibold">
-              {zap.folder.name[0].toLocaleUpperCase() +
-                (
-                  zap.folder.name.split(" ")[1][0] || zap.folder.name[1]
-                ).toLocaleUpperCase()}
+              {zap.user.firstname[0].toLocaleUpperCase() +
+                zap.user.lastname[0].toLocaleUpperCase()}
             </span>
           </div>
           <button className="text-gray-400 hover:text-gray-600 ml-4">
             <RowAction
+              zapId={zap.id}
+              currentName={zap.name}
               trigger={
                 <span className="text-lg font-extrabold text-[#280200] hover:cursor-pointer p-1 transition-all rounded duration-150 hover:bg-black/5">
                   ⋮

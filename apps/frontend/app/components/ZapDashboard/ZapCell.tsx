@@ -1,17 +1,22 @@
+"use client";
 import { EllipsisVertical } from "lucide-react";
 import { BiSolidZap } from "react-icons/bi";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
+import Image from "next/image";
 export default function ZapCell({
   title,
   subtitle,
   order,
   imagePath,
   SelectCell,
+  loading,
 }: {
   title: string;
   subtitle: string;
   order: number;
   imagePath?: string;
   SelectCell: (order: number) => void;
+  loading: boolean;
 }) {
   return (
     <div
@@ -30,13 +35,19 @@ export default function ZapCell({
         <div className=" flex flex-col pl-2 gap-1.5">
           <div className="flex justify-between items-center min-w-[18rem]">
             {" "}
-            <div className="flex justify-between gap-2 items-center px-1.5 py-[1px] w-fit border border-black/20 bg-stone-200 rounded-md">
-              {imagePath ? (
-                <img
+            <div className="flex items-center justify-between gap-2 px-1.5 py-[1px] w-fit border border-black/20 bg-stone-200 rounded-md">
+              {imagePath && !loading ? (
+                <Image
                   src={imagePath}
                   alt="logo"
-                  className="w-5 h-5 rounded-full"
+                  className="w-5 h-5 rounded-full object-cover"
+                  width={20}
+                  height={20}
                 />
+              ) : loading ? (
+                <div className="flex items-center justify-center text-white  rounded-full">
+                  <LoadingSpinner size="sm" />
+                </div>
               ) : (
                 <div className="text-white p-0.5 bg-black  rounded-full">
                   <BiSolidZap />

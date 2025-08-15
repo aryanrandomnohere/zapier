@@ -10,11 +10,14 @@ import { BiSolidZap } from "react-icons/bi";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import FloatingModal from "../../ui/FloatingModal";
 import { Plus } from "lucide-react";
-import DittoComponent from "./SelectActionField";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 import { useParams } from "next/navigation";
+import { getSession } from "next-auth/react";
+import useOutsideClick from "@/app/hooks/useOutsideClick";
+import { lazy } from "react";
+const FloatingModal = lazy(() => import("@/app/ui/FloatingModal"));
+const DittoComponent = lazy(() => import("./SelectActionField"));
 
 interface MetaDataFieldProps {
   field: Field;
@@ -35,16 +38,18 @@ export default function MetaDataField({
   imagePath,
   id,
 }: MetaDataFieldProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const { open, setOpen } = useOutsideClick(ref);
   const [selectFieldIsOpen, setSelectFieldIsOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [value, setValue] = useState(field.fieldValue);
   const inputRef = useRef<HTMLInputElement>(null);
   const [configureStepIndex, setConfigureStepIndex] =
     useRecoilState(configureStepDetails);
+
   const setOptionChanged = useSetRecoilState(OptionChanged);
   const stepIndex = useRecoilValue(onStep);
-  const user = useRecoilValue(userAtom);
+  const [user, setUser] = useRecoilState(userAtom);
   const { zapId } = useParams();
   useEffect(() => {
     const handler = (event: MessageEvent) => {
@@ -122,7 +127,7 @@ export default function MetaDataField({
           {field.required && <div className="text-red-400">*</div>}
         </div>
         <div
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setOpen(!open)}
           className="relative flex justify-between items-center px-3 py-2 border border-black/20 rounded hover:border-blue-500 cursor-pointer"
         >
           <div className="flex items-center gap-2 text-xs font-medium">
@@ -133,8 +138,8 @@ export default function MetaDataField({
               <FaArrowRightArrowLeft />
             </div>
           </div>
-          {isOpen && (
-            <FloatingModal>
+          {open && (
+            <FloatingModal ref={ref}>
               <div className="p-2">
                 <div className="flex items-center gap-2 px-2 py-1.5 bg-white mb-3.5 border border-black/20 rounded focus:border focus:border-blue-600">
                   <div className="text-gray-500">
@@ -170,7 +175,7 @@ export default function MetaDataField({
                             option.id,
                             onStepEnum.SETUP,
                           );
-                        setIsOpen(false);
+                        setOpen(false);
                         setOptionChanged((option) => option++);
                         if (stepIndex === onStepEnum.SETUP)
                           setConfigureStepIndex(option.id);
@@ -292,10 +297,16 @@ export default function MetaDataField({
             <div className="text-xs text-gray-500">
               {!!!field.fieldValue ? (
                 <button
-                  onClick={() => {
-                    console.log(user?.id);
+                  onClick={async () => {
+                    let userId = user?.userId;
+                    if (!user) {
+                      const session = await getSession();
+                      setUser(session?.user);
+                      userId = session?.user.userId;
+                    }
+
                     const popup = window.open(
-                      `/api/oauth/google/start?userId=${user?.id || "2"}&zapId=${zapId}`,
+                      `/api/oauth/google/start?userId=${userId}&zapId=${zapId}`,
                       "oauthPopup",
                       "width=500,height=600",
                     );
@@ -316,10 +327,15 @@ export default function MetaDataField({
                 </button>
               ) : (
                 <button
-                  onClick={() => {
-                    console.log(user?.id);
+                  onClick={async () => {
+                    let userId = user?.userId;
+                    if (!userId) {
+                      const session = await getSession();
+                      setUser(session?.user);
+                      userId = session?.user.userId;
+                    }
                     const popup = window.open(
-                      `/api/oauth/google/start?userId=${user?.id || "2"}&zapId=${zapId}`,
+                      `/api/oauth/google/start?userId=${userId}&zapId=${zapId}`,
                       "oauthPopup",
                       "width=500,height=600",
                     );

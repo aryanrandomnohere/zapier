@@ -1,5 +1,5 @@
+"use client";
 import { ReactNode } from "react";
-import HelpActions from "./HelpActions";
 import { RxCross2 } from "react-icons/rx";
 
 export default function ZapOperations({

@@ -2,11 +2,8 @@ generator client {
   provider = "prisma-client-js"
   output   = "../generated/client"
 }
+w
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "./ERD.png"
-}
 
 
 datasource db {
@@ -31,9 +28,10 @@ model User {
   changeHistory ZapChangeHistory[]  @relation("UserZapHistory")
   notes         ZapNote[]           @relation("userNotes")
   Folder        Folder[]            @relation("UserRootFolder")
+  Trash         Zap[]               @relation("UserTrash")  
 }
  
-model Zap {
+model   Zap {
 id               Int                   @id @default(autoincrement())
 triggerId        String?
 name             String        @default("Untitled Zap")
@@ -52,12 +50,16 @@ changeHistory    ZapChangeHistory[]  @relation("zapHistory")
 notes            ZapNote[]           @relation("zapNotes")
 folderId         Int
 folder           Folder               @relation(fields: [folderId], references: [id])
+deleted          Boolean              @default(false)
+deletedAt        DateTime?
+deletedBy        Int?
+deletedByUser    User?                @relation("UserTrash", fields: [deletedBy], references: [id])
 }
 
 model Folder {
   id        Int       @id @default(autoincrement())
   name      String
-  userId    Int      @unique
+  userId    Int      
   type      String   @default("root")
   user      User     @relation("UserRootFolder", fields: [userId], references: [id])
   parentId  Int?

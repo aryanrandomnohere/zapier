@@ -1,6 +1,7 @@
 "use client";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
+import { lazy } from "react";
 import {
   configureStepDetails,
   onStep,
@@ -11,21 +12,22 @@ import { SlSizeFullscreen } from "react-icons/sl";
 import { RxCross2 } from "react-icons/rx";
 import { FiEdit3 } from "react-icons/fi";
 import { BiSolidZap } from "react-icons/bi";
-import StepsStatus from "../components/MetaData/StepsStatus";
-import AddMetaData from "../components/MetaData/AddMetaData";
 import { useState, useMemo, useEffect } from "react";
 import { itemStepMetaData, onStepEnum } from "@repo/types";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { IoTimerOutline } from "react-icons/io5";
-import TestItem from "../components/TestItem";
 import { recordsAtom, selectedRecord } from "../RecoilState/store/recordsAtom";
 import { userAtom } from "../RecoilState/store/userAtom";
 import { getSession } from "next-auth/react";
-import ChangeItem from "../components/MetaData/ChangeItem";
 import { triggerTested } from "../RecoilState/store/triggerAtom";
 import axios from "axios";
 import { useParams } from "next/navigation";
 // Mock data for when metadata is not available
+
+const ChangeItem = lazy(() => import("../components/MetaData/ChangeItem"));
+const AddMetaData = lazy(() => import("../components/MetaData/AddMetaData"));
+const StepsStatus = lazy(() => import("../components/MetaData/StepsStatus"));
+const TestItem = lazy(() => import("../components/TestItem"));
 
 export default function SideModal({
   handlePublish,
@@ -388,10 +390,10 @@ export default function SideModal({
   if (!zap.selectedItems[index]?.metadata) {
     return (
       <div className="min-h-full relative flex flex-col items-center justify-center w-96 border-blue-600 border-1 z-20 mx-6 transform-all ease-in-out duration-300  bg-[#FFFDF9]">
-        <ChangeItem item={zap.selectedItems[index]} />
-        <div className="text-sm text-gray-500 font-medium bg-gray-50 rounded-md p-4">
-          We don't support this trigger yet
-        </div>
+          <ChangeItem item={zap.selectedItems[index]} />
+          <div className="text-sm text-gray-500 font-medium bg-gray-50 rounded-md p-4">
+              We don't support this trigger yet
+            </div>
       </div>
     );
   }
@@ -485,8 +487,8 @@ export default function SideModal({
                 <IoTimerOutline size={18} />{" "}
               </div>
             </div>
-          )}
-        </div>
+            )}
+          </div>
         {panelIndex === onStepEnum.SETUP && (
           <div className="flex gap-1 w-full  px-2.5 ">
             <div className="self-start p-2 w-full">

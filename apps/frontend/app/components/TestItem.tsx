@@ -6,12 +6,14 @@ import { selectedItemMetaData } from "../RecoilState/currentZap";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { FaSquare } from "react-icons/fa6";
-import Triggerdata from "./TriggerData/Triggerdata";
-import DataInForm from "./DataInField/FieldData";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { userAtom } from "../RecoilState/store/userAtom";
+import { lazy } from "react";
+
+const Triggerdata = lazy(() => import("./TriggerData/Triggerdata"));
+const DataInForm = lazy(() => import("./DataInField/FieldData"));
 
 export default function TestItem({
   item,

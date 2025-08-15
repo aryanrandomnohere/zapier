@@ -1,5 +1,5 @@
+"use client";
 import React, { useState } from "react";
-
 export default function LinkedAssets() {
   const [isHoveredClose, setIsHoveredClose] = useState(false);
   const [hoveredButton, setHoveredButton] = useState<number | null>(null);
@@ -11,6 +11,7 @@ export default function LinkedAssets() {
         padding: "16px",
         fontFamily: "sans-serif",
       }}
+      className="cursor-not-allowed"
     >
       {/* Header */}
       <div

@@ -1,8 +1,10 @@
 "use client";
-import FilterItems from "../SelectItems/FilterItems";
-import Options from "../SelectItems/Options";
-import Search from "../SelectItems/Search";
 import { useModal } from "../../ui/Modal";
+import { lazy } from "react";
+
+const FilterItems = lazy(() => import("../SelectItems/FilterItems"));
+const Options = lazy(() => import("../SelectItems/Options"));
+const Search = lazy(() => import("../SelectItems/Search"));
 
 export default function SelectItem({
   type,

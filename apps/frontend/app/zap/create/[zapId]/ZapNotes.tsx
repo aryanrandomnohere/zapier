@@ -1,11 +1,13 @@
+"use client";
 import { useEffect, useState, useRef } from "react";
-import { ActivityIcon, ChevronDown, Plus, Search, X } from "lucide-react";
+import { ChevronDown, Plus, Search, X } from "lucide-react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
-
+import { BoltIcon } from "@/app/components/ZapDashboard/FolderIcon";
+import { lazy } from "react";
 export default function ZapNotes() {
   const [zapNote, setZapNote] = useState<string>("");
   const [stepNotes, setStepNotes] = useState<
@@ -320,7 +322,7 @@ export default function ZapNotes() {
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-6 h-6 bg-orange-100 rounded flex items-center justify-center">
-                          <ActivityIcon />
+                          <BoltIcon />
                         </div>
                         <span className="text-sm font-medium text-gray-900">
                           {getStepName(step.stepId)}

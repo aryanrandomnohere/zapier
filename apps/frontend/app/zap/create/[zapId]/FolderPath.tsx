@@ -1,11 +1,12 @@
 "use client";
 import { Folder } from "lucide-react";
 import { IoIosArrowDown } from "react-icons/io";
-import ZapActions from "./ZapActions";
 import { useParams } from "next/navigation";
 import useZaps from "@/app/hooks/useZaps";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { lazy } from "react";
+const ZapActions = lazy(() => import("./ZapActions"));
 
 export default function ZapHeader() {
   const { zapId } = useParams();
@@ -14,12 +15,28 @@ export default function ZapHeader() {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(requiredZap?.name || "");
   const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (isRenaming && inputRef.current) {
       inputRef.current.focus();
       inputRef.current.select(); // highlight text
     }
   }, [isRenaming]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setIsRenaming(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   async function handleRename(e?: FormEvent) {
     if (e) e.preventDefault();

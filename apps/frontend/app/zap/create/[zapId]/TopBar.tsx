@@ -1,11 +1,15 @@
+"use client";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoApps, IoHomeOutline } from "react-icons/io5";
 import { RxQuestionMarkCircled } from "react-icons/rx";
-import FolderPath from "./FolderPath";
 import Link from "next/link";
-import CanvasActions from "./CanvasActions";
-import ServicesActions from "./ServicesActions";
-import HelpActions from "./HelpActions";
+
+import { lazy } from "react";
+
+const FolderPath = lazy(() => import("./FolderPath"));
+const CanvasActions = lazy(() => import("./CanvasActions"));
+const ServicesActions = lazy(() => import("./ServicesActions"));
+const HelpActions = lazy(() => import("./HelpActions"));
 
 export default function TopBar() {
   return (

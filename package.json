@@ -23,6 +23,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@tanstack/react-query": "^5.84.1",
     "next-auth": "^4.24.11",
     "nodemailer": "^6.10.1"
   }

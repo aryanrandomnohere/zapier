@@ -1,6 +1,9 @@
+"use client";
 import useItems from "@/app/hooks/useItems";
-import OptionList from "./OptionList";
 import { topApps, products, extendedItems } from "./TempItems";
+import { lazy } from "react";
+
+const OptionList = lazy(() => import("./OptionList"));
 
 export default function Options({
   type,

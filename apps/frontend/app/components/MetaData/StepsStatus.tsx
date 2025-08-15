@@ -1,3 +1,4 @@
+"use client";
 import { selectedRecord } from "@/app/RecoilState/store/recordsAtom";
 import { itemStepMetaData, onStepEnum } from "@repo/types";
 import { FaRegCircle } from "react-icons/fa6";

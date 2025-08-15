@@ -15,6 +15,9 @@ const nextConfig = {
     }
     return config;
   },
+  images: {
+    domains: ['zapier-images.imgix.net'], 
+  },
 }
 
-module.exports = nextConfig 
+module.exports = nextConfig

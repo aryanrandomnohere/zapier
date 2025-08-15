@@ -1,3 +1,4 @@
+"use client";
 import { GetHistoryIcon } from "./GetHistoryIcon";
 
 export interface User {

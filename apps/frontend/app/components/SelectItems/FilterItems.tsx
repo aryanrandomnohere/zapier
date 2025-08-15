@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { BsHouseDoor, BsStars } from "react-icons/bs";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";

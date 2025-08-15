@@ -1,3 +1,4 @@
+"use client";
 import { ItemType, onStepEnum } from "@repo/types";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../../RecoilState/store/zapCreate";
@@ -7,8 +8,9 @@ import { userAtom } from "../../RecoilState/store/userAtom";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { RiPushpinLine } from "react-icons/ri";
-import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { useState } from "react";
+import { lazy } from "react";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 
 type MockItem = {
   id: string;
@@ -144,12 +146,22 @@ export default function OptionList({
   return (
     <div className="flex flex-col gap-1 w-full">
       <div className="font-semibold text-sm text-stone-500">{title}</div>
-      {items?.map((item, index: number) => (
+      {items?.map((item: ItemType | MockItem, index: number) => (
         <div
-          onClick={() => handleClick(item)}
+          onClick={() => {
+            if (
+              updatingStep === item.id ||
+              !("metadata" in item) ||
+              !item.metadata
+            )
+              return;
+            handleClick(item);
+          }}
           key={item.id}
           className={`flex p-1.5 hover:cursor-pointer transform transition-all duration-300 ease-in-out rounded group hover:bg-blue-500/10 min-w items-center gap-2 text-sm font-semibold justify-start hover:justify-between group-hover:justify-between hover:scale-105 ${
-            updatingStep === item.id ? "opacity-50 cursor-not-allowed" : ""
+            updatingStep === item.id || !("metadata" in item) || !item.metadata
+              ? "opacity-50 hover:cursor-not-allowed "
+              : ""
           }`}
         >
           <div className="flex gap-1.5 items-center">

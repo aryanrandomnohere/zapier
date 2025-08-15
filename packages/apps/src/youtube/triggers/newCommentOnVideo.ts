@@ -1,11 +1,12 @@
 import { apiRequest } from "../utils/request.js";
 
 export default async function newCommentOnVideo(
+  type: "test" | "polling",
   videoId: string,
   token: string,
-  type: "test" | "polling",
   lastPolledAt?: string,
 ) {
+  console.log("newCommentOnVideo", videoId, token, type, lastPolledAt);
   const params: Record<string, string> = {
     part: "snippet",
     videoId,

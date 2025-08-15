@@ -9,7 +9,12 @@ import { validateOrRespond } from "../utils/validateOrRespond.js";
 const actionRouter = express.Router();
 
 actionRouter.get("/available", async (req, res) => {
-  const actions = await prisma.availableActions.findMany();
+  const actions = await prisma.availableActions.findMany({
+    orderBy: {
+      id: "asc",
+    },
+  });
+
   res.status(200).json({ items: actions });
 });
 

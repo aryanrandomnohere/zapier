@@ -1,4 +1,9 @@
 import React from "react";
+import { BiSolidZap } from "react-icons/bi";
+import { SlSizeFullscreen } from "react-icons/sl";
+import { RxCross2 } from "react-icons/rx";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { IoTimerOutline } from "react-icons/io5";
 
 interface SkeletonProps {
   className?: string;
@@ -158,3 +163,101 @@ export const GridSkeleton: React.FC<{ cols?: number; rows?: number }> = ({
     ))}
   </div>
 );
+
+
+
+
+const SkeletonPulse = ({ className }: { className: string }) => (
+  <div className={`bg-gray-200 animate-pulse rounded ${className}`}></div>
+);
+
+export default function SideModalLoading() {
+  return (
+    <div className="min-h-full flex flex-col items-center justify-between w-96 border-blue-800 border-2 z-50 rounded transform-all ease-in-out duration-300 bg-[#FFFDF9]">
+      <div className="flex flex-col items-center w-full">
+        {/* Header */}
+        <div className="flex justify-between w-full items-center bg-blue-300/10">
+          <div className="flex items-center gap-1 text-sm font-bold">
+            <div className="flex items-center justify-center m-2 w-10 h-10 p-1.5 border border-black/20 bg-[#FFFDF9] rounded">
+              <BiSolidZap size={22} className="text-gray-400" />
+            </div>
+            <SkeletonPulse className="w-32 h-4" />
+          </div>
+          <div className="flex items-center gap-2 m-2">
+            <SlSizeFullscreen size={18} className="text-gray-400" />
+            <RxCross2 size={20} className="text-gray-400" />
+          </div>
+        </div>
+
+        {/* Steps Navigation */}
+        <div className="flex items-center justify-start gap-0.5 h-10 p-1 w-full border-b border-black/10">
+          {/* Setup Step */}
+          <div className="text-xs font-semibold flex items-center px-1 gap-1 py-2.5">
+            <SkeletonPulse className="w-8 h-3" />
+            <div className="text-black/30">
+              <IoTimerOutline size={18} />
+            </div>
+          </div>
+          <MdKeyboardArrowRight size={20} className="text-gray-400" />
+          
+          {/* Configuration Step */}
+          <div className="text-xs font-semibold flex items-center px-1 gap-1 py-2.5">
+            <SkeletonPulse className="w-12 h-3" />
+            <div className="text-black/30">
+              <IoTimerOutline size={18} />
+            </div>
+          </div>
+          <MdKeyboardArrowRight size={20} className="text-gray-400" />
+          
+          {/* Test Step */}
+          <div className="text-xs font-semibold flex items-center px-1 gap-1 py-2.5">
+            <SkeletonPulse className="w-6 h-3" />
+            <div className="text-black/30">
+              <IoTimerOutline size={18} />
+            </div>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="flex gap-1 w-full px-2.5">
+          <div className="self-start p-2 w-full">
+            <div className="space-y-4">
+              {/* Form field skeleton 1 */}
+              <div className="space-y-2">
+                <SkeletonPulse className="w-20 h-4" />
+                <SkeletonPulse className="w-full h-10" />
+              </div>
+              
+              {/* Form field skeleton 2 */}
+              <div className="space-y-2">
+                <SkeletonPulse className="w-24 h-4" />
+                <SkeletonPulse className="w-full h-10" />
+              </div>
+              
+              {/* Form field skeleton 3 */}
+              <div className="space-y-2">
+                <SkeletonPulse className="w-16 h-4" />
+                <SkeletonPulse className="w-full h-24" />
+              </div>
+              
+              {/* Additional content skeleton */}
+              <div className="space-y-3 mt-6">
+                <SkeletonPulse className="w-full h-3" />
+                <SkeletonPulse className="w-3/4 h-3" />
+                <SkeletonPulse className="w-1/2 h-3" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Button */}
+      <div className="w-full border-t border-black/10">
+        <div className="w-full my-4 px-2">
+          <SkeletonPulse className="w-full h-10 rounded" />
+        </div>
+      </div>
+    </div>
+  );
+}
+

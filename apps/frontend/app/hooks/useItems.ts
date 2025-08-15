@@ -9,7 +9,9 @@ export default function useItems(type: "actions" | "triggers") {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${type}/available`)
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${type}/available`, {
+        withCredentials: true,
+      })
       .then((response) => {
         setItems(response.data.items);
         setIsLoading(false);

@@ -1,10 +1,12 @@
 "use client";
 import { ItemType, onStepEnum } from "@repo/types";
-import ChangeItem from "./ChangeItem";
-import MetaDataField from "./MetaDataField";
 import { useRecoilState } from "recoil";
 import { configureStepDetails } from "@/app/RecoilState/currentZap";
 import { useState } from "react";
+import { lazy } from "react";
+
+const ChangeItem = lazy(() => import("./ChangeItem"));
+const MetaDataField = lazy(() => import("./MetaDataField"));
 
 export default function AddMetaData({
   item,

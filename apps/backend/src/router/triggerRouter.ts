@@ -4,7 +4,16 @@ const triggerRouter = express.Router();
 
 triggerRouter.get("/available", async (req, res) => {
   try {
-    const triggers = await prisma.availableTriggers.findMany();
+    const triggers = await prisma.availableTriggers.findMany({
+      where: {
+        id: {
+          not: "email",
+        },
+      },
+      orderBy: {
+        id: "desc",
+      },
+    });
     res.status(200).json({ items: triggers });
   } catch (error) {
     console.log(error);

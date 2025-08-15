@@ -4,13 +4,17 @@ import successResponse from "../utils/successResponse.js";
 import errorResponse from "../utils/errorResponse.js";
 import { createFolderSchema } from "../types/index.js";
 import { extendedRequest } from "../types/types.js";
+import { validateOrRespond } from "../utils/validateOrRespond.js";
 
 export async function CreateFolder(req: extendedRequest, res: Response) {
   try {
-    const validatedData = createFolderSchema.parse(req.body);
-    const { name, parentId, type } = validatedData;
+    const parsed = validateOrRespond(req.body, createFolderSchema, res);
+    if (!parsed) return;
+    const { name, type, parentId } = parsed;
+
     const userId = Number(req.userId);
-    if (type === "subfolder") {
+    console.log(userId);
+    if (type === "subfolder" && parentId) {
       const folder = await prisma.folder.create({
         data: { name, parentId: parentId, userId },
       });
@@ -22,6 +26,7 @@ export async function CreateFolder(req: extendedRequest, res: Response) {
         });
       else errorResponse({ res, msg: "Failed to create folder" });
     } else {
+      console.log("root");
       const folder = await prisma.folder.create({
         data: { name, userId },
       });
@@ -40,7 +45,23 @@ export async function CreateFolder(req: extendedRequest, res: Response) {
 
 export async function GetFolders(req: Request, res: Response) {
   try {
-    const folders = await prisma.folder.findMany();
+    const folders = await prisma.folder.findMany({
+      orderBy: {
+        id: "desc",
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            firstname: true,
+            lastname: true,
+            email: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+    console.log(folders);
     successResponse({
       res,
       msg: "Folders fetched successfully",

@@ -1,8 +1,13 @@
-import useZaps from "@/app/hooks/useZaps";
+"use client";
 import { Row } from "./Row";
 import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
-import { InlineLoading, TableLoading } from "../ui/LoadingSpinner";
+import { InlineLoading } from "../ui/LoadingSpinner";
 import { zapInterface } from "@repo/types";
+import {
+  appFilterAtom,
+  statusFilterAtom,
+} from "@/app/RecoilState/store/dashBoardFilters";
+import { useRecoilValue } from "recoil";
 
 interface ZapRowsProps {
   zaps?: zapInterface[];
@@ -14,7 +19,23 @@ export const ZapRows: React.FC<ZapRowsProps> = ({
   loading,
 }) => {
   const zaps = propZaps;
+  const statusFilter = useRecoilValue(statusFilterAtom);
+  const appFilter = useRecoilValue(appFilterAtom);
+  console.log(statusFilter, appFilter, zaps);
+  const filteredZaps = zaps
+    ?.filter(
+      (zap) =>
+        appFilter == "ALL" ||
+        zap.trigger?.type.id === appFilter ||
+        zap.actions.some((action) => action.actionDetails.id === appFilter),
+    )
+    .filter(
+      (zap) =>
+        statusFilter == "ALL" ||
+        zap.published === (statusFilter == "ON" ? true : false),
+    );
 
+  console.log(filteredZaps);
   const handleZapClick = (id: string): void => {
     console.log(`Clicked zap with id: ${id}`);
   };
@@ -48,12 +69,9 @@ export const ZapRows: React.FC<ZapRowsProps> = ({
     <tbody>
       <RecoilContextProvider>
         {" "}
-        {zaps
-          ?.filter((zap) => zap.trigger || zap.actions.length > 0)
-          .filter((zap) => zap.trigger || zap.actions.length > 0)
-          .map((zap) => (
-            <Row key={zap.id} zap={zap} handleZapClick={handleZapClick} />
-          ))}
+        {filteredZaps?.map((zap) => (
+          <Row key={zap.id} zap={zap} handleZapClick={handleZapClick} />
+        ))}
       </RecoilContextProvider>
     </tbody>
   );

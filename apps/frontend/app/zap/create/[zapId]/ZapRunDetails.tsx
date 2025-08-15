@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -10,13 +11,14 @@ import {
   CalendarDays,
 } from "lucide-react";
 import { IoReload } from "react-icons/io5";
+
+import { lazy } from "react";
 import { DatePickerModal } from "./DatePickerModal";
-import ZapRunIcons from "./ZapRunIcons";
-import OptionDropdown from "./OptionDropdown";
-import {
-  InlineLoading,
-  TableLoading,
-} from "@/app/components/ui/LoadingSpinner";
+import { InlineLoading } from "@/app/components/ui/LoadingSpinner";
+
+const ZapRunIcons = lazy(() => import("./ZapRunIcons"));
+const OptionDropdown = lazy(() => import("./OptionDropdown"));
+
 
 interface ZapRun {
   id: string;
@@ -233,7 +235,7 @@ export default function ZapRunList() {
             <DatePickerModal
               isOpen={isDateModalOpen}
               onClose={() => setIsDateModalOpen(false)}
-              onDateSelect={(date) => setDateFilter(date)}
+              onDateSelect={(date: string) => setDateFilter(date)}
               selectedValue={dateFilter}
               title="Date"
             />

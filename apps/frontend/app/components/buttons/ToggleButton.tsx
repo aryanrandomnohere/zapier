@@ -1,3 +1,4 @@
+"use client";
 import { ToggleButtonProps } from "@repo/types";
 
 export const ToggleButton: React.FC<ToggleButtonProps> = ({

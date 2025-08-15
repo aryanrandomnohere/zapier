@@ -1,3 +1,4 @@
+"use client";
 import { GoLinkExternal } from "react-icons/go";
 import { IoSearch } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";

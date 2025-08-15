@@ -1,7 +1,9 @@
 "use client";
 import Modal from "@/app/ui/Modal";
 import { ItemType } from "@repo/types";
-import SelectItem from "../ZapCreate/SelectItem";
+import { lazy } from "react";
+
+const SelectItem = lazy(() => import("../ZapCreate/SelectItem"));
 
 export default function ChangeItem({ item }: { item: ItemType }) {
   return (

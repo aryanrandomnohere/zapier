@@ -96,7 +96,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/templates") ? "bg-gray-100" : ""}`}
             >
@@ -118,7 +118,7 @@ const Sidebar: React.FC = () => {
             <Link
               href="/zap/dashboard"
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               } ${isActive("/zap/dashboard") ? "bg-gray-100" : ""}`}
             >
@@ -154,7 +154,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >
@@ -170,7 +170,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >
@@ -194,7 +194,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >
@@ -219,7 +219,7 @@ const Sidebar: React.FC = () => {
             <Link
               href="" // Path to simulate active state for Agents
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/assets/agents") ? "bg-gray-100" : ""}`}
             >
@@ -260,7 +260,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/assets/connections") ? "bg-gray-100" : ""}`}
             >
@@ -276,7 +276,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/history") ? "bg-gray-100" : ""}`}
             >
@@ -291,7 +291,7 @@ const Sidebar: React.FC = () => {
 
             <button
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 text-gray-700 hover:bg-gray-100 rounded w-full transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded w-full transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >
