@@ -1,4 +1,5 @@
 import DropDownOptions from "@/app/ui/DropDownOptions";
+import { folderInterface } from "@repo/types";
 import {
   Pencil,
   UserRoundPlus,
@@ -8,7 +9,13 @@ import {
 } from "lucide-react";
 import { ReactNode } from "react";
 
-export default function FolderRowAction({ trigger }: { trigger: ReactNode }) {
+export default function FolderRowAction({
+  trigger,
+  folder,
+}: {
+  trigger: ReactNode;
+  folder: folderInterface;
+}) {
   return (
     <DropDownOptions trigger={trigger}>
       <div className="absolute right-0 mt-2 w-48 rounded-md border border-gray-200 bg-white shadow-lg z-50">
