@@ -2086,6 +2086,7 @@ export namespace Prisma {
     changeHistory: number;
     notes: number;
     Folder: number;
+    Trash: number;
   };
 
   export type UserCountOutputTypeSelect<
@@ -2096,6 +2097,7 @@ export namespace Prisma {
     changeHistory?: boolean | UserCountOutputTypeCountChangeHistoryArgs;
     notes?: boolean | UserCountOutputTypeCountNotesArgs;
     Folder?: boolean | UserCountOutputTypeCountFolderArgs;
+    Trash?: boolean | UserCountOutputTypeCountTrashArgs;
   };
 
   // Custom InputTypes
@@ -2154,6 +2156,15 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: FolderWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTrashArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ZapWhereInput;
   };
 
   /**
@@ -2696,6 +2707,7 @@ export namespace Prisma {
       changeHistory?: boolean | User$changeHistoryArgs<ExtArgs>;
       notes?: boolean | User$notesArgs<ExtArgs>;
       Folder?: boolean | User$FolderArgs<ExtArgs>;
+      Trash?: boolean | User$TrashArgs<ExtArgs>;
       _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["user"]
@@ -2758,6 +2770,7 @@ export namespace Prisma {
     changeHistory?: boolean | User$changeHistoryArgs<ExtArgs>;
     notes?: boolean | User$notesArgs<ExtArgs>;
     Folder?: boolean | User$FolderArgs<ExtArgs>;
+    Trash?: boolean | User$TrashArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<
@@ -2774,6 +2787,7 @@ export namespace Prisma {
       changeHistory: Prisma.$ZapChangeHistoryPayload<ExtArgs>[];
       notes: Prisma.$ZapNotePayload<ExtArgs>[];
       Folder: Prisma.$FolderPayload<ExtArgs>[];
+      Trash: Prisma.$ZapPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -3349,6 +3363,17 @@ export namespace Prisma {
         >
       | Null
     >;
+    Trash<T extends User$TrashArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$TrashArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$ZapPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3917,6 +3942,32 @@ export namespace Prisma {
   };
 
   /**
+   * User.Trash
+   */
+  export type User$TrashArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Zap
+     */
+    select?: ZapSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Zap
+     */
+    omit?: ZapOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZapInclude<ExtArgs> | null;
+    where?: ZapWhereInput;
+    orderBy?: ZapOrderByWithRelationInput | ZapOrderByWithRelationInput[];
+    cursor?: ZapWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: ZapScalarFieldEnum | ZapScalarFieldEnum[];
+  };
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<
@@ -3952,12 +4003,14 @@ export namespace Prisma {
     id: number | null;
     userId: number | null;
     folderId: number | null;
+    deletedBy: number | null;
   };
 
   export type ZapSumAggregateOutputType = {
     id: number | null;
     userId: number | null;
     folderId: number | null;
+    deletedBy: number | null;
   };
 
   export type ZapMinAggregateOutputType = {
@@ -3970,6 +4023,9 @@ export namespace Prisma {
     RecordId: string | null;
     userId: number | null;
     folderId: number | null;
+    deleted: boolean | null;
+    deletedAt: Date | null;
+    deletedBy: number | null;
   };
 
   export type ZapMaxAggregateOutputType = {
@@ -3982,6 +4038,9 @@ export namespace Prisma {
     RecordId: string | null;
     userId: number | null;
     folderId: number | null;
+    deleted: boolean | null;
+    deletedAt: Date | null;
+    deletedBy: number | null;
   };
 
   export type ZapCountAggregateOutputType = {
@@ -3994,6 +4053,9 @@ export namespace Prisma {
     RecordId: number;
     userId: number;
     folderId: number;
+    deleted: number;
+    deletedAt: number;
+    deletedBy: number;
     _all: number;
   };
 
@@ -4001,12 +4063,14 @@ export namespace Prisma {
     id?: true;
     userId?: true;
     folderId?: true;
+    deletedBy?: true;
   };
 
   export type ZapSumAggregateInputType = {
     id?: true;
     userId?: true;
     folderId?: true;
+    deletedBy?: true;
   };
 
   export type ZapMinAggregateInputType = {
@@ -4019,6 +4083,9 @@ export namespace Prisma {
     RecordId?: true;
     userId?: true;
     folderId?: true;
+    deleted?: true;
+    deletedAt?: true;
+    deletedBy?: true;
   };
 
   export type ZapMaxAggregateInputType = {
@@ -4031,6 +4098,9 @@ export namespace Prisma {
     RecordId?: true;
     userId?: true;
     folderId?: true;
+    deleted?: true;
+    deletedAt?: true;
+    deletedBy?: true;
   };
 
   export type ZapCountAggregateInputType = {
@@ -4043,6 +4113,9 @@ export namespace Prisma {
     RecordId?: true;
     userId?: true;
     folderId?: true;
+    deleted?: true;
+    deletedAt?: true;
+    deletedBy?: true;
     _all?: true;
   };
 
@@ -4143,6 +4216,9 @@ export namespace Prisma {
     RecordId: string | null;
     userId: number;
     folderId: number;
+    deleted: boolean;
+    deletedAt: Date | null;
+    deletedBy: number | null;
     _count: ZapCountAggregateOutputType | null;
     _avg: ZapAvgAggregateOutputType | null;
     _sum: ZapSumAggregateOutputType | null;
@@ -4175,6 +4251,9 @@ export namespace Prisma {
       RecordId?: boolean;
       userId?: boolean;
       folderId?: boolean;
+      deleted?: boolean;
+      deletedAt?: boolean;
+      deletedBy?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
       trigger?: boolean | Zap$triggerArgs<ExtArgs>;
       actions?: boolean | Zap$actionsArgs<ExtArgs>;
@@ -4184,6 +4263,7 @@ export namespace Prisma {
       changeHistory?: boolean | Zap$changeHistoryArgs<ExtArgs>;
       notes?: boolean | Zap$notesArgs<ExtArgs>;
       folder?: boolean | FolderDefaultArgs<ExtArgs>;
+      deletedByUser?: boolean | Zap$deletedByUserArgs<ExtArgs>;
       _count?: boolean | ZapCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["zap"]
@@ -4202,9 +4282,13 @@ export namespace Prisma {
       RecordId?: boolean;
       userId?: boolean;
       folderId?: boolean;
+      deleted?: boolean;
+      deletedAt?: boolean;
+      deletedBy?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
       record?: boolean | Zap$recordArgs<ExtArgs>;
       folder?: boolean | FolderDefaultArgs<ExtArgs>;
+      deletedByUser?: boolean | Zap$deletedByUserArgs<ExtArgs>;
     },
     ExtArgs["result"]["zap"]
   >;
@@ -4219,6 +4303,9 @@ export namespace Prisma {
     RecordId?: boolean;
     userId?: boolean;
     folderId?: boolean;
+    deleted?: boolean;
+    deletedAt?: boolean;
+    deletedBy?: boolean;
   };
 
   export type ZapOmit<
@@ -4232,7 +4319,10 @@ export namespace Prisma {
     | "published"
     | "RecordId"
     | "userId"
-    | "folderId",
+    | "folderId"
+    | "deleted"
+    | "deletedAt"
+    | "deletedBy",
     ExtArgs["result"]["zap"]
   >;
   export type ZapInclude<
@@ -4247,6 +4337,7 @@ export namespace Prisma {
     changeHistory?: boolean | Zap$changeHistoryArgs<ExtArgs>;
     notes?: boolean | Zap$notesArgs<ExtArgs>;
     folder?: boolean | FolderDefaultArgs<ExtArgs>;
+    deletedByUser?: boolean | Zap$deletedByUserArgs<ExtArgs>;
     _count?: boolean | ZapCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type ZapIncludeCreateManyAndReturn<
@@ -4255,6 +4346,7 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>;
     record?: boolean | Zap$recordArgs<ExtArgs>;
     folder?: boolean | FolderDefaultArgs<ExtArgs>;
+    deletedByUser?: boolean | Zap$deletedByUserArgs<ExtArgs>;
   };
 
   export type $ZapPayload<
@@ -4271,6 +4363,7 @@ export namespace Prisma {
       changeHistory: Prisma.$ZapChangeHistoryPayload<ExtArgs>[];
       notes: Prisma.$ZapNotePayload<ExtArgs>[];
       folder: Prisma.$FolderPayload<ExtArgs>;
+      deletedByUser: Prisma.$UserPayload<ExtArgs> | null;
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -4283,6 +4376,9 @@ export namespace Prisma {
         RecordId: string | null;
         userId: number;
         folderId: number;
+        deleted: boolean;
+        deletedAt: Date | null;
+        deletedBy: number | null;
       },
       ExtArgs["result"]["zap"]
     >;
@@ -4898,6 +4994,19 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
+    deletedByUser<T extends Zap$deletedByUserArgs<ExtArgs> = {}>(
+      args?: Subset<T, Zap$deletedByUserArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<
+        Prisma.$UserPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4947,6 +5056,9 @@ export namespace Prisma {
     readonly RecordId: FieldRef<"Zap", "String">;
     readonly userId: FieldRef<"Zap", "Int">;
     readonly folderId: FieldRef<"Zap", "Int">;
+    readonly deleted: FieldRef<"Zap", "Boolean">;
+    readonly deletedAt: FieldRef<"Zap", "DateTime">;
+    readonly deletedBy: FieldRef<"Zap", "Int">;
   }
 
   // Custom InputTypes
@@ -5505,6 +5617,27 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: ZapNoteScalarFieldEnum | ZapNoteScalarFieldEnum[];
+  };
+
+  /**
+   * Zap.deletedByUser
+   */
+  export type Zap$deletedByUserArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null;
+    where?: UserWhereInput;
   };
 
   /**
@@ -20175,6 +20308,9 @@ export namespace Prisma {
     RecordId: "RecordId";
     userId: "userId";
     folderId: "folderId";
+    deleted: "deleted";
+    deletedAt: "deletedAt";
+    deletedBy: "deletedBy";
   };
 
   export type ZapScalarFieldEnum =
@@ -20512,6 +20648,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryListRelationFilter;
     notes?: ZapNoteListRelationFilter;
     Folder?: FolderListRelationFilter;
+    Trash?: ZapListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -20531,6 +20668,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryOrderByRelationAggregateInput;
     notes?: ZapNoteOrderByRelationAggregateInput;
     Folder?: FolderOrderByRelationAggregateInput;
+    Trash?: ZapOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -20554,6 +20692,7 @@ export namespace Prisma {
       changeHistory?: ZapChangeHistoryListRelationFilter;
       notes?: ZapNoteListRelationFilter;
       Folder?: FolderListRelationFilter;
+      Trash?: ZapListRelationFilter;
     },
     "id" | "email" | "zapmail"
   >;
@@ -20611,6 +20750,9 @@ export namespace Prisma {
     RecordId?: StringNullableFilter<"Zap"> | string | null;
     userId?: IntFilter<"Zap"> | number;
     folderId?: IntFilter<"Zap"> | number;
+    deleted?: BoolFilter<"Zap"> | boolean;
+    deletedAt?: DateTimeNullableFilter<"Zap"> | Date | string | null;
+    deletedBy?: IntNullableFilter<"Zap"> | number | null;
     user?: XOR<UserRelationFilter, UserWhereInput>;
     trigger?: XOR<TriggerNullableRelationFilter, TriggerWhereInput> | null;
     actions?: ActionListRelationFilter;
@@ -20620,6 +20762,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryListRelationFilter;
     notes?: ZapNoteListRelationFilter;
     folder?: XOR<FolderRelationFilter, FolderWhereInput>;
+    deletedByUser?: XOR<UserNullableRelationFilter, UserWhereInput> | null;
   };
 
   export type ZapOrderByWithRelationInput = {
@@ -20632,6 +20775,9 @@ export namespace Prisma {
     RecordId?: SortOrderInput | SortOrder;
     userId?: SortOrder;
     folderId?: SortOrder;
+    deleted?: SortOrder;
+    deletedAt?: SortOrderInput | SortOrder;
+    deletedBy?: SortOrderInput | SortOrder;
     user?: UserOrderByWithRelationInput;
     trigger?: TriggerOrderByWithRelationInput;
     actions?: ActionOrderByRelationAggregateInput;
@@ -20641,6 +20787,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryOrderByRelationAggregateInput;
     notes?: ZapNoteOrderByRelationAggregateInput;
     folder?: FolderOrderByWithRelationInput;
+    deletedByUser?: UserOrderByWithRelationInput;
   };
 
   export type ZapWhereUniqueInput = Prisma.AtLeast<
@@ -20657,6 +20804,9 @@ export namespace Prisma {
       published?: BoolFilter<"Zap"> | boolean;
       userId?: IntFilter<"Zap"> | number;
       folderId?: IntFilter<"Zap"> | number;
+      deleted?: BoolFilter<"Zap"> | boolean;
+      deletedAt?: DateTimeNullableFilter<"Zap"> | Date | string | null;
+      deletedBy?: IntNullableFilter<"Zap"> | number | null;
       user?: XOR<UserRelationFilter, UserWhereInput>;
       trigger?: XOR<TriggerNullableRelationFilter, TriggerWhereInput> | null;
       actions?: ActionListRelationFilter;
@@ -20666,6 +20816,7 @@ export namespace Prisma {
       changeHistory?: ZapChangeHistoryListRelationFilter;
       notes?: ZapNoteListRelationFilter;
       folder?: XOR<FolderRelationFilter, FolderWhereInput>;
+      deletedByUser?: XOR<UserNullableRelationFilter, UserWhereInput> | null;
     },
     "id" | "RecordId"
   >;
@@ -20680,6 +20831,9 @@ export namespace Prisma {
     RecordId?: SortOrderInput | SortOrder;
     userId?: SortOrder;
     folderId?: SortOrder;
+    deleted?: SortOrder;
+    deletedAt?: SortOrderInput | SortOrder;
+    deletedBy?: SortOrderInput | SortOrder;
     _count?: ZapCountOrderByAggregateInput;
     _avg?: ZapAvgOrderByAggregateInput;
     _max?: ZapMaxOrderByAggregateInput;
@@ -20704,6 +20858,13 @@ export namespace Prisma {
     RecordId?: StringNullableWithAggregatesFilter<"Zap"> | string | null;
     userId?: IntWithAggregatesFilter<"Zap"> | number;
     folderId?: IntWithAggregatesFilter<"Zap"> | number;
+    deleted?: BoolWithAggregatesFilter<"Zap"> | boolean;
+    deletedAt?:
+      | DateTimeNullableWithAggregatesFilter<"Zap">
+      | Date
+      | string
+      | null;
+    deletedBy?: IntNullableWithAggregatesFilter<"Zap"> | number | null;
   };
 
   export type FolderWhereInput = {
@@ -20740,11 +20901,11 @@ export namespace Prisma {
   export type FolderWhereUniqueInput = Prisma.AtLeast<
     {
       id?: number;
-      userId?: number;
       AND?: FolderWhereInput | FolderWhereInput[];
       OR?: FolderWhereInput[];
       NOT?: FolderWhereInput | FolderWhereInput[];
       name?: StringFilter<"Folder"> | string;
+      userId?: IntFilter<"Folder"> | number;
       type?: StringFilter<"Folder"> | string;
       parentId?: IntNullableFilter<"Folder"> | number | null;
       createdAt?: DateTimeFilter<"Folder"> | Date | string;
@@ -20754,7 +20915,7 @@ export namespace Prisma {
       children?: FolderListRelationFilter;
       zaps?: ZapListRelationFilter;
     },
-    "id" | "userId"
+    "id"
   >;
 
   export type FolderOrderByWithAggregationInput = {
@@ -21657,6 +21818,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderCreateNestedManyWithoutUserInput;
+    Trash?: ZapCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -21676,6 +21838,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
+    Trash?: ZapUncheckedCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserUpdateInput = {
@@ -21694,6 +21857,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -21713,6 +21877,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUncheckedUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -21762,6 +21927,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -21771,6 +21938,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateInput = {
@@ -21783,6 +21951,9 @@ export namespace Prisma {
     RecordId?: string | null;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -21797,6 +21968,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -21806,6 +21983,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateInput = {
@@ -21818,6 +21996,13 @@ export namespace Prisma {
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -21836,6 +22021,9 @@ export namespace Prisma {
     RecordId?: string | null;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
   };
 
   export type ZapUpdateManyMutationInput = {
@@ -21844,6 +22032,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
   };
 
   export type ZapUncheckedUpdateManyInput = {
@@ -21856,6 +22050,13 @@ export namespace Prisma {
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
   };
 
   export type FolderCreateInput = {
@@ -22935,6 +23136,28 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>;
   };
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
+  };
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null;
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
+    lt?: number | IntFieldRefInput<$PrismaModel>;
+    lte?: number | IntFieldRefInput<$PrismaModel>;
+    gt?: number | IntFieldRefInput<$PrismaModel>;
+    gte?: number | IntFieldRefInput<$PrismaModel>;
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null;
+  };
+
   export type UserRelationFilter = {
     is?: UserWhereInput;
     isNot?: UserWhereInput;
@@ -22973,6 +23196,11 @@ export namespace Prisma {
     isNot?: FolderWhereInput;
   };
 
+  export type UserNullableRelationFilter = {
+    is?: UserWhereInput | null;
+    isNot?: UserWhereInput | null;
+  };
+
   export type ActionOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -22995,12 +23223,16 @@ export namespace Prisma {
     RecordId?: SortOrder;
     userId?: SortOrder;
     folderId?: SortOrder;
+    deleted?: SortOrder;
+    deletedAt?: SortOrder;
+    deletedBy?: SortOrder;
   };
 
   export type ZapAvgOrderByAggregateInput = {
     id?: SortOrder;
     userId?: SortOrder;
     folderId?: SortOrder;
+    deletedBy?: SortOrder;
   };
 
   export type ZapMaxOrderByAggregateInput = {
@@ -23013,6 +23245,9 @@ export namespace Prisma {
     RecordId?: SortOrder;
     userId?: SortOrder;
     folderId?: SortOrder;
+    deleted?: SortOrder;
+    deletedAt?: SortOrder;
+    deletedBy?: SortOrder;
   };
 
   export type ZapMinOrderByAggregateInput = {
@@ -23025,15 +23260,37 @@ export namespace Prisma {
     RecordId?: SortOrder;
     userId?: SortOrder;
     folderId?: SortOrder;
+    deleted?: SortOrder;
+    deletedAt?: SortOrder;
+    deletedBy?: SortOrder;
   };
 
   export type ZapSumOrderByAggregateInput = {
     id?: SortOrder;
     userId?: SortOrder;
     folderId?: SortOrder;
+    deletedBy?: SortOrder;
   };
 
-  export type IntNullableFilter<$PrismaModel = never> = {
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?:
+      | NestedDateTimeNullableWithAggregatesFilter<$PrismaModel>
+      | Date
+      | string
+      | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>;
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>;
+  };
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null;
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
@@ -23041,7 +23298,12 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>;
     gt?: number | IntFieldRefInput<$PrismaModel>;
     gte?: number | IntFieldRefInput<$PrismaModel>;
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null;
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null;
+    _count?: NestedIntNullableFilter<$PrismaModel>;
+    _avg?: NestedFloatNullableFilter<$PrismaModel>;
+    _sum?: NestedIntNullableFilter<$PrismaModel>;
+    _min?: NestedIntNullableFilter<$PrismaModel>;
+    _max?: NestedIntNullableFilter<$PrismaModel>;
   };
 
   export type FolderNullableRelationFilter = {
@@ -23089,22 +23351,6 @@ export namespace Prisma {
     id?: SortOrder;
     userId?: SortOrder;
     parentId?: SortOrder;
-  };
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null;
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
-    lt?: number | IntFieldRefInput<$PrismaModel>;
-    lte?: number | IntFieldRefInput<$PrismaModel>;
-    gt?: number | IntFieldRefInput<$PrismaModel>;
-    gte?: number | IntFieldRefInput<$PrismaModel>;
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null;
-    _count?: NestedIntNullableFilter<$PrismaModel>;
-    _avg?: NestedFloatNullableFilter<$PrismaModel>;
-    _sum?: NestedIntNullableFilter<$PrismaModel>;
-    _min?: NestedIntNullableFilter<$PrismaModel>;
-    _max?: NestedIntNullableFilter<$PrismaModel>;
   };
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -23226,17 +23472,6 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>;
   };
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
-  };
-
   export type UserConnectionNullableRelationFilter = {
     is?: UserConnectionWhereInput | null;
     isNot?: UserConnectionWhereInput | null;
@@ -23292,24 +23527,6 @@ export namespace Prisma {
 
   export type TriggerSumOrderByAggregateInput = {
     zapId?: SortOrder;
-  };
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?:
-      | NestedDateTimeNullableWithAggregatesFilter<$PrismaModel>
-      | Date
-      | string
-      | null;
-    _count?: NestedIntNullableFilter<$PrismaModel>;
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>;
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>;
   };
 
   export type TriggerListRelationFilter = {
@@ -23787,6 +24004,21 @@ export namespace Prisma {
     connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
   };
 
+  export type ZapCreateNestedManyWithoutDeletedByUserInput = {
+    create?:
+      | XOR<
+          ZapCreateWithoutDeletedByUserInput,
+          ZapUncheckedCreateWithoutDeletedByUserInput
+        >
+      | ZapCreateWithoutDeletedByUserInput[]
+      | ZapUncheckedCreateWithoutDeletedByUserInput[];
+    connectOrCreate?:
+      | ZapCreateOrConnectWithoutDeletedByUserInput
+      | ZapCreateOrConnectWithoutDeletedByUserInput[];
+    createMany?: ZapCreateManyDeletedByUserInputEnvelope;
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+  };
+
   export type ZapUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<ZapCreateWithoutUserInput, ZapUncheckedCreateWithoutUserInput>
@@ -23856,6 +24088,21 @@ export namespace Prisma {
       | FolderCreateOrConnectWithoutUserInput[];
     createMany?: FolderCreateManyUserInputEnvelope;
     connect?: FolderWhereUniqueInput | FolderWhereUniqueInput[];
+  };
+
+  export type ZapUncheckedCreateNestedManyWithoutDeletedByUserInput = {
+    create?:
+      | XOR<
+          ZapCreateWithoutDeletedByUserInput,
+          ZapUncheckedCreateWithoutDeletedByUserInput
+        >
+      | ZapCreateWithoutDeletedByUserInput[]
+      | ZapUncheckedCreateWithoutDeletedByUserInput[];
+    connectOrCreate?:
+      | ZapCreateOrConnectWithoutDeletedByUserInput
+      | ZapCreateOrConnectWithoutDeletedByUserInput[];
+    createMany?: ZapCreateManyDeletedByUserInputEnvelope;
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
   };
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -24020,6 +24267,34 @@ export namespace Prisma {
     deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[];
   };
 
+  export type ZapUpdateManyWithoutDeletedByUserNestedInput = {
+    create?:
+      | XOR<
+          ZapCreateWithoutDeletedByUserInput,
+          ZapUncheckedCreateWithoutDeletedByUserInput
+        >
+      | ZapCreateWithoutDeletedByUserInput[]
+      | ZapUncheckedCreateWithoutDeletedByUserInput[];
+    connectOrCreate?:
+      | ZapCreateOrConnectWithoutDeletedByUserInput
+      | ZapCreateOrConnectWithoutDeletedByUserInput[];
+    upsert?:
+      | ZapUpsertWithWhereUniqueWithoutDeletedByUserInput
+      | ZapUpsertWithWhereUniqueWithoutDeletedByUserInput[];
+    createMany?: ZapCreateManyDeletedByUserInputEnvelope;
+    set?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    disconnect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    delete?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    update?:
+      | ZapUpdateWithWhereUniqueWithoutDeletedByUserInput
+      | ZapUpdateWithWhereUniqueWithoutDeletedByUserInput[];
+    updateMany?:
+      | ZapUpdateManyWithWhereWithoutDeletedByUserInput
+      | ZapUpdateManyWithWhereWithoutDeletedByUserInput[];
+    deleteMany?: ZapScalarWhereInput | ZapScalarWhereInput[];
+  };
+
   export type IntFieldUpdateOperationsInput = {
     set?: number;
     increment?: number;
@@ -24174,6 +24449,34 @@ export namespace Prisma {
     deleteMany?: FolderScalarWhereInput | FolderScalarWhereInput[];
   };
 
+  export type ZapUncheckedUpdateManyWithoutDeletedByUserNestedInput = {
+    create?:
+      | XOR<
+          ZapCreateWithoutDeletedByUserInput,
+          ZapUncheckedCreateWithoutDeletedByUserInput
+        >
+      | ZapCreateWithoutDeletedByUserInput[]
+      | ZapUncheckedCreateWithoutDeletedByUserInput[];
+    connectOrCreate?:
+      | ZapCreateOrConnectWithoutDeletedByUserInput
+      | ZapCreateOrConnectWithoutDeletedByUserInput[];
+    upsert?:
+      | ZapUpsertWithWhereUniqueWithoutDeletedByUserInput
+      | ZapUpsertWithWhereUniqueWithoutDeletedByUserInput[];
+    createMany?: ZapCreateManyDeletedByUserInputEnvelope;
+    set?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    disconnect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    delete?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    connect?: ZapWhereUniqueInput | ZapWhereUniqueInput[];
+    update?:
+      | ZapUpdateWithWhereUniqueWithoutDeletedByUserInput
+      | ZapUpdateWithWhereUniqueWithoutDeletedByUserInput[];
+    updateMany?:
+      | ZapUpdateManyWithWhereWithoutDeletedByUserInput
+      | ZapUpdateManyWithWhereWithoutDeletedByUserInput[];
+    deleteMany?: ZapScalarWhereInput | ZapScalarWhereInput[];
+  };
+
   export type UserCreateNestedOneWithoutZapInput = {
     create?: XOR<UserCreateWithoutZapInput, UserUncheckedCreateWithoutZapInput>;
     connectOrCreate?: UserCreateOrConnectWithoutZapInput;
@@ -24272,6 +24575,15 @@ export namespace Prisma {
     connect?: FolderWhereUniqueInput;
   };
 
+  export type UserCreateNestedOneWithoutTrashInput = {
+    create?: XOR<
+      UserCreateWithoutTrashInput,
+      UserUncheckedCreateWithoutTrashInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutTrashInput;
+    connect?: UserWhereUniqueInput;
+  };
+
   export type TriggerUncheckedCreateNestedOneWithoutZapInput = {
     create?: XOR<
       TriggerCreateWithoutZapInput,
@@ -24344,6 +24656,10 @@ export namespace Prisma {
       | ZapNoteCreateOrConnectWithoutZapInput[];
     createMany?: ZapNoteCreateManyZapInputEnvelope;
     connect?: ZapNoteWhereUniqueInput | ZapNoteWhereUniqueInput[];
+  };
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null;
   };
 
   export type UserUpdateOneRequiredWithoutZapNestedInput = {
@@ -24546,6 +24862,33 @@ export namespace Prisma {
       >,
       FolderUncheckedUpdateWithoutZapsInput
     >;
+  };
+
+  export type UserUpdateOneWithoutTrashNestedInput = {
+    create?: XOR<
+      UserCreateWithoutTrashInput,
+      UserUncheckedCreateWithoutTrashInput
+    >;
+    connectOrCreate?: UserCreateOrConnectWithoutTrashInput;
+    upsert?: UserUpsertWithoutTrashInput;
+    disconnect?: UserWhereInput | boolean;
+    delete?: UserWhereInput | boolean;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutTrashInput,
+        UserUpdateWithoutTrashInput
+      >,
+      UserUncheckedUpdateWithoutTrashInput
+    >;
+  };
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null;
+    increment?: number;
+    decrement?: number;
+    multiply?: number;
+    divide?: number;
   };
 
   export type TriggerUncheckedUpdateOneWithoutZapNestedInput = {
@@ -24864,14 +25207,6 @@ export namespace Prisma {
     deleteMany?: ZapScalarWhereInput | ZapScalarWhereInput[];
   };
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null;
-    increment?: number;
-    decrement?: number;
-    multiply?: number;
-    divide?: number;
-  };
-
   export type FolderUncheckedUpdateManyWithoutParentNestedInput = {
     create?:
       | XOR<
@@ -25050,10 +25385,6 @@ export namespace Prisma {
     >;
     connectOrCreate?: ZapNoteCreateOrConnectWithoutTriggerInput;
     connect?: ZapNoteWhereUniqueInput;
-  };
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null;
   };
 
   export type ZapUpdateOneRequiredWithoutTriggerNestedInput = {
@@ -26200,6 +26531,40 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>;
   };
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
+  };
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> =
+    {
+      equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
+      in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
+      notIn?:
+        | Date[]
+        | string[]
+        | ListDateTimeFieldRefInput<$PrismaModel>
+        | null;
+      lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+      lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+      gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+      gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
+      not?:
+        | NestedDateTimeNullableWithAggregatesFilter<$PrismaModel>
+        | Date
+        | string
+        | null;
+      _count?: NestedIntNullableFilter<$PrismaModel>;
+      _min?: NestedDateTimeNullableFilter<$PrismaModel>;
+      _max?: NestedDateTimeNullableFilter<$PrismaModel>;
+    };
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null;
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null;
@@ -26257,40 +26622,6 @@ export namespace Prisma {
       | JsonFieldRefInput<$PrismaModel>
       | JsonNullValueFilter;
   };
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
-  };
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> =
-    {
-      equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
-      in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
-      notIn?:
-        | Date[]
-        | string[]
-        | ListDateTimeFieldRefInput<$PrismaModel>
-        | null;
-      lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-      lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-      gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-      gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
-      not?:
-        | NestedDateTimeNullableWithAggregatesFilter<$PrismaModel>
-        | Date
-        | string
-        | null;
-      _count?: NestedIntNullableFilter<$PrismaModel>;
-      _min?: NestedDateTimeNullableFilter<$PrismaModel>;
-      _max?: NestedDateTimeNullableFilter<$PrismaModel>;
-    };
 
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null;
@@ -26400,6 +26731,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunCreateNestedManyWithoutZapInput;
@@ -26408,6 +26741,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutUserInput = {
@@ -26419,6 +26753,9 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -26576,6 +26913,58 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type ZapCreateWithoutDeletedByUserInput = {
+    triggerId?: string | null;
+    name?: string;
+    lastEdited?: Date | string;
+    createdAt?: Date | string;
+    published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    user: UserCreateNestedOneWithoutZapInput;
+    trigger?: TriggerCreateNestedOneWithoutZapInput;
+    actions?: ActionCreateNestedManyWithoutZapInput;
+    zapRuns?: ZapRunCreateNestedManyWithoutZapInput;
+    records?: RecordCreateNestedManyWithoutZapInput;
+    record?: RecordCreateNestedOneWithoutZapSingleInput;
+    changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
+    notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    folder: FolderCreateNestedOneWithoutZapsInput;
+  };
+
+  export type ZapUncheckedCreateWithoutDeletedByUserInput = {
+    id?: number;
+    triggerId?: string | null;
+    name?: string;
+    lastEdited?: Date | string;
+    createdAt?: Date | string;
+    published?: boolean;
+    RecordId?: string | null;
+    userId: number;
+    folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
+    actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
+    zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
+    records?: RecordUncheckedCreateNestedManyWithoutZapInput;
+    changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutZapInput;
+    notes?: ZapNoteUncheckedCreateNestedManyWithoutZapInput;
+  };
+
+  export type ZapCreateOrConnectWithoutDeletedByUserInput = {
+    where: ZapWhereUniqueInput;
+    create: XOR<
+      ZapCreateWithoutDeletedByUserInput,
+      ZapUncheckedCreateWithoutDeletedByUserInput
+    >;
+  };
+
+  export type ZapCreateManyDeletedByUserInputEnvelope = {
+    data: ZapCreateManyDeletedByUserInput | ZapCreateManyDeletedByUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type ZapUpsertWithWhereUniqueWithoutUserInput = {
     where: ZapWhereUniqueInput;
     update: XOR<ZapUpdateWithoutUserInput, ZapUncheckedUpdateWithoutUserInput>;
@@ -26608,6 +26997,9 @@ export namespace Prisma {
     RecordId?: StringNullableFilter<"Zap"> | string | null;
     userId?: IntFilter<"Zap"> | number;
     folderId?: IntFilter<"Zap"> | number;
+    deleted?: BoolFilter<"Zap"> | boolean;
+    deletedAt?: DateTimeNullableFilter<"Zap"> | Date | string | null;
+    deletedBy?: IntNullableFilter<"Zap"> | number | null;
   };
 
   export type UserConnectionUpsertWithWhereUniqueWithoutUserInput = {
@@ -26776,6 +27168,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Folder"> | Date | string;
   };
 
+  export type ZapUpsertWithWhereUniqueWithoutDeletedByUserInput = {
+    where: ZapWhereUniqueInput;
+    update: XOR<
+      ZapUpdateWithoutDeletedByUserInput,
+      ZapUncheckedUpdateWithoutDeletedByUserInput
+    >;
+    create: XOR<
+      ZapCreateWithoutDeletedByUserInput,
+      ZapUncheckedCreateWithoutDeletedByUserInput
+    >;
+  };
+
+  export type ZapUpdateWithWhereUniqueWithoutDeletedByUserInput = {
+    where: ZapWhereUniqueInput;
+    data: XOR<
+      ZapUpdateWithoutDeletedByUserInput,
+      ZapUncheckedUpdateWithoutDeletedByUserInput
+    >;
+  };
+
+  export type ZapUpdateManyWithWhereWithoutDeletedByUserInput = {
+    where: ZapScalarWhereInput;
+    data: XOR<
+      ZapUpdateManyMutationInput,
+      ZapUncheckedUpdateManyWithoutDeletedByUserInput
+    >;
+  };
+
   export type UserCreateWithoutZapInput = {
     firstname?: string | null;
     lastname?: string | null;
@@ -26791,6 +27211,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderCreateNestedManyWithoutUserInput;
+    Trash?: ZapCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserUncheckedCreateWithoutZapInput = {
@@ -26809,6 +27230,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
+    Trash?: ZapUncheckedCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserCreateOrConnectWithoutZapInput = {
@@ -27080,6 +27502,51 @@ export namespace Prisma {
     >;
   };
 
+  export type UserCreateWithoutTrashInput = {
+    firstname?: string | null;
+    lastname?: string | null;
+    email: string;
+    zapmail: string;
+    type: string;
+    verified?: boolean;
+    password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    zap?: ZapCreateNestedManyWithoutUserInput;
+    connections?: UserConnectionCreateNestedManyWithoutUserInput;
+    changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
+    notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutTrashInput = {
+    id?: number;
+    firstname?: string | null;
+    lastname?: string | null;
+    email: string;
+    zapmail: string;
+    type: string;
+    verified?: boolean;
+    password?: string | null;
+    imageUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    zap?: ZapUncheckedCreateNestedManyWithoutUserInput;
+    connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
+    changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
+    notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
+    Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutTrashInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<
+      UserCreateWithoutTrashInput,
+      UserUncheckedCreateWithoutTrashInput
+    >;
+  };
+
   export type UserUpsertWithoutZapInput = {
     update: XOR<UserUpdateWithoutZapInput, UserUncheckedUpdateWithoutZapInput>;
     create: XOR<UserCreateWithoutZapInput, UserUncheckedCreateWithoutZapInput>;
@@ -27106,6 +27573,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutZapInput = {
@@ -27124,6 +27592,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUncheckedUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type TriggerUpsertWithoutZapInput = {
@@ -27443,6 +27912,63 @@ export namespace Prisma {
     children?: FolderUncheckedUpdateManyWithoutParentNestedInput;
   };
 
+  export type UserUpsertWithoutTrashInput = {
+    update: XOR<
+      UserUpdateWithoutTrashInput,
+      UserUncheckedUpdateWithoutTrashInput
+    >;
+    create: XOR<
+      UserCreateWithoutTrashInput,
+      UserUncheckedCreateWithoutTrashInput
+    >;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutTrashInput = {
+    where?: UserWhereInput;
+    data: XOR<
+      UserUpdateWithoutTrashInput,
+      UserUncheckedUpdateWithoutTrashInput
+    >;
+  };
+
+  export type UserUpdateWithoutTrashInput = {
+    firstname?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastname?: NullableStringFieldUpdateOperationsInput | string | null;
+    email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    verified?: BoolFieldUpdateOperationsInput | boolean;
+    password?: NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    zap?: ZapUpdateManyWithoutUserNestedInput;
+    connections?: UserConnectionUpdateManyWithoutUserNestedInput;
+    changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
+    notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutTrashInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    firstname?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastname?: NullableStringFieldUpdateOperationsInput | string | null;
+    email?: StringFieldUpdateOperationsInput | string;
+    zapmail?: StringFieldUpdateOperationsInput | string;
+    type?: StringFieldUpdateOperationsInput | string;
+    verified?: BoolFieldUpdateOperationsInput | boolean;
+    password?: NullableStringFieldUpdateOperationsInput | string | null;
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    zap?: ZapUncheckedUpdateManyWithoutUserNestedInput;
+    connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
+    changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
+    notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
+    Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
   export type UserCreateWithoutFolderInput = {
     firstname?: string | null;
     lastname?: string | null;
@@ -27458,6 +27984,7 @@ export namespace Prisma {
     connections?: UserConnectionCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
+    Trash?: ZapCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserUncheckedCreateWithoutFolderInput = {
@@ -27476,6 +28003,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
+    Trash?: ZapUncheckedCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserCreateOrConnectWithoutFolderInput = {
@@ -27555,6 +28083,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -27563,6 +28093,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutFolderInput = {
@@ -27574,6 +28105,9 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -27630,6 +28164,7 @@ export namespace Prisma {
     connections?: UserConnectionUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
+    Trash?: ZapUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutFolderInput = {
@@ -27648,6 +28183,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
+    Trash?: ZapUncheckedUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type FolderUpsertWithoutChildrenInput = {
@@ -27753,6 +28289,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -27761,6 +28299,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutRecordsInput = {
@@ -27773,6 +28312,9 @@ export namespace Prisma {
     RecordId?: string | null;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -27794,6 +28336,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -27802,6 +28346,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutRecordInput = {
@@ -27813,6 +28358,9 @@ export namespace Prisma {
     published?: boolean;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -27855,6 +28403,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -27863,6 +28417,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutRecordsInput = {
@@ -27875,6 +28430,13 @@ export namespace Prisma {
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -27908,6 +28470,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -27916,6 +28484,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutRecordInput = {
@@ -27927,6 +28496,13 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -27941,6 +28517,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunCreateNestedManyWithoutZapInput;
@@ -27949,6 +28527,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutTriggerInput = {
@@ -27961,6 +28540,9 @@ export namespace Prisma {
     RecordId?: string | null;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
     records?: RecordUncheckedCreateNestedManyWithoutZapInput;
@@ -28092,6 +28674,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUpdateManyWithoutZapNestedInput;
@@ -28100,6 +28688,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutTriggerInput = {
@@ -28112,6 +28701,13 @@ export namespace Prisma {
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
     records?: RecordUncheckedUpdateManyWithoutZapNestedInput;
@@ -28260,6 +28856,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderCreateNestedManyWithoutUserInput;
+    Trash?: ZapCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserUncheckedCreateWithoutConnectionsInput = {
@@ -28278,6 +28875,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
+    Trash?: ZapUncheckedCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserCreateOrConnectWithoutConnectionsInput = {
@@ -28401,6 +28999,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutConnectionsInput = {
@@ -28419,6 +29018,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUncheckedUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type TriggerUpsertWithWhereUniqueWithoutUserConnectionInput = {
@@ -28563,6 +29163,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     zapRuns?: ZapRunCreateNestedManyWithoutZapInput;
@@ -28571,6 +29173,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutActionsInput = {
@@ -28583,6 +29186,9 @@ export namespace Prisma {
     RecordId?: string | null;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
     records?: RecordUncheckedCreateNestedManyWithoutZapInput;
@@ -28751,6 +29357,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     zapRuns?: ZapRunUpdateManyWithoutZapNestedInput;
@@ -28759,6 +29371,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutActionsInput = {
@@ -28771,6 +29384,13 @@ export namespace Prisma {
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
     records?: RecordUncheckedUpdateManyWithoutZapNestedInput;
@@ -29037,6 +29657,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -29045,6 +29667,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutZapRunsInput = {
@@ -29057,6 +29680,9 @@ export namespace Prisma {
     RecordId?: string | null;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     records?: RecordUncheckedCreateNestedManyWithoutZapInput;
@@ -29158,6 +29784,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -29166,6 +29798,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutZapRunsInput = {
@@ -29178,6 +29811,13 @@ export namespace Prisma {
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     records?: RecordUncheckedUpdateManyWithoutZapNestedInput;
@@ -29299,6 +29939,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -29307,6 +29949,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     notes?: ZapNoteCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutChangeHistoryInput = {
@@ -29319,6 +29962,9 @@ export namespace Prisma {
     RecordId?: string | null;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -29349,6 +29995,7 @@ export namespace Prisma {
     connections?: UserConnectionCreateNestedManyWithoutUserInput;
     notes?: ZapNoteCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderCreateNestedManyWithoutUserInput;
+    Trash?: ZapCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserUncheckedCreateWithoutChangeHistoryInput = {
@@ -29367,6 +30014,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
     notes?: ZapNoteUncheckedCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
+    Trash?: ZapUncheckedCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserCreateOrConnectWithoutChangeHistoryInput = {
@@ -29403,6 +30051,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -29411,6 +30065,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutChangeHistoryInput = {
@@ -29423,6 +30078,13 @@ export namespace Prisma {
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -29465,6 +30127,7 @@ export namespace Prisma {
     connections?: UserConnectionUpdateManyWithoutUserNestedInput;
     notes?: ZapNoteUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutChangeHistoryInput = {
@@ -29483,6 +30146,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
     notes?: ZapNoteUncheckedUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUncheckedUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type ZapCreateWithoutNotesInput = {
@@ -29491,6 +30155,8 @@ export namespace Prisma {
     lastEdited?: Date | string;
     createdAt?: Date | string;
     published?: boolean;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
     user: UserCreateNestedOneWithoutZapInput;
     trigger?: TriggerCreateNestedOneWithoutZapInput;
     actions?: ActionCreateNestedManyWithoutZapInput;
@@ -29499,6 +30165,7 @@ export namespace Prisma {
     record?: RecordCreateNestedOneWithoutZapSingleInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutZapInput;
     folder: FolderCreateNestedOneWithoutZapsInput;
+    deletedByUser?: UserCreateNestedOneWithoutTrashInput;
   };
 
   export type ZapUncheckedCreateWithoutNotesInput = {
@@ -29511,6 +30178,9 @@ export namespace Prisma {
     RecordId?: string | null;
     userId: number;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
     trigger?: TriggerUncheckedCreateNestedOneWithoutZapInput;
     actions?: ActionUncheckedCreateNestedManyWithoutZapInput;
     zapRuns?: ZapRunUncheckedCreateNestedManyWithoutZapInput;
@@ -29605,6 +30275,7 @@ export namespace Prisma {
     connections?: UserConnectionCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderCreateNestedManyWithoutUserInput;
+    Trash?: ZapCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserUncheckedCreateWithoutNotesInput = {
@@ -29623,6 +30294,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedCreateNestedManyWithoutUserInput;
     changeHistory?: ZapChangeHistoryUncheckedCreateNestedManyWithoutCreatedByInput;
     Folder?: FolderUncheckedCreateNestedManyWithoutUserInput;
+    Trash?: ZapUncheckedCreateNestedManyWithoutDeletedByUserInput;
   };
 
   export type UserCreateOrConnectWithoutNotesInput = {
@@ -29656,6 +30328,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -29664,6 +30342,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutNotesInput = {
@@ -29676,6 +30355,13 @@ export namespace Prisma {
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -29814,6 +30500,7 @@ export namespace Prisma {
     connections?: UserConnectionUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutNotesInput = {
@@ -29832,6 +30519,7 @@ export namespace Prisma {
     connections?: UserConnectionUncheckedUpdateManyWithoutUserNestedInput;
     changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutCreatedByNestedInput;
     Folder?: FolderUncheckedUpdateManyWithoutUserNestedInput;
+    Trash?: ZapUncheckedUpdateManyWithoutDeletedByUserNestedInput;
   };
 
   export type ZapCreateManyUserInput = {
@@ -29843,6 +30531,9 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
   };
 
   export type UserConnectionCreateManyUserInput = {
@@ -29883,12 +30574,32 @@ export namespace Prisma {
     updatedAt?: Date | string;
   };
 
+  export type ZapCreateManyDeletedByUserInput = {
+    id?: number;
+    triggerId?: string | null;
+    name?: string;
+    lastEdited?: Date | string;
+    createdAt?: Date | string;
+    published?: boolean;
+    RecordId?: string | null;
+    userId: number;
+    folderId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+  };
+
   export type ZapUpdateWithoutUserInput = {
     triggerId?: NullableStringFieldUpdateOperationsInput | string | null;
     name?: StringFieldUpdateOperationsInput | string;
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUpdateManyWithoutZapNestedInput;
@@ -29897,6 +30608,7 @@ export namespace Prisma {
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
     folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutUserInput = {
@@ -29908,6 +30620,13 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -29925,6 +30644,13 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
   };
 
   export type UserConnectionUpdateWithoutUserInput = {
@@ -30046,6 +30772,71 @@ export namespace Prisma {
     parentId?: NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ZapUpdateWithoutDeletedByUserInput = {
+    triggerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    name?: StringFieldUpdateOperationsInput | string;
+    lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    user?: UserUpdateOneRequiredWithoutZapNestedInput;
+    trigger?: TriggerUpdateOneWithoutZapNestedInput;
+    actions?: ActionUpdateManyWithoutZapNestedInput;
+    zapRuns?: ZapRunUpdateManyWithoutZapNestedInput;
+    records?: RecordUpdateManyWithoutZapNestedInput;
+    record?: RecordUpdateOneWithoutZapSingleNestedInput;
+    changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
+    notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    folder?: FolderUpdateOneRequiredWithoutZapsNestedInput;
+  };
+
+  export type ZapUncheckedUpdateWithoutDeletedByUserInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    triggerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    name?: StringFieldUpdateOperationsInput | string;
+    lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    published?: BoolFieldUpdateOperationsInput | boolean;
+    RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
+    userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
+    actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
+    zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
+    records?: RecordUncheckedUpdateManyWithoutZapNestedInput;
+    changeHistory?: ZapChangeHistoryUncheckedUpdateManyWithoutZapNestedInput;
+    notes?: ZapNoteUncheckedUpdateManyWithoutZapNestedInput;
+  };
+
+  export type ZapUncheckedUpdateManyWithoutDeletedByUserInput = {
+    id?: IntFieldUpdateOperationsInput | number;
+    triggerId?: NullableStringFieldUpdateOperationsInput | string | null;
+    name?: StringFieldUpdateOperationsInput | string;
+    lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    published?: BoolFieldUpdateOperationsInput | boolean;
+    RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
+    userId?: IntFieldUpdateOperationsInput | number;
+    folderId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
   };
 
   export type ActionCreateManyZapInput = {
@@ -30282,6 +31073,9 @@ export namespace Prisma {
     published?: boolean;
     RecordId?: string | null;
     userId: number;
+    deleted?: boolean;
+    deletedAt?: Date | string | null;
+    deletedBy?: number | null;
   };
 
   export type FolderUpdateWithoutParentInput = {
@@ -30320,6 +31114,12 @@ export namespace Prisma {
     lastEdited?: DateTimeFieldUpdateOperationsInput | Date | string;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     published?: BoolFieldUpdateOperationsInput | boolean;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     user?: UserUpdateOneRequiredWithoutZapNestedInput;
     trigger?: TriggerUpdateOneWithoutZapNestedInput;
     actions?: ActionUpdateManyWithoutZapNestedInput;
@@ -30328,6 +31128,7 @@ export namespace Prisma {
     record?: RecordUpdateOneWithoutZapSingleNestedInput;
     changeHistory?: ZapChangeHistoryUpdateManyWithoutZapNestedInput;
     notes?: ZapNoteUpdateManyWithoutZapNestedInput;
+    deletedByUser?: UserUpdateOneWithoutTrashNestedInput;
   };
 
   export type ZapUncheckedUpdateWithoutFolderInput = {
@@ -30339,6 +31140,13 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
     trigger?: TriggerUncheckedUpdateOneWithoutZapNestedInput;
     actions?: ActionUncheckedUpdateManyWithoutZapNestedInput;
     zapRuns?: ZapRunUncheckedUpdateManyWithoutZapNestedInput;
@@ -30356,6 +31164,13 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean;
     RecordId?: NullableStringFieldUpdateOperationsInput | string | null;
     userId?: IntFieldUpdateOperationsInput | number;
+    deleted?: BoolFieldUpdateOperationsInput | boolean;
+    deletedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
+    deletedBy?: NullableIntFieldUpdateOperationsInput | number | null;
   };
 
   export type TriggerCreateManyUserConnectionInput = {

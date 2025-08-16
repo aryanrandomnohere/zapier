@@ -143,7 +143,10 @@ exports.Prisma.ZapScalarFieldEnum = {
   published: 'published',
   RecordId: 'RecordId',
   userId: 'userId',
-  folderId: 'folderId'
+  folderId: 'folderId',
+  deleted: 'deleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy'
 };
 
 exports.Prisma.FolderScalarFieldEnum = {
