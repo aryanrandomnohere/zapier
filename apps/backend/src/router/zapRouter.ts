@@ -23,11 +23,18 @@ zapRouter.get(
     const zaps = await prisma.zap.findMany({
       where: {
         userId: Number(userId),
+        deleted: false,
       },
       include: {
         actions: {
           include: {
             actionDetails: true,
+          },
+        },
+        user: {
+          select: {
+            firstname: true,
+            lastname: true,
           },
         },
         folder: {
@@ -61,12 +68,31 @@ zapRouter.get(
   }),
 );
 
+zapRouter.put(
+  "/rename/:zapId",
+  asyncHandler(async (req, res) => {
+    const zapId = Number(req.params.zapId);
+    if (!req.body?.newName || !zapId) {
+      return errorResponse({ res, msg: "Empty Inputs" });
+    }
+    await prisma.zap.update({
+      where: {
+        id: zapId,
+      },
+      data: {
+        name: req.body.newName,
+      },
+    });
+    successResponse({ msg: "Renamed Zap Successfully", res });
+  }),
+);
+
 zapRouter.post(
   "/draft",
   asyncHandler(async (req: extendedRequest, res: Response) => {
     try {
       const userId = Number(req.userId);
-      let folderId = req.body?.folderId;
+      let folderId = Number(req.body?.folderId);
       if (!folderId) {
         const userFolder = await prisma.user.findFirst({
           where: {
@@ -76,13 +102,17 @@ zapRouter.post(
             Folder: true,
           },
         });
-        folderId = userFolder?.Folder[0]?.id;
+        folderId = userFolder?.Folder[0]?.id || 0;
       }
       if (!folderId) {
         errorResponse({ res, msg: "Internal Server Error" });
         return;
       }
-      const allZaps = await prisma.zap.findMany();
+      const allZaps = await prisma.zap.findMany({
+        where: {
+          folderId,
+        },
+      });
 
       const emptyZap = allZaps.find((zap) => zap.triggerId === null);
       let response;
@@ -116,7 +146,7 @@ zapRouter.get("/zap-history/:zapId", async (req: Request, res: Response) => {
     const history = await prisma.zapChangeHistory.findMany({
       where: { zapId },
       include: {
-        createdBy: true, // fetch related user
+        createdBy: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -765,21 +795,114 @@ zapRouter.post(
 );
 
 zapRouter.put(
-  "/rename/:zapId",
+  "/move",
   asyncHandler(async (req, res) => {
-    const zapId = Number(req.params.zapId);
-    if (!req.body?.newName || !zapId) {
-      return errorResponse({ res, msg: "Empty Inputs" });
-    }
-    await prisma.zap.update({
-      where: {
-        id: zapId,
-      },
-      data: {
-        name: req.body.newName,
+    const folderId = Number(req.body.folderId);
+    const zapId = Number(req.body.zapId);
+    if (!folderId || !zapId)
+      return errorResponse({ res, msg: "Folder ID and Zap ID are required" });
+    const zap = await prisma.zap.findUnique({
+      where: { id: zapId },
+      select: {
+        folderId: true,
       },
     });
-    successResponse({ msg: "Renamed Zap Successfully", res });
+    if (!zap) return errorResponse({ res, msg: "Zap not found" });
+    if (zap.folderId === folderId)
+      return errorResponse({ res, msg: "Zap already in this folder" });
+    await prisma.zap.update({
+      where: { id: zapId },
+      data: { folderId },
+    });
+    successResponse({ msg: "Moved Zap Successfully", res });
+  }),
+);
+
+zapRouter.delete(
+  "/:zapId",
+  asyncHandler(async (req: extendedRequest, res) => {
+    const zapId = Number(req.params.zapId);
+    if (!zapId) return errorResponse({ res, msg: "Zap ID is required" });
+    await prisma.zap.update({
+      where: { id: zapId },
+      data: {
+        deleted: true,
+        deletedAt: new Date(),
+        deletedBy: Number(req.userId),
+      },
+    });
+    successResponse({ msg: "Zap deleted successfully", res });
+  }),
+);
+
+zapRouter.delete(
+  "/:zapId",
+  asyncHandler(async (req: extendedRequest, res) => {
+    const zapId = Number(req.params.zapId);
+    if (!zapId) return errorResponse({ res, msg: "Zap ID is required" });
+
+    await prisma.zap.update({
+      where: { id: zapId },
+      data: {
+        deleted: true,
+        deletedAt: new Date(),
+        deletedBy: Number(req.userId),
+      },
+    });
+
+    successResponse({ msg: "Zap deleted successfully", res });
+  }),
+);
+
+zapRouter.get(
+  "/trash",
+  asyncHandler(async (req: extendedRequest, res) => {
+    const userId = Number(req.userId);
+
+    const zaps = await prisma.zap.findMany({
+      where: {
+        deleted: true,
+        deletedBy: userId,
+        deletedAt: { not: null },
+      },
+      include: {
+        actions: {
+          include: {
+            actionDetails: true,
+          },
+        },
+        user: {
+          select: {
+            firstname: true,
+            lastname: true,
+          },
+        },
+        folder: {
+          select: {
+            name: true,
+            id: true,
+            type: true,
+            parentId: true,
+            userId: true,
+            createdAt: true,
+            updatedAt: true,
+            user: {
+              select: {
+                firstname: true,
+                lastname: true,
+              },
+            },
+          },
+        },
+        trigger: {
+          include: {
+            type: true,
+          },
+        },
+      },
+    });
+
+    successResponse({ msg: "Zaps fetched successfully", res, data: zaps });
   }),
 );
 

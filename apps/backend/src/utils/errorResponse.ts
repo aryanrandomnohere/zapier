@@ -13,6 +13,7 @@ export default function errorResponse({
   status = 500,
   errors,
 }: ErrorResponseOptions): Response {
+  console.log(errors);
   return res.status(status).json({
     success: false,
     message: msg,
