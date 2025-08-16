@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 import AddCell from "../../../components/ZapCreate/AddCell";
 import Modal from "../../../ui/Modal";
 import SelectItem from "@/app/components/ZapCreate/SelectItem";
+import SideModal from "@/app/ui/SideModal";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { zapCreateState } from "../../../RecoilState/store/zapCreate";
 import axios from "axios";
 import { ItemType, onStepEnum, RecordMetadata } from "@repo/types";
-import SideModal from "@/app/ui/SideModal";
 import {
   configureStepDetails,
   onStep,
