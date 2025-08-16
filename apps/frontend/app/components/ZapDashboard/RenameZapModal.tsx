@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
 import axios from "axios";
 import CancelButton from "../buttons/CancelButton";
 import SaveButton from "../buttons/SaveButton";
@@ -28,7 +28,8 @@ export default function RenameZapModal({
     }
   }, []);
 
-  async function handleSave() {
+  async function handleSave(e: FormEvent) {
+    e.preventDefault();
     if (!newName.trim()) return;
     setIsSaving(true);
     try {
