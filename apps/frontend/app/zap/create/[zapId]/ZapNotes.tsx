@@ -7,6 +7,10 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 import { BoltIcon } from "@/app/components/ZapDashboard/FolderIcon";
+import {
+  extendedStepNotesAtom,
+  selectedNotesAtom,
+} from "@/app/RecoilState/store/leftbarAtom";
 export default function ZapNotes() {
   const [zapNote, setZapNote] = useState<string>("");
   const [stepNotes, setStepNotes] = useState<
@@ -15,11 +19,11 @@ export default function ZapNotes() {
   const [showAddNote, setShowAddNote] = useState(false);
   const [selectedStep, setSelectedStep] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [expandedStep, setExpandedStep] = useState<string | null>(null);
+  const [expandedStep, setExpandedStep] = useRecoilState(extendedStepNotesAtom);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const zaps = useRecoilValue(zapCreateState);
-  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const [selectedItems, setSelectedItems] = useRecoilState(selectedNotesAtom);
   // Refs for debouncing
   const zapNoteTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const stepNoteTimeoutRef = useRef<NodeJS.Timeout | null>(null);

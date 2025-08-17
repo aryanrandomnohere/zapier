@@ -6,6 +6,7 @@ import useZaps from "@/app/hooks/useZaps";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import ZapActions from "./ZapActions";
+import { useRouter } from "next/navigation";
 
 export default function ZapHeader() {
   const { zapId } = useParams();
@@ -14,7 +15,7 @@ export default function ZapHeader() {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(requiredZap?.name || "");
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const router = useRouter();
   useEffect(() => {
     if (isRenaming && inputRef.current) {
       inputRef.current.focus();
@@ -56,6 +57,32 @@ export default function ZapHeader() {
     }
     setIsRenaming(false);
   }
+  async function handleDublicate() {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/dublicate`,
+      { zapId },
+      {
+        withCredentials: true,
+      },
+    );
+    if (response.data.success) {
+      router.push(`/zap/create/${response.data.data.zapId}`);
+    }
+  }
+  async function handleDelete() {
+    try {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${zapId}`,
+        { withCredentials: true },
+      );
+      if (response.data.success) {
+        router.push("/zap/dashboard");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  }
+
   return (
     <>
       <div
@@ -74,7 +101,9 @@ export default function ZapHeader() {
 
         {/* Avatar */}
         <ZapActions
+          handleDelete={handleDelete}
           handleRename={handleRename}
+          handleDublicate={handleDublicate}
           trigger={
             <div className="flex items-center space-x-2 hover:bg-white/20  py-2 px-2 hover:cursor-pointer">
               <div className="flex items-center space-x-1">

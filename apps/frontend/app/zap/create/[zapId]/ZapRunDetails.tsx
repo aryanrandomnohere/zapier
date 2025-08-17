@@ -17,7 +17,6 @@ import ZapRunIcons from "./ZapRunIcons";
 import OptionDropdown from "./OptionDropdown";
 import { DatePickerModal } from "./DatePickerModal";
 
-
 interface ZapRun {
   id: string;
   status: "PENDING" | "RUNNING" | "SUCCESS" | "FAILED";

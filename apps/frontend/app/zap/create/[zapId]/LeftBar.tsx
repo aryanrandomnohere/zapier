@@ -8,14 +8,19 @@ import {
   Clock,
   Settings,
 } from "lucide-react";
-import {  useState } from "react";
+import { useState } from "react";
 import ZapOperations from "./ZapOperations";
 import CurrentOperation from "./CurrentOperation";
+import { useRecoilState } from "recoil";
+import {
+  currentOperationAtom,
+  leftbarIsOpenAtom,
+} from "@/app/RecoilState/store/leftbarAtom";
 
 export default function LeftBar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useRecoilState(leftbarIsOpenAtom);
   const [currentOperation, setCurrentOperation] =
-    useState<zapOperations | null>(null);
+    useRecoilState(currentOperationAtom);
   function handleClick(operation: zapOperations) {
     if (currentOperation === null) {
       setIsOpen(true);
@@ -139,5 +144,3 @@ export default function LeftBar() {
     </>
   );
 }
-
-

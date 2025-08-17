@@ -144,7 +144,7 @@ export default function ZapDetails() {
           </div>
           */}
 
-          {/* Create a template Section */}
+          {/* Create a template Section
           <div>
             <h3 className="text-sm font-semibold text-gray-900 mb-2">
               Create a template
@@ -158,7 +158,7 @@ export default function ZapDetails() {
               <FileText size={16} className="text-gray-500" />
               <span>Create template</span>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

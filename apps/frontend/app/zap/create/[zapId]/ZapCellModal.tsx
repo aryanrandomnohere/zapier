@@ -1,7 +1,7 @@
-import React from 'react';
-import Modal from '@/app/ui/Modal'; 
-import ZapCell from '@/app/components/ZapDashboard/ZapCell';
-import SelectItem from '@/app/components/ZapCreate/SelectItem';
+import React from "react";
+import Modal from "@/app/ui/Modal";
+import ZapCell from "@/app/components/ZapDashboard/ZapCell";
+import SelectItem from "@/app/components/ZapCreate/SelectItem";
 
 interface ZapCellModalProps {
   // ZapCell props
@@ -11,10 +11,10 @@ interface ZapCellModalProps {
   title: string;
   subtitle: string;
   order: number;
-  
+
   // SelectItem props
   type: "triggers" | "actions";
-  
+
   // Optional modal configuration
   modalName?: string;
 }
@@ -27,7 +27,7 @@ export default function ZapCellModal({
   subtitle,
   order,
   type,
-  modalName = "select"
+  modalName = "select",
 }: ZapCellModalProps) {
   return (
     <Modal>
@@ -43,7 +43,7 @@ export default function ZapCellModal({
           />
         </div>
       </Modal.Open>
-      
+
       <Modal.Window name={modalName}>
         <SelectItem type={type} />
       </Modal.Window>
@@ -55,10 +55,10 @@ export default function ZapCellModal({
 interface FlexibleZapCellModalProps extends ZapCellModalProps {
   // Custom render function for modal content
   renderModalContent?: () => React.ReactNode;
-  
+
   // Custom props to pass to ZapCell
   zapCellProps?: Record<string, any>;
-  
+
   // Custom props to pass to SelectItem
   selectItemProps?: Record<string, any>;
 }
@@ -74,7 +74,7 @@ export function FlexibleZapCellModal({
   modalName = "select",
   renderModalContent,
   zapCellProps = {},
-  selectItemProps = {}
+  selectItemProps = {},
 }: FlexibleZapCellModalProps) {
   return (
     <Modal>
@@ -91,7 +91,7 @@ export function FlexibleZapCellModal({
           />
         </div>
       </Modal.Open>
-      
+
       <Modal.Window name={modalName}>
         {renderModalContent ? (
           renderModalContent()
@@ -101,4 +101,4 @@ export function FlexibleZapCellModal({
       </Modal.Window>
     </Modal>
   );
-}   
+}
