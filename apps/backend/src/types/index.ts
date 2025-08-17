@@ -17,6 +17,7 @@ export const ZapCreateSchema = z.object({
   actions: z.array(
     z.object({
       actionId: z.string(),
+      stepId: z.string(),
       configuration: z.any(),
     }),
   ),
@@ -31,6 +32,12 @@ export const ActionCreationSchema = z.object({
   actionId: z.string(),
   actionConfiguration: z.any(),
   sortingOrder: z.number(),
+});
+export const InsertActionSchema = z.object({
+  actionId: z.string(),
+  actionConfiguration: z.any(),
+  order: z.number(),
+  zapId: z.number(),
 });
 
 export const UserConnectionSchema = z.object({
@@ -63,4 +70,31 @@ export const createFolderSchema = z.object({
   name: z.string().min(1),
   type: z.enum(["subfolder", "root"]),
   parentId: z.number().optional(),
+});
+
+export const folderRenameSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1),
+});
+
+export const deleteFolderSchema = z.object({
+  id: z.number(),
+});
+
+export const DublicateActionSchema = z.object({
+  dublicateId: z.string(),
+  zapId: z.number(),
+});
+
+export const PasteActionSchema = z.object({
+  zapId: z.number(),
+  actionId: z.string(),
+  index: z.number(),
+});
+
+export const PasteToReplaceActionSchema = z.object({
+  zapId: z.number(),
+  actionId: z.string(),
+  index: z.number(),
+  actionToReplaceWithId: z.string(),
 });
