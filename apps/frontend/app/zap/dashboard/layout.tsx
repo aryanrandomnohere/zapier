@@ -22,9 +22,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Sidebar />
         <div className="flex justify-center w-full h-full">
           <div className="w-11/12 max-w-7xl mt-12 flex flex-col">
-            <RecoilContextProvider>
-              <ZapFilters />
-            </RecoilContextProvider>
             <QueryProvider> {children}</QueryProvider>
           </div>
         </div>

@@ -6,7 +6,10 @@ import axios from "axios";
 import { userAtom } from "../../RecoilState/store/userAtom";
 import { useRecoilState } from "recoil";
 import { Plus } from "lucide-react";
-import { LoadingButton } from "../../components/ui/LoadingSpinner";
+import {
+  LoadingButton,
+  LoadingSpinner,
+} from "../../components/ui/LoadingSpinner";
 import DropDownOptions from "@/app/ui/DropDownOptions";
 import { BoltIcon, FolderIcon } from "@/app/components/ZapDashboard/FolderIcon";
 import CreateFolderSimple from "@/app/components/ZapDashboard/CreateFolderSimple";
@@ -17,7 +20,7 @@ export default function CreateButton() {
   const [isCreating, setIsCreating] = useState(false);
   const [showFolderModal, setShowFolderModal] = useState(false);
   const { tabId, id } = useParams();
-
+  const [pageLoading, setPageLoading] = useState(false);
   useEffect(() => {
     async function handleLoadSession() {
       const session = await getSession();
@@ -42,6 +45,7 @@ export default function CreateButton() {
         },
       );
       console.log(response);
+      setPageLoading(true);
       router.push(`/zap/create/${response.data.zapId}`);
     } catch (e) {
       console.error(e);
@@ -67,6 +71,15 @@ export default function CreateButton() {
     } catch (error) {
       console.error("Error creating folder:", error);
     }
+  }
+
+  if (pageLoading) {
+    return (
+      <div className="fixed bg-black/50 bg-blur-sm top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex  items-center justify-center h-screen z-[9999] w-screen gap-4 text-white text-2xl font-bold">
+        This May Take a While, Setting Up the Zap Creation Environment{" "}
+        <LoadingSpinner size="lg" color="primary" />
+      </div>
+    );
   }
 
   return (

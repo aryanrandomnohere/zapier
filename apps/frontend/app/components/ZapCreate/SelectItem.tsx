@@ -7,9 +7,11 @@ import Search from "../SelectItems/Search";
 export default function SelectItem({
   type,
   index,
+  insertingOrNew,
 }: {
   type: "actions" | "triggers";
   index?: number;
+  insertingOrNew?: "inserting" | "new" | "change";
 }) {
   const { close } = useModal();
 
@@ -17,7 +19,12 @@ export default function SelectItem({
     <div className="flex flex-col w-[520px] h-[540px]">
       <Search />
       <FilterItems />
-      <Options type={type} onClose={close} index={index} />
+      <Options
+        type={type}
+        onClose={close}
+        index={index}
+        insertingOrNew={insertingOrNew}
+      />
     </div>
   );
 }

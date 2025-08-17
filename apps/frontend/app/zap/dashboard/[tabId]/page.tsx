@@ -1,8 +1,9 @@
 "use client";
 import FolderRows from "@/app/components/ZapDashboard/FolderRows";
 import useFolders from "@/app/hooks/useFolders";
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const { folders } = useFolders();
@@ -12,7 +13,7 @@ export default function Page() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentFolders = folders?.slice(startIndex, endIndex) || [];
-
+  const router = useRouter();
   const getPaginationNumbers = () => {
     const numbers = [];
     const maxVisible = 5;
@@ -51,6 +52,22 @@ export default function Page() {
 
   return (
     <>
+      <div className="flex gap-2 mb-4 items-center">
+        <div
+          className="text-sm text-blue-600 hover:underline cursor-pointer"
+          onClick={() => router.push("/zap/dashboard")}
+        >
+          Zap
+        </div>
+        <ArrowRight size={14} className="text-blue-600" />
+        <div
+          className="text-sm text-blue-600 hover:underline cursor-pointer"
+          onClick={() => router.push("/zap/dashboard/folders")}
+        >
+          Folders
+        </div>
+      </div>
+      <div className="text-3xl font-bold">Folders</div>
       <div className="bg-[#FFFDF9] border border-[#F3F0E8] rounded-lg">
         <table className="w-full">
           <thead className=" border-b border-gray-200">

@@ -4,18 +4,17 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import useZaps from "@/app/hooks/useZaps";
 import ZapTable from "@/app/components/ZapDashboard/ZapTable";
-
+import ZapFilters from "@/app/components/ZapDashboard/ZapFilters";
+import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 export default function Page() {
   const { zaps, loading } = useZaps();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
   const totalPages = Math.ceil(zaps.length / itemsPerPage);
+  console.log(JSON.stringify(zaps, null, 2));
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentZaps = zaps.slice(startIndex, endIndex);
-  const currentFolders = zaps
-    .filter((zap) => zap.folder && zap.folder.type != "subfolder")
-    .map((zap) => zap.folder);
   // Generate pagination numbers
   const getPaginationNumbers = () => {
     const numbers = [];
@@ -54,9 +53,11 @@ export default function Page() {
 
     return numbers;
   };
-  console.log(currentZaps);
   return (
     <>
+      <RecoilContextProvider>
+        <ZapFilters />
+      </RecoilContextProvider>
       <ZapTable zaps={currentZaps} loading={loading} />{" "}
       {/* ✅ use paginated data */}
       <div className="flex items-center justify-between py-4">

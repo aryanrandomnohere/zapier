@@ -2,23 +2,37 @@
 import Modal from "@/app/ui/Modal";
 import { ItemType } from "@repo/types";
 import SelectItem from "../ZapCreate/SelectItem";
+import { BoltIcon } from "../ZapDashboard/FolderIcon";
 
-export default function ChangeItem({ item }: { item: ItemType }) {
+export default function ChangeItem({
+  item,
+  insertingOrNew = "change",
+}: {
+  item: ItemType;
+  insertingOrNew?: "inserting" | "new" | "change";
+}) {
   return (
     <Modal>
       <Modal.Open opens="select">
         <div className="hover:cursor-pointer flex justify-between px-3 py-2 border border-black/20 rounded min-w-full">
           <div className="flex items-center bg-yellow-500/10 min-w-fit justify-center rounded p-2 gap-1 border border-black/30 text-xs font-semibold">
-            <img src={item.imagePath} className="w-4 h-4" />
-            {item.name}
+            {item?.imagePath ? (
+              <img src={item?.imagePath} className="w-4 h-4" />
+            ) : (
+              <BoltIcon className="w-4 h-4" />
+            )}
+            {item?.name || "No Action selected Yet"}
           </div>
           <button className="text-blue-500 text-xs border border-black/20 rounded px-2 py-[1px] hover:bg-gray-100 font-bold hover:cursor-pointer">
-            Change
+            {item?.name ? "Change" : "Select"}
           </button>
         </div>
       </Modal.Open>
       <Modal.Window name="select">
-        <SelectItem type="triggers" />
+        <SelectItem
+          type={item && item?.type === "trigger" ? "triggers" : "actions"}
+          insertingOrNew={insertingOrNew}
+        />
       </Modal.Window>
     </Modal>
   );
