@@ -15,31 +15,31 @@ export default function ZapTable({
       <table className="w-full">
         <thead className=" border-b border-gray-200">
           <tr>
-            <th className="text-left py-3 px-6 min-w-96 text-sm font-medium text-gray-700">
+            <th className="text-left py-3 px-6 min-w-[27rem] text-base font-medium text-gray-700">
               <div className="flex items-center gap-2">
                 Name
                 <ChevronDown size={14} className="text-gray-400" />
               </div>
             </th>
-            <th className="text-left py-3 px-6 text-sm font-medium text-gray-700">
+            <th className="text-left py-3 px-6 text-base font-medium text-gray-700">
               Apps
             </th>
-            <th className="text-left py-3 px-6 text-sm font-medium text-gray-700">
+            <th className="text-left py-3 px-6 text-base font-medium text-gray-700">
               Location
             </th>
-            <th className="text-left py-3 px-6 text-sm font-medium text-gray-700">
+            <th className="text-left py-3 px-6 text-base font-medium text-gray-700">
               <div className="flex items-center gap-2">
                 Last modified
                 <ChevronDown size={14} className="text-gray-400" />
               </div>
             </th>
-            <th className="text-left py-3 px-6 text-sm font-medium text-gray-700">
+            <th className="text-left py-3 px-6 text-base font-medium text-gray-700">
               <div className="flex items-center gap-2">
                 Status
                 <ChevronDown size={14} className="text-gray-400" />
               </div>
             </th>
-            <th className="text-left py-3 px-6 text-sm font-medium text-gray-700">
+            <th className="text-left py-3 px-6 text-base font-medium text-gray-700">
               Owner
             </th>
           </tr>

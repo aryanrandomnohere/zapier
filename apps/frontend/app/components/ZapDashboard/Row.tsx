@@ -12,12 +12,17 @@ import { getSession } from "next-auth/react";
 import axios from "axios";
 import RowAction from "./RowAction";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
-
+import Avatar from "../Avatar";
+import { folderInterface } from "./RowAction";
+import useFolders from "@/app/hooks/useFolders";
 export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
+  const { folders } = useFolders();
+  console.log(folders);
   const [activeZap, setActiveZap] = useState<boolean>(zap.published);
   const [user, setUser] = useRecoilState(userAtom);
   const [publishingLoading, setPublishingLoading] = useState(false);
   const router = useRouter();
+  const [pageLoading, setPageLoading] = useState(false);
   async function handlePublishing() {
     setPublishingLoading(true);
     let userId = user?.userId;
@@ -67,17 +72,26 @@ export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
     [] as (typeof sortedActions)[0]["actionDetails"][],
   );
 
+  if (pageLoading) {
+    return (
+      <div className="fixed bg-black/50 bg-blur-sm top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex  items-center justify-center h-screen z-[9999] w-screen gap-4 text-white text-2xl font-bold">
+        This May Take a While, Setting Up the Zap Creation Environment{" "}
+        <LoadingSpinner size="lg" color="primary" />
+      </div>
+    );
+  }
   return (
     <tr className="border-b border-gray-100">
       <td
         onClick={() => {
+          setPageLoading(true);
           router.push(`/zap/create/${zap.id}`);
         }}
         className="py-4 px-6 hover:cursor-pointer"
       >
         <div className="flex items-center gap-3">
           <BoltIcon />
-          <span className="text-sm text-gray-900 font-medium hover:underline">
+          <span className="text-base text-gray-900 font-medium hover:underline">
             {zap.name}
           </span>
         </div>
@@ -104,19 +118,19 @@ export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
       <td className="py-4 px-6">
         <div className="flex items-center gap-2">
           <FolderIcon />
-          <span className="text-sm text-gray-700">
+          <span className="text-base text-gray-700">
             {zap.folder.name} (Personal)
           </span>
         </div>
       </td>
 
       <td className="py-4 px-6">
-        <span className="text-sm text-gray-600">
+        <span className="text-base text-gray-600">
           {formatDate(zap.lastEdited)}
         </span>
       </td>
 
-      <td className="py-4 px-6">
+      <td className="py-4 items-center justify-center px-6">
         {publishingLoading ? (
           <div className="flex items-center justify-center">
             <LoadingSpinner size="sm" color="primary" />
@@ -128,16 +142,20 @@ export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
 
       <td className="py-4 px-6">
         <div className="flex items-center justify-between">
-          <div className="w-6 h-6 bg-[#AEE0FC] rounded-full flex items-center justify-center">
-            <span className="text-black text-xs font-semibold">
-              {zap.user.firstname[0].toLocaleUpperCase() +
-                zap.user.lastname[0].toLocaleUpperCase()}
-            </span>
-          </div>
+          <Avatar
+            size="sm"
+            name={
+              zap.user.firstname[0].toLocaleUpperCase() +
+              zap.user.lastname[0].toLocaleUpperCase()
+            }
+          />
           <button className="text-gray-400 hover:text-gray-600 ml-4">
             <RowAction
+              currentFolderId={zap.folder.id}
+              folders={folders || []}
               zapId={zap.id}
               currentName={zap.name}
+              changeOwnerDisabled={true}
               trigger={
                 <span className="text-lg font-extrabold text-[#280200] hover:cursor-pointer p-1 transition-all rounded duration-150 hover:bg-black/5">
                   ⋮

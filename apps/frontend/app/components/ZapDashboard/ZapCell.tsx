@@ -3,6 +3,9 @@ import { EllipsisVertical } from "lucide-react";
 import { BiSolidZap } from "react-icons/bi";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import Image from "next/image";
+import DropDownMenu from "@/app/ui/DropDownMenu";
+import CellActions from "./CellActions";
+import { ItemType } from "@repo/types";
 export default function ZapCell({
   title,
   subtitle,
@@ -10,6 +13,8 @@ export default function ZapCell({
   imagePath,
   SelectCell,
   loading,
+  copiedItem,
+  setCopiedItem,
 }: {
   title: string;
   subtitle: string;
@@ -17,6 +22,8 @@ export default function ZapCell({
   imagePath?: string;
   SelectCell: (order: number) => void;
   loading: boolean;
+  copiedItem: ItemType | null;
+  setCopiedItem: (item: ItemType | null) => void;
 }) {
   return (
     <div
@@ -55,7 +62,22 @@ export default function ZapCell({
               )}
               <div className="font-bold text-sm"> {title}</div>{" "}
             </div>
-            <EllipsisVertical size={20} />
+            <DropDownMenu
+              type="bottom"
+              menuClassName="bg-white text-black"
+              trigger={
+                <div className="flex items-center justify-center hover:bg-gray-100 rounded p-1">
+                  {" "}
+                  <EllipsisVertical size={20} />
+                </div>
+              }
+            >
+              <CellActions
+                copiedItem={copiedItem}
+                setCopiedItem={setCopiedItem}
+                index={order}
+              />
+            </DropDownMenu>
           </div>
           <div className="flex gap-1 font-bold text-xl">
             <div className="flex gap-1 items-center">
