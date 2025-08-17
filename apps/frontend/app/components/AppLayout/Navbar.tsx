@@ -6,6 +6,8 @@ import { SlArrowDown } from "react-icons/sl";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "../../api/auth/[...nextauth]/auth";
+import UserAction from "../UserAction";
+import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 
 export default async function Navbar() {
   const session = await auth();
@@ -27,7 +29,7 @@ export default async function Navbar() {
               className="max-w-32 hover:cursor-pointer"
             />
           </Link>
-          <LinkButton size="small">
+          {/* <LinkButton size="small">
             Products{" "}
             <div className="ml-1.5 text-xs">
               <SlArrowDown />
@@ -48,7 +50,7 @@ export default async function Navbar() {
             </div>
           </LinkButton>
           <LinkButton size="small">Enterprise</LinkButton>
-          <LinkButton size="small">Pricing</LinkButton>
+          <LinkButton size="small">Pricing</LinkButton> */}
         </div>
         <div className="flex items-center gap-4">
           <LinkButton href="https://zapier.com/apps" size="small">
@@ -65,6 +67,14 @@ export default async function Navbar() {
               <PrimaryButton size="small">Sign up</PrimaryButton>
             )}
           </Link>
+
+          {isAuthenticated && (
+            <RecoilContextProvider>
+              <UserAction
+                name={session?.user?.name[0].toLocaleUpperCase() || "UR"}
+              />
+            </RecoilContextProvider>
+          )}
         </div>
       </div>
     </div>
