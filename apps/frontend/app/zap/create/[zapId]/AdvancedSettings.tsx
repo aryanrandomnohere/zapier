@@ -4,9 +4,7 @@ import { X, ChevronDown } from "lucide-react";
 
 export default function AdvancedSettings() {
   const [isOpen, setIsOpen] = useState(true);
-  const [autoreplayOverride, setAutoreplayOverride] = useState(
-    "Use account setting (Always replay)",
-  );
+  const [autoreplayOverride, setAutoreplayOverride] = useState("Always replay");
   const [errorRatioOption, setErrorRatioOption] = useState(
     "Turn off if errors occur (recommended)",
   );
@@ -14,16 +12,12 @@ export default function AdvancedSettings() {
     useState("Parallel execution");
   const [showAutoreplayDropdown, setShowAutoreplayDropdown] = useState(false);
 
-  const autoreplayOptions = [
-    "Use account setting (Always replay)",
-    "Always replay",
-    "Never replay",
-  ];
+  const autoreplayOptions = ["Always replay", "Never replay"];
 
   if (!isOpen) return null;
 
   return (
-    <div className="bg-opacity-50 flex items-start justify-center px-1 pl-3 z-40">
+    <div className="bg-opacity-50 flex items-start cursor-not-allowed justify-center px-1 pl-3 z-40">
       <div className="rounded-lg w-full max-w-xs max-h-[90vh] overflow-hidden">
         {/* Header */}
         <div className="px-1 py-4 border-b border-gray-200 relative">
@@ -66,18 +60,21 @@ export default function AdvancedSettings() {
 
               {showAutoreplayDropdown && (
                 <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-10 max-h-60 overflow-y-auto">
-                  {autoreplayOptions.map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => {
-                        setAutoreplayOverride(option);
-                        setShowAutoreplayDropdown(false);
-                      }}
-                      className="w-full px-4 py-2 text-left hover:cursor-pointer hover:bg-gray-50 text-xs"
-                    >
-                      {option}
-                    </button>
-                  ))}
+                  {autoreplayOptions.map(
+                    (option) =>
+                      autoreplayOverride !== option && (
+                        <button
+                          key={option}
+                          onClick={() => {
+                            setAutoreplayOverride(option);
+                            setShowAutoreplayDropdown(false);
+                          }}
+                          className="w-full px-4 py-2 text-left hover:cursor-pointer hover:bg-gray-50 text-xs"
+                        >
+                          {option}
+                        </button>
+                      ),
+                  )}
                 </div>
               )}
             </div>
