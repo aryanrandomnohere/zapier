@@ -54,6 +54,12 @@ export type AvailableTriggers =
  */
 export type Action = $Result.DefaultSelection<Prisma.$ActionPayload>;
 /**
+ * Model ActionStepTest
+ *
+ */
+export type ActionStepTest =
+  $Result.DefaultSelection<Prisma.$ActionStepTestPayload>;
+/**
  * Model AvailableActions
  *
  */
@@ -380,6 +386,16 @@ export class PrismaClient<
    * ```
    */
   get action(): Prisma.ActionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.actionStepTest`: Exposes CRUD operations for the **ActionStepTest** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more ActionStepTests
+   * const actionStepTests = await prisma.actionStepTest.findMany()
+   * ```
+   */
+  get actionStepTest(): Prisma.ActionStepTestDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.availableActions`: Exposes CRUD operations for the **AvailableActions** model.
@@ -902,6 +918,7 @@ export namespace Prisma {
     UserConnection: "UserConnection";
     AvailableTriggers: "AvailableTriggers";
     Action: "Action";
+    ActionStepTest: "ActionStepTest";
     AvailableActions: "AvailableActions";
     ZapRun: "ZapRun";
     ZapRunOutbox: "ZapRunOutbox";
@@ -943,6 +960,7 @@ export namespace Prisma {
         | "userConnection"
         | "availableTriggers"
         | "action"
+        | "actionStepTest"
         | "availableActions"
         | "zapRun"
         | "zapRunOutbox"
@@ -1515,6 +1533,78 @@ export namespace Prisma {
           };
         };
       };
+      ActionStepTest: {
+        payload: Prisma.$ActionStepTestPayload<ExtArgs>;
+        fields: Prisma.ActionStepTestFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.ActionStepTestFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.ActionStepTestFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload>;
+          };
+          findFirst: {
+            args: Prisma.ActionStepTestFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.ActionStepTestFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload>;
+          };
+          findMany: {
+            args: Prisma.ActionStepTestFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload>[];
+          };
+          create: {
+            args: Prisma.ActionStepTestCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload>;
+          };
+          createMany: {
+            args: Prisma.ActionStepTestCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.ActionStepTestCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload>[];
+          };
+          delete: {
+            args: Prisma.ActionStepTestDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload>;
+          };
+          update: {
+            args: Prisma.ActionStepTestUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload>;
+          };
+          deleteMany: {
+            args: Prisma.ActionStepTestDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.ActionStepTestUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          upsert: {
+            args: Prisma.ActionStepTestUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ActionStepTestPayload>;
+          };
+          aggregate: {
+            args: Prisma.ActionStepTestAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateActionStepTest>;
+          };
+          groupBy: {
+            args: Prisma.ActionStepTestGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<ActionStepTestGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.ActionStepTestCountArgs<ExtArgs>;
+            result:
+              | $Utils.Optional<ActionStepTestCountAggregateOutputType>
+              | number;
+          };
+        };
+      };
       AvailableActions: {
         payload: Prisma.$AvailableActionsPayload<ExtArgs>;
         fields: Prisma.AvailableActionsFieldRefs;
@@ -1975,6 +2065,7 @@ export namespace Prisma {
     userConnection?: UserConnectionOmit;
     availableTriggers?: AvailableTriggersOmit;
     action?: ActionOmit;
+    actionStepTest?: ActionStepTestOmit;
     availableActions?: AvailableActionsOmit;
     zapRun?: ZapRunOmit;
     zapRunOutbox?: ZapRunOutboxOmit;
@@ -9757,6 +9848,7 @@ export namespace Prisma {
     refreshToken: string | null;
     createdAt: Date | null;
     expiredAt: Date | null;
+    lastRefreshedAt: Date | null;
   };
 
   export type UserConnectionMaxAggregateOutputType = {
@@ -9768,6 +9860,7 @@ export namespace Prisma {
     refreshToken: string | null;
     createdAt: Date | null;
     expiredAt: Date | null;
+    lastRefreshedAt: Date | null;
   };
 
   export type UserConnectionCountAggregateOutputType = {
@@ -9779,6 +9872,7 @@ export namespace Prisma {
     refreshToken: number;
     createdAt: number;
     expiredAt: number;
+    lastRefreshedAt: number;
     _all: number;
   };
 
@@ -9799,6 +9893,7 @@ export namespace Prisma {
     refreshToken?: true;
     createdAt?: true;
     expiredAt?: true;
+    lastRefreshedAt?: true;
   };
 
   export type UserConnectionMaxAggregateInputType = {
@@ -9810,6 +9905,7 @@ export namespace Prisma {
     refreshToken?: true;
     createdAt?: true;
     expiredAt?: true;
+    lastRefreshedAt?: true;
   };
 
   export type UserConnectionCountAggregateInputType = {
@@ -9821,6 +9917,7 @@ export namespace Prisma {
     refreshToken?: true;
     createdAt?: true;
     expiredAt?: true;
+    lastRefreshedAt?: true;
     _all?: true;
   };
 
@@ -9926,6 +10023,7 @@ export namespace Prisma {
     refreshToken: string | null;
     createdAt: Date;
     expiredAt: Date;
+    lastRefreshedAt: Date | null;
     _count: UserConnectionCountAggregateOutputType | null;
     _avg: UserConnectionAvgAggregateOutputType | null;
     _sum: UserConnectionSumAggregateOutputType | null;
@@ -9959,6 +10057,7 @@ export namespace Prisma {
       refreshToken?: boolean;
       createdAt?: boolean;
       expiredAt?: boolean;
+      lastRefreshedAt?: boolean;
       User?: boolean | UserDefaultArgs<ExtArgs>;
       trigger?: boolean | UserConnection$triggerArgs<ExtArgs>;
       action?: boolean | UserConnection$actionArgs<ExtArgs>;
@@ -9979,6 +10078,7 @@ export namespace Prisma {
       refreshToken?: boolean;
       createdAt?: boolean;
       expiredAt?: boolean;
+      lastRefreshedAt?: boolean;
       User?: boolean | UserDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["userConnection"]
@@ -9993,6 +10093,7 @@ export namespace Prisma {
     refreshToken?: boolean;
     createdAt?: boolean;
     expiredAt?: boolean;
+    lastRefreshedAt?: boolean;
   };
 
   export type UserConnectionOmit<
@@ -10005,7 +10106,8 @@ export namespace Prisma {
     | "accessToken"
     | "refreshToken"
     | "createdAt"
-    | "expiredAt",
+    | "expiredAt"
+    | "lastRefreshedAt",
     ExtArgs["result"]["userConnection"]
   >;
   export type UserConnectionInclude<
@@ -10041,6 +10143,7 @@ export namespace Prisma {
         refreshToken: string | null;
         createdAt: Date;
         expiredAt: Date;
+        lastRefreshedAt: Date | null;
       },
       ExtArgs["result"]["userConnection"]
     >;
@@ -10636,6 +10739,7 @@ export namespace Prisma {
     readonly refreshToken: FieldRef<"UserConnection", "String">;
     readonly createdAt: FieldRef<"UserConnection", "DateTime">;
     readonly expiredAt: FieldRef<"UserConnection", "DateTime">;
+    readonly lastRefreshedAt: FieldRef<"UserConnection", "DateTime">;
   }
 
   // Custom InputTypes
@@ -12608,6 +12712,7 @@ export namespace Prisma {
       userConnection?: boolean | Action$userConnectionArgs<ExtArgs>;
       zapRunFailures?: boolean | Action$zapRunFailuresArgs<ExtArgs>;
       note?: boolean | Action$noteArgs<ExtArgs>;
+      stepTests?: boolean | Action$stepTestsArgs<ExtArgs>;
       _count?: boolean | ActionCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs["result"]["action"]
@@ -12664,6 +12769,7 @@ export namespace Prisma {
     userConnection?: boolean | Action$userConnectionArgs<ExtArgs>;
     zapRunFailures?: boolean | Action$zapRunFailuresArgs<ExtArgs>;
     note?: boolean | Action$noteArgs<ExtArgs>;
+    stepTests?: boolean | Action$stepTestsArgs<ExtArgs>;
     _count?: boolean | ActionCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type ActionIncludeCreateManyAndReturn<
@@ -12684,6 +12790,7 @@ export namespace Prisma {
       userConnection: Prisma.$UserConnectionPayload<ExtArgs> | null;
       zapRunFailures: Prisma.$ZapRunPayload<ExtArgs>[];
       note: Prisma.$ZapNotePayload<ExtArgs> | null;
+      stepTests: Prisma.$ActionStepTestPayload<ExtArgs> | null;
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -13267,6 +13374,19 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
+    stepTests<T extends Action$stepTestsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Action$stepTestsArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13766,6 +13886,27 @@ export namespace Prisma {
   };
 
   /**
+   * Action.stepTests
+   */
+  export type Action$stepTestsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    where?: ActionStepTestWhereInput;
+  };
+
+  /**
    * Action without action
    */
   export type ActionDefaultArgs<
@@ -13783,6 +13924,1202 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ActionInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model ActionStepTest
+   */
+
+  export type AggregateActionStepTest = {
+    _count: ActionStepTestCountAggregateOutputType | null;
+    _min: ActionStepTestMinAggregateOutputType | null;
+    _max: ActionStepTestMaxAggregateOutputType | null;
+  };
+
+  export type ActionStepTestMinAggregateOutputType = {
+    id: string | null;
+    actionId: string | null;
+    createdAt: Date | null;
+  };
+
+  export type ActionStepTestMaxAggregateOutputType = {
+    id: string | null;
+    actionId: string | null;
+    createdAt: Date | null;
+  };
+
+  export type ActionStepTestCountAggregateOutputType = {
+    id: number;
+    dataOut: number;
+    actionId: number;
+    createdAt: number;
+    _all: number;
+  };
+
+  export type ActionStepTestMinAggregateInputType = {
+    id?: true;
+    actionId?: true;
+    createdAt?: true;
+  };
+
+  export type ActionStepTestMaxAggregateInputType = {
+    id?: true;
+    actionId?: true;
+    createdAt?: true;
+  };
+
+  export type ActionStepTestCountAggregateInputType = {
+    id?: true;
+    dataOut?: true;
+    actionId?: true;
+    createdAt?: true;
+    _all?: true;
+  };
+
+  export type ActionStepTestAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ActionStepTest to aggregate.
+     */
+    where?: ActionStepTestWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ActionStepTests to fetch.
+     */
+    orderBy?:
+      | ActionStepTestOrderByWithRelationInput
+      | ActionStepTestOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: ActionStepTestWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ActionStepTests from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ActionStepTests.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ActionStepTests
+     **/
+    _count?: true | ActionStepTestCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: ActionStepTestMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: ActionStepTestMaxAggregateInputType;
+  };
+
+  export type GetActionStepTestAggregateType<
+    T extends ActionStepTestAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateActionStepTest]: P extends "_count" | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateActionStepTest[P]>
+      : GetScalarType<T[P], AggregateActionStepTest[P]>;
+  };
+
+  export type ActionStepTestGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ActionStepTestWhereInput;
+    orderBy?:
+      | ActionStepTestOrderByWithAggregationInput
+      | ActionStepTestOrderByWithAggregationInput[];
+    by: ActionStepTestScalarFieldEnum[] | ActionStepTestScalarFieldEnum;
+    having?: ActionStepTestScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: ActionStepTestCountAggregateInputType | true;
+    _min?: ActionStepTestMinAggregateInputType;
+    _max?: ActionStepTestMaxAggregateInputType;
+  };
+
+  export type ActionStepTestGroupByOutputType = {
+    id: string;
+    dataOut: JsonValue;
+    actionId: string;
+    createdAt: Date;
+    _count: ActionStepTestCountAggregateOutputType | null;
+    _min: ActionStepTestMinAggregateOutputType | null;
+    _max: ActionStepTestMaxAggregateOutputType | null;
+  };
+
+  type GetActionStepTestGroupByPayload<T extends ActionStepTestGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<ActionStepTestGroupByOutputType, T["by"]> & {
+          [P in keyof T &
+            keyof ActionStepTestGroupByOutputType]: P extends "_count"
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ActionStepTestGroupByOutputType[P]>
+            : GetScalarType<T[P], ActionStepTestGroupByOutputType[P]>;
+        }
+      >
+    >;
+
+  export type ActionStepTestSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      dataOut?: boolean;
+      actionId?: boolean;
+      createdAt?: boolean;
+      action?: boolean | ActionDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["actionStepTest"]
+  >;
+
+  export type ActionStepTestSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      dataOut?: boolean;
+      actionId?: boolean;
+      createdAt?: boolean;
+      action?: boolean | ActionDefaultArgs<ExtArgs>;
+    },
+    ExtArgs["result"]["actionStepTest"]
+  >;
+
+  export type ActionStepTestSelectScalar = {
+    id?: boolean;
+    dataOut?: boolean;
+    actionId?: boolean;
+    createdAt?: boolean;
+  };
+
+  export type ActionStepTestOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "dataOut" | "actionId" | "createdAt",
+    ExtArgs["result"]["actionStepTest"]
+  >;
+  export type ActionStepTestInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    action?: boolean | ActionDefaultArgs<ExtArgs>;
+  };
+  export type ActionStepTestIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    action?: boolean | ActionDefaultArgs<ExtArgs>;
+  };
+
+  export type $ActionStepTestPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "ActionStepTest";
+    objects: {
+      action: Prisma.$ActionPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        dataOut: Prisma.JsonValue;
+        actionId: string;
+        createdAt: Date;
+      },
+      ExtArgs["result"]["actionStepTest"]
+    >;
+    composites: {};
+  };
+
+  type ActionStepTestGetPayload<
+    S extends boolean | null | undefined | ActionStepTestDefaultArgs,
+  > = $Result.GetResult<Prisma.$ActionStepTestPayload, S>;
+
+  type ActionStepTestCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    ActionStepTestFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
+    select?: ActionStepTestCountAggregateInputType | true;
+  };
+
+  export interface ActionStepTestDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["ActionStepTest"];
+      meta: { name: "ActionStepTest" };
+    };
+    /**
+     * Find zero or one ActionStepTest that matches the filter.
+     * @param {ActionStepTestFindUniqueArgs} args - Arguments to find a ActionStepTest
+     * @example
+     * // Get one ActionStepTest
+     * const actionStepTest = await prisma.actionStepTest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ActionStepTestFindUniqueArgs>(
+      args: SelectSubset<T, ActionStepTestFindUniqueArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one ActionStepTest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ActionStepTestFindUniqueOrThrowArgs} args - Arguments to find a ActionStepTest
+     * @example
+     * // Get one ActionStepTest
+     * const actionStepTest = await prisma.actionStepTest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ActionStepTestFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, ActionStepTestFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first ActionStepTest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActionStepTestFindFirstArgs} args - Arguments to find a ActionStepTest
+     * @example
+     * // Get one ActionStepTest
+     * const actionStepTest = await prisma.actionStepTest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ActionStepTestFindFirstArgs>(
+      args?: SelectSubset<T, ActionStepTestFindFirstArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first ActionStepTest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActionStepTestFindFirstOrThrowArgs} args - Arguments to find a ActionStepTest
+     * @example
+     * // Get one ActionStepTest
+     * const actionStepTest = await prisma.actionStepTest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ActionStepTestFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ActionStepTestFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more ActionStepTests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActionStepTestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ActionStepTests
+     * const actionStepTests = await prisma.actionStepTest.findMany()
+     *
+     * // Get first 10 ActionStepTests
+     * const actionStepTests = await prisma.actionStepTest.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const actionStepTestWithIdOnly = await prisma.actionStepTest.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ActionStepTestFindManyArgs>(
+      args?: SelectSubset<T, ActionStepTestFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Create a ActionStepTest.
+     * @param {ActionStepTestCreateArgs} args - Arguments to create a ActionStepTest.
+     * @example
+     * // Create one ActionStepTest
+     * const ActionStepTest = await prisma.actionStepTest.create({
+     *   data: {
+     *     // ... data to create a ActionStepTest
+     *   }
+     * })
+     *
+     */
+    create<T extends ActionStepTestCreateArgs>(
+      args: SelectSubset<T, ActionStepTestCreateArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many ActionStepTests.
+     * @param {ActionStepTestCreateManyArgs} args - Arguments to create many ActionStepTests.
+     * @example
+     * // Create many ActionStepTests
+     * const actionStepTest = await prisma.actionStepTest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ActionStepTestCreateManyArgs>(
+      args?: SelectSubset<T, ActionStepTestCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many ActionStepTests and returns the data saved in the database.
+     * @param {ActionStepTestCreateManyAndReturnArgs} args - Arguments to create many ActionStepTests.
+     * @example
+     * // Create many ActionStepTests
+     * const actionStepTest = await prisma.actionStepTest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ActionStepTests and only return the `id`
+     * const actionStepTestWithIdOnly = await prisma.actionStepTest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ActionStepTestCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, ActionStepTestCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >;
+
+    /**
+     * Delete a ActionStepTest.
+     * @param {ActionStepTestDeleteArgs} args - Arguments to delete one ActionStepTest.
+     * @example
+     * // Delete one ActionStepTest
+     * const ActionStepTest = await prisma.actionStepTest.delete({
+     *   where: {
+     *     // ... filter to delete one ActionStepTest
+     *   }
+     * })
+     *
+     */
+    delete<T extends ActionStepTestDeleteArgs>(
+      args: SelectSubset<T, ActionStepTestDeleteArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one ActionStepTest.
+     * @param {ActionStepTestUpdateArgs} args - Arguments to update one ActionStepTest.
+     * @example
+     * // Update one ActionStepTest
+     * const actionStepTest = await prisma.actionStepTest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ActionStepTestUpdateArgs>(
+      args: SelectSubset<T, ActionStepTestUpdateArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more ActionStepTests.
+     * @param {ActionStepTestDeleteManyArgs} args - Arguments to filter ActionStepTests to delete.
+     * @example
+     * // Delete a few ActionStepTests
+     * const { count } = await prisma.actionStepTest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ActionStepTestDeleteManyArgs>(
+      args?: SelectSubset<T, ActionStepTestDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more ActionStepTests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActionStepTestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ActionStepTests
+     * const actionStepTest = await prisma.actionStepTest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ActionStepTestUpdateManyArgs>(
+      args: SelectSubset<T, ActionStepTestUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create or update one ActionStepTest.
+     * @param {ActionStepTestUpsertArgs} args - Arguments to update or create a ActionStepTest.
+     * @example
+     * // Update or create a ActionStepTest
+     * const actionStepTest = await prisma.actionStepTest.upsert({
+     *   create: {
+     *     // ... data to create a ActionStepTest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ActionStepTest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ActionStepTestUpsertArgs>(
+      args: SelectSubset<T, ActionStepTestUpsertArgs<ExtArgs>>,
+    ): Prisma__ActionStepTestClient<
+      $Result.GetResult<
+        Prisma.$ActionStepTestPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of ActionStepTests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActionStepTestCountArgs} args - Arguments to filter ActionStepTests to count.
+     * @example
+     * // Count the number of ActionStepTests
+     * const count = await prisma.actionStepTest.count({
+     *   where: {
+     *     // ... the filter for the ActionStepTests we want to count
+     *   }
+     * })
+     **/
+    count<T extends ActionStepTestCountArgs>(
+      args?: Subset<T, ActionStepTestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], ActionStepTestCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a ActionStepTest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActionStepTestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends ActionStepTestAggregateArgs>(
+      args: Subset<T, ActionStepTestAggregateArgs>,
+    ): Prisma.PrismaPromise<GetActionStepTestAggregateType<T>>;
+
+    /**
+     * Group by ActionStepTest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ActionStepTestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends ActionStepTestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<"skip", Keys<T>>,
+        Extends<"take", Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ActionStepTestGroupByArgs["orderBy"] }
+        : { orderBy?: ActionStepTestGroupByArgs["orderBy"] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T["orderBy"]>>
+      >,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T["by"] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      "Field ",
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ];
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, ActionStepTestGroupByArgs, OrderByArg> &
+        InputErrors,
+    ): {} extends InputErrors
+      ? GetActionStepTestGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the ActionStepTest model
+     */
+    readonly fields: ActionStepTestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ActionStepTest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ActionStepTestClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    action<T extends ActionDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, ActionDefaultArgs<ExtArgs>>,
+    ): Prisma__ActionClient<
+      | $Result.GetResult<
+          Prisma.$ActionPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the ActionStepTest model
+   */
+  interface ActionStepTestFieldRefs {
+    readonly id: FieldRef<"ActionStepTest", "String">;
+    readonly dataOut: FieldRef<"ActionStepTest", "Json">;
+    readonly actionId: FieldRef<"ActionStepTest", "String">;
+    readonly createdAt: FieldRef<"ActionStepTest", "DateTime">;
+  }
+
+  // Custom InputTypes
+  /**
+   * ActionStepTest findUnique
+   */
+  export type ActionStepTestFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActionStepTest to fetch.
+     */
+    where: ActionStepTestWhereUniqueInput;
+  };
+
+  /**
+   * ActionStepTest findUniqueOrThrow
+   */
+  export type ActionStepTestFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActionStepTest to fetch.
+     */
+    where: ActionStepTestWhereUniqueInput;
+  };
+
+  /**
+   * ActionStepTest findFirst
+   */
+  export type ActionStepTestFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActionStepTest to fetch.
+     */
+    where?: ActionStepTestWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ActionStepTests to fetch.
+     */
+    orderBy?:
+      | ActionStepTestOrderByWithRelationInput
+      | ActionStepTestOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ActionStepTests.
+     */
+    cursor?: ActionStepTestWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ActionStepTests from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ActionStepTests.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ActionStepTests.
+     */
+    distinct?: ActionStepTestScalarFieldEnum | ActionStepTestScalarFieldEnum[];
+  };
+
+  /**
+   * ActionStepTest findFirstOrThrow
+   */
+  export type ActionStepTestFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActionStepTest to fetch.
+     */
+    where?: ActionStepTestWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ActionStepTests to fetch.
+     */
+    orderBy?:
+      | ActionStepTestOrderByWithRelationInput
+      | ActionStepTestOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ActionStepTests.
+     */
+    cursor?: ActionStepTestWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ActionStepTests from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ActionStepTests.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ActionStepTests.
+     */
+    distinct?: ActionStepTestScalarFieldEnum | ActionStepTestScalarFieldEnum[];
+  };
+
+  /**
+   * ActionStepTest findMany
+   */
+  export type ActionStepTestFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * Filter, which ActionStepTests to fetch.
+     */
+    where?: ActionStepTestWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ActionStepTests to fetch.
+     */
+    orderBy?:
+      | ActionStepTestOrderByWithRelationInput
+      | ActionStepTestOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ActionStepTests.
+     */
+    cursor?: ActionStepTestWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ActionStepTests from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ActionStepTests.
+     */
+    skip?: number;
+    distinct?: ActionStepTestScalarFieldEnum | ActionStepTestScalarFieldEnum[];
+  };
+
+  /**
+   * ActionStepTest create
+   */
+  export type ActionStepTestCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a ActionStepTest.
+     */
+    data: XOR<ActionStepTestCreateInput, ActionStepTestUncheckedCreateInput>;
+  };
+
+  /**
+   * ActionStepTest createMany
+   */
+  export type ActionStepTestCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many ActionStepTests.
+     */
+    data: ActionStepTestCreateManyInput | ActionStepTestCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * ActionStepTest createManyAndReturn
+   */
+  export type ActionStepTestCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * The data used to create many ActionStepTests.
+     */
+    data: ActionStepTestCreateManyInput | ActionStepTestCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * ActionStepTest update
+   */
+  export type ActionStepTestUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a ActionStepTest.
+     */
+    data: XOR<ActionStepTestUpdateInput, ActionStepTestUncheckedUpdateInput>;
+    /**
+     * Choose, which ActionStepTest to update.
+     */
+    where: ActionStepTestWhereUniqueInput;
+  };
+
+  /**
+   * ActionStepTest updateMany
+   */
+  export type ActionStepTestUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update ActionStepTests.
+     */
+    data: XOR<
+      ActionStepTestUpdateManyMutationInput,
+      ActionStepTestUncheckedUpdateManyInput
+    >;
+    /**
+     * Filter which ActionStepTests to update
+     */
+    where?: ActionStepTestWhereInput;
+  };
+
+  /**
+   * ActionStepTest upsert
+   */
+  export type ActionStepTestUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the ActionStepTest to update in case it exists.
+     */
+    where: ActionStepTestWhereUniqueInput;
+    /**
+     * In case the ActionStepTest found by the `where` argument doesn't exist, create a new ActionStepTest with this data.
+     */
+    create: XOR<ActionStepTestCreateInput, ActionStepTestUncheckedCreateInput>;
+    /**
+     * In case the ActionStepTest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ActionStepTestUpdateInput, ActionStepTestUncheckedUpdateInput>;
+  };
+
+  /**
+   * ActionStepTest delete
+   */
+  export type ActionStepTestDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
+    /**
+     * Filter which ActionStepTest to delete.
+     */
+    where: ActionStepTestWhereUniqueInput;
+  };
+
+  /**
+   * ActionStepTest deleteMany
+   */
+  export type ActionStepTestDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ActionStepTests to delete
+     */
+    where?: ActionStepTestWhereInput;
+  };
+
+  /**
+   * ActionStepTest without action
+   */
+  export type ActionStepTestDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ActionStepTest
+     */
+    select?: ActionStepTestSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ActionStepTest
+     */
+    omit?: ActionStepTestOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ActionStepTestInclude<ExtArgs> | null;
   };
 
   /**
@@ -20367,6 +21704,7 @@ export namespace Prisma {
     refreshToken: "refreshToken";
     createdAt: "createdAt";
     expiredAt: "expiredAt";
+    lastRefreshedAt: "lastRefreshedAt";
   };
 
   export type UserConnectionScalarFieldEnum =
@@ -20398,6 +21736,16 @@ export namespace Prisma {
 
   export type ActionScalarFieldEnum =
     (typeof ActionScalarFieldEnum)[keyof typeof ActionScalarFieldEnum];
+
+  export const ActionStepTestScalarFieldEnum: {
+    id: "id";
+    dataOut: "dataOut";
+    actionId: "actionId";
+    createdAt: "createdAt";
+  };
+
+  export type ActionStepTestScalarFieldEnum =
+    (typeof ActionStepTestScalarFieldEnum)[keyof typeof ActionStepTestScalarFieldEnum];
 
   export const AvailableActionsScalarFieldEnum: {
     id: "id";
@@ -21150,6 +22498,11 @@ export namespace Prisma {
     refreshToken?: StringNullableFilter<"UserConnection"> | string | null;
     createdAt?: DateTimeFilter<"UserConnection"> | Date | string;
     expiredAt?: DateTimeFilter<"UserConnection"> | Date | string;
+    lastRefreshedAt?:
+      | DateTimeNullableFilter<"UserConnection">
+      | Date
+      | string
+      | null;
     User?: XOR<UserRelationFilter, UserWhereInput>;
     trigger?: TriggerListRelationFilter;
     action?: ActionListRelationFilter;
@@ -21164,6 +22517,7 @@ export namespace Prisma {
     refreshToken?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     expiredAt?: SortOrder;
+    lastRefreshedAt?: SortOrderInput | SortOrder;
     User?: UserOrderByWithRelationInput;
     trigger?: TriggerOrderByRelationAggregateInput;
     action?: ActionOrderByRelationAggregateInput;
@@ -21182,6 +22536,11 @@ export namespace Prisma {
       refreshToken?: StringNullableFilter<"UserConnection"> | string | null;
       createdAt?: DateTimeFilter<"UserConnection"> | Date | string;
       expiredAt?: DateTimeFilter<"UserConnection"> | Date | string;
+      lastRefreshedAt?:
+        | DateTimeNullableFilter<"UserConnection">
+        | Date
+        | string
+        | null;
       User?: XOR<UserRelationFilter, UserWhereInput>;
       trigger?: TriggerListRelationFilter;
       action?: ActionListRelationFilter;
@@ -21198,6 +22557,7 @@ export namespace Prisma {
     refreshToken?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     expiredAt?: SortOrder;
+    lastRefreshedAt?: SortOrderInput | SortOrder;
     _count?: UserConnectionCountOrderByAggregateInput;
     _avg?: UserConnectionAvgOrderByAggregateInput;
     _max?: UserConnectionMaxOrderByAggregateInput;
@@ -21224,6 +22584,11 @@ export namespace Prisma {
       | null;
     createdAt?: DateTimeWithAggregatesFilter<"UserConnection"> | Date | string;
     expiredAt?: DateTimeWithAggregatesFilter<"UserConnection"> | Date | string;
+    lastRefreshedAt?:
+      | DateTimeNullableWithAggregatesFilter<"UserConnection">
+      | Date
+      | string
+      | null;
   };
 
   export type AvailableTriggersWhereInput = {
@@ -21324,6 +22689,10 @@ export namespace Prisma {
     > | null;
     zapRunFailures?: ZapRunListRelationFilter;
     note?: XOR<ZapNoteNullableRelationFilter, ZapNoteWhereInput> | null;
+    stepTests?: XOR<
+      ActionStepTestNullableRelationFilter,
+      ActionStepTestWhereInput
+    > | null;
   };
 
   export type ActionOrderByWithRelationInput = {
@@ -21340,13 +22709,13 @@ export namespace Prisma {
     userConnection?: UserConnectionOrderByWithRelationInput;
     zapRunFailures?: ZapRunOrderByRelationAggregateInput;
     note?: ZapNoteOrderByWithRelationInput;
+    stepTests?: ActionStepTestOrderByWithRelationInput;
   };
 
   export type ActionWhereUniqueInput = Prisma.AtLeast<
     {
       id?: string;
       connectionId?: string;
-      zapId_sortingOrder?: ActionZapIdSortingOrderCompoundUniqueInput;
       AND?: ActionWhereInput | ActionWhereInput[];
       OR?: ActionWhereInput[];
       NOT?: ActionWhereInput | ActionWhereInput[];
@@ -21367,8 +22736,12 @@ export namespace Prisma {
       > | null;
       zapRunFailures?: ZapRunListRelationFilter;
       note?: XOR<ZapNoteNullableRelationFilter, ZapNoteWhereInput> | null;
+      stepTests?: XOR<
+        ActionStepTestNullableRelationFilter,
+        ActionStepTestWhereInput
+      > | null;
     },
-    "id" | "connectionId" | "zapId_sortingOrder"
+    "id" | "connectionId"
   >;
 
   export type ActionOrderByWithAggregationInput = {
@@ -21403,6 +22776,63 @@ export namespace Prisma {
     actionId?: StringWithAggregatesFilter<"Action"> | string;
     sortingOrder?: IntWithAggregatesFilter<"Action"> | number;
     connectionId?: StringNullableWithAggregatesFilter<"Action"> | string | null;
+  };
+
+  export type ActionStepTestWhereInput = {
+    AND?: ActionStepTestWhereInput | ActionStepTestWhereInput[];
+    OR?: ActionStepTestWhereInput[];
+    NOT?: ActionStepTestWhereInput | ActionStepTestWhereInput[];
+    id?: StringFilter<"ActionStepTest"> | string;
+    dataOut?: JsonFilter<"ActionStepTest">;
+    actionId?: StringFilter<"ActionStepTest"> | string;
+    createdAt?: DateTimeFilter<"ActionStepTest"> | Date | string;
+    action?: XOR<ActionRelationFilter, ActionWhereInput>;
+  };
+
+  export type ActionStepTestOrderByWithRelationInput = {
+    id?: SortOrder;
+    dataOut?: SortOrder;
+    actionId?: SortOrder;
+    createdAt?: SortOrder;
+    action?: ActionOrderByWithRelationInput;
+  };
+
+  export type ActionStepTestWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      actionId?: string;
+      AND?: ActionStepTestWhereInput | ActionStepTestWhereInput[];
+      OR?: ActionStepTestWhereInput[];
+      NOT?: ActionStepTestWhereInput | ActionStepTestWhereInput[];
+      dataOut?: JsonFilter<"ActionStepTest">;
+      createdAt?: DateTimeFilter<"ActionStepTest"> | Date | string;
+      action?: XOR<ActionRelationFilter, ActionWhereInput>;
+    },
+    "id" | "actionId"
+  >;
+
+  export type ActionStepTestOrderByWithAggregationInput = {
+    id?: SortOrder;
+    dataOut?: SortOrder;
+    actionId?: SortOrder;
+    createdAt?: SortOrder;
+    _count?: ActionStepTestCountOrderByAggregateInput;
+    _max?: ActionStepTestMaxOrderByAggregateInput;
+    _min?: ActionStepTestMinOrderByAggregateInput;
+  };
+
+  export type ActionStepTestScalarWhereWithAggregatesInput = {
+    AND?:
+      | ActionStepTestScalarWhereWithAggregatesInput
+      | ActionStepTestScalarWhereWithAggregatesInput[];
+    OR?: ActionStepTestScalarWhereWithAggregatesInput[];
+    NOT?:
+      | ActionStepTestScalarWhereWithAggregatesInput
+      | ActionStepTestScalarWhereWithAggregatesInput[];
+    id?: StringWithAggregatesFilter<"ActionStepTest"> | string;
+    dataOut?: JsonWithAggregatesFilter<"ActionStepTest">;
+    actionId?: StringWithAggregatesFilter<"ActionStepTest"> | string;
+    createdAt?: DateTimeWithAggregatesFilter<"ActionStepTest"> | Date | string;
   };
 
   export type AvailableActionsWhereInput = {
@@ -22321,6 +23751,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
     User: UserCreateNestedOneWithoutConnectionsInput;
     trigger?: TriggerCreateNestedManyWithoutUserConnectionInput;
     action?: ActionCreateNestedManyWithoutUserConnectionInput;
@@ -22335,6 +23766,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
     trigger?: TriggerUncheckedCreateNestedManyWithoutUserConnectionInput;
     action?: ActionUncheckedCreateNestedManyWithoutUserConnectionInput;
   };
@@ -22347,6 +23779,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     User?: UserUpdateOneRequiredWithoutConnectionsNestedInput;
     trigger?: TriggerUpdateManyWithoutUserConnectionNestedInput;
     action?: ActionUpdateManyWithoutUserConnectionNestedInput;
@@ -22361,6 +23798,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     trigger?: TriggerUncheckedUpdateManyWithoutUserConnectionNestedInput;
     action?: ActionUncheckedUpdateManyWithoutUserConnectionNestedInput;
   };
@@ -22374,6 +23816,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
   };
 
   export type UserConnectionUpdateManyMutationInput = {
@@ -22384,6 +23827,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
   };
 
   export type UserConnectionUncheckedUpdateManyInput = {
@@ -22395,6 +23843,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
   };
 
   export type AvailableTriggersCreateInput = {
@@ -22482,6 +23935,7 @@ export namespace Prisma {
     userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
     zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
     note?: ZapNoteCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestCreateNestedOneWithoutActionInput;
   };
 
   export type ActionUncheckedCreateInput = {
@@ -22495,6 +23949,7 @@ export namespace Prisma {
     connectionId?: string | null;
     zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
     note?: ZapNoteUncheckedCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestUncheckedCreateNestedOneWithoutActionInput;
   };
 
   export type ActionUpdateInput = {
@@ -22508,6 +23963,7 @@ export namespace Prisma {
     userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
     zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
     note?: ZapNoteUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateInput = {
@@ -22521,6 +23977,7 @@ export namespace Prisma {
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
     zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
     note?: ZapNoteUncheckedUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUncheckedUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionCreateManyInput = {
@@ -22551,6 +24008,54 @@ export namespace Prisma {
     actionId?: StringFieldUpdateOperationsInput | string;
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
+  };
+
+  export type ActionStepTestCreateInput = {
+    id?: string;
+    dataOut: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+    action: ActionCreateNestedOneWithoutStepTestsInput;
+  };
+
+  export type ActionStepTestUncheckedCreateInput = {
+    id?: string;
+    dataOut: JsonNullValueInput | InputJsonValue;
+    actionId: string;
+    createdAt?: Date | string;
+  };
+
+  export type ActionStepTestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    dataOut?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    action?: ActionUpdateOneRequiredWithoutStepTestsNestedInput;
+  };
+
+  export type ActionStepTestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    dataOut?: JsonNullValueInput | InputJsonValue;
+    actionId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ActionStepTestCreateManyInput = {
+    id?: string;
+    dataOut: JsonNullValueInput | InputJsonValue;
+    actionId: string;
+    createdAt?: Date | string;
+  };
+
+  export type ActionStepTestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    dataOut?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ActionStepTestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    dataOut?: JsonNullValueInput | InputJsonValue;
+    actionId?: StringFieldUpdateOperationsInput | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type AvailableActionsCreateInput = {
@@ -23548,6 +25053,7 @@ export namespace Prisma {
     refreshToken?: SortOrder;
     createdAt?: SortOrder;
     expiredAt?: SortOrder;
+    lastRefreshedAt?: SortOrder;
   };
 
   export type UserConnectionAvgOrderByAggregateInput = {
@@ -23563,6 +25069,7 @@ export namespace Prisma {
     refreshToken?: SortOrder;
     createdAt?: SortOrder;
     expiredAt?: SortOrder;
+    lastRefreshedAt?: SortOrder;
   };
 
   export type UserConnectionMinOrderByAggregateInput = {
@@ -23574,6 +25081,7 @@ export namespace Prisma {
     refreshToken?: SortOrder;
     createdAt?: SortOrder;
     expiredAt?: SortOrder;
+    lastRefreshedAt?: SortOrder;
   };
 
   export type UserConnectionSumOrderByAggregateInput = {
@@ -23618,9 +25126,9 @@ export namespace Prisma {
     isNot?: AvailableActionsWhereInput;
   };
 
-  export type ActionZapIdSortingOrderCompoundUniqueInput = {
-    zapId: number;
-    sortingOrder: number;
+  export type ActionStepTestNullableRelationFilter = {
+    is?: ActionStepTestWhereInput | null;
+    isNot?: ActionStepTestWhereInput | null;
   };
 
   export type ActionCountOrderByAggregateInput = {
@@ -23670,6 +25178,30 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>;
     _min?: NestedBoolNullableFilter<$PrismaModel>;
     _max?: NestedBoolNullableFilter<$PrismaModel>;
+  };
+
+  export type ActionRelationFilter = {
+    is?: ActionWhereInput;
+    isNot?: ActionWhereInput;
+  };
+
+  export type ActionStepTestCountOrderByAggregateInput = {
+    id?: SortOrder;
+    dataOut?: SortOrder;
+    actionId?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type ActionStepTestMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    actionId?: SortOrder;
+    createdAt?: SortOrder;
+  };
+
+  export type ActionStepTestMinOrderByAggregateInput = {
+    id?: SortOrder;
+    actionId?: SortOrder;
+    createdAt?: SortOrder;
   };
 
   export type AvailableActionsCountOrderByAggregateInput = {
@@ -25813,6 +27345,15 @@ export namespace Prisma {
     connect?: ZapNoteWhereUniqueInput;
   };
 
+  export type ActionStepTestCreateNestedOneWithoutActionInput = {
+    create?: XOR<
+      ActionStepTestCreateWithoutActionInput,
+      ActionStepTestUncheckedCreateWithoutActionInput
+    >;
+    connectOrCreate?: ActionStepTestCreateOrConnectWithoutActionInput;
+    connect?: ActionStepTestWhereUniqueInput;
+  };
+
   export type ZapRunUncheckedCreateNestedManyWithoutFailedActionInput = {
     create?:
       | XOR<
@@ -25835,6 +27376,15 @@ export namespace Prisma {
     >;
     connectOrCreate?: ZapNoteCreateOrConnectWithoutStepInput;
     connect?: ZapNoteWhereUniqueInput;
+  };
+
+  export type ActionStepTestUncheckedCreateNestedOneWithoutActionInput = {
+    create?: XOR<
+      ActionStepTestCreateWithoutActionInput,
+      ActionStepTestUncheckedCreateWithoutActionInput
+    >;
+    connectOrCreate?: ActionStepTestCreateOrConnectWithoutActionInput;
+    connect?: ActionStepTestWhereUniqueInput;
   };
 
   export type NullableBoolFieldUpdateOperationsInput = {
@@ -25941,6 +27491,25 @@ export namespace Prisma {
     >;
   };
 
+  export type ActionStepTestUpdateOneWithoutActionNestedInput = {
+    create?: XOR<
+      ActionStepTestCreateWithoutActionInput,
+      ActionStepTestUncheckedCreateWithoutActionInput
+    >;
+    connectOrCreate?: ActionStepTestCreateOrConnectWithoutActionInput;
+    upsert?: ActionStepTestUpsertWithoutActionInput;
+    disconnect?: ActionStepTestWhereInput | boolean;
+    delete?: ActionStepTestWhereInput | boolean;
+    connect?: ActionStepTestWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        ActionStepTestUpdateToOneWithWhereWithoutActionInput,
+        ActionStepTestUpdateWithoutActionInput
+      >,
+      ActionStepTestUncheckedUpdateWithoutActionInput
+    >;
+  };
+
   export type ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput = {
     create?:
       | XOR<
@@ -25985,6 +27554,51 @@ export namespace Prisma {
         ZapNoteUpdateWithoutStepInput
       >,
       ZapNoteUncheckedUpdateWithoutStepInput
+    >;
+  };
+
+  export type ActionStepTestUncheckedUpdateOneWithoutActionNestedInput = {
+    create?: XOR<
+      ActionStepTestCreateWithoutActionInput,
+      ActionStepTestUncheckedCreateWithoutActionInput
+    >;
+    connectOrCreate?: ActionStepTestCreateOrConnectWithoutActionInput;
+    upsert?: ActionStepTestUpsertWithoutActionInput;
+    disconnect?: ActionStepTestWhereInput | boolean;
+    delete?: ActionStepTestWhereInput | boolean;
+    connect?: ActionStepTestWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        ActionStepTestUpdateToOneWithWhereWithoutActionInput,
+        ActionStepTestUpdateWithoutActionInput
+      >,
+      ActionStepTestUncheckedUpdateWithoutActionInput
+    >;
+  };
+
+  export type ActionCreateNestedOneWithoutStepTestsInput = {
+    create?: XOR<
+      ActionCreateWithoutStepTestsInput,
+      ActionUncheckedCreateWithoutStepTestsInput
+    >;
+    connectOrCreate?: ActionCreateOrConnectWithoutStepTestsInput;
+    connect?: ActionWhereUniqueInput;
+  };
+
+  export type ActionUpdateOneRequiredWithoutStepTestsNestedInput = {
+    create?: XOR<
+      ActionCreateWithoutStepTestsInput,
+      ActionUncheckedCreateWithoutStepTestsInput
+    >;
+    connectOrCreate?: ActionCreateOrConnectWithoutStepTestsInput;
+    upsert?: ActionUpsertWithoutStepTestsInput;
+    connect?: ActionWhereUniqueInput;
+    update?: XOR<
+      XOR<
+        ActionUpdateToOneWithWhereWithoutStepTestsInput,
+        ActionUpdateWithoutStepTestsInput
+      >,
+      ActionUncheckedUpdateWithoutStepTestsInput
     >;
   };
 
@@ -26782,6 +28396,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
     trigger?: TriggerCreateNestedManyWithoutUserConnectionInput;
     action?: ActionCreateNestedManyWithoutUserConnectionInput;
   };
@@ -26794,6 +28409,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
     trigger?: TriggerUncheckedCreateNestedManyWithoutUserConnectionInput;
     action?: ActionUncheckedCreateNestedManyWithoutUserConnectionInput;
   };
@@ -27042,6 +28658,11 @@ export namespace Prisma {
     refreshToken?: StringNullableFilter<"UserConnection"> | string | null;
     createdAt?: DateTimeFilter<"UserConnection"> | Date | string;
     expiredAt?: DateTimeFilter<"UserConnection"> | Date | string;
+    lastRefreshedAt?:
+      | DateTimeNullableFilter<"UserConnection">
+      | Date
+      | string
+      | null;
   };
 
   export type ZapChangeHistoryUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -27280,6 +28901,7 @@ export namespace Prisma {
     userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
     zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
     note?: ZapNoteCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestCreateNestedOneWithoutActionInput;
   };
 
   export type ActionUncheckedCreateWithoutZapInput = {
@@ -27292,6 +28914,7 @@ export namespace Prisma {
     connectionId?: string | null;
     zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
     note?: ZapNoteUncheckedCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestUncheckedCreateNestedOneWithoutActionInput;
   };
 
   export type ActionCreateOrConnectWithoutZapInput = {
@@ -28566,6 +30189,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
     User: UserCreateNestedOneWithoutConnectionsInput;
     action?: ActionCreateNestedManyWithoutUserConnectionInput;
   };
@@ -28579,6 +30203,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
     action?: ActionUncheckedCreateNestedManyWithoutUserConnectionInput;
   };
 
@@ -28743,6 +30368,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     User?: UserUpdateOneRequiredWithoutConnectionsNestedInput;
     action?: ActionUpdateManyWithoutUserConnectionNestedInput;
   };
@@ -28756,6 +30386,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     action?: ActionUncheckedUpdateManyWithoutUserConnectionNestedInput;
   };
 
@@ -28935,6 +30570,7 @@ export namespace Prisma {
     actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput;
     zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
     note?: ZapNoteCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestCreateNestedOneWithoutActionInput;
   };
 
   export type ActionUncheckedCreateWithoutUserConnectionInput = {
@@ -28947,6 +30583,7 @@ export namespace Prisma {
     sortingOrder?: number;
     zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
     note?: ZapNoteUncheckedCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestUncheckedCreateNestedOneWithoutActionInput;
   };
 
   export type ActionCreateOrConnectWithoutUserConnectionInput = {
@@ -29240,6 +30877,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
     User: UserCreateNestedOneWithoutConnectionsInput;
     trigger?: TriggerCreateNestedManyWithoutUserConnectionInput;
   };
@@ -29253,6 +30891,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
     trigger?: TriggerUncheckedCreateNestedManyWithoutUserConnectionInput;
   };
 
@@ -29328,6 +30967,26 @@ export namespace Prisma {
     create: XOR<
       ZapNoteCreateWithoutStepInput,
       ZapNoteUncheckedCreateWithoutStepInput
+    >;
+  };
+
+  export type ActionStepTestCreateWithoutActionInput = {
+    id?: string;
+    dataOut: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+  };
+
+  export type ActionStepTestUncheckedCreateWithoutActionInput = {
+    id?: string;
+    dataOut: JsonNullValueInput | InputJsonValue;
+    createdAt?: Date | string;
+  };
+
+  export type ActionStepTestCreateOrConnectWithoutActionInput = {
+    where: ActionStepTestWhereUniqueInput;
+    create: XOR<
+      ActionStepTestCreateWithoutActionInput,
+      ActionStepTestUncheckedCreateWithoutActionInput
     >;
   };
 
@@ -29466,6 +31125,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     User?: UserUpdateOneRequiredWithoutConnectionsNestedInput;
     trigger?: TriggerUpdateManyWithoutUserConnectionNestedInput;
   };
@@ -29479,6 +31143,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     trigger?: TriggerUncheckedUpdateManyWithoutUserConnectionNestedInput;
   };
 
@@ -29552,6 +31221,118 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
+  export type ActionStepTestUpsertWithoutActionInput = {
+    update: XOR<
+      ActionStepTestUpdateWithoutActionInput,
+      ActionStepTestUncheckedUpdateWithoutActionInput
+    >;
+    create: XOR<
+      ActionStepTestCreateWithoutActionInput,
+      ActionStepTestUncheckedCreateWithoutActionInput
+    >;
+    where?: ActionStepTestWhereInput;
+  };
+
+  export type ActionStepTestUpdateToOneWithWhereWithoutActionInput = {
+    where?: ActionStepTestWhereInput;
+    data: XOR<
+      ActionStepTestUpdateWithoutActionInput,
+      ActionStepTestUncheckedUpdateWithoutActionInput
+    >;
+  };
+
+  export type ActionStepTestUpdateWithoutActionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    dataOut?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ActionStepTestUncheckedUpdateWithoutActionInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    dataOut?: JsonNullValueInput | InputJsonValue;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ActionCreateWithoutStepTestsInput = {
+    id?: string;
+    success?: boolean | null;
+    configuration?: JsonNullValueInput | InputJsonValue;
+    optionId?: string;
+    sortingOrder?: number;
+    zap: ZapCreateNestedOneWithoutActionsInput;
+    actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput;
+    userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
+    zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
+    note?: ZapNoteCreateNestedOneWithoutStepInput;
+  };
+
+  export type ActionUncheckedCreateWithoutStepTestsInput = {
+    id?: string;
+    zapId: number;
+    success?: boolean | null;
+    configuration?: JsonNullValueInput | InputJsonValue;
+    optionId?: string;
+    actionId: string;
+    sortingOrder?: number;
+    connectionId?: string | null;
+    zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
+    note?: ZapNoteUncheckedCreateNestedOneWithoutStepInput;
+  };
+
+  export type ActionCreateOrConnectWithoutStepTestsInput = {
+    where: ActionWhereUniqueInput;
+    create: XOR<
+      ActionCreateWithoutStepTestsInput,
+      ActionUncheckedCreateWithoutStepTestsInput
+    >;
+  };
+
+  export type ActionUpsertWithoutStepTestsInput = {
+    update: XOR<
+      ActionUpdateWithoutStepTestsInput,
+      ActionUncheckedUpdateWithoutStepTestsInput
+    >;
+    create: XOR<
+      ActionCreateWithoutStepTestsInput,
+      ActionUncheckedCreateWithoutStepTestsInput
+    >;
+    where?: ActionWhereInput;
+  };
+
+  export type ActionUpdateToOneWithWhereWithoutStepTestsInput = {
+    where?: ActionWhereInput;
+    data: XOR<
+      ActionUpdateWithoutStepTestsInput,
+      ActionUncheckedUpdateWithoutStepTestsInput
+    >;
+  };
+
+  export type ActionUpdateWithoutStepTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
+    configuration?: JsonNullValueInput | InputJsonValue;
+    optionId?: StringFieldUpdateOperationsInput | string;
+    sortingOrder?: IntFieldUpdateOperationsInput | number;
+    zap?: ZapUpdateOneRequiredWithoutActionsNestedInput;
+    actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput;
+    userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
+    zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
+    note?: ZapNoteUpdateOneWithoutStepNestedInput;
+  };
+
+  export type ActionUncheckedUpdateWithoutStepTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    zapId?: IntFieldUpdateOperationsInput | number;
+    success?: NullableBoolFieldUpdateOperationsInput | boolean | null;
+    configuration?: JsonNullValueInput | InputJsonValue;
+    optionId?: StringFieldUpdateOperationsInput | string;
+    actionId?: StringFieldUpdateOperationsInput | string;
+    sortingOrder?: IntFieldUpdateOperationsInput | number;
+    connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
+    zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
+    note?: ZapNoteUncheckedUpdateOneWithoutStepNestedInput;
+  };
+
   export type ActionCreateWithoutActionDetailsInput = {
     id?: string;
     success?: boolean | null;
@@ -29562,6 +31343,7 @@ export namespace Prisma {
     userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
     zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
     note?: ZapNoteCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestCreateNestedOneWithoutActionInput;
   };
 
   export type ActionUncheckedCreateWithoutActionDetailsInput = {
@@ -29574,6 +31356,7 @@ export namespace Prisma {
     connectionId?: string | null;
     zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
     note?: ZapNoteUncheckedCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestUncheckedCreateNestedOneWithoutActionInput;
   };
 
   export type ActionCreateOrConnectWithoutActionDetailsInput = {
@@ -29629,6 +31412,7 @@ export namespace Prisma {
     actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput;
     userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
     note?: ZapNoteCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestCreateNestedOneWithoutActionInput;
   };
 
   export type ActionUncheckedCreateWithoutZapRunFailuresInput = {
@@ -29641,6 +31425,7 @@ export namespace Prisma {
     sortingOrder?: number;
     connectionId?: string | null;
     note?: ZapNoteUncheckedCreateNestedOneWithoutStepInput;
+    stepTests?: ActionStepTestUncheckedCreateNestedOneWithoutActionInput;
   };
 
   export type ActionCreateOrConnectWithoutZapRunFailuresInput = {
@@ -29744,6 +31529,7 @@ export namespace Prisma {
     actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput;
     userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
     note?: ZapNoteUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateWithoutZapRunFailuresInput = {
@@ -29756,6 +31542,7 @@ export namespace Prisma {
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
     note?: ZapNoteUncheckedUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUncheckedUpdateOneWithoutActionNestedInput;
   };
 
   export type ZapUpsertWithoutZapRunsInput = {
@@ -30238,6 +32025,7 @@ export namespace Prisma {
     actionDetails: AvailableActionsCreateNestedOneWithoutActionsInput;
     userConnection?: UserConnectionCreateNestedOneWithoutActionInput;
     zapRunFailures?: ZapRunCreateNestedManyWithoutFailedActionInput;
+    stepTests?: ActionStepTestCreateNestedOneWithoutActionInput;
   };
 
   export type ActionUncheckedCreateWithoutNoteInput = {
@@ -30250,6 +32038,7 @@ export namespace Prisma {
     sortingOrder?: number;
     connectionId?: string | null;
     zapRunFailures?: ZapRunUncheckedCreateNestedManyWithoutFailedActionInput;
+    stepTests?: ActionStepTestUncheckedCreateNestedOneWithoutActionInput;
   };
 
   export type ActionCreateOrConnectWithoutNoteInput = {
@@ -30451,6 +32240,7 @@ export namespace Prisma {
     actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput;
     userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
     zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
+    stepTests?: ActionStepTestUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateWithoutNoteInput = {
@@ -30463,6 +32253,7 @@ export namespace Prisma {
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
     zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
+    stepTests?: ActionStepTestUncheckedUpdateOneWithoutActionNestedInput;
   };
 
   export type UserUpsertWithoutNotesInput = {
@@ -30544,6 +32335,7 @@ export namespace Prisma {
     refreshToken?: string | null;
     createdAt?: Date | string;
     expiredAt: Date | string;
+    lastRefreshedAt?: Date | string | null;
   };
 
   export type ZapChangeHistoryCreateManyCreatedByInput = {
@@ -30661,6 +32453,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     trigger?: TriggerUpdateManyWithoutUserConnectionNestedInput;
     action?: ActionUpdateManyWithoutUserConnectionNestedInput;
   };
@@ -30673,6 +32470,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
     trigger?: TriggerUncheckedUpdateManyWithoutUserConnectionNestedInput;
     action?: ActionUncheckedUpdateManyWithoutUserConnectionNestedInput;
   };
@@ -30685,6 +32487,11 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiredAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    lastRefreshedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null;
   };
 
   export type ZapChangeHistoryUpdateWithoutCreatedByInput = {
@@ -30898,6 +32705,7 @@ export namespace Prisma {
     userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
     zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
     note?: ZapNoteUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateWithoutZapInput = {
@@ -30910,6 +32718,7 @@ export namespace Prisma {
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
     zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
     note?: ZapNoteUncheckedUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUncheckedUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateManyWithoutZapInput = {
@@ -31251,6 +33060,7 @@ export namespace Prisma {
     actionDetails?: AvailableActionsUpdateOneRequiredWithoutActionsNestedInput;
     zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
     note?: ZapNoteUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateWithoutUserConnectionInput = {
@@ -31263,6 +33073,7 @@ export namespace Prisma {
     sortingOrder?: IntFieldUpdateOperationsInput | number;
     zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
     note?: ZapNoteUncheckedUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUncheckedUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateManyWithoutUserConnectionInput = {
@@ -31407,6 +33218,7 @@ export namespace Prisma {
     userConnection?: UserConnectionUpdateOneWithoutActionNestedInput;
     zapRunFailures?: ZapRunUpdateManyWithoutFailedActionNestedInput;
     note?: ZapNoteUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateWithoutActionDetailsInput = {
@@ -31419,6 +33231,7 @@ export namespace Prisma {
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null;
     zapRunFailures?: ZapRunUncheckedUpdateManyWithoutFailedActionNestedInput;
     note?: ZapNoteUncheckedUpdateOneWithoutStepNestedInput;
+    stepTests?: ActionStepTestUncheckedUpdateOneWithoutActionNestedInput;
   };
 
   export type ActionUncheckedUpdateManyWithoutActionDetailsInput = {

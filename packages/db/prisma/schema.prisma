@@ -2,8 +2,6 @@ generator client {
   provider = "prisma-client-js"
   output   = "../generated/client"
 }
-w
-
 
 
 datasource db {
@@ -109,6 +107,7 @@ model UserConnection {
   createdAt     DateTime    @default(now())
   expiredAt     DateTime
   User          User        @relation(fields:[userId], references:[id])
+  lastRefreshedAt DateTime?
   trigger       Trigger[]   @relation(name: "TriggerToUserConnection")
   action        Action[]    @relation(name: "ActionToUserConnection")
 }
@@ -138,7 +137,15 @@ model Action {
   userConnection  UserConnection?    @relation(name: "ActionToUserConnection", fields: [connectionId], references: [id])
   zapRunFailures  ZapRun[]          @relation("ActionFailures")
   note            ZapNote?           @relation("actionNote")
-  @@unique([zapId,sortingOrder])
+  stepTests       ActionStepTest? @relation("ActionStepTests")
+}
+
+model ActionStepTest {
+  id String @id @default(uuid())
+  dataOut Json
+  actionId String   @unique
+  action Action @relation(name: "ActionStepTests", fields: [actionId],references: [id])
+  createdAt DateTime @default(now())
 }
 
 model AvailableActions {

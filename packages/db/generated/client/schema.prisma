@@ -3,11 +3,6 @@ generator client {
   output   = "../generated/client"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "./ERD.svg"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -102,17 +97,18 @@ model Trigger {
 }
 
 model UserConnection {
-  id           String    @id @default(uuid())
-  userId       Int
-  appId        String
-  identifier   String
-  accessToken  String
-  refreshToken String?
-  createdAt    DateTime  @default(now())
-  expiredAt    DateTime
-  User         User      @relation(fields: [userId], references: [id])
-  trigger      Trigger[] @relation(name: "TriggerToUserConnection")
-  action       Action[]  @relation(name: "ActionToUserConnection")
+  id              String    @id @default(uuid())
+  userId          Int
+  appId           String
+  identifier      String
+  accessToken     String
+  refreshToken    String?
+  createdAt       DateTime  @default(now())
+  expiredAt       DateTime
+  User            User      @relation(fields: [userId], references: [id])
+  lastRefreshedAt DateTime?
+  trigger         Trigger[] @relation(name: "TriggerToUserConnection")
+  action          Action[]  @relation(name: "ActionToUserConnection")
 }
 
 model AvailableTriggers {
@@ -140,8 +136,15 @@ model Action {
   userConnection UserConnection?  @relation(name: "ActionToUserConnection", fields: [connectionId], references: [id])
   zapRunFailures ZapRun[]         @relation("ActionFailures")
   note           ZapNote?         @relation("actionNote")
+  stepTests      ActionStepTest?  @relation("ActionStepTests")
+}
 
-  @@unique([zapId, sortingOrder])
+model ActionStepTest {
+  id        String   @id @default(uuid())
+  dataOut   Json
+  actionId  String   @unique
+  action    Action   @relation(name: "ActionStepTests", fields: [actionId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 model AvailableActions {

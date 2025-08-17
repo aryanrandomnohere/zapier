@@ -190,7 +190,8 @@ exports.Prisma.UserConnectionScalarFieldEnum = {
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
   createdAt: 'createdAt',
-  expiredAt: 'expiredAt'
+  expiredAt: 'expiredAt',
+  lastRefreshedAt: 'lastRefreshedAt'
 };
 
 exports.Prisma.AvailableTriggersScalarFieldEnum = {
@@ -212,6 +213,13 @@ exports.Prisma.ActionScalarFieldEnum = {
   actionId: 'actionId',
   sortingOrder: 'sortingOrder',
   connectionId: 'connectionId'
+};
+
+exports.Prisma.ActionStepTestScalarFieldEnum = {
+  id: 'id',
+  dataOut: 'dataOut',
+  actionId: 'actionId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.AvailableActionsScalarFieldEnum = {
@@ -320,6 +328,7 @@ exports.Prisma.ModelName = {
   UserConnection: 'UserConnection',
   AvailableTriggers: 'AvailableTriggers',
   Action: 'Action',
+  ActionStepTest: 'ActionStepTest',
   AvailableActions: 'AvailableActions',
   ZapRun: 'ZapRun',
   ZapRunOutbox: 'ZapRunOutbox',
