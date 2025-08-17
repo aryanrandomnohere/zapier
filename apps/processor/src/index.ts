@@ -1,6 +1,9 @@
 import { RunTrigger } from "@repo/apps";
 import { prisma } from "@repo/db";
 import { Kafka } from "kafkajs";
+import { refreshAccessToken } from "./auth/refreshAccessToken.js";
+import * as dotenv from "dotenv";
+dotenv.config();
 const kafka = new Kafka({
   clientId: "outbox-processor",
   brokers: ["localhost:9092"],
@@ -91,6 +94,23 @@ async function main() {
         },
       });
       if (deletedZapRun.count > 0) console.log("Deleted", deletedZapRun);
+    }
+    //Refresh Access Tokens
+    const connections = await prisma.userConnection.findMany({
+      where: {
+        appId: "youtube",
+        lastRefreshedAt: null,
+      },
+    });
+    for (const connection of connections) {
+      if (connection.appId === "youtube") {
+        if (!connection.refreshToken) continue;
+        const newToken = await refreshAccessToken(connection.refreshToken);
+        await prisma.userConnection.update({
+          where: { id: connection.id },
+          data: { accessToken: newToken, lastRefreshedAt: new Date() },
+        });
+      }
     }
   }
 }
