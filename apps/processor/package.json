@@ -15,9 +15,11 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@repo/apps": "*",
     "@repo/db": "*",
-    "kafkajs": "^2.2.4",
-    "@repo/types":"*",
-    "@repo/apps":"*"
+    "@repo/types": "*",
+    "@types/dotenv": "^6.1.1",
+    "dotenv": "^17.2.1",
+    "kafkajs": "^2.2.4"
   }
 }

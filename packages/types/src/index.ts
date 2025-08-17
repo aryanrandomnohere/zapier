@@ -36,6 +36,7 @@ export interface ItemType {
   appId: string;
   type: string;
   imagePath: string;
+  dataOut?: Record<string, string> | null;
   metadata: itemStepMetaData;
 }
 
@@ -165,6 +166,9 @@ export interface folderInterface {
     firstname: string;
     lastname: string;
   };
+  zaps: {
+    id: string;
+  }[];
 }
 
 export interface zapInterface {
