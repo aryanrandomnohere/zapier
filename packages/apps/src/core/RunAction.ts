@@ -39,7 +39,7 @@ export default async function RunAction(currentAction: any, metadata: any) {
     const response = await actionFn({ fields, metadata });
 
     return response?.success
-      ? { success: true, id: response.id }
+      ? { success: true, id: response.id, dataOut: response.dataOut || {} }
       : {
           success: false,
           error: response?.error || "Action failed to execute",
