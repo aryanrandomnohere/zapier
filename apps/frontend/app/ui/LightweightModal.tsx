@@ -130,9 +130,12 @@ const modalStyles = `
 `;
 
 // Inject styles if not already present
-if (typeof document !== 'undefined' && !document.getElementById('lightweight-modal-styles')) {
-  const style = document.createElement('style');
-  style.id = 'lightweight-modal-styles';
+if (
+  typeof document !== "undefined" &&
+  !document.getElementById("lightweight-modal-styles")
+) {
+  const style = document.createElement("style");
+  style.id = "lightweight-modal-styles";
   style.textContent = modalStyles;
   document.head.appendChild(style);
 }

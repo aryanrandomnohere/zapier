@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * Custom hook to ensure portal rendering only happens on client-side
@@ -15,6 +15,6 @@ export default function useClientOnlyPortal() {
 
   return {
     mounted,
-    portalRoot: mounted ? document.body : null
+    portalRoot: mounted ? document.body : null,
   };
 }

@@ -18,25 +18,40 @@ import { IoTimerOutline } from "react-icons/io5";
 import { recordsAtom, selectedRecord } from "../RecoilState/store/recordsAtom";
 import { userAtom } from "../RecoilState/store/userAtom";
 import { getSession } from "next-auth/react";
-import { triggerTested } from "../RecoilState/store/triggerAtom";
+import {
+  skippedTrigger,
+  triggerTested,
+} from "../RecoilState/store/triggerAtom";
 import axios from "axios";
 import { useParams } from "next/navigation";
 // Mock data for when metadata is not available
+
+import dynamic from "next/dynamic";
+
+// const ChangeItem = dynamic(() => import("../components/MetaData/ChangeItem"), { ssr: false });
+// const AddMetaData = dynamic(() => import("../components/MetaData/AddMetaData"), { ssr: false });
+// const StepsStatus = dynamic(() => import("../components/MetaData/StepsStatus"), { ssr: false });
+// const TestItem = dynamic(() => import("../components/TestItem"), { ssr: false });
 
 import ChangeItem from "../components/MetaData/ChangeItem";
 import AddMetaData from "../components/MetaData/AddMetaData";
 import StepsStatus from "../components/MetaData/StepsStatus";
 import TestItem from "../components/TestItem";
+import { TbArrowsMinimize } from "react-icons/tb";
 
 export default function SideModal({
   handlePublish,
   CheckStepValidity,
+  isFullScreen,
+  setIsFullScreen,
 }: {
   handlePublish: () => void;
   CheckStepValidity: (
     onStepEnum: onStepEnum,
     panelIndex?: onStepEnum,
   ) => boolean;
+  isFullScreen: boolean;
+  setIsFullScreen: (isFullScreen: boolean) => void;
 }) {
   const [zap, setZapState] = useRecoilState(zapCreateState);
   const [selectedStep, setSelectedStep] = useState<onStepEnum>(
@@ -53,6 +68,7 @@ export default function SideModal({
   const setOnStep = useSetRecoilState(onStep);
   const setConfigurationId = useSetRecoilState(configureStepDetails);
   const setTestedTrigger = useSetRecoilState(triggerTested);
+  const setSkippedTrigger = useSetRecoilState(skippedTrigger);
   const { zapId } = useParams();
   if (index == null) return null;
 
@@ -71,7 +87,7 @@ export default function SideModal({
   const isCurrentStepValid = useMemo(() => {
     const currentStep =
       panelIndex === onStepEnum.CONFIGURATION
-        ? zap.selectedItems[index]?.metadata.optionConfiguration[configureId]
+        ? zap.selectedItems[index]?.metadata?.optionConfiguration?.[configureId]
             .configurationStep
         : zap.selectedItems[index]?.metadata;
 
@@ -193,6 +209,7 @@ export default function SideModal({
     setMetaData((prev) => {
       return { ...prev, index: 1 };
     });
+    setSkippedTrigger(true);
     setOnStep(onStepEnum.SETUP);
     if (zap.selectedItems[1]?.metadata?.fields[0].fieldValue)
       setConfigurationId(zap.selectedItems[1].metadata?.fields[0].fieldValue);
@@ -388,17 +405,19 @@ export default function SideModal({
 
   if (!zap.selectedItems[index]?.metadata) {
     return (
-      <div className="min-h-full relative flex flex-col items-center justify-center w-96 border-blue-600 border-1 z-20 mx-6 transform-all ease-in-out duration-300  bg-[#FFFDF9]">
-          <ChangeItem item={zap.selectedItems[index]} />
-          <div className="text-sm text-gray-500 font-medium bg-gray-50 rounded-md p-4">
-              We don't support this trigger yet
-            </div>
+      <div
+        className={`min-h-full relative flex gap-5 px-2  items-center justify-center ${isFullScreen ? "min-w-[27rem] min-h-[30rem] flex-wrap " : "w-96 flex-col"} border-blue-600 border-1 z-20 mx-6 transform-all ease-in-out duration-300  bg-[#FFFDF9]`}
+      >
+        <ChangeItem item={zap.selectedItems[index]} />
+        <div className="text-sm text-gray-500 font-medium bg-gray-50 rounded-md p-4">
+          We don't support this trigger yet
+        </div>
       </div>
     );
   }
   return (
     <div
-      className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-800 border-2 z-50  rounded transform-all ease-in-out duration-300 bg-[#FFFDF9]`}
+      className={`min-h-full flex flex-col items-center justify-between w-96 border-blue-800 border-2 z-50  rounded transform-all ease-in-out duration-300 bg-[#FFFDF9] `}
     >
       <div className={`flex flex-col items-center w-full`}>
         <div className="flex justify-between w-full items-center bg-blue-300/10">
@@ -419,7 +438,25 @@ export default function SideModal({
             <FiEdit3 size={16} />
           </div>
           <div className="flex items-center gap-2 m-2">
-            <SlSizeFullscreen size={18} />
+            {!isFullScreen ? (
+              <div
+                onClick={() => {
+                  console.log("Going FulScreen");
+                  setIsFullScreen(true);
+                }}
+              >
+                <SlSizeFullscreen size={18} />
+              </div>
+            ) : (
+              <div
+                onClick={() => {
+                  console.log("Going FulScreen");
+                  setIsFullScreen(false);
+                }}
+              >
+                <TbArrowsMinimize size={18} />
+              </div>
+            )}
             <div
               onClick={() => {
                 console.log("closing");
@@ -486,8 +523,8 @@ export default function SideModal({
                 <IoTimerOutline size={18} />{" "}
               </div>
             </div>
-            )}
-          </div>
+          )}
+        </div>
         {panelIndex === onStepEnum.SETUP && (
           <div className="flex gap-1 w-full  px-2.5 ">
             <div className="self-start p-2 w-full">
