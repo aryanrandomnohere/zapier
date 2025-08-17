@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
 import Parser from "../../shared/utils/parser.js";
 import { Field } from "@repo/types";
-
+import dotenv from "dotenv";
+dotenv.config();
 /**
  * Handles sending email via nodemailer
  * Expects fields: "to", "subject", "body (html or plain)"
@@ -45,6 +46,12 @@ export default async function sendEmailAction({
   }
 
   // Configure transporter
+  console.log(
+    process.env.SMTP_HOST,
+    process.env.SMTP_PORT,
+    process.env.SMTP_USERNAME,
+    process.env.SMTP_SECRET,
+  );
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
@@ -65,7 +72,16 @@ export default async function sendEmailAction({
   // Return result
   if (info.messageId) {
     console.log("message sent", info.messageId);
-    return { success: true, id: info.messageId, msg: "Message sent" };
+    return {
+      success: true,
+      id: info.messageId,
+      msg: "Message sent",
+      dataOut: {
+        to: parsedTo,
+        subject: parsedSubject,
+        body: parsedBody,
+      },
+    };
   } else {
     return { success: false, error: "Message failed to send" };
   }
