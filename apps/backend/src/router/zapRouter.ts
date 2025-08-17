@@ -13,282 +13,23 @@ import successResponse from "../utils/successResponse.js";
 import asyncHandler from "../utils/asyncFunction.js";
 import { validateOrRespond } from "../utils/validateOrRespond.js";
 import { extendedRequest } from "../types/types.js";
+import {
+  createDraft,
+  getZapHistory,
+  getZaps,
+  updateTrigger,
+  updateAction,
+  dublicateZap,
+} from "../controllers/zapController.js";
 
 const zapRouter = express.Router();
 
-zapRouter.get(
-  "/",
-  asyncHandler(async (req: extendedRequest, res: Response) => {
-    const userId = req.userId;
-    const zaps = await prisma.zap.findMany({
-      where: {
-        userId: Number(userId),
-        deleted: false,
-      },
-      include: {
-        actions: {
-          include: {
-            actionDetails: true,
-          },
-        },
-        user: {
-          select: {
-            firstname: true,
-            lastname: true,
-          },
-        },
-        folder: {
-          select: {
-            name: true,
-            id: true,
-            type: true,
-            parentId: true,
-            userId: true,
-            createdAt: true,
-            updatedAt: true,
-            user: {
-              select: {
-                firstname: true,
-                lastname: true,
-              },
-            },
-          },
-        },
-        trigger: {
-          include: {
-            type: true,
-          },
-        },
-      },
-    });
-    res.status(200).json({
-      zaps,
-      msg: "Tonight the music seem so loud",
-    });
-  }),
-);
-
-zapRouter.post(
-  "/draft",
-  asyncHandler(async (req: extendedRequest, res: Response) => {
-    try {
-      const userId = Number(req.userId);
-      let folderId = Number(req.body?.folderId);
-      if (!folderId) {
-        const userFolder = await prisma.user.findFirst({
-          where: {
-            id: Number(userId),
-          },
-          select: {
-            Folder: true,
-          },
-        });
-        folderId = userFolder?.Folder[0]?.id || 0;
-      }
-      if (!folderId) {
-        errorResponse({ res, msg: "Internal Server Error" });
-        return;
-      }
-      const allZaps = await prisma.zap.findMany({
-        where: {
-          folderId,
-        },
-      });
-
-      const emptyZap = allZaps.find((zap) => zap.triggerId === null);
-      let response;
-      if (!emptyZap) {
-        response = await prisma.zap.create({
-          data: {
-            userId,
-            folderId,
-          },
-          select: {
-            id: true,
-          },
-        });
-      } else {
-        response = { id: emptyZap.id };
-      }
-      res.status(200).json({ zapId: response.id });
-      return;
-    } catch (e) {
-      console.error(e);
-      res.json(400).json({ msg: "Error while creating a draft" });
-      return;
-    }
-  }),
-);
-
-zapRouter.get("/zap-history/:zapId", async (req: Request, res: Response) => {
-  try {
-    const zapId = parseInt(req.params.zapId);
-
-    const history = await prisma.zapChangeHistory.findMany({
-      where: { zapId },
-      include: {
-        createdBy: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    res.status(200).json(history);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch zap history" });
-  }
-});
-zapRouter.post(
-  "/updatetrigger/:zapId",
-  asyncHandler(async (req: extendedRequest, res: Response) => {
-    try {
-      const zapId = Number(req.params.zapId);
-      const parsedBody = validateOrRespond(req.body, TriggerCreateSchema, res);
-      if (!parsedBody) return;
-      const userId = req.userId;
-      const existingTrigger = await prisma.trigger.findUnique({
-        where: {
-          zapId,
-        },
-        select: {
-          id: true,
-        },
-      });
-      if (existingTrigger) {
-        const updatedTrigger = await prisma.trigger.update({
-          where: {
-            id: existingTrigger.id,
-          },
-          data: {
-            triggerId: parsedBody.triggerId,
-            configuration: parsedBody.triggerConfiguration,
-            optionId: (parsedBody.triggerConfiguration as JsonObject).fields[0]
-              .fieldValue,
-          },
-        });
-        res.status(200).json({
-          msg: "Trigger updated",
-          success: true,
-          stepId: updatedTrigger.id,
-        });
-        return;
-      }
-      let response;
-      if (
-        (parsedBody.triggerConfiguration as JsonObject).fields[0].fieldValue !=
-        ""
-      )
-        response = await prisma.trigger.create({
-          data: {
-            zapId,
-            optionId: (parsedBody.triggerConfiguration as JsonObject).fields[0]
-              .fieldValue,
-            triggerId: parsedBody.triggerId,
-            configuration: parsedBody.triggerConfiguration,
-          },
-          select: {
-            id: true,
-          },
-        });
-      else
-        response = await prisma.trigger.create({
-          data: {
-            zapId,
-            triggerId: parsedBody.triggerId,
-            configuration: parsedBody.triggerConfiguration,
-          },
-        });
-
-      await prisma.zap.update({
-        where: {
-          id: zapId,
-        },
-        data: {
-          triggerId: response.id,
-        },
-      });
-      await prisma.zapChangeHistory.create({
-        data: {
-          zapId: Number(zapId), // integer
-          type: "ZAP_CREATED",
-          message: "Zap Created",
-          createdById: Number(userId),
-        },
-      });
-      res
-        .status(200)
-        .json({ msg: "Trigger Created", success: true, stepId: response.id });
-    } catch (e) {
-      console.error(e);
-      res.status(200).json({ msg: "something went wrong", success: false });
-    }
-  }),
-);
-
-zapRouter.post(
-  "/updateaction/:zapId",
-  asyncHandler(async (req: extendedRequest, res: Response) => {
-    try {
-      const zapId = Number(req.params.zapId);
-      const parsedBody = validateOrRespond(req.body, ActionCreationSchema, res);
-      if (!parsedBody) return;
-      const existingAction = await prisma.action.findUnique({
-        where: {
-          zapId_sortingOrder: {
-            zapId,
-            sortingOrder: parsedBody.sortingOrder,
-          },
-        },
-        select: {
-          id: true,
-        },
-      });
-
-      if (existingAction) {
-        const updatedAction = await prisma.action.update({
-          where: {
-            id: existingAction.id,
-          },
-          data: {
-            actionId: parsedBody?.actionId,
-            optionId: (parsedBody?.actionConfiguration as JsonObject).fields[0]
-              .fieldValue,
-            configuration: parsedBody?.actionConfiguration,
-          },
-        });
-        res.status(200).json({
-          msg: "Action updated",
-          success: true,
-          stepId: updatedAction.id,
-        });
-        return;
-      }
-      const newAction = await prisma.action.create({
-        data: {
-          zapId,
-          actionId: parsedBody.actionId,
-          optionId: (parsedBody.actionConfiguration as JsonObject).fields[0]
-            .fieldValue,
-          configuration: parsedBody.actionConfiguration,
-          sortingOrder: parsedBody.sortingOrder,
-        },
-        select: {
-          id: true,
-        },
-      });
-
-      res
-        .status(200)
-        .json({ msg: "Action Created", success: true, stepId: newAction.id });
-    } catch (e) {
-      console.error(e);
-      res.status(400).json({ msg: "something went wrong", success: false });
-    }
-  }),
-);
-
+zapRouter.get("/", getZaps);
+zapRouter.post("/draft", createDraft);
+zapRouter.get("/zap-history/:zapId", getZapHistory);
+zapRouter.post("/updatetrigger/:zapId", updateTrigger);
+zapRouter.post("/updateaction/:zapId", updateAction);
+zapRouter.post("/dublicate", dublicateZap);
 zapRouter.put(
   "/stop/:zapId",
   asyncHandler(async (req: extendedRequest, res: Response) => {
@@ -312,7 +53,7 @@ zapRouter.put(
           zapId,
           type: "ZAP_TURNED_OFF",
           message: "Zap turned off",
-          createdById: Number(req.body.userId),
+          createdById: Number(req.userId),
         },
       });
       res.status(200).json({ success: true, msg: "Zap stoped successfully" });
@@ -368,7 +109,6 @@ zapRouter.post(
     const parsedData = validateOrRespond(body, ZapCreateSchema, res);
     if (!parsedData) return;
     const userId = req.userId;
-    console.log(parsedData);
     const alreadyPublishedZap = await prisma.zap.findUnique({
       where: {
         id: parsedData.zapId,
@@ -401,10 +141,7 @@ zapRouter.post(
       parsedData.actions.map(async (x, index) => {
         const existingAction = await tx.action.findUnique({
           where: {
-            zapId_sortingOrder: {
-              zapId: parsedData.zapId,
-              sortingOrder: index + 1,
-            },
+            id: parsedData.actions[index].stepId,
           },
           select: {
             id: true,
@@ -533,6 +270,9 @@ zapRouter.get(
         orderBy: {
           sortingOrder: "asc",
         },
+        include: {
+          stepTests: true,
+        },
       });
       await Promise.all(
         actions.map(async (action) => {
@@ -546,6 +286,7 @@ zapRouter.get(
               ...availableAction, // clone properties
               stepId: action.id, // add new stepId
               metadata: action.configuration, // override metadata
+              dataOut: action.stepTests?.dataOut || null,
             };
 
             finalZap.push(Action);
@@ -812,7 +553,7 @@ zapRouter.put(
       return errorResponse({ res, msg: "Zap already in this folder" });
     await prisma.zap.update({
       where: { id: zapId },
-      data: { folderId },
+      data: { folderId, deleted: false },
     });
     successResponse({ msg: "Moved Zap Successfully", res });
   }),

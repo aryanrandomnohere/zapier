@@ -2,7 +2,11 @@ import { prisma } from "../config/client.js";
 import { Request, Response } from "express";
 import successResponse from "../utils/successResponse.js";
 import errorResponse from "../utils/errorResponse.js";
-import { createFolderSchema } from "../types/index.js";
+import {
+  createFolderSchema,
+  deleteFolderSchema,
+  folderRenameSchema,
+} from "../types/index.js";
 import { extendedRequest } from "../types/types.js";
 import { validateOrRespond } from "../utils/validateOrRespond.js";
 
@@ -43,9 +47,13 @@ export async function CreateFolder(req: extendedRequest, res: Response) {
   }
 }
 
-export async function GetFolders(req: Request, res: Response) {
+export async function GetFolders(req: extendedRequest, res: Response) {
   try {
+    const userId = Number(req.userId);
     const folders = await prisma.folder.findMany({
+      where: {
+        userId,
+      },
       orderBy: {
         id: "desc",
       },
@@ -59,6 +67,11 @@ export async function GetFolders(req: Request, res: Response) {
             createdAt: true,
           },
         },
+        zaps: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
     console.log(folders);
@@ -69,5 +82,52 @@ export async function GetFolders(req: Request, res: Response) {
     });
   } catch (error) {
     errorResponse({ res, msg: "Failed to fetch folders", errors: error });
+  }
+}
+
+export async function RenameFolder(req: Request, res: Response) {
+  try {
+    const parsed = validateOrRespond(req.body, folderRenameSchema, res);
+    if (!parsed) return;
+    const { id, name } = parsed;
+    const folder = await prisma.folder.findUnique({
+      where: { id },
+    });
+    if (!folder) return errorResponse({ res, msg: "Folder not found" });
+    const updatedFolder = await prisma.folder.update({
+      where: { id },
+      data: { name },
+    });
+    successResponse({
+      res,
+      msg: "Folder renamed successfully",
+      data: updatedFolder,
+    });
+  } catch (error) {
+    errorResponse({ res, msg: "Failed to rename folder", errors: error });
+  }
+}
+
+export async function DeleteFolder(req: Request, res: Response) {
+  try {
+    const parsed = validateOrRespond(req.body, deleteFolderSchema, res);
+    if (!parsed) return;
+    const { id } = parsed;
+    const folder = await prisma.folder.findUnique({
+      where: { id },
+      select: {
+        zaps: true,
+      },
+    });
+    if (folder?.zaps.length && folder.zaps.length > 0)
+      return errorResponse({
+        res,
+        msg: "Folder has zaps, please delete them first",
+      });
+    if (!folder) return errorResponse({ res, msg: "Folder not found" });
+    await prisma.folder.delete({ where: { id } });
+    successResponse({ res, msg: "Folder deleted successfully" });
+  } catch (error) {
+    errorResponse({ res, msg: "Failed to delete folder", errors: error });
   }
 }
