@@ -1,8 +1,8 @@
 "use client";
-import { itemTestMetaData } from "@repo/types";
+import { itemTestMetaData, onStepEnum } from "@repo/types";
 import React, { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { selectedItemMetaData } from "../RecoilState/currentZap";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { onStep, selectedItemMetaData } from "../RecoilState/currentZap";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { FaSquare } from "react-icons/fa6";
@@ -30,7 +30,17 @@ export default function TestItem({
   const [metadata, setMetaData] = useRecoilState(selectedItemMetaData);
   const [user, setUser] = useRecoilState(userAtom);
   const { zapId } = useParams();
+  const setOnStep = useSetRecoilState(onStep);
   console.log(type);
+
+  const handleNextStep = () => {
+    console.log("handleNextStep");
+    setMetaData((prev) => ({
+      ...prev,
+      index: (prev?.index || 0) + 1,
+    }));
+    setOnStep(onStepEnum.SETUP);
+  };
   useEffect(() => {
     async function handleSaveTrigger() {
       let triggerSaved = false;
@@ -119,6 +129,8 @@ export default function TestItem({
         zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue &&
         zap.selectedItems[metadata.index]?.metadata?.optionConfiguration && (
           <DataInForm
+            handleNextStep={handleNextStep}
+            notLastStep={metadata.index !== zap.selectedItems.length - 1}
             handlePublish={handlePublish}
             fields={
               zap.selectedItems[metadata.index]?.metadata?.optionConfiguration[

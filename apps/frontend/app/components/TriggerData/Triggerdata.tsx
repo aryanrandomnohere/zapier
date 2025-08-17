@@ -278,7 +278,7 @@ const TriggerData = ({
                       onClick={handleComplete}
                       className="w-1/2 bg-blue-700 text-white hover:bg-blue-800 py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer"
                     >
-                      Skip test
+                      Skip Test For Now
                     </button>
                   )}
                 </>

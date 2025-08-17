@@ -6,7 +6,7 @@ import { selectedItemMetaData, onStep } from "../../RecoilState/currentZap";
 import { useRecoilValue } from "recoil";
 import { userAtom } from "../../RecoilState/store/userAtom";
 import { useParams } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { RiPushpinLine } from "react-icons/ri";
 import { useState } from "react";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
@@ -22,11 +22,13 @@ export default function OptionList({
   title,
   onClose,
   index,
+  insertingOrNew,
 }: {
   items?: ItemType[] | MockItem[];
   title: string;
   onClose: () => void;
   index?: number;
+  insertingOrNew?: "inserting" | "new" | "change";
 }) {
   const [Item, setItem] = useRecoilState(zapCreateState);
   const setMetaData = useSetRecoilState(selectedItemMetaData);
@@ -60,22 +62,41 @@ export default function OptionList({
               sortingOrder: Item.selectedItems.length - 1,
             };
 
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${ItemType === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
-        body,
-        {
-          withCredentials: true,
-        },
-      );
-
-      if (Item.selectedCell)
-        setItem((prev: any) => {
-          const updated = structuredClone(prev);
-          updated.selectedItems[
-            ItemType === "trigger" ? 0 : updated.selectedCell || 1
-          ].stepId = response.data.stepId;
-          return updated;
-        });
+      let response: AxiosResponse;
+      if (
+        index !== Item.selectedItems.length - 1 &&
+        ItemType !== "trigger" &&
+        insertingOrNew !== "inserting"
+      ) {
+        response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${ItemType === "trigger" ? "updatetrigger" : "updateaction"}/${zapId}`,
+          body,
+          {
+            withCredentials: true,
+          },
+        );
+      } else {
+        if (index === undefined) return;
+        response = await axios.put(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/insert`,
+          {
+            ...body,
+            zapId: Number(zapId),
+            order: index,
+          },
+          {
+            withCredentials: true,
+          },
+        );
+      }
+      console.log(response);
+      console.log(Item.selectedItems, ItemType === "trigger" ? 0 : index || 1);
+      setItem((prev: any) => {
+        const updated = structuredClone(prev);
+        updated.selectedItems[ItemType === "trigger" ? 0 : index || 1].stepId =
+          response.data.stepId;
+        return updated;
+      });
     } catch (error) {
       console.error("Error updating step:", error);
     } finally {

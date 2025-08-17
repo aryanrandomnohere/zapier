@@ -7,10 +7,12 @@ export default function Options({
   type,
   onClose,
   index,
+  insertingOrNew,
 }: {
   type: "actions" | "triggers";
   onClose: () => void;
   index?: number;
+  insertingOrNew?: "inserting" | "new" | "change";
 }) {
   const { items } = useItems(type);
   const builtInItems = items.filter((item) => item.serviceType === "builtIn");
@@ -21,7 +23,12 @@ export default function Options({
   return (
     <div className="flex h-full mt-5">
       <div className="w-1/2">
-        <OptionList title="Your top apps" items={Apps} onClose={onClose} />
+        <OptionList
+          title="Your top apps"
+          items={Apps}
+          onClose={onClose}
+          insertingOrNew={insertingOrNew}
+        />
       </div>
       <div className="flex flex-col w-1/2">
         <div className="min-h-2/3">
@@ -30,6 +37,7 @@ export default function Options({
             items={Items}
             onClose={onClose}
             index={index}
+            insertingOrNew={insertingOrNew}
           />
         </div>
         <div>
@@ -38,6 +46,7 @@ export default function Options({
             items={products}
             onClose={onClose}
             index={index}
+            insertingOrNew={insertingOrNew}
           />
         </div>
       </div>

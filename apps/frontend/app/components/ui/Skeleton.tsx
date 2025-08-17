@@ -164,9 +164,6 @@ export const GridSkeleton: React.FC<{ cols?: number; rows?: number }> = ({
   </div>
 );
 
-
-
-
 const SkeletonPulse = ({ className }: { className: string }) => (
   <div className={`bg-gray-200 animate-pulse rounded ${className}`}></div>
 );
@@ -199,7 +196,7 @@ export default function SideModalLoading() {
             </div>
           </div>
           <MdKeyboardArrowRight size={20} className="text-gray-400" />
-          
+
           {/* Configuration Step */}
           <div className="text-xs font-semibold flex items-center px-1 gap-1 py-2.5">
             <SkeletonPulse className="w-12 h-3" />
@@ -208,7 +205,7 @@ export default function SideModalLoading() {
             </div>
           </div>
           <MdKeyboardArrowRight size={20} className="text-gray-400" />
-          
+
           {/* Test Step */}
           <div className="text-xs font-semibold flex items-center px-1 gap-1 py-2.5">
             <SkeletonPulse className="w-6 h-3" />
@@ -227,19 +224,19 @@ export default function SideModalLoading() {
                 <SkeletonPulse className="w-20 h-4" />
                 <SkeletonPulse className="w-full h-10" />
               </div>
-              
+
               {/* Form field skeleton 2 */}
               <div className="space-y-2">
                 <SkeletonPulse className="w-24 h-4" />
                 <SkeletonPulse className="w-full h-10" />
               </div>
-              
+
               {/* Form field skeleton 3 */}
               <div className="space-y-2">
                 <SkeletonPulse className="w-16 h-4" />
                 <SkeletonPulse className="w-full h-24" />
               </div>
-              
+
               {/* Additional content skeleton */}
               <div className="space-y-3 mt-6">
                 <SkeletonPulse className="w-full h-3" />
@@ -260,4 +257,3 @@ export default function SideModalLoading() {
     </div>
   );
 }
-
