@@ -1,9 +1,7 @@
 "use client";
 import { selectedRecord } from "@/app/RecoilState/store/recordsAtom";
 import { itemStepMetaData, onStepEnum } from "@repo/types";
-import { FaRegCircle } from "react-icons/fa6";
-import { GoCheckCircleFill } from "react-icons/go";
-import { IoTimerOutline } from "react-icons/io5";
+import { CheckCircle2, Circle, Timer } from "lucide-react";
 import { useRecoilValue } from "recoil";
 
 export default function StepsStatus({
@@ -19,19 +17,21 @@ export default function StepsStatus({
   panelIndex: onStepEnum;
   stepIndex: number;
   setIndex: (index: number) => void;
-  checkValidity: (onStepEnum: onStepEnum, panelIndex?: onStepEnum) => boolean;
+  checkValidity: (onStepEnum: onStepEnum, panelIndex: onStepEnum) => boolean;
 }) {
   const selectedRecordId = useRecoilValue(selectedRecord);
   if (!step) return;
   const isClickable =
     unique === onStepEnum.TEST
-      ? checkValidity(onStepEnum.SETUP) &&
-        checkValidity(onStepEnum.CONFIGURATION)
+      ? checkValidity(onStepEnum.SETUP, stepIndex) &&
+        checkValidity(onStepEnum.CONFIGURATION, stepIndex)
       : unique === onStepEnum.CONFIGURATION
-        ? checkValidity(onStepEnum.SETUP)
+        ? checkValidity(onStepEnum.SETUP, stepIndex)
         : true;
   const validity =
-    unique === onStepEnum.TEST ? !!selectedRecordId : checkValidity(unique);
+    unique === onStepEnum.TEST && stepIndex === 0
+      ? !!selectedRecordId
+      : checkValidity(unique, stepIndex);
   return (
     <div className="flex flex-col items-center">
       {" "}
@@ -43,14 +43,14 @@ export default function StepsStatus({
       >
         <span className="text-xs font-semibold">{step.stepName}</span>
         {step.completed === null && unique == panelIndex ? (
-          <FaRegCircle />
+          <Circle />
         ) : step.completed === null && unique !== panelIndex ? (
           <div className="text-black/30 ">
-            <IoTimerOutline size={18} />
+            <Timer size={18} />
           </div>
         ) : validity ? (
           <div className="text-green-700">
-            <GoCheckCircleFill size={15} />
+            <CheckCircle2 size={15} />
           </div>
         ) : (
           <div className="text-black  font-extrabold bg-yellow-400 px-[7px] py-[1px] border-0 rounded-full ">
@@ -64,4 +64,3 @@ export default function StepsStatus({
     </div>
   );
 }
-<FaRegCircle />;

@@ -78,7 +78,10 @@ export function ZapCard({
               className="w-7 h-7 border p-0.5 rounded-sm border-black/20"
             />
           ) : (
-            <div className="flex items-center justify-center w-7 h-7 border p-0.5 rounded-sm border-black/20 bg-gray-200">
+            <div
+              key={i}
+              className="flex items-center justify-center w-7 h-7 border p-0.5 rounded-sm border-black/20 "
+            >
               <BoltIcon />{" "}
             </div>
           ),

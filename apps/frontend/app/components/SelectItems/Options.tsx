@@ -1,7 +1,8 @@
 "use client";
 import useItems from "@/app/hooks/useItems";
 import { topApps, products, extendedItems } from "./TempItems";
-import OptionList from "./OptionList";
+import dynamic from "next/dynamic";
+const OptionList = dynamic(() => import("./OptionList"), { ssr: false });
 
 export default function Options({
   type,

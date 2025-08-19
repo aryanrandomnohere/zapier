@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 
 export default function FolderRows({
   folders,
+  refetchFolders,
 }: {
   folders: folderInterface[];
+  refetchFolders: () => void;
 }) {
   const router = useRouter();
   return (
@@ -38,10 +40,10 @@ export default function FolderRows({
             </td>
 
             <td className="py-4 px-6">
-              <div className="flex items-center justify-start gap-1">
-                <UserPlusIcon className="w-4 h-4" />
+              <div className="flex items-center justify-center gap-1">
                 <FolderRowAction
                   folder={folder}
+                  refetchFolders={refetchFolders}
                   trigger={
                     <span className="text-lg font-extrabold text-[#280200] hover:cursor-pointer p-1 transition-all rounded duration-150 hover:bg-black/5">
                       ⋮

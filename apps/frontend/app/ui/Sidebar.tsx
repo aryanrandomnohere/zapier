@@ -106,7 +106,9 @@ const Sidebar: React.FC = () => {
                   d="M12 2C7.53 2 3.74 4.95 2.46 9h2.13a8.058 8.058 0 0 1 4.54-4.46L6.78 11H2.05C1.46 16.89 6.1 22 12 22c5.51 0 10-4.49 10-10S17.51 2 12 2Zm-.56 2.03c.57-.04.57-.04 1.09 0L15.07 11H8.9l2.54-6.97ZM4.07 13h2.71l2.35 6.46c-2.7-1.05-4.69-3.5-5.06-6.46Zm7.37 6.97L8.9 13h6.17l-2.54 6.97c-.51.04-.52.04-1.09 0Zm3.41-.5L17.2 13h2.73c-.37 2.97-2.38 5.43-5.08 6.47ZM17.2 11l-2.35-6.47A8.007 8.007 0 0 1 19.93 11H17.2Z"
                 />
               </svg>
-              {isOpen && <span className="text-sm">Discover</span>}
+              {isOpen && (
+                <span className="text-sm cursor-not-allowed">Discover</span>
+              )}
             </Link>
           </div>
 
@@ -138,7 +140,7 @@ const Sidebar: React.FC = () => {
             <Link
               href="" // Assuming no specific page for Tables, Interfaces, Chatbots, Canvas yet
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 min-w-full p-1 text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 min-w-full p-1 text-gray-300 cursor-not-allowed hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >
@@ -154,7 +156,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-not-allowed text-gray-300 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >
@@ -170,7 +172,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-not-allowed text-gray-300 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >
@@ -194,7 +196,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-not-allowed text-gray-300 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >
@@ -219,7 +221,7 @@ const Sidebar: React.FC = () => {
             <Link
               href="" // Path to simulate active state for Agents
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-not-allowed text-gray-300 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/assets/agents") ? "bg-gray-100" : ""}`}
             >
@@ -260,7 +262,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-not-allowed text-gray-300 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/assets/connections") ? "bg-gray-100" : ""}`}
             >
@@ -276,7 +278,7 @@ const Sidebar: React.FC = () => {
             <Link
               href=""
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-not-allowed text-gray-300 hover:bg-gray-100 rounded transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               } ${isActive("/app/history") ? "bg-gray-100" : ""}`}
             >
@@ -291,7 +293,7 @@ const Sidebar: React.FC = () => {
 
             <button
               // Removed redundant ${isOpen ? "px-2.5": ""} here
-              className={`flex items-center gap-3 p-1 cursor-pointer text-gray-700 hover:bg-gray-100 rounded w-full transition-colors duration-150 ${
+              className={`flex items-center gap-3 p-1 cursor-not-allowed text-gray-300 hover:bg-gray-100 rounded w-full transition-colors duration-150 ${
                 isOpen ? "" : "justify-center"
               }`}
             >

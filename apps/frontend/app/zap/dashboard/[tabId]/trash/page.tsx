@@ -1,26 +1,17 @@
 "use client";
+import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 import ZapTable from "@/app/components/ZapDashboard/ZapTable";
 import { LoadingSpinner } from "@/app/components/ui/LoadingSpinner";
+import useDeletedZap from "@/app/hooks/useDeletedZap";
+import useZaps from "@/app/hooks/useZaps";
 import { zapInterface } from "@repo/types";
 import axios from "axios";
 import { FolderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function TrashPage() {
-  const [deletedZaps, setDeletedZaps] = useState<zapInterface[]>([]);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    const fetchDeletedZaps = async () => {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/trash`,
-        { withCredentials: true },
-      );
-      setDeletedZaps(response.data.data);
-      setLoading(false);
-    };
-    fetchDeletedZaps();
-  }, []);
+  const { deletedZaps, loading, error, refetchDeletedZaps } = useDeletedZap();
+  console.log(deletedZaps);
   return (
     <div>
       {loading ? (
@@ -30,7 +21,13 @@ export default function TrashPage() {
           <FolderIcon className="w-8 h-8" /> Trash
         </h1>
       )}
-      <ZapTable zaps={deletedZaps} loading={loading} />
+      <RecoilContextProvider>
+        <ZapTable
+          zaps={deletedZaps}
+          loading={loading}
+          refetchZaps={refetchDeletedZaps}
+        />
+      </RecoilContextProvider>
     </div>
   );
 }

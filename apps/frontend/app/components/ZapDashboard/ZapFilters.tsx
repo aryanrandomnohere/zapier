@@ -30,7 +30,10 @@ interface Service {
   type: string;
 }
 
-const ZapFilters: React.FC = () => {
+const ZapFilters: React.FC<{
+  type?: "folders" | "zaps";
+  refetchZaps: () => void;
+}> = ({ type, refetchZaps }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
   const [search, setSearch] = useState("");
@@ -101,23 +104,19 @@ const ZapFilters: React.FC = () => {
     return numbers;
   };
 
-  const handleSetDefaultFilters = () => {
-    localStorage.setItem("filterIsOpen", filterIsOpen.toString());
-    localStorage.setItem("appFilter", appFilter);
-    localStorage.setItem("statusFilter", statusFilter);
-  };
-  console.log(Apps);
-
   return (
     <div className="bg-[#FFFDF9] h-fit  flex flex-col ">
       {/* Header with Zaps title and action buttons */}
       <div className="flex items-center justify-between py-4 border-b border-gray-200">
-        <h1 className="text-2xl font-semibold text-gray-900">Zaps</h1>
+        <h1 className="text-2xl font-semibold text-gray-900">
+          {type === "folders" ? "Folders" : "Zaps"}
+        </h1>
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/zap/dashboard/folders/trash")}
             className="flex hover:cursor-pointer items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md border border-gray-200"
           >
+            //@ts-ignore gemini
             <Trash2 size={16} />
             Trash
           </button>
@@ -158,7 +157,7 @@ const ZapFilters: React.FC = () => {
           </div>
 
           {/* Dropdown */}
-          <DropDownMenu
+          {/* <DropDownMenu
             type="normal"
             menuClassName="bg-[#FFFDF9]"
             trigger={
@@ -179,26 +178,30 @@ const ZapFilters: React.FC = () => {
                 Shared with me
               </label>
             </div>
-          </DropDownMenu>
+          </DropDownMenu> */}
 
           {/* Filters */}
-          <button
+          {/* {type !== "folders" && <button
             onClick={() => setFilterIsOpen(!filterIsOpen)}
             className={`flex hover:cursor-pointer items-center gap-2 border border-[#DAD6CE] rounded px-3 py-1.5 text-sm text-[#3C3C3C] hover:bg-[#F9F7F3] bg-[#FFFCF7] ${filterIsOpen ? "bg-blue-300/20 text-blue-700" : "bg-[#FFFCF7]"}`}
           >
             <Filter size={14} />
             Filters
-          </button>
+          </button>} */}
 
           {/* Action buttons */}
           <div className="flex gap-1 bg-[#ECE9DF] rounded p-1">
-            <button
+            {/* <button
               onClick={handleSetDefaultFilters}
               className="p-1 hover:bg-[#E1DED3] rounded hover:cursor-pointer"
             >
               <BookmarkIcon />
-            </button>
-            <button className="p-1 hover:bg-[#E1DED3] rounded hover:cursor-pointer">
+            </button> */}
+            <button
+              onClick={() => refetchZaps()}
+              className="p-1 hover:bg-[#E1DED3] rounded hover:cursor-pointer"
+            >
+              //@ts-ignore gemini
               <RefreshIcon />
             </button>
           </div>
@@ -206,6 +209,7 @@ const ZapFilters: React.FC = () => {
 
         {/* Search */}
         <div className="relative">
+          //@ts-ignore gemini
           <Search
             size={14}
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -219,11 +223,12 @@ const ZapFilters: React.FC = () => {
           />
         </div>
       </div>
-
-      {filterIsOpen && (
+      {/* 
+      {filterIsOpen && type !== "folders" && (
         <div className="flex gap-2">
           <div className="flex p-1 gap-2 flex-col">
             <DropDownMenu
+              
               type="normal"
               menuClassName="bg-[#FFFDF9]"
               trigger={
@@ -298,7 +303,7 @@ const ZapFilters: React.FC = () => {
             </DropDownMenu>
           </div>{" "}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

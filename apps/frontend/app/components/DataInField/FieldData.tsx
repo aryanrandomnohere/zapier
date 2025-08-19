@@ -15,6 +15,8 @@ import {
   skippedAction,
 } from "@/app/RecoilState/store/actionAtom";
 import { metadata } from "@/app/layout";
+import toast from "react-hot-toast";
+import ToastNotification from "@/app/ui/Notification";
 
 interface DataInFormProps {
   fields?: Field[];
@@ -145,8 +147,18 @@ const DataInForm: React.FC<DataInFormProps> = ({
         withCredentials: true,
       },
     );
-    console.log(response);
     if (response.data.success) {
+      setTabId(tabIdEnum.DATA_OUT);
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="success"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">Tested successfully</div>
+        </ToastNotification>
+      ));
       setZapState({
         ...zapState,
         selectedItems: zapState.selectedItems.map((item) => {
@@ -162,10 +174,23 @@ const DataInForm: React.FC<DataInFormProps> = ({
       });
       setTested(true);
     }
+    if (response.data.success === false) {
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="error"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">Test failed</div>
+        </ToastNotification>
+      ));
+    }
 
     setTested(true);
   };
-  if (metaData.index === null || metaData.index === undefined) return;
+  if (!metaData || metaData.index === null || metaData.index === undefined)
+    return;
 
   return (
     <div className="w-full flex flex-col  max-w-md">
@@ -185,11 +210,15 @@ const DataInForm: React.FC<DataInFormProps> = ({
         <div
           className="mb-0 ml-2 mx-3"
           onClick={() => {
-            console.log("clicked data out");
-            setTabId(tabIdEnum.DATA_OUT);
+            //@ts-ignore gemini
+            if (zapState.selectedItems[metaData.index]?.dataOut) {
+              setTabId(tabIdEnum.DATA_OUT);
+            }
           }}
         >
-          <h2 className="text-xs font-medium text-gray-900 mb-2 pl-3 cursor-pointer ">
+          <h2
+            className={`text-xs ${zapState.selectedItems[metaData.index]?.dataOut ? "text-gray-900 cursor-pointer" : "text-gray-500 cursor-not-allowed"}  font-medium text-gray-900 mb-2 pl-3 `}
+          >
             Data Out
           </h2>
           {tabId === tabIdEnum.DATA_OUT && (
@@ -203,6 +232,7 @@ const DataInForm: React.FC<DataInFormProps> = ({
           {/* Search Bar */}
           <div className="p-4 border-b border-gray-200">
             <div className="relative">
+              {/* @ts-ignore gemini */}
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
@@ -292,7 +322,7 @@ const DataInForm: React.FC<DataInFormProps> = ({
                 {tested ? "Retest step" : "Test step"}
                 <div className="text-xs text-gray-500">
                   {" "}
-                  {!selectedRecordId ? " (No Record Selected)" : ""}
+                  {!selectedRecordId ? " (Trigger not tested)" : ""}
                 </div>
               </button>
             ) : !zapState?.selectedItems[metaData?.index]?.dataOut ? (
@@ -320,6 +350,11 @@ const DataInForm: React.FC<DataInFormProps> = ({
                   className={`  ${!zapState?.selectedItems[metaData?.index]?.dataOut ? "w-1/2" : "w-full"} ${!checkPublishability() ? "bg-gray-400 cursor-not-allowed" : "bg-blue-700 "} text-white hover:bg-blue-800" py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer`}
                 >
                   Publish
+                  {!checkPublishability() && (
+                    <div className="text-xs text-gray-500">
+                      (Complete all fields)
+                    </div>
+                  )}
                 </button>
               )
             ) : !zapState?.selectedItems[metaData?.index]?.dataOut ? (
@@ -331,7 +366,7 @@ const DataInForm: React.FC<DataInFormProps> = ({
                 Test step
                 <div className="text-xs text-gray-500">
                   {" "}
-                  {!selectedRecordId ? " (No Record Selected)" : ""}
+                  {!selectedRecordId ? " (Trigger not tested)" : ""}
                 </div>
               </button>
             ) : (

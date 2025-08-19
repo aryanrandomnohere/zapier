@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import CancelButton from "../buttons/CancelButton";
 import SaveButton from "../buttons/SaveButton";
+import toast from "react-hot-toast";
+import ToastNotification from "@/app/ui/Notification";
 
 interface RenameZapModalProps {
   zapId: string | number;
@@ -40,7 +42,31 @@ export default function RenameZapModal({
       console.log("Rename success:", res.data);
       onRenameSuccess?.(newName);
       onClose();
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="success"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">
+            <div>{currentName}</div>
+            <div>has been renamed to </div>
+            <div>{newName}</div>
+          </div>
+        </ToastNotification>
+      ));
     } catch (err) {
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="error"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">Error renaming zap</div>
+        </ToastNotification>
+      ));
       console.error("Rename error:", err);
     } finally {
       setIsSaving(false);
@@ -48,10 +74,7 @@ export default function RenameZapModal({
   }
 
   return (
-    <form
-      className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center p-4"
-      onSubmit={handleSave}
-    >
+    <div className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center p-4">
       <div
         className="bg-white rounded shadow-xl w-full max-w-md p-6"
         onClick={(e) => e.stopPropagation()}
@@ -82,6 +105,6 @@ export default function RenameZapModal({
           </SaveButton>
         </div>
       </div>
-    </form>
+    </div>
   );
 }

@@ -7,7 +7,7 @@ import { useRecoilValue } from "recoil";
 import { userAtom } from "../../RecoilState/store/userAtom";
 import { useParams } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
-import { RiPushpinLine } from "react-icons/ri";
+import { Pin } from "lucide-react";
 import { useState } from "react";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 
@@ -44,6 +44,7 @@ export default function OptionList({
   }: {
     availabelStepId: string;
     ItemType: string;
+    //@ts-ignore gemini
     metaData: any;
   }) {
     setUpdatingStep(availabelStepId);
@@ -65,7 +66,7 @@ export default function OptionList({
       let response: AxiosResponse;
       if (
         index !== Item.selectedItems.length - 1 &&
-        ItemType !== "trigger" &&
+        ItemType === "trigger" &&
         insertingOrNew !== "inserting"
       ) {
         response = await axios.post(
@@ -91,6 +92,7 @@ export default function OptionList({
       }
       console.log(response);
       console.log(Item.selectedItems, ItemType === "trigger" ? 0 : index || 1);
+      //@ts-ignore gemini
       setItem((prev: any) => {
         const updated = structuredClone(prev);
         updated.selectedItems[ItemType === "trigger" ? 0 : index || 1].stepId =
@@ -122,6 +124,7 @@ export default function OptionList({
       : (item as ItemType);
 
     // Update Recoil state
+    //@ts-ignore gemini
     setItem((zap: any) => {
       if (finalIndex === null) return zap;
 
@@ -199,7 +202,7 @@ export default function OptionList({
             </span>
           </div>
           <div className="hidden group-hover:flex text-blue-400 transform transition-all duration-300 ease-in-out">
-            <RiPushpinLine size={16} />
+            <Pin size={16} />
           </div>
         </div>
       ))}

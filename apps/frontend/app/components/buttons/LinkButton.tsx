@@ -16,7 +16,7 @@ export default function LinkButton({
   return (
     <Link
       href={href || ""}
-      className=" flex lg: items-center rounded hover:bg-stone-200/50 text-sm p-2 transform transition-all duration-100 cursor-pointer"
+      className=" flex lg:items-center rounded hover:bg-stone-200/50 text-sm p-2 transform transition-all duration-100 cursor-pointer"
       onClick={onClick}
     >
       {children}

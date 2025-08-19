@@ -1,6 +1,5 @@
 import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 import { Metadata } from "next";
-import QueryProvider from "@/app/RecoilState/QueryProvider";
 import LeftBar from "./LeftBar";
 import TopBar from "./TopBar";
 
@@ -13,17 +12,15 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen h-screen">
-      <QueryProvider>
-        <RecoilContextProvider>
-          <div className="flex flex-col min-h-screen h-screen">
-            <TopBar />
-            <div className="flex h-full">
-              <LeftBar />
-              <div className="w-full rounded-md min-h-full">{children}</div>
-            </div>
+      <RecoilContextProvider>
+        <div className="flex flex-col min-h-screen h-screen">
+          <TopBar />
+          <div className="flex h-full">
+            <LeftBar />
+            <div className="w-full rounded-md min-h-full">{children}</div>
           </div>
-        </RecoilContextProvider>
-      </QueryProvider>
+        </div>
+      </RecoilContextProvider>
     </div>
   );
 }

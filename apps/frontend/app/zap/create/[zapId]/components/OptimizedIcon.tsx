@@ -1,21 +1,8 @@
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import type { LucideProps } from "lucide-react";
-import type { IconType } from "react-icons";
 
 // Dynamic icon loader function
-type IconLibrary =
-  | "lucide"
-  | "bs"
-  | "ai"
-  | "go"
-  | "lia"
-  | "io5"
-  | "rx"
-  | "io"
-  | "md"
-  | "fi"
-  | "lu"
-  | "pi";
+type IconLibrary = "lucide";
 
 // Icon cache to prevent reloading
 const iconCache = new Map<string, React.ComponentType<any>>();
@@ -30,9 +17,6 @@ const PRELOAD_ICONS: Array<{ library: IconLibrary; name: string }> = [
   { library: "lucide", name: "Clock" },
   { library: "lucide", name: "Settings" },
   { library: "lucide", name: "Play" },
-  { library: "rx", name: "RxCross2" },
-  { library: "io5", name: "IoHomeOutline" },
-  { library: "io5", name: "IoApps" },
 ];
 
 const loadIcon = async (
@@ -63,61 +47,6 @@ const loadIcon = async (
     switch (library) {
       case "lucide": {
         const mod = await import("lucide-react");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "bs": {
-        const mod = await import("react-icons/bs");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "ai": {
-        const mod = await import("react-icons/ai");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "go": {
-        const mod = await import("react-icons/go");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "lia": {
-        const mod = await import("react-icons/lia");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "io5": {
-        const mod = await import("react-icons/io5");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "rx": {
-        const mod = await import("react-icons/rx");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "io": {
-        const mod = await import("react-icons/io");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "md": {
-        const mod = await import("react-icons/md");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "fi": {
-        const mod = await import("react-icons/fi");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "lu": {
-        const mod = await import("react-icons/lu");
-        iconComponent = (mod as any)[iconName];
-        break;
-      }
-      case "pi": {
-        const mod = await import("react-icons/pi");
         iconComponent = (mod as any)[iconName];
         break;
       }

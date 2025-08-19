@@ -31,7 +31,7 @@ export default function ZapDetails() {
   }, [requiredZap?.folder.name]);
 
   return (
-    <div className="bg-opacity-50 flex items-start justify-center px-1 pl-3 z-40">
+    <div className="bg-opacity-50 flex items-start justify-center px-1 pl-3 z-[1000] min-h-[30rem] ">
       <div className="rounded-lg w-full max-w-xs max-h-[90vh] overflow-hidden">
         {/* Header */}
         <div className="px-1 py-4 border-b border-gray-200 relative">
@@ -65,7 +65,7 @@ export default function ZapDetails() {
               </button>
 
               {showFolderDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-[1000] max-h-60 overflow-y-auto">
                   {folderOptions?.map((option) => (
                     <button
                       key={option.id}

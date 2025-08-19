@@ -62,7 +62,11 @@ export default function ZapDashboardClient() {
     <>
       <RecoilContextProvider>
         <ZapFilters refetchZaps={refetchZaps} />
-        <ZapTable zaps={currentZaps} loading={loading} refetchZaps={refetchZaps} />{" "}
+        <ZapTable
+          zaps={currentZaps}
+          loading={loading}
+          refetchZaps={refetchZaps}
+        />{" "}
       </RecoilContextProvider>
 
       {/* ✅ use paginated data */}
@@ -94,8 +98,8 @@ export default function ZapDashboardClient() {
                 pageNum === currentPage
                   ? "bg-blue-600 text-white"
                   : pageNum === "..."
-                  ? "text-gray-400 cursor-default"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "text-gray-400 cursor-default"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               {pageNum}

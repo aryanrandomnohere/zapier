@@ -7,7 +7,7 @@ export default function Input({
 }: {
   label: string;
   placeholder: string;
-  onChange: any;
+  onChange: (value: string) => void;
   value: string;
   type?: string;
 }) {

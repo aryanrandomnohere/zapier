@@ -13,6 +13,7 @@ import {
 import DropDownOptions from "@/app/ui/DropDownOptions";
 import { BoltIcon, FolderIcon } from "@/app/components/ZapDashboard/FolderIcon";
 import CreateFolderSimple from "@/app/components/ZapDashboard/CreateFolderSimple";
+import useFolders from "@/app/hooks/useFolders";
 
 export default function CreateButton() {
   const router = useRouter();
@@ -21,9 +22,12 @@ export default function CreateButton() {
   const [showFolderModal, setShowFolderModal] = useState(false);
   const { tabId, id } = useParams();
   const [pageLoading, setPageLoading] = useState(false);
+  const { refetchFolders } = useFolders();
+
   useEffect(() => {
     async function handleLoadSession() {
       const session = await getSession();
+      // @ts-ignore
       setUser(session?.user);
     }
     if (!user) handleLoadSession();
@@ -67,6 +71,7 @@ export default function CreateButton() {
         },
       );
       console.log(response.data);
+      refetchFolders();
       router.push(`/zap/dashboard/folder/${response.data.data.id}`);
     } catch (error) {
       console.error("Error creating folder:", error);

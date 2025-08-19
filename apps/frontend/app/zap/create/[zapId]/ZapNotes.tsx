@@ -7,6 +7,8 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 import { BoltIcon } from "@/app/components/ZapDashboard/FolderIcon";
+
+import dynamic from "next/dynamic";
 import {
   extendedStepNotesAtom,
   selectedNotesAtom,

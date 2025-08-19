@@ -44,13 +44,11 @@ export const insertAction = asyncHandler(async (req: extendedRequest, res) => {
       configuration: parsedBody.actionConfiguration,
     },
   });
-  res
-    .status(200)
-    .json({
-      success: true,
-      msg: "Action inserted",
-      stepId: newInsertedAction.id,
-    });
+  res.status(200).json({
+    success: true,
+    msg: "Action inserted",
+    stepId: newInsertedAction.id,
+  });
 });
 
 export const dublicateAction = asyncHandler(
@@ -181,13 +179,11 @@ export const pasteToReplaceAction = asyncHandler(
         configuration: actionToReplace.configuration || {},
       },
     });
-    res
-      .status(200)
-      .json({
-        success: true,
-        msg: "Action pasted to replace",
-        stepId: pastedAction.id,
-      });
+    res.status(200).json({
+      success: true,
+      msg: "Action pasted to replace",
+      stepId: pastedAction.id,
+    });
   },
 );
 
@@ -195,7 +191,7 @@ export const deleteAction = asyncHandler(async (req: extendedRequest, res) => {
   const { actionId } = req.params;
   const userId = req.userId;
   if (!actionId || !userId) return;
-
+  console.log(actionId);
   const deletedAction = await prisma.action.delete({
     where: {
       id: actionId,
@@ -268,13 +264,11 @@ export const testAction = asyncHandler(async (req: extendedRequest, res) => {
     errorResponse({ res, msg: error || "Action Test Failed", status: 400 });
   }
   if (success) {
-    res
-      .status(200)
-      .json({
-        success: true,
-        msg: "Action Tested Successfully",
-        dataOut: dataOut || {},
-        sortingOrder: currentAction.sortingOrder,
-      });
+    res.status(200).json({
+      success: true,
+      msg: "Action Tested Successfully",
+      dataOut: dataOut || {},
+      sortingOrder: currentAction.sortingOrder,
+    });
   }
 });

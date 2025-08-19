@@ -1,8 +1,8 @@
-import { AiOutlineAppstoreAdd } from "react-icons/ai";
+import { AppWindow } from "lucide-react";
 import LinkButton from "../buttons/LinkButton";
 import PrimaryButton from "../buttons/PrimaryButton";
 import zap from "./zap.png";
-import { SlArrowDown } from "react-icons/sl";
+import { ArrowDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "../../api/auth/[...nextauth]/auth";
@@ -32,45 +32,53 @@ export default async function Navbar() {
           {/* <LinkButton size="small">
             Products{" "}
             <div className="ml-1.5 text-xs">
-              <SlArrowDown />
+              <ArrowDown />
             </div>
           </LinkButton>
           <LinkButton size="small">
             Solutions{" "}
             <div className="ml-1.5 text-xs">
               {" "}
-              <SlArrowDown />{" "}
+              <ArrowDown />{" "}
             </div>
           </LinkButton>
           <LinkButton size="small">
             Resources{" "}
             <div className="ml-1.5 text-xs">
               {" "}
-              <SlArrowDown />{" "}
+              <ArrowDown />{" "}
             </div>
           </LinkButton>
           <LinkButton size="small">Enterprise</LinkButton>
           <LinkButton size="small">Pricing</LinkButton> */}
         </div>
         <div className="flex items-center gap-4">
-          <LinkButton href="https://zapier.com/apps" size="small">
+          <LinkButton href="" size="small">
             <div className="text-xl mr-1">
               {" "}
-              <AiOutlineAppstoreAdd />
+              {/* @ts-ignore */}
+              <AppWindow />
             </div>
             Explore Apps
           </LinkButton>
+          {/* @ts-ignore */}
           <LinkButton size="small">Contact sales</LinkButton>
-          <Link className="flex items-center gap-4" href={"sign-up"}>
-            {!isAuthenticated && <LinkButton size="small">Log in</LinkButton>}
+          {!isAuthenticated && (
+            <LinkButton href={"/sign-up"} size="small">
+              Log in
+            </LinkButton>
+          )}
+          <LinkButton href={"/sign-up"} size="small">
+            {/* @ts-ignore */}
             {!isAuthenticated && (
               <PrimaryButton size="small">Sign up</PrimaryButton>
             )}
-          </Link>
+          </LinkButton>
 
           {isAuthenticated && (
             <RecoilContextProvider>
               <UserAction
+                // @ts-ignore
                 name={session?.user?.name[0].toLocaleUpperCase() || "UR"}
               />
             </RecoilContextProvider>

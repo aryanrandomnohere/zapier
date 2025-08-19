@@ -1,10 +1,14 @@
 import { zapOperations } from "@repo/types";
-import LinkedAssets from "./LinkedAssets";
-import ZapRunDetails from "./ZapRunDetails";
-import ZapNotes from "./ZapNotes";
-import ZapHistory from "./ZapHistory";
-import AdvancedSettings from "./AdvancedSettings";
-import ZapDetails from "./ZapDetails";
+
+import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
+import { lazy, Suspense } from "react";
+import LeftBarSkeleton from "@/app/components/ui/SuspenseLoaders/LeftBarSkeleton";
+const LinkedAssets = lazy(() => import("./LinkedAssets"));
+const ZapNotes = lazy(() => import("./ZapNotes"));
+const ZapHistory = lazy(() => import("./ZapHistory"));
+const AdvancedSettings = lazy(() => import("./AdvancedSettings"));
+const ZapDetails = lazy(() => import("./ZapDetails"));
+const ZapRunDetails = lazy(() => import("./ZapRunDetails"));
 
 export default function CurrentOperation({
   operation,
@@ -13,21 +17,47 @@ export default function CurrentOperation({
 }) {
   switch (operation) {
     case zapOperations.LINKEDASSETS:
-      return <LinkedAssets />;
+      return (
+        <Suspense fallback={<LeftBarSkeleton />}>
+          <LinkedAssets />
+        </Suspense>
+      );
     case zapOperations.ADVANCEDSETTINGS:
-      return <AdvancedSettings />;
+      return (
+        <Suspense fallback={<LeftBarSkeleton />}>
+          <AdvancedSettings />
+        </Suspense>
+      );
     case zapOperations.NOTES:
-      return <ZapNotes />;
+      return (
+        <Suspense fallback={<LeftBarSkeleton />}>
+          <ZapNotes />
+        </Suspense>
+      );
     case zapOperations.STATUS:
       return <div>Status</div>;
     case zapOperations.CHANGEHISTORY:
-      return <ZapHistory />;
+      return (
+        <Suspense fallback={<LeftBarSkeleton />}>
+          <ZapHistory />
+        </Suspense>
+      );
     case zapOperations.ZAPDETAILS:
-      return <ZapDetails />;
+      return (
+        <Suspense fallback={<LeftBarSkeleton />}>
+          <RecoilContextProvider>
+            <ZapDetails />
+          </RecoilContextProvider>
+        </Suspense>
+      );
     // case zapOperations.VERSIONS:
     //   return <div>Versions</div>;
     case zapOperations.ZAPRUN:
-      return <ZapRunDetails />;
+      return (
+        <Suspense fallback={<LeftBarSkeleton />}>
+          <ZapRunDetails />
+        </Suspense>
+      );
     default:
       <>Error</>;
   }

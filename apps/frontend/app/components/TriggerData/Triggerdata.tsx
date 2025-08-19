@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Search } from "lucide-react";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { FaSquare } from "react-icons/fa6";
+import { ArrowRight, Square } from "lucide-react";
 import { itemTestMetaData, RecordMetadata } from "@repo/types";
 import { RecordItem } from "./RecordItem";
 import Task from "../BuiltInTriggers/Task";
@@ -93,8 +92,7 @@ const TriggerData = ({
       const response = !appId ? await fetchRecords() : await testTrigger();
 
       setRecords(response.records);
-      if (!records)
-        setSelectedRecordId(response.records[response.records.length - 1].id);
+      setSelectedRecordId(response.records[response.records.length - 1].id);
     } catch (err) {
       setError("Failed to fetch records. Please try again.");
       console.error("API Error:", err);
@@ -138,10 +136,10 @@ const TriggerData = ({
                   alt="logo"
                   className="w-8 h-8 p-1 border border-black/10 rounded"
                 />
-                <IoIosArrowRoundForward size={24} />
-                <div className="text-red-500 rounded p-1 border border-black/10">
+                <ArrowRight size={24} />
+                <div className=" rounded p-1 border border-black/10">
                   {" "}
-                  <FaSquare size={22} />
+                  <Square color="red" size={22} />
                 </div>
               </div>
             </div>

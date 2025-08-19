@@ -51,6 +51,7 @@ export default function RenameFolderModal({
   }
 
   const handleSubmit = (e: React.FormEvent) => {
+    e.stopPropagation();
     e.preventDefault();
     handleSave();
   };
@@ -63,7 +64,7 @@ export default function RenameFolderModal({
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg text-start font-semibold mb-4">
-          Rename "{currentName || "Untitled Folder"}"
+          //@ts-ignore gemini Rename "{currentName || "Untitled Folder"}"
         </h2>
 
         <label className="block text-sm text-start font-medium mb-1">

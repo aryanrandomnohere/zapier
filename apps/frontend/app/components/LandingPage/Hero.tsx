@@ -1,7 +1,6 @@
 import hero from "./homepage-hero.png";
-import { GoArrowRight } from "react-icons/go";
+import { ArrowRight } from "lucide-react";
 import PrimaryButton from "../buttons/PrimaryButton";
-import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 export default function Hero() {
   return (
@@ -15,8 +14,7 @@ export default function Hero() {
               <div className="py-0.5 px-2.5 rounded-2xl border border-black ">
                 New
               </div>{" "}
-              Zapier Enterpris is here{" "}
-              <GoArrowRight className="text-lg " />{" "}
+              Zapier Enterpris is here <ArrowRight className="text-lg " />{" "}
             </div>
             <div className="text-6xl font-extrabold mr-6">
               Ops run on Zapier—seamless workflows, no IT bottlenecks.
@@ -38,7 +36,11 @@ export default function Hero() {
                 <div
                   className={`flex justify-center items-center "text-xl px-10 py-2.5 h-full gap-3  font-semibold  border text-black border-black/50 hover:cursor-pointer rounded-full hover:border-black hover:border-2 `}
                 >
-                  <FcGoogle className="text-xl" /> Start free with Google
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/300/300221.png "
+                    className="w-6 h-6"
+                  />{" "}
+                  Start free with Google
                 </div>
               </div>{" "}
             </div>

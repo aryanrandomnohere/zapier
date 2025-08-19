@@ -1,11 +1,11 @@
 "use client";
-import { RowProps } from "@repo/types";
+import { zapInterface } from "@repo/types";
 import { useState } from "react";
 import { ToggleButton } from "../buttons/ToggleButton";
 import { formatDate } from "@/app/utils/formatDate";
 import { BoltIcon, FolderIcon } from "./FolderIcon";
 import { AppIcon } from "./AppIcon";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 import { useRecoilState } from "recoil";
 import { getSession } from "next-auth/react";
@@ -13,9 +13,19 @@ import axios from "axios";
 import RowAction from "./RowAction";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import Avatar from "../Avatar";
-import { folderInterface } from "./RowAction";
 import useFolders from "@/app/hooks/useFolders";
-export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
+import ToastNotification from "@/app/ui/Notification";
+import toast from "react-hot-toast";
+export interface RowProps {
+  zap: zapInterface;
+  handleZapClick: (id: string) => void;
+  refetchZaps: () => void;
+}
+export const Row: React.FC<RowProps> = ({
+  zap,
+  handleZapClick,
+  refetchZaps,
+}) => {
   const { folders } = useFolders();
   console.log(folders);
   const [activeZap, setActiveZap] = useState<boolean>(zap.published);
@@ -23,13 +33,27 @@ export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
   const [publishingLoading, setPublishingLoading] = useState(false);
   const router = useRouter();
   const [pageLoading, setPageLoading] = useState(false);
+  const pathname = usePathname();
+  const isTrash = pathname.includes("trash");
   async function handlePublishing() {
     setPublishingLoading(true);
-    let userId = user?.userId;
+    let userId: string | undefined = user?.userId
+      ? String(user.userId)
+      : undefined;
     if (!user) {
       const session = await getSession();
-      setUser(session?.user);
-      userId = session?.user.userId;
+      setUser(
+        session?.user
+          ? {
+              ...session.user,
+              name: session.user.name || "",
+              email: session.user.email || "",
+              image: session.user.image || "",
+              userId: String(session.user.userId),
+            }
+          : undefined,
+      );
+      userId = session?.user.userId ? String(session.user.userId) : undefined;
     }
     try {
       if (activeZap) {
@@ -41,6 +65,19 @@ export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
           },
         );
         if (response.data.success) setActiveZap(false);
+        else
+          toast.custom((t) => (
+            <ToastNotification
+              t={t}
+              type="error"
+              actions={[]}
+              onClose={() => toast.dismiss(t.id)}
+            >
+              <div className="flex gap-1 items-center">
+                Error stopping zap {zap.name}
+              </div>
+            </ToastNotification>
+          ));
       } else {
         const response = await axios.put(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/start/${zap.id}`,
@@ -119,7 +156,7 @@ export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
         <div className="flex items-center gap-2">
           <FolderIcon />
           <span className="text-base text-gray-700">
-            {zap.folder.name} (Personal)
+            {isTrash ? "Trash" : zap.folder.name + "(Personal)"}
           </span>
         </div>
       </td>
@@ -156,6 +193,7 @@ export const Row: React.FC<RowProps> = ({ zap, handleZapClick }) => {
               zapId={zap.id}
               currentName={zap.name}
               changeOwnerDisabled={true}
+              refetchZaps={refetchZaps}
               trigger={
                 <span className="text-lg font-extrabold text-[#280200] hover:cursor-pointer p-1 transition-all rounded duration-150 hover:bg-black/5">
                   ⋮

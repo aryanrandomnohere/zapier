@@ -16,8 +16,8 @@ export default function ZapierIntroCard() {
           Get started with Zapier
         </h2>
         <p className="text-xs text-gray-600 mt-2">
-          We'll help you adopt an automation mindset and guide you through the
-          necessary steps to get things up and running.
+          We&apos;ll help you adopt an automation mindset and guide you through
+          the necessary steps to get things up and running.
         </p>
       </div>
 

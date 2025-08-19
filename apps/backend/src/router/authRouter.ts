@@ -26,7 +26,9 @@ authRouter.post(
     try {
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
-        return res.status(400).json({ msg: "User already exists" });
+        return res
+          .status(200)
+          .json({ msg: "User already exists", success: false });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -63,7 +65,9 @@ authRouter.post(
       res.status(200).json({ token, user: user });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ msg: "Signup failed", error: err });
+      res
+        .status(500)
+        .json({ msg: "Signup failed", error: err, success: false });
     }
   }),
 );
@@ -78,11 +82,15 @@ authRouter.post("/login", async (req, res) => {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user)
-      return res.status(400).json({ msg: "Invalid email or password" });
+      return res
+        .status(400)
+        .json({ msg: "Invalid email or password", success: false });
 
     const validPassword = await bcrypt.compare(password, user.password!);
     if (!validPassword)
-      return res.status(400).json({ msg: "Invalid email or password" });
+      return res
+        .status(400)
+        .json({ msg: "Invalid email or password", success: false });
 
     const token = signToken({
       userId: user.id,
@@ -93,7 +101,7 @@ authRouter.post("/login", async (req, res) => {
     res.status(200).json({ token, user: user });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: "Login failed", error: err });
+    res.status(500).json({ msg: "Login failed", error: err, success: false });
   }
 });
 
@@ -140,16 +148,18 @@ authRouter.post(
         email: user.email,
         zapmail: user.zapmail,
       });
-
       res.status(200).json({
         user: user,
         zapmail: user.zapmail,
         email: user.email,
         token: token,
+        success: true,
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ msg: "Google login failed" });
+      return res
+        .status(500)
+        .json({ msg: "Google login failed", success: false });
     }
   }),
 );
@@ -157,16 +167,35 @@ authRouter.post(
 authRouter.post("/set-cookie", async (req, res) => {
   try {
     const { token } = req.body;
+
     console.log("Setting cookie", token);
     res.cookie("auth_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
     });
-    res.status(200).json({ msg: "Cookie set" });
+    res.status(200).json({ msg: "Cookie set", success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: "Cookie set failed" });
+    res.status(500).json({ msg: "Cookie set failed", success: false });
+  }
+});
+
+authRouter.post("/logout", async (req, res) => {
+  try {
+    console.log("Logging out");
+    res.clearCookie("auth_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+    res.status(200).json({ msg: "Cookie cleared", success: true });
+
+    res.status(200).json({ msg: "Cookie cleared", success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Cookie clear failed", success: false });
   }
 });
 

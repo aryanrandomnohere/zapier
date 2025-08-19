@@ -14,6 +14,8 @@ import DeleteZapModal from "@/app/components/ZapDashboard/DeleteZapModal";
 import MoveZapModal from "@/app/components/ZapDashboard/MoveZapModal";
 import { usePathname, useRouter } from "next/navigation";
 import DuplicateZapModal from "./DublicateZapModal";
+import ToastNotification from "@/app/ui/Notification";
+import toast from "react-hot-toast";
 
 export interface folderInterface {
   id: number;
@@ -33,6 +35,7 @@ interface RowActionProps {
   currentName: string;
   currentFolderId: number;
   folders: folderInterface[];
+  refetchZaps: () => void;
   onRenameSuccess?: (newName: string) => void;
   onDeleteSuccess?: () => void;
   onMoveSuccess?: (folderId: number) => void;
@@ -51,6 +54,7 @@ export default function RowAction({
   currentName,
   currentFolderId,
   folders,
+  refetchZaps,
   onRenameSuccess,
   onDeleteSuccess,
   onMoveSuccess,
@@ -68,9 +72,6 @@ export default function RowAction({
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const pathname = usePathname();
   const isTrash = pathname.includes("trash");
-  const router = useRouter();
-  console.log(isTrash, pathname);
-  console.log(renameDisabled || isTrash);
 
   return (
     <>
@@ -180,6 +181,7 @@ export default function RowAction({
           onClose={() => setShowRenameModal(false)}
           onRenameSuccess={(newName) => {
             onRenameSuccess?.(newName);
+            refetchZaps();
             setShowRenameModal(false);
           }}
         />
@@ -193,6 +195,7 @@ export default function RowAction({
           onClose={() => setShowDeleteModal(false)}
           onDeleteSuccess={() => {
             onDeleteSuccess?.();
+            refetchZaps();
             setShowDeleteModal(false);
           }}
         />
@@ -203,11 +206,18 @@ export default function RowAction({
         <MoveZapModal
           zapId={zapId}
           zapName={currentName}
-          currentFolderId={currentFolderId}
+          folderName={
+            isTrash
+              ? "Trash"
+              : folders.find((folder) => folder.id === currentFolderId)?.name ||
+                ""
+          }
+          currentFolderId={isTrash ? 0 : currentFolderId}
           folders={folders}
           onClose={() => setShowMoveModal(false)}
           onMoveSuccess={(folderId) => {
             onMoveSuccess?.(folderId);
+            refetchZaps();
             setShowMoveModal(false);
           }}
         />
@@ -221,6 +231,7 @@ export default function RowAction({
           onClose={() => setShowDuplicateModal(false)}
           onDuplicateSuccess={(newZapId) => {
             onDuplicateSuccess?.(newZapId);
+            refetchZaps();
             setShowDuplicateModal(false);
           }}
         />

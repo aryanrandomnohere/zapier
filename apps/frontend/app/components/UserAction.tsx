@@ -1,12 +1,12 @@
 "use client";
 import DropDownMenu from "../ui/DropDownMenu";
-import Cookies from "js-cookie";
 import Avatar from "./Avatar";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userAtom } from "../RecoilState/store/userAtom";
 import { getSession, signOut } from "next-auth/react";
 import { Check, LogOut, Settings } from "lucide-react";
+import axios from "axios";
 
 export default function UserAction({ name }: { name: string }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,11 +15,46 @@ export default function UserAction({ name }: { name: string }) {
     async function handleUser() {
       if (!user) {
         const session = await getSession();
+        //@ts-ignore gemini
         setUser(session?.user);
       }
     }
     handleUser();
   }, [user]);
+
+  const clearAllCookies = () => {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    }
+  };
+
+  const handleSignOut = async () => {
+    console.log("Logging out");
+    // Clear all client-side cookies
+    clearAllCookies();
+
+    // Call backend logout endpoint
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/logout`,
+      );
+      console.log("Logout response", response);
+      if (response.status === 200) {
+        await signOut(); // NextAuth signOut
+      } else {
+        // toast.error("Logout failed"); // Assuming 'toast' is available, otherwise remove or define it
+        console.error("Logout failed on backend");
+      }
+    } catch (error) {
+      console.error("Error during backend logout:", error);
+      // toast.error("Logout failed due to network error");
+    }
+  };
+
   return (
     <div>
       {" "}
@@ -44,21 +79,21 @@ export default function UserAction({ name }: { name: string }) {
               </div>
             </div>
             <div className=" ml-auto">
+              //@ts-ignore gemini
               <Check className="w-4 h-4" />
             </div>
           </div>
           <div className="flex gap-2 font-normal  items-center border-t border-black/10 pt-2 hover:cursor-pointer hover:bg-blue-500/10 rounded p-2">
             {" "}
+            //@ts-ignore gemini
             <Settings /> Settings
           </div>
           <div
-            onClick={() => {
-              signOut();
-              Cookies.remove("auth_token");
-            }}
+            onClick={handleSignOut}
             className="flex gap-2 font-normal items-center hover:cursor-pointer hover:bg-red-500/10 rounded p-2"
           >
             {" "}
+            //@ts-ignore gemini
             <LogOut /> Logout
           </div>
         </div>

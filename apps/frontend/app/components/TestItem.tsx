@@ -4,8 +4,7 @@ import React, { useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { onStep, selectedItemMetaData } from "../RecoilState/currentZap";
 import { zapCreateState } from "../RecoilState/store/zapCreate";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { FaSquare } from "react-icons/fa6";
+import { ArrowRight, Square } from "lucide-react";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { useParams } from "next/navigation";
@@ -46,11 +45,23 @@ export default function TestItem({
       let triggerSaved = false;
       if (!metadata || metadata.index === null || metadata.index === undefined)
         return;
-      let userId = user?.userId;
+      let userId: string | undefined = user?.userId
+        ? String(user.userId)
+        : undefined;
       if (!user) {
         const session = await getSession();
-        setUser(session?.user);
-        userId = session?.user.userId;
+        setUser(
+          session?.user
+            ? {
+                ...session.user,
+                name: session.user.name || "",
+                email: session.user.email || "",
+                image: session.user.image || "",
+                userId: String(session.user.userId),
+              }
+            : undefined,
+        );
+        userId = session?.user.userId ? String(session.user.userId) : undefined;
       }
       const body =
         type == "trigger"
@@ -97,9 +108,9 @@ export default function TestItem({
               {" "}
               <div className="flex items-center">
                 <div className="text-red-500 rounded p-1 border border-black/10">
-                  <FaSquare size={30} />
+                  <Square size={22} />
                 </div>
-                <IoIosArrowRoundForward size={24} />
+                <ArrowRight size={24} />
                 <img
                   src={zap.selectedItems[metadata.index].imagePath}
                   alt="logo"
@@ -134,7 +145,7 @@ export default function TestItem({
             handlePublish={handlePublish}
             fields={
               zap.selectedItems[metadata.index]?.metadata?.optionConfiguration[
-                //@ts-ignore
+                //@ts-ignore gemini
                 zap.selectedItems[metadata.index].metadata?.fields[0].fieldValue
               ].configurationStep.fields
             }

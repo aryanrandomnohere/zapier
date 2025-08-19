@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
-
+import { getSession } from "next-auth/react";
+import axios from "axios";
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl;
 
@@ -20,6 +21,7 @@ export async function middleware(request: NextRequest) {
   });
 
   // If no token and not already on sign-up or sign-in page → redirect
+
   if (!token) {
     const isPublicPath =
       url.pathname === "/" ||

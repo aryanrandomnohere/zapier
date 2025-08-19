@@ -12,16 +12,19 @@ import { useRecoilValue } from "recoil";
 interface ZapRowsProps {
   zaps?: zapInterface[];
   loading: boolean;
+  refetchZaps: () => void;
 }
 
 export const ZapRows: React.FC<ZapRowsProps> = ({
   zaps: propZaps,
   loading,
+  refetchZaps,
 }) => {
   const zaps = propZaps;
   const statusFilter = useRecoilValue(statusFilterAtom);
   const appFilter = useRecoilValue(appFilterAtom);
-  console.log(statusFilter, appFilter, zaps);
+  console.log("Filters Updated", statusFilter, appFilter, zaps);
+
   const filteredZaps = zaps
     ?.filter(
       (zap) =>
@@ -70,7 +73,12 @@ export const ZapRows: React.FC<ZapRowsProps> = ({
       <RecoilContextProvider>
         {" "}
         {filteredZaps?.map((zap) => (
-          <Row key={zap.id} zap={zap} handleZapClick={handleZapClick} />
+          <Row
+            key={zap.id}
+            zap={zap}
+            handleZapClick={handleZapClick}
+            refetchZaps={refetchZaps}
+          />
         ))}
       </RecoilContextProvider>
     </tbody>

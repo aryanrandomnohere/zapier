@@ -40,12 +40,38 @@ export interface ZapHistoryItem {
 }
 
 export default function ZapHistory() {
-  const [history, setHistory] = useState<ZapHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [runsPerPage] = useState(10);
   const [dateFilter, setDateFilter] = useState("All time");
   const [statusFilter, setStatusFilter] = useState("All types");
+  const [history, setHistory] = useState<ZapHistoryItem[]>([]);
+  const filteredHistory = history.filter((h) => {
+    const statusMatch = statusFilter === "All types" || statusFilter === h.type;
+
+    const dateMatch = (() => {
+      if (dateFilter === "All time") return true;
+
+      const now = new Date();
+      const itemDate = new Date(h.createdAt);
+
+      switch (dateFilter) {
+        case "Last 24 hours":
+          return now.getTime() - itemDate.getTime() <= 24 * 60 * 60 * 1000;
+        case "Last 7 days":
+          return now.getTime() - itemDate.getTime() <= 7 * 24 * 60 * 60 * 1000;
+        case "Last 30 days":
+          return now.getTime() - itemDate.getTime() <= 30 * 24 * 60 * 60 * 1000;
+        case "Last 60 days":
+          return now.getTime() - itemDate.getTime() <= 60 * 24 * 60 * 60 * 1000;
+        default:
+          // Handle specific date format like "6/6/2025"
+          return itemDate.toLocaleDateString() === dateFilter;
+      }
+    })();
+
+    return statusMatch && dateMatch;
+  });
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const { zapId } = useParams();
@@ -78,14 +104,14 @@ export default function ZapHistory() {
     },
   ];
 
-  const paginatedHistory = history.slice(
+  const paginatedHistory = filteredHistory.slice(
     (currentPage - 1) * runsPerPage,
     currentPage * runsPerPage,
   );
 
   // Generate pagination numbers
   const getPaginationNumbers = () => {
-    const totalPages = Math.ceil(history.length / runsPerPage);
+    const totalPages = Math.ceil(filteredHistory.length / runsPerPage);
     const numbers = [];
     const maxVisible = 5; // Show max 5 page numbers
 
@@ -125,7 +151,6 @@ export default function ZapHistory() {
 
   useEffect(() => {
     const fetchHistory = async () => {
-      console.log("Fetching history");
       setLoading(true);
       try {
         const res = await axios.get<ZapHistoryItem[]>(
@@ -134,7 +159,6 @@ export default function ZapHistory() {
             withCredentials: true,
           },
         );
-        console.log(res.data);
         setHistory(res.data);
       } catch (error) {
         console.error("Error fetching history", error);
@@ -184,11 +208,10 @@ export default function ZapHistory() {
           </label>
           <OptionDropdown
             trigger={
-              <div
-                onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                className="w-full px-4 py-2 border-2 border-blue-500 rounded-md text-xs bg-white text-left flex items-center justify-between hover:cursor-pointer"
-              >
-                <span>All types</span>
+              <div className="w-full px-4 py-2 border-2 border-blue-500 rounded-md text-xs bg-white text-left flex items-center justify-between hover:cursor-pointer">
+                <span>
+                  {statusOptions.find((o) => o.value === statusFilter)?.label}
+                </span>
                 <ChevronDown size={16} className="text-gray-500" />
               </div>
             }
@@ -262,7 +285,7 @@ export default function ZapHistory() {
                 </div>
 
                 {/* Pagination */}
-                {Math.ceil(history.length / runsPerPage) > 1 && (
+                {Math.ceil(filteredHistory.length / runsPerPage) > 1 && (
                   <div className="flex items-center justify-center gap-1 pt-4">
                     {getPaginationNumbers().map((pageNum, index) => (
                       <button

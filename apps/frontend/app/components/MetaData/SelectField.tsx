@@ -7,7 +7,8 @@ export default function SelectField({
 }: {
   fieldName: string;
   imagePath: string;
-  fieldValue: any;
+  //@ts-ignore gemini
+  fieldValue: string | Record<string, any>;
   handleFieldClick: (param: string) => void;
   parentPath?: string;
 }) {

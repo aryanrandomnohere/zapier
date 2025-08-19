@@ -127,7 +127,7 @@ export default function AdvancedSettings() {
           </div>
 
           {/* Path execution settings */}
-          <div className="border-2 border-blue-500 rounded-lg p-4 bg-blue-50">
+          {/* <div className="border-2 border-blue-500 rounded-lg p-4 bg-blue-50">
             <div className="flex items-center gap-2 mb-2">
               <h3 className="text-sm font-semibold text-gray-900">
                 Path execution settings
@@ -167,14 +167,14 @@ export default function AdvancedSettings() {
                   <span className="italic text-gray-500">(new)</span>
                 </span>
               </label>
-            </div>
+            </div> */}
 
-            <p className="text-xs text-gray-600">
+          {/* <p className="text-xs text-gray-600">
               This option will be available till September 30, 2025. After this
               date all Zaps will move to Sequential execution and this setting
               will be removed.
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

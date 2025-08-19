@@ -3,6 +3,8 @@ import CancelButton from "../buttons/CancelButton";
 import SaveButton from "../buttons/SaveButton";
 import axios from "axios";
 import { useState } from "react";
+import ToastNotification from "@/app/ui/Notification";
+import toast from "react-hot-toast";
 
 interface DeleteZapModalProps {
   zapId: string | number;
@@ -28,7 +30,31 @@ export default function DeleteZapModal({
       );
       onDeleteSuccess?.();
       onClose();
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="success"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">
+            Zap {currentName} has been deleted
+          </div>
+        </ToastNotification>
+      ));
     } catch (err) {
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="error"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">
+            Error deleting zap {currentName}
+          </div>
+        </ToastNotification>
+      ));
       console.error("Delete error:", err);
     } finally {
       setIsDeleting(false);

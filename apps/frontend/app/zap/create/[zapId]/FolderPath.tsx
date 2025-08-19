@@ -1,12 +1,13 @@
 "use client";
-import { Folder } from "lucide-react";
-import { IoIosArrowDown } from "react-icons/io";
+import { Folder, ChevronDown } from "lucide-react";
 import { useParams } from "next/navigation";
 import useZaps from "@/app/hooks/useZaps";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import ZapActions from "./ZapActions";
 import { useRouter } from "next/navigation";
+import ToastNotification from "@/app/ui/Notification";
+import toast from "react-hot-toast";
 
 export default function ZapHeader() {
   const { zapId } = useParams();
@@ -46,40 +47,100 @@ export default function ZapHeader() {
       return;
     }
     if (newName) {
-      const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/rename/${zapId}`,
-        { newName },
+      try {
+        const response = await axios.put(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/rename/${zapId}`,
+          { newName },
+          {
+            withCredentials: true,
+          },
+        );
+        if (response.data.success) {
+          setIsRenaming(false);
+        }
+        toast.custom((t) => (
+          <ToastNotification
+            t={t}
+            type="success"
+            actions={[]}
+            onClose={() => toast.dismiss(t.id)}
+          >
+            <div className="flex gap-1 items-center">
+              Zap renamed to {newName} from {requiredZap?.name}
+            </div>
+          </ToastNotification>
+        ));
+      } catch (err: any) {
+        console.error("Rename error:", err.response.data.message);
+        toast.custom((t) => (
+          <ToastNotification
+            t={t}
+            type="error"
+            actions={[]}
+            onClose={() => toast.dismiss(t.id)}
+          >
+            <div className="flex gap-1 items-center">
+              Error renaming zap {newName}
+            </div>
+          </ToastNotification>
+        ));
+      }
+    }
+  }
+  async function handleDublicate() {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/dublicate`,
+        { zapId },
         {
           withCredentials: true,
         },
       );
-      console.log(response);
-    }
-    setIsRenaming(false);
-  }
-  async function handleDublicate() {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/dublicate`,
-      { zapId },
-      {
-        withCredentials: true,
-      },
-    );
-    if (response.data.success) {
-      router.push(`/zap/create/${response.data.data.zapId}`);
+      if (response.data.success) {
+        router.push(`/zap/create/${response.data.data.zapId}`);
+      }
+    } catch (err: any) {
+      console.error("Dublicate error:", err.response.data.message);
+      setIsRenaming(false);
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="error"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">
+            Error dublicating zap {newName}
+          </div>
+        </ToastNotification>
+      ));
     }
   }
   async function handleDelete() {
     try {
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${zapId}`,
-        { withCredentials: true },
-      );
-      if (response.data.success) {
-        router.push("/zap/dashboard");
+      if (prompt("Type 'confirm' to delete zap") === "confirm") {
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${zapId}`,
+          { withCredentials: true },
+        );
+        if (response.data.success) {
+          router.push("/zap/dashboard");
+        }
       }
-    } catch (err) {
-      console.error("Delete error:", err);
+    } catch (err: any) {
+      console.error("Delete error:", err.response.data.message);
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="error"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">
+            Error deleting zap {newName}
+          </div>
+        </ToastNotification>
+      ));
     }
   }
 
@@ -122,7 +183,7 @@ export default function ZapHeader() {
 
               {/* Optional dropdown */}
               <div className="text-white/50">
-                <IoIosArrowDown size={16} />
+                <ChevronDown size={16} />
               </div>
             </div>
           }

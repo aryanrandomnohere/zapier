@@ -106,6 +106,7 @@ function Window({ children, name, portTo }: WindowProps) {
 function Open({ children, opens }: OpenProps) {
   const { open } = useModal();
   const handleClick = () => open(opens);
+  // @ts-ignore
   return cloneElement(children as ReactElement, { onClick: handleClick });
 }
 

@@ -6,9 +6,11 @@ import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 export default function ZapTable({
   zaps,
   loading,
+  refetchZaps,
 }: {
   zaps: zapInterface[];
   loading: boolean;
+  refetchZaps: () => void;
 }) {
   return (
     <div className="bg-[#FFFDF9] border border-[#F3F0E8] rounded-lg">
@@ -46,7 +48,7 @@ export default function ZapTable({
         </thead>
         <RecoilContextProvider>
           {" "}
-          <ZapRows zaps={zaps} loading={loading} />
+          <ZapRows zaps={zaps} loading={loading} refetchZaps={refetchZaps} />
         </RecoilContextProvider>
       </table>
     </div>

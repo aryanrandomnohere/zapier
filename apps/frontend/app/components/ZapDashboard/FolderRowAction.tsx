@@ -19,6 +19,7 @@ import {
 interface FolderRowActionProps {
   trigger: ReactNode;
   folder: folderInterface;
+  refetchFolders: () => void;
   onRenameSuccess?: (newName: string) => void;
   onDeleteSuccess?: () => void;
 }
@@ -26,6 +27,7 @@ interface FolderRowActionProps {
 export default function FolderRowAction({
   trigger,
   folder,
+  refetchFolders,
   onRenameSuccess,
   onDeleteSuccess,
 }: FolderRowActionProps) {
@@ -87,6 +89,7 @@ export default function FolderRowAction({
           onClose={() => setShowRenameModal(false)}
           onRenameSuccess={(newName) => {
             onRenameSuccess?.(newName);
+            refetchFolders();
             setShowRenameModal(false);
           }}
         />
@@ -108,6 +111,7 @@ export default function FolderRowAction({
           onClose={() => setShowDeleteModal(false)}
           onDeleteSuccess={() => {
             onDeleteSuccess?.();
+            refetchFolders();
             setShowDeleteModal(false);
           }}
         />

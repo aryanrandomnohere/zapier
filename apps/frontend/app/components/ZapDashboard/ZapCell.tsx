@@ -1,11 +1,15 @@
-"use client";
 import { EllipsisVertical } from "lucide-react";
-import { BiSolidZap } from "react-icons/bi";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import Image from "next/image";
-import DropDownMenu from "@/app/ui/DropDownMenu";
-import CellActions from "./CellActions";
 import { ItemType } from "@repo/types";
+import dynamic from "next/dynamic";
+import { BoltIcon } from "./FolderIcon";
+
+const DropDownMenu = dynamic(() => import("@/app/ui/DropDownMenu"), {
+  ssr: false,
+});
+const CellActions = dynamic(() => import("./CellActions"), { ssr: false });
+
 export default function ZapCell({
   title,
   subtitle,
@@ -26,10 +30,7 @@ export default function ZapCell({
   setCopiedItem: (item: ItemType | null) => void;
 }) {
   return (
-    <div
-      className="flex flex-col gap-0 zap-cell"
-      onClick={() => SelectCell(order - 1)}
-    >
+    <div className="flex flex-col gap-0 zap-cell">
       <div
         className=" flex bg-white w-full hover:cursor-pointer px-2 transition-all transform duration-200 hover:shadow-xl min-w-[20rem] py-2  border-black rounded-xl focus-within:border-blue-600"
         style={{
@@ -38,6 +39,7 @@ export default function ZapCell({
           borderSpacing: "11px",
         }}
         tabIndex={0}
+        onClick={() => SelectCell(order - 1)}
       >
         <div className=" flex flex-col pl-2 gap-1.5">
           <div className="flex justify-between items-center min-w-[18rem]">
@@ -56,8 +58,8 @@ export default function ZapCell({
                   <LoadingSpinner size="sm" />
                 </div>
               ) : (
-                <div className="text-white p-0.5 bg-black  rounded-full">
-                  <BiSolidZap />
+                <div className="text-white rounded-full">
+                  <BoltIcon />
                 </div>
               )}
               <div className="font-bold text-sm"> {title}</div>{" "}

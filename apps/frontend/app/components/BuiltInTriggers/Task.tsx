@@ -32,11 +32,25 @@ export default function Task({
     async function handleFetch() {
       setLoading(true);
       try {
-        let userId = user?.userId;
+        let userId: string | undefined = user?.userId
+          ? String(user.userId)
+          : undefined;
         if (!user) {
           const session = await getSession();
-          setUser(session?.user);
-          userId = session?.user.userId;
+          setUser(
+            session?.user
+              ? {
+                  ...session.user,
+                  name: session.user.name || "",
+                  email: session.user.email || "",
+                  image: session.user.image || "",
+                  userId: String(session.user.userId),
+                }
+              : undefined,
+          );
+          userId = session?.user.userId
+            ? String(session.user.userId)
+            : undefined;
         }
         if (!userId) {
           console.log("Session does not exists returning");

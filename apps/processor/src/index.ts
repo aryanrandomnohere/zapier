@@ -36,7 +36,6 @@ async function main() {
       for (const trigger of pollingTriggers) {
         try {
           const record = await RunTrigger(trigger, "polling");
-          console.log(record);
           if (!record) {
             console.log("No new record polled");
             await prisma.trigger.update({

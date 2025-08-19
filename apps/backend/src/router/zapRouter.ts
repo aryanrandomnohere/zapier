@@ -221,9 +221,33 @@ zapRouter.get(
 
 zapRouter.get(
   "/loadzap/:zapId",
-  asyncHandler(async (req: Request, res: Response) => {
+  asyncHandler(async (req: extendedRequest, res: Response) => {
     try {
       const zapId = Number(req.params.zapId);
+      const userId = Number(req.userId);
+      if (!userId || !zapId) {
+        res.status(400).json({ msg: "Invalid Inputs", success: false });
+        return;
+      }
+      const requiredZap = await prisma.zap.findUnique({
+        where: {
+          id: zapId,
+        },
+        select: {
+          userId: true,
+          triggerId: true,
+        },
+      });
+      if (requiredZap?.userId !== userId) {
+        res
+          .status(200)
+          .json({
+            msg: "You are not authorized to access this zap",
+            success: false,
+            unauthorized: true,
+          });
+        return;
+      }
       let finalZap = [];
       const trigger = await prisma.trigger.findUnique({
         where: {
@@ -546,11 +570,23 @@ zapRouter.put(
       where: { id: zapId },
       select: {
         folderId: true,
+        deleted: true,
       },
     });
     if (!zap) return errorResponse({ res, msg: "Zap not found" });
-    if (zap.folderId === folderId)
+    if (zap.folderId === folderId) {
+      if (zap.deleted === true) {
+        await prisma.zap.update({
+          where: { id: zapId },
+          data: { deleted: false },
+        });
+        return successResponse({
+          msg: "Zap Shifted From Trash Successfully",
+          res,
+        });
+      }
       return errorResponse({ res, msg: "Zap already in this folder" });
+    }
     await prisma.zap.update({
       where: { id: zapId },
       data: { folderId, deleted: false },
@@ -567,6 +603,7 @@ zapRouter.delete(
     await prisma.zap.update({
       where: { id: zapId },
       data: {
+        published: false,
         deleted: true,
         deletedAt: new Date(),
         deletedBy: Number(req.userId),

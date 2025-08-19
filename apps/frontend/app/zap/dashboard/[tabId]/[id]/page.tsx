@@ -13,8 +13,8 @@ import { useRouter } from "next/navigation";
 export default function page() {
   const router = useRouter();
   const { id } = useParams();
-  const { zaps, loading: zapsLoading } = useZaps();
-  const { folders, isLoading: foldersLoading } = useFolders();
+  const { zaps, loading: zapsLoading, refetchZaps } = useZaps();
+  const { folders, loading: foldersLoading } = useFolders();
   const folder = folders?.find((folder) => folder.id === Number(id));
   const filteredZaps = zaps?.filter((zap) => zap.folder.id === Number(id));
   return (
@@ -39,7 +39,7 @@ export default function page() {
         </div>
       </div>
       <RecoilContextProvider>
-        <ZapFilters />
+        <ZapFilters type="zaps" refetchZaps={refetchZaps} />
       </RecoilContextProvider>
       {foldersLoading ? (
         <LoadingSpinner />
@@ -49,7 +49,13 @@ export default function page() {
         </h1>
       )}
 
-      <ZapTable zaps={filteredZaps} loading={zapsLoading} />
+      <RecoilContextProvider>
+        <ZapTable
+          zaps={filteredZaps}
+          loading={zapsLoading}
+          refetchZaps={refetchZaps}
+        />
+      </RecoilContextProvider>
     </div>
   );
 }

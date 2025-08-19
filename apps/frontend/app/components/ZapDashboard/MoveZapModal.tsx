@@ -4,7 +4,9 @@ import { Search, Folder, ChevronRight } from "lucide-react";
 import axios from "axios";
 import CancelButton from "../buttons/CancelButton";
 import SaveButton from "../buttons/SaveButton";
-
+import ToastNotification from "@/app/ui/Notification";
+import toast from "react-hot-toast";
+import useZaps from "@/app/hooks/useZaps";
 export interface folderInterface {
   id: number;
   name: string;
@@ -20,6 +22,7 @@ export interface folderInterface {
 interface MoveZapModalProps {
   zapId: string | number;
   zapName: string;
+  folderName: string;
   currentFolderId: number;
   folders: folderInterface[];
   onClose: () => void;
@@ -29,6 +32,7 @@ interface MoveZapModalProps {
 export default function MoveZapModal({
   zapId,
   zapName,
+  folderName,
   currentFolderId,
   folders,
   onClose,
@@ -38,7 +42,7 @@ export default function MoveZapModal({
     useState<number>(currentFolderId);
   const [filterText, setFilterText] = useState("");
   const [isMoving, setIsMoving] = useState(false);
-
+  const { refetchZaps } = useZaps();
   // Filter folders based on search text
   const filteredFolders = folders.filter((folder) =>
     folder.name.toLowerCase().includes(filterText.toLowerCase()),
@@ -47,6 +51,7 @@ export default function MoveZapModal({
   async function handleMove() {
     if (selectedFolderId === currentFolderId) {
       onClose();
+      console.log("Selected folder is the same as the current folder");
       return;
     }
 
@@ -63,8 +68,44 @@ export default function MoveZapModal({
       console.log("Move success:", res.data);
       onMoveSuccess?.(selectedFolderId);
       onClose();
-    } catch (err) {
-      console.error("Move error:", err);
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="success"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">
+            //@ts-ignore gemini Zap {zapName} has been moved from{" "}
+            <div className="text-blue-500  underline min-w-fit ">
+              {folderName}
+            </div>{" "}
+            to{" "}
+            <div className=" text-blue-500 underline min-w-fit ">
+              {folders.find((folder) => folder.id === selectedFolderId)?.name}
+            </div>
+          </div>
+        </ToastNotification>
+      ));
+      refetchZaps();
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        toast.custom((t) => (
+          <ToastNotification
+            t={t}
+            type="error"
+            actions={[]}
+            onClose={() => toast.dismiss(t.id)}
+          >
+            <div className="flex gap-1 items-center">
+              Error moving zap {zapName}
+            </div>
+          </ToastNotification>
+        ));
+        console.error("Move error:", err.response?.data?.message);
+      } else {
+        console.error("An unexpected error occurred:", err);
+      }
     } finally {
       setIsMoving(false);
     }

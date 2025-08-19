@@ -1,9 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { BsHouseDoor, BsStars } from "react-icons/bs";
-import { AiOutlineAppstoreAdd } from "react-icons/ai";
-import { GoZap } from "react-icons/go";
-import { LiaToolsSolid } from "react-icons/lia";
+import { Home, Sparkles, AppWindow, Zap, Wrench } from "lucide-react";
 interface FilterOption {
   id: string;
   label: string;
@@ -17,27 +14,27 @@ const FilterItems: React.FC = () => {
     {
       id: "home",
       label: "",
-      icon: <BsHouseDoor />,
+      icon: <Home size={16} />,
     },
     {
       id: "apps",
       label: "Apps",
-      icon: <AiOutlineAppstoreAdd />,
+      icon: <AppWindow size={16} />,
     },
     {
       id: "zapier-products",
       label: "Zapier products",
-      icon: <GoZap />,
+      icon: <Zap size={16} />,
     },
     {
       id: "built-in-tools",
       label: "Built-in tools",
-      icon: <LiaToolsSolid />,
+      icon: <Wrench size={16} />,
     },
     {
       id: "ai",
       label: "AI",
-      icon: <BsStars />,
+      icon: <Sparkles size={16} />,
     },
   ];
 

@@ -1,4 +1,5 @@
 "use client";
+import { BoltIcon } from "@/app/components/ZapDashboard/FolderIcon";
 import {
   CheckCircle,
   XCircle,
@@ -10,6 +11,7 @@ import {
   ToggleLeft,
   RefreshCcw,
   UserCheck,
+  Pause,
 } from "lucide-react";
 
 type ZapRunIconsProps = {
@@ -39,6 +41,18 @@ export default function ZapRunIcons({ icon, className }: ZapRunIconsProps) {
       return <RefreshCcw className={className} size={16} />;
     case "swapowner": // Owner changed
       return <UserCheck className={className} size={16} />;
+    case "check": // Approval request sent
+      return <CheckCircle className={className} size={16} />;
+    case "cross": // Approval request denied
+      return <XCircle className={className} size={16} />;
+    case "pending": // Approval request approved
+      return <Clock className={className} size={16} />;
+    case "calender": // Approval request cancelled
+      return <Calendar className={className} size={16} />;
+    case "pause":
+      return <Pause className={className} size={16} />;
+    case "zap":
+      return <BoltIcon />;
     default:
       return null;
   }

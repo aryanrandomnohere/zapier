@@ -1,11 +1,6 @@
 import { zapCreateState } from "@/app/RecoilState/store/zapCreate";
 import axios from "axios";
-import {
-  Copy,
-  Link,
-  MessageCircleCodeIcon,
-  MessageSquareCode,
-} from "lucide-react";
+import { Copy, Link, MessageSquareCode } from "lucide-react";
 import { Trash } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -17,7 +12,11 @@ import {
   leftbarIsOpenAtom,
   selectedNotesAtom,
 } from "@/app/RecoilState/store/leftbarAtom";
-
+import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
+const ToastNotification = dynamic(() => import("@/app/ui/Notification"), {
+  ssr: false,
+});
 export default function CellActions({
   index,
   copiedItem,
@@ -39,55 +38,109 @@ export default function CellActions({
       e.stopPropagation();
       setReallyDelete(true);
     } else {
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/delete/${zapState.selectedItems[index - 1].stepId}`,
-        { withCredentials: true },
-      );
+      try {
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/delete/${zapState.selectedItems[index - 1].stepId}`,
+          { withCredentials: true },
+        );
 
-      if (response.data.success) {
-        setZapState((prev) => {
-          const updatedItems = [...prev.selectedItems];
-          updatedItems.splice(index - 1, 1); // remove the item at index - 1
-          return { ...prev, selectedItems: updatedItems };
-        });
+        if (response.data.success) {
+          setZapState((prev) => {
+            const updatedItems = [...prev.selectedItems];
+            updatedItems.splice(index - 1, 1); // remove the item at index - 1
+            return { ...prev, selectedItems: updatedItems };
+          });
+          toast.custom((t) => (
+            <ToastNotification
+              t={t}
+              type="success"
+              actions={[]}
+              onClose={() => toast.dismiss(t.id)}
+            >
+              <div className="flex gap-1 items-center">
+                Zap has been deleted
+              </div>
+            </ToastNotification>
+          ));
+        } //@ts-ignore gemini
+      } catch (err: any) {
+        console.error("Delete error:", err.response.data.message);
+        toast.custom((t) => (
+          <ToastNotification
+            t={t}
+            type="error"
+            actions={[]}
+            onClose={() => toast.dismiss(t.id)}
+          >
+            <div className="flex gap-1 items-center">
+              Error deleting zap {zapState.selectedItems[index - 1].name}
+            </div>
+          </ToastNotification>
+        ));
+      } finally {
+        setReallyDelete(false);
       }
     }
   };
   const handleDuplicate = async () => {
     if (index === 1) return;
-    if (!zapState?.selectedItems[index - 1]?.metadata) {
+    try {
+      if (!zapState?.selectedItems[index - 1]?.metadata) {
+        setZapState((prev) => {
+          const newAction = { ...prev.selectedItems[index - 1] };
+          const updatedItems = [...prev.selectedItems];
+          updatedItems.splice(index, 0, newAction);
+
+          return { ...prev, selectedItems: updatedItems };
+        });
+
+        return;
+      }
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/dublicate`,
+        {
+          dublicateId: zapState.selectedItems[index - 1].stepId,
+          zapId: Number(zapId),
+        },
+        { withCredentials: true },
+      );
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="success"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">Zap has been duplicated</div>
+        </ToastNotification>
+      ));
       setZapState((prev) => {
-        const newAction = { ...prev.selectedItems[index - 1] };
+        const newAction = { ...prev.selectedItems[index - 1] }; // clone the one at index-1
+        newAction.stepId = response.data.data.stepId;
+
+        // clone array (don’t mutate prev directly)
         const updatedItems = [...prev.selectedItems];
         updatedItems.splice(index, 0, newAction);
 
         return { ...prev, selectedItems: updatedItems };
       });
-
-      return;
+    } catch (err: any) {
+      //@ts-ignore gemini
+      console.error("Duplicate error:", err.response.data.message);
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="error"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">
+            Error duplicating zap {zapState.selectedItems[index - 1].name}
+          </div>
+        </ToastNotification>
+      ));
     }
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/dublicate`,
-      {
-        dublicateId: zapState.selectedItems[index - 1].stepId,
-        zapId: Number(zapId),
-      },
-      { withCredentials: true },
-    );
-
-    setZapState((prev) => {
-      const newAction = { ...prev.selectedItems[index - 1] }; // clone the one at index-1
-      newAction.stepId = response.data.data.stepId;
-
-      // clone array (don’t mutate prev directly)
-      const updatedItems = [...prev.selectedItems];
-      updatedItems.splice(index, 0, newAction); // insert at index
-
-      return { ...prev, selectedItems: updatedItems };
-    });
   };
-
-  console.log(copiedItem);
   return (
     <div className="flex flex-col w-full justify-center items-center">
       <button
@@ -105,6 +158,18 @@ export default function CellActions({
       {/* Change owner */}
       <button
         onClick={() => {
+          toast.custom((t) => (
+            <ToastNotification
+              t={t}
+              type="success"
+              actions={[]}
+              onClose={() => toast.dismiss(t.id)}
+            >
+              <div className="flex gap-1 items-center">
+                Zap Has Been Copied To Clipboard
+              </div>
+            </ToastNotification>
+          ));
           setCopiedItem(zapState.selectedItems[index - 1]);
           console.log(zapState.selectedItems[index - 1], index - 1);
         }}
@@ -130,6 +195,18 @@ export default function CellActions({
               { withCredentials: true },
             );
             if (response.data.success) {
+              toast.custom((t) => (
+                <ToastNotification
+                  t={t}
+                  type="success"
+                  actions={[]}
+                  onClose={() => toast.dismiss(t.id)}
+                >
+                  <div className="flex gap-1 items-center">
+                    Zap has been pasted below
+                  </div>
+                </ToastNotification>
+              ));
               setZapState((prev) => {
                 const updatedItems = [...prev.selectedItems];
                 updatedItems.splice(index, 0, {
@@ -158,39 +235,72 @@ export default function CellActions({
       <button
         onClick={async () => {
           if (copiedItem) {
-            const response = await axios.post(
-              `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/paste-to-replace`,
-              {
-                zapId: Number(zapId),
-                actionId: zapState.selectedItems[index - 1].stepId,
-                index: index - 1,
-                actionToReplaceWithId: copiedItem.stepId,
-              },
-              { withCredentials: true },
-            );
-            if (response.data.success) {
-              setZapState((prev) => {
-                const updatedItems = [...prev.selectedItems];
-                updatedItems[index - 1] = {
-                  ...copiedItem,
-                  stepId: response.data.stepId,
-                };
-                console.log(updatedItems);
-                return { ...prev, selectedItems: updatedItems };
-              });
+            try {
+              const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${index === 1 ? "triggers" : "actions"}/paste-to-replace`,
+                {
+                  zapId: Number(zapId),
+                  actionId: zapState.selectedItems[index - 1].stepId,
+                  index: index - 1,
+                  actionToReplaceWithId: copiedItem.stepId,
+                },
+                { withCredentials: true },
+              );
+              if (response.data.success) {
+                toast.custom((t) => (
+                  <ToastNotification
+                    t={t}
+                    type="success"
+                    actions={[]}
+                    onClose={() => toast.dismiss(t.id)}
+                  >
+                    <div className="flex gap-1 items-center">
+                      Zap has been pasted to replace
+                    </div>
+                  </ToastNotification>
+                ));
+                setZapState((prev) => {
+                  const updatedItems = [...prev.selectedItems];
+                  updatedItems[index - 1] = {
+                    ...copiedItem,
+                    stepId: response.data.stepId,
+                  };
+                  console.log(updatedItems);
+                  return { ...prev, selectedItems: updatedItems };
+                });
+              }
+              setCopiedItem(null);
+            } catch (err: any) {
+              //@ts-ignore gemini
+              console.error(
+                "Paste to replace error:",
+                err.response.data.message,
+              );
+              toast.custom((t) => (
+                <ToastNotification
+                  t={t}
+                  type="error"
+                  actions={[]}
+                  onClose={() => toast.dismiss(t.id)}
+                >
+                  <div className="flex gap-1 items-center">
+                    Error pasting to replace{" "}
+                    {zapState.selectedItems[index - 1].name}
+                  </div>
+                </ToastNotification>
+              ));
             }
-            setCopiedItem(null);
           }
         }}
         disabled={
           !copiedItem ||
           (copiedItem.type === "action" && index === 1) ||
-          (copiedItem.type === "trigger" && index === 0)
+          (copiedItem.type === "trigger" && index !== 1)
         }
         className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
           !copiedItem ||
           (copiedItem.type === "action" && index === 1) ||
-          (copiedItem.type === "trigger" && index === 0)
+          (copiedItem.type === "trigger" && index !== 1)
             ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
             : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
         }`}

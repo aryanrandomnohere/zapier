@@ -6,8 +6,7 @@ import {
 } from "@/app/RecoilState/store/recordsAtom";
 import { onStepEnum } from "@repo/types";
 import SelectField from "./SelectField";
-import { IoIosArrowRoundForward } from "react-icons/io";
-import { FaSquare } from "react-icons/fa6";
+import { ArrowRight, Square } from "lucide-react";
 import {
   configureStepDetails,
   onStep,
@@ -27,9 +26,13 @@ interface RecordMetadata {
 interface DittoComponentProps {
   currentValue: string;
   cursorPosition: number;
-  onFieldChange: (fieldNumber: number, value: string, stepEnum: any) => void;
+  onFieldChange: (
+    fieldNumber: number,
+    value: string,
+    stepEnum: onStepEnum,
+  ) => void;
   fieldNumber: number;
-  currentStep: onStepEnump;
+  currentStep: onStepEnum;
   fieldLabel: string;
   imagePath: string;
   setValue: (value: string) => void;
@@ -214,6 +217,7 @@ const DittoComponent: React.FC<DittoComponentProps> = ({
                   console.log(typeof fieldValue);
                   return (
                     <SelectField
+                      key={fieldName}
                       fieldName={fieldName}
                       fieldValue={fieldValue}
                       handleFieldClick={handleFieldClick}
@@ -242,10 +246,10 @@ const DittoComponent: React.FC<DittoComponentProps> = ({
             <div className="flex items-center gap-2 mb-3">
               {/* Left Icon (Square red) */}
               <div className="text-red-500 rounded p-1 border border-black/10">
-                <FaSquare size={20} />
+                <Square size={22} />
               </div>
               {/* Arrow */}
-              <IoIosArrowRoundForward size={20} className="text-gray-500" />
+              <ArrowRight size={20} className="text-gray-500" />
               {/* Right Icon (Webhook image) */}
               <img
                 src={imagePath}

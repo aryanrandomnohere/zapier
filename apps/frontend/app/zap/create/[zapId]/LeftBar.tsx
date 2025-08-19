@@ -8,14 +8,15 @@ import {
   Clock,
   Settings,
 } from "lucide-react";
-import { useState } from "react";
-import ZapOperations from "./ZapOperations";
-import CurrentOperation from "./CurrentOperation";
+// import ZapOperations from "./ZapOperations";
+// import CurrentOperation from "./CurrentOperation";
 import { useRecoilState } from "recoil";
 import {
   currentOperationAtom,
   leftbarIsOpenAtom,
 } from "@/app/RecoilState/store/leftbarAtom";
+import ZapOperations from "./ZapOperations";
+import CurrentOperation from "./CurrentOperation";
 
 export default function LeftBar() {
   const [isOpen, setIsOpen] = useRecoilState(leftbarIsOpenAtom);

@@ -1,11 +1,12 @@
 import React from "react";
 import JsonData from "./JsonData";
-import { TbPointFilled } from "react-icons/tb";
+import { Dot } from "lucide-react";
 
 export default function RecordJsonData({
   data,
   type,
 }: {
+  //@ts-ignore gemini
   data: Record<string, any>; // allow nested objects
   type?: string;
 }) {
@@ -18,7 +19,7 @@ export default function RecordJsonData({
               <div className="flex items-center">
                 {type && type === "nested" && (
                   <div className="text-sm">
-                    <TbPointFilled className="text-blue-500/40" />
+                    <Dot className="text-blue-500/40" />
                   </div>
                 )}
                 <JsonData label={label} />
@@ -31,10 +32,10 @@ export default function RecordJsonData({
           );
         }
         return (
-          <div className="flex items-center">
+          <div key={label} className="flex items-center">
             {type && type === "nested" && (
               <div className="text-sm">
-                <TbPointFilled className="text-blue-500/40" />
+                <Dot className="text-blue-500/40" />
               </div>
             )}
             <JsonData key={label} label={label} value={value} />{" "}

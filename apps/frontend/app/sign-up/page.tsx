@@ -1,4 +1,4 @@
-import { TbCircleCheckFilled } from "react-icons/tb";
+import { CheckCircle2 } from "lucide-react";
 import SingIn from "../components/Authentication/SingIn";
 
 export default function page() {
@@ -13,21 +13,24 @@ export default function page() {
           <div>
             {" "}
             <div className="flex gap-2 items-center text-sm font-medium">
-              <TbCircleCheckFilled className="text-green-700 text-xl " /> Easy
-              setup, no coding required
+              //@ts-ignore gemini
+              <CheckCircle2 className="text-green-700 text-xl " /> Easy setup,
+              no coding required
             </div>
           </div>
           <div>
             {" "}
             <div className="flex gap-2 items-center text-sm font-medium">
-              <TbCircleCheckFilled className="text-green-700 text-xl " /> Free
-              forever for core features
+              //@ts-ignore gemini
+              <CheckCircle2 className="text-green-700 text-xl " /> Free forever
+              for core features
             </div>
           </div>
           <div>
             {" "}
             <div className="flex gap-2 items-center text-sm font-medium">
-              <TbCircleCheckFilled className="text-green-700 text-xl " />
+              //@ts-ignore gemini
+              <CheckCircle2 className="text-green-700 text-xl " />
               14-day trial of premium features & apps
             </div>
           </div>

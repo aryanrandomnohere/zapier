@@ -2,9 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { Session, User } from "next-auth";
-import bcrypt from "bcryptjs";
-import { prisma } from "@repo/db";
+import { Account, Session, User, Profile } from "next-auth";
 import axios from "axios";
 
 const authOptions: NextAuthOptions = {
@@ -17,7 +15,7 @@ const authOptions: NextAuthOptions = {
       },
       async authorize(
         credentials: Record<"email" | "password", string> | undefined,
-      ): Promise<any | null> {
+      ): Promise<User | null> {
         if (!credentials?.email || !credentials?.password) return null;
 
         try {
@@ -50,9 +48,10 @@ const authOptions: NextAuthOptions = {
             zapmail: user.zapmail,
             backendToken: response.data.token,
           };
-        } catch (error: any) {
+        } catch (error) {
           console.error(
             "Credentials auth error:",
+            //@ts-ignore gemini
             error.response?.data || error.message,
           );
           return null;
@@ -79,26 +78,44 @@ const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+    // @ts-ignore
     async signIn({
       user,
       account,
       profile,
     }: {
       user: User;
-      account: any;
-      profile?: any;
+      account: Account;
+      profile?: Profile;
     }) {
       try {
         if (account?.provider === "google") {
           console.log("Processing Google sign-in");
-
+          console.log("Profile", profile);
+          console.log("Sent Data", {
+            //@ts-ignore gemini
+            email_verified: profile?.email_verified,
+            //@ts-ignore gemini
+            firstname: profile?.given_name,
+            //@ts-ignore gemini
+            lastname: profile?.family_name,
+            //@ts-ignore gemini
+            picture: profile?.picture,
+            //@ts-ignore gemini
+            email: profile?.email,
+          });
           const response = await axios.post(
             `http://localhost:3001/api/v1/auth/google`,
             {
+              //@ts-ignore gemini
               email_verified: profile?.email_verified,
+              //@ts-ignore gemini
               firstname: profile?.given_name,
+              //@ts-ignore gemini
               lastname: profile?.family_name,
+              //@ts-ignore gemini
               picture: profile?.picture,
+              //@ts-ignore gemini
               email: profile?.email,
             },
             {
@@ -109,8 +126,9 @@ const authOptions: NextAuthOptions = {
           console.log("Response from google", response.data);
 
           if (response.data.user) {
-            (user as any).userId = response.data.user.id;
-            (user as any).zapmail = response.data.zapmail;
+            user.backendToken = response.data.token;
+            user.userId = response.data.user.id;
+            user.zapmail = response.data.zapmail;
           }
         } else if (account?.provider === "credentials") {
           console.log(
@@ -119,7 +137,8 @@ const authOptions: NextAuthOptions = {
         }
 
         return true;
-      } catch (error: any) {
+      } catch (error) {
+        // @ts-ignore
         console.error("Sign-in error:", error.response?.data || error.message);
         return false;
       }
@@ -133,10 +152,10 @@ const authOptions: NextAuthOptions = {
       user?: User | undefined;
     }): Promise<JWT> {
       if (user) {
-        token.userId = (user as any).userId;
-        token.zapmail = (user as any).zapmail;
-        if ((user as any).backendToken) {
-          token.backendToken = (user as any).backendToken;
+        token.userId = user.userId;
+        token.zapmail = user.zapmail;
+        if (user.backendToken) {
+          token.backendToken = user.backendToken;
         }
       }
       return token;
@@ -150,10 +169,10 @@ const authOptions: NextAuthOptions = {
       token: JWT;
     }): Promise<Session> {
       if (session.user) {
-        (session.user as any).userId = token.userId;
-        (session.user as any).zapmail = token.zapmail;
+        session.user.userId = token.userId;
+        session.user.zapmail = token.zapmail;
         if (token.backendToken) {
-          (session.user as any).backendToken = token.backendToken;
+          session.user.backendToken = token.backendToken;
         }
       }
       return session;

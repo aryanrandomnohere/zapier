@@ -51,6 +51,9 @@ export const getZaps = asyncHandler(
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     res.status(200).json({
       zaps,
@@ -82,6 +85,8 @@ export const createDraft = asyncHandler(
       const allZaps = await prisma.zap.findMany({
         where: {
           folderId,
+          deleted: false,
+          userId: Number(userId),
         },
       });
 
@@ -149,6 +154,17 @@ export const updateTrigger = asyncHandler(
         },
       });
       if (existingTrigger) {
+        //@ts-ignore
+        console.log(
+          (
+            parsedBody?.triggerConfiguration as itemStepMetaData
+          )?.fields[0]?.options.find(
+            (option: any) =>
+              option.id ===
+              (parsedBody.triggerConfiguration as itemStepMetaData)?.fields[0]
+                .fieldValue,
+          )?.type || "",
+        );
         const updatedTrigger = await prisma.trigger.update({
           where: {
             id: existingTrigger.id,
@@ -159,6 +175,16 @@ export const updateTrigger = asyncHandler(
             optionId:
               (parsedBody.triggerConfiguration as itemStepMetaData).fields[0]
                 ?.fieldValue || "",
+            // @ts-ignore
+            optionType:
+              (
+                parsedBody?.triggerConfiguration as itemStepMetaData
+              )?.fields[0]?.options.find(
+                (option: any) =>
+                  option.id ===
+                  (parsedBody.triggerConfiguration as itemStepMetaData)
+                    ?.fields[0].fieldValue,
+              )?.type || "",
           },
         });
         res.status(200).json({
@@ -181,6 +207,16 @@ export const updateTrigger = asyncHandler(
                 ?.fieldValue || "",
             triggerId: parsedBody.triggerId,
             configuration: parsedBody.triggerConfiguration,
+            // @ts-ignore
+            optionType:
+              (
+                parsedBody?.triggerConfiguration as itemStepMetaData
+              )?.fields[0]?.options.find(
+                (option: any) =>
+                  option.id ===
+                  (parsedBody.triggerConfiguration as itemStepMetaData)
+                    ?.fields[0].fieldValue,
+              )?.type || "",
           },
           select: {
             id: true,
@@ -237,7 +273,19 @@ export const updateAction = asyncHandler(
           id: true,
         },
       });
+
       if (existingAction) {
+        console.log(
+          (parsedBody?.actionConfiguration as itemStepMetaData).fields[0]
+            .fieldValue || "",
+        );
+        if (
+          !(parsedBody?.actionConfiguration as itemStepMetaData).fields[0]
+            .fieldValue
+        ) {
+          errorResponse({ res, msg: "Option ID is required" });
+          return;
+        }
         const updatedAction = await prisma.action.update({
           where: {
             id: existingAction.id,
@@ -313,7 +361,8 @@ export const dublicateZap = asyncHandler(
           data: {
             userId: zap.userId,
             folderId: zap.folderId,
-            name: zap.name + " (Copy)",
+            name: "(Copy) " + zap.name,
+            published: false,
             actions: {
               create: zap.actions.map((action) => ({
                 actionId: action.actionId,

@@ -17,7 +17,7 @@ export default async function RunAction(currentAction: any, metadata: any) {
     const normServiceType = normalizeId(serviceType);
     const normActionId = normalizeId(actionId);
     const normOptionId = normalizeId(optionId);
-
+    console.log(normServiceType, normActionId, normOptionId);
     // Lookup function
     const actionFn =
       serviceActionMap[normServiceType]?.[normActionId]?.[normOptionId];

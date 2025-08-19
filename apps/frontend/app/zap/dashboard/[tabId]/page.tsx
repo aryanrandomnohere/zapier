@@ -4,9 +4,11 @@ import useFolders from "@/app/hooks/useFolders";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
+import ZapFilters from "@/app/components/ZapDashboard/ZapFilters";
 
 export default function Page() {
-  const { folders } = useFolders();
+  const { folders, refetchFolders } = useFolders();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
   const totalPages = Math.ceil((folders?.length || 0) / itemsPerPage);
@@ -67,7 +69,10 @@ export default function Page() {
           Folders
         </div>
       </div>
-      <div className="text-3xl font-bold">Folders</div>
+      <RecoilContextProvider>
+        <ZapFilters type="folders" refetchZaps={refetchFolders} />
+      </RecoilContextProvider>
+      {/* <div className="text-3xl font-bold">Folders</div> */}
       <div className="bg-[#FFFDF9] border border-[#F3F0E8] rounded-lg">
         <table className="w-full">
           <thead className=" border-b border-gray-200">
@@ -78,12 +83,16 @@ export default function Page() {
               <th className="text-left py-3 px-6 min-w-48 text-sm font-medium text-gray-700">
                 Owner
               </th>
-              <th className="text-left py-3 px-6 min-w-48 text-sm font-medium text-gray-700">
+              <th className="text-center py-3 px-6 min-w-48 text-sm font-medium text-gray-700">
                 Actions
               </th>
             </tr>
           </thead>
-          <FolderRows folders={currentFolders} /> {/* ✅ pass sliced data */}
+          <FolderRows
+            folders={currentFolders}
+            refetchFolders={refetchFolders}
+          />{" "}
+          {/* ✅ pass sliced data */}
         </table>
       </div>
       <div className="flex items-center justify-between  py-4 ">

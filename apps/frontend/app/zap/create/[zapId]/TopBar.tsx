@@ -1,13 +1,14 @@
 "use client";
-import { IoIosArrowDown } from "react-icons/io";
-import { IoApps, IoHomeOutline } from "react-icons/io5";
-import { RxQuestionMarkCircled } from "react-icons/rx";
+import { ChevronDown, AppWindow, Home, CircleHelp } from "lucide-react";
 import Link from "next/link";
-
-import FolderPath from "./FolderPath";
-import CanvasActions from "./CanvasActions";
-import ServicesActions from "./ServicesActions";
-import HelpActions from "./HelpActions";
+import { lazy, Suspense } from "react";
+const FolderPath = lazy(() => import("./FolderPath"));
+const CanvasActions = lazy(() => import("./CanvasActions"));
+const ServicesActions = lazy(() => import("./ServicesActions"));
+const HelpActions = lazy(() => import("./HelpActions"));
+// import HelpActions from "./HelpActions";
+import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
+import { SkeletonPulse } from "@/app/components/ui/Skeleton";
 
 export default function TopBar() {
   return (
@@ -19,12 +20,12 @@ export default function TopBar() {
             className=" p-1.5 border rounded-sm border-black hover:bg-blue-200/70 hover:border-blue-200/70 hover:cursor-pointer"
           >
             {" "}
-            <IoHomeOutline size={16} color="white" />
+            <Home size={16} color="white" />
           </Link>
           <ServicesActions
             trigger={
               <div className="px-1.5 py-3 hover:bg-white/20 hover:cursor-pointer ">
-                <IoApps size={16} color="white" />
+                <AppWindow size={16} color="white" />
               </div>
             }
           />
@@ -51,7 +52,9 @@ export default function TopBar() {
         </div>
 
         <div>
-          <FolderPath />
+          <RecoilContextProvider>
+            <FolderPath />
+          </RecoilContextProvider>
         </div>
 
         <div className="flex gap-3">
@@ -60,23 +63,31 @@ export default function TopBar() {
               <div className="flex items-center justify-center text-sm text-white gap-1 px-2 py-3  hover:bg-white/20 hover:cursor-pointer">
                 <span className="flex font-bold">100%</span>
                 <div className="text-white/50">
-                  <IoIosArrowDown size={16} />
+                  <ChevronDown size={16} />
                 </div>
               </div>
             }
           />
-
-          <HelpActions
-            trigger={
-              <div className="flex items-center justify-center text-sm text-white gap-1 py-3 px-2  hover:bg-white/20 hover:cursor-pointer">
-                <RxQuestionMarkCircled size={16} />
-                <span className="flex font-bold">Help</span>
-                <div className="text-white/50">
-                  <IoIosArrowDown size={16} />
-                </div>
+          <Suspense
+            fallback={
+              <div className="w-full h-full mt-3 flex items-center justify-center">
+                {" "}
+                <SkeletonPulse className="w-14 h-6" />{" "}
               </div>
             }
-          />
+          >
+            <HelpActions
+              trigger={
+                <div className="flex items-center justify-center text-sm text-white gap-1 py-3 px-2  hover:bg-white/20 hover:cursor-pointer">
+                  <CircleHelp size={16} />
+                  <span className="flex font-bold">Help</span>
+                  <div className="text-white/50">
+                    <ChevronDown size={16} />
+                  </div>
+                </div>
+              }
+            />
+          </Suspense>
         </div>
       </div>
     </div>

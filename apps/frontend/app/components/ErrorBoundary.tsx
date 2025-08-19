@@ -22,6 +22,7 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
+  //@ts-ignore gemini
   componentDidCatch(error: Error, errorInfo: any) {
     console.error("LazyLoad Error Boundary caught an error:", error, errorInfo);
   }

@@ -6,9 +6,7 @@ import {
 } from "@/app/RecoilState/currentZap";
 import { Field, FieldOption, onStepEnum, SessionType } from "@repo/types";
 import { useEffect, useRef, useState } from "react";
-import { BiSolidZap } from "react-icons/bi";
-import { FaArrowRightArrowLeft } from "react-icons/fa6";
-import { IoSearch } from "react-icons/io5";
+import { Zap, ArrowRightLeft, Search } from "lucide-react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Plus } from "lucide-react";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
@@ -134,7 +132,7 @@ export default function MetaDataField({
           </div>
           <div className="text-xs text-gray-500">
             <div className="text-black/50 rotate-90">
-              <FaArrowRightArrowLeft />
+              <ArrowRightLeft />
             </div>
           </div>
           {open && (
@@ -142,7 +140,7 @@ export default function MetaDataField({
               <div className="p-2">
                 <div className="flex items-center gap-2 px-2 py-1.5 bg-white mb-3.5 border border-black/20 rounded focus:border focus:border-blue-600">
                   <div className="text-gray-500">
-                    <IoSearch size={16} />
+                    <Search size={16} />
                   </div>
                   <input
                     type="text"
@@ -186,7 +184,7 @@ export default function MetaDataField({
                         <div className="flex items-center gap-1 text-xs font-semibold bg-yellow-500/20 rounded px-1">
                           {" "}
                           <div className="border border-black rounded-full p-[0.5px]">
-                            <BiSolidZap size={11} />{" "}
+                            <Zap size={11} />{" "}
                           </div>
                           {option.type}
                         </div>
@@ -297,11 +295,25 @@ export default function MetaDataField({
               {!!!field.fieldValue ? (
                 <button
                   onClick={async () => {
-                    let userId = user?.userId;
+                    let userId: string | undefined = user?.userId
+                      ? String(user.userId)
+                      : undefined;
                     if (!user) {
                       const session = await getSession();
-                      setUser(session?.user);
-                      userId = session?.user.userId;
+                      setUser(
+                        session?.user
+                          ? {
+                              ...session.user,
+                              name: session.user.name || "",
+                              email: session.user.email || "",
+                              image: session.user.image || "",
+                              userId: String(session.user.userId),
+                            }
+                          : undefined,
+                      );
+                      userId = session?.user.userId
+                        ? String(session.user.userId)
+                        : undefined;
                     }
 
                     const popup = window.open(
@@ -327,11 +339,25 @@ export default function MetaDataField({
               ) : (
                 <button
                   onClick={async () => {
-                    let userId = user?.userId;
+                    let userId: string | undefined = user?.userId
+                      ? String(user.userId)
+                      : undefined;
                     if (!userId) {
                       const session = await getSession();
-                      setUser(session?.user);
-                      userId = session?.user.userId;
+                      setUser(
+                        session?.user
+                          ? {
+                              ...session.user,
+                              name: session.user.name || "",
+                              email: session.user.email || "",
+                              image: session.user.image || "",
+                              userId: String(session.user.userId),
+                            }
+                          : undefined,
+                      );
+                      userId = session?.user.userId
+                        ? String(session.user.userId)
+                        : undefined;
                     }
                     const popup = window.open(
                       `/api/oauth/google/start?userId=${userId}&zapId=${zapId}`,

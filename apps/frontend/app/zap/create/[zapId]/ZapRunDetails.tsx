@@ -9,8 +9,8 @@ import {
   MoreHorizontal,
   Trash2,
   CalendarDays,
+  RotateCw,
 } from "lucide-react";
-import { IoReload } from "react-icons/io5";
 
 import { InlineLoading } from "@/app/components/ui/LoadingSpinner";
 import ZapRunIcons from "./ZapRunIcons";
@@ -68,7 +68,7 @@ export default function ZapRunList() {
 
   useEffect(() => {
     fetchRuns();
-  }, [zapId, statusFilter, dateFilter]);
+  }, [zapId, statusFilter]);
 
   async function fetchRuns() {
     setLoading(true);
@@ -91,13 +91,35 @@ export default function ZapRunList() {
   }
 
   const filteredRuns = runs.filter((run) => {
-    if (statusFilter && run.status !== statusFilter) return false;
-    if (
-      searchQuery &&
-      !JSON.stringify(run).toLowerCase().includes(searchQuery.toLowerCase())
-    )
-      return false;
-    return true;
+    const statusMatch = !statusFilter || run.status === statusFilter;
+    const searchMatch =
+      !searchQuery ||
+      JSON.stringify(run).toLowerCase().includes(searchQuery.toLowerCase());
+
+    const dateMatch = (() => {
+      if (dateFilter === "All time" || !dateFilter) return true;
+
+      const now = new Date();
+      const itemDate = new Date(run.createdAt);
+
+      switch (dateFilter) {
+        case "Last 24 hours":
+          return now.getTime() - itemDate.getTime() <= 24 * 60 * 60 * 1000;
+        case "Last 7 days":
+          return now.getTime() - itemDate.getTime() <= 7 * 24 * 60 * 60 * 1000;
+        case "Last 30 days":
+          return now.getTime() - itemDate.getTime() <= 30 * 24 * 60 * 60 * 1000;
+        case "Last 60 days":
+          return now.getTime() - itemDate.getTime() <= 60 * 24 * 60 * 60 * 1000;
+        default:
+          return (
+            itemDate.toLocaleDateString() ===
+            new Date(dateFilter).toLocaleDateString()
+          );
+      }
+    })();
+
+    return statusMatch && searchMatch && dateMatch;
   });
 
   // Pagination logic
@@ -321,7 +343,7 @@ export default function ZapRunList() {
                   onClick={handleReFetchZap}
                   className="bg-[#D5D7FC] hover:bg-[#847DFE] p-3 rounded hover:cursor-pointer"
                 >
-                  <IoReload size={15} />
+                  <RotateCw size={15} />
                 </div>
               </div>
             </div>
