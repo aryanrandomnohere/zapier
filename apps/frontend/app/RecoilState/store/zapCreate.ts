@@ -4,9 +4,6 @@ import { ItemType } from "../../../../../packages/types/src";
 export interface ZapCreateState {
   selectedItems: ItemType[];
   selectedCell: number | undefined;
-  isDragging: boolean;
-  position: { x: number; y: number };
-  initialPosition: { x: number; y: number };
 }
 
 export const zapCreateState = atom<ZapCreateState>({
@@ -14,8 +11,5 @@ export const zapCreateState = atom<ZapCreateState>({
   default: {
     selectedItems: [],
     selectedCell: undefined,
-    isDragging: false,
-    position: { x: 0, y: 0 },
-    initialPosition: { x: 0, y: 0 },
   },
 });

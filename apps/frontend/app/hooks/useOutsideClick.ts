@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function useOutsideClick(
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<HTMLElement | null>,
   specificFunction?: () => void,
 ) {
   const [open, setOpen] = useState(false);

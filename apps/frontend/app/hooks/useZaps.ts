@@ -1,29 +1,41 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { zapInterface } from "../../../../packages/types/src";
+import { useRecoilState } from "recoil";
+import zapAtom from "../RecoilState/store/zapAtom";
+import { fetchZaps } from "../services/zapServices";
 
 export default function useZaps() {
   const [loading, setLoading] = useState(false);
-  const [zaps, setZaps] = useState<zapInterface[]>([]);
+  const [zaps, setZaps] = useRecoilState(zapAtom);
   const [error, setError] = useState(null);
-  useEffect(() => {
+
+  async function refetchZaps() {
     setLoading(true);
-    axios
-      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        setZaps(response.data.zaps);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-      });
+    try {
+      const response = await fetchZaps();
+      setZaps(response);
+    } //@ts-ignore gemini
+    catch (error: any) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (zaps.length > 0) {
+      console.log("zaps already fetched");
+      setLoading(false);
+      return;
+    }
+    refetchZaps();
   }, []);
+
   return {
     zaps,
     loading,
     error,
+    refetchZaps,
   };
 }

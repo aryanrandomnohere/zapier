@@ -5,14 +5,15 @@ import {
   selectedItemMetaDataType,
 } from "../../../../packages/types/src";
 
-export const selectedTrigger = atom<ItemType>({
-  key: "selectedTrigger",
-  default: {
-    id: "",
-    name: "",
-    imagePath: "",
-  },
-});
+// export const selectedTrigger = atom<ItemType>({
+//   key: "selectedTrigger",
+//   default: {
+//     id: "",
+//     name: "",
+//     imagePath: "",
+
+//   },
+// });
 
 export const selectedAction = atom<ItemType[]>({
   key: "selectedAction",
