@@ -5,5 +5,5 @@ const zapAtom = atom<zapInterface[]>({
   key: "zapAtom",
   default: [],
 });
- 
+
 export default zapAtom;

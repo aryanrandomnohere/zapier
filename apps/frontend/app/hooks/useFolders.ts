@@ -14,8 +14,8 @@ export default function useFolders() {
     try {
       const response = await getFolders();
       setFolders(response);
-    } //@ts-ignore gemini
-    catch (error: any) {
+    } catch (error: any) {
+      //@ts-ignore gemini
       setError(error);
     } finally {
       setLoading(false);

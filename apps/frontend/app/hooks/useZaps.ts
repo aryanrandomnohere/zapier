@@ -15,8 +15,8 @@ export default function useZaps() {
     try {
       const response = await fetchZaps();
       setZaps(response);
-    } //@ts-ignore gemini
-    catch (error: any) {
+    } catch (error: any) {
+      //@ts-ignore gemini
       setError(error);
     } finally {
       setLoading(false);
