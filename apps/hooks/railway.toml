@@ -1,0 +1,5 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "cd ../../ && npm install && npm run build --workspace=hooks"
+startCommand = "node apps/hooks/dist/index.js"
+
