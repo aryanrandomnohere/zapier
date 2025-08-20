@@ -157,7 +157,7 @@ export default function CreatePage() {
   async function handleTest() {
     console.log("Testing the zap");
     try {
-      const response = await axios.post(`http://localhost:3002/test/run`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOOK_URL}/api/v1/zap/test/run`, {
         zapId: Number(zapId),
       });
       console.log(response);

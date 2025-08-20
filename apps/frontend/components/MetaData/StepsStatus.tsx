@@ -53,7 +53,7 @@ export default function StepsStatus({
             <CheckCircle2 size={15} />
           </div>
         ) : (
-          <div className="text-black  font-extrabold bg-yellow-400 px-[7px] py-[1px] border-0 rounded-full ">
+          <div className="text-black  font-extrabold bg-yellow-400 px-[5px] py-[0.5px] border-0 rounded-full ">
             !
           </div>
         )}

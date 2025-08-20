@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import UserAction from "../UserAction";
-import RecoilContextProvider from "@/RecoilState/RecoilContextProvider";
 
 export default async function Navbar() {
   const session = await auth();

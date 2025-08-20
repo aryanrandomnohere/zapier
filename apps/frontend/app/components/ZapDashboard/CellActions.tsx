@@ -271,7 +271,6 @@ export default function CellActions({
               }
               setCopiedItem(null);
             } catch (err: any) {
-              //@ts-ignore gemini
               console.error(
                 "Paste to replace error:",
                 err.response.data.message,

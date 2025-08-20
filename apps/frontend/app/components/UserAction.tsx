@@ -79,13 +79,11 @@ export default function UserAction({ name }: { name: string }) {
               </div>
             </div>
             <div className=" ml-auto">
-              //@ts-ignore gemini
               <Check className="w-4 h-4" />
             </div>
           </div>
           <div className="flex gap-2 font-normal  items-center border-t border-black/10 pt-2 hover:cursor-pointer hover:bg-blue-500/10 rounded p-2">
             {" "}
-            //@ts-ignore gemini
             <Settings /> Settings
           </div>
           <div
@@ -93,7 +91,6 @@ export default function UserAction({ name }: { name: string }) {
             className="flex gap-2 font-normal items-center hover:cursor-pointer hover:bg-red-500/10 rounded p-2"
           >
             {" "}
-            //@ts-ignore gemini
             <LogOut /> Logout
           </div>
         </div>

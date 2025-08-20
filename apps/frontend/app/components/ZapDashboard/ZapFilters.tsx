@@ -116,7 +116,6 @@ const ZapFilters: React.FC<{
             onClick={() => router.push("/zap/dashboard/folders/trash")}
             className="flex hover:cursor-pointer items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md border border-gray-200"
           >
-            //@ts-ignore gemini
             <Trash2 size={16} />
             Trash
           </button>
@@ -201,7 +200,6 @@ const ZapFilters: React.FC<{
               onClick={() => refetchZaps()}
               className="p-1 hover:bg-[#E1DED3] rounded hover:cursor-pointer"
             >
-              //@ts-ignore gemini
               <RefreshIcon />
             </button>
           </div>

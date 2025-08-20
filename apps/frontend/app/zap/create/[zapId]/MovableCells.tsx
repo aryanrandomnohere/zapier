@@ -11,17 +11,18 @@ import {
 } from "@/app/RecoilState/currentZap";
 import { onStepEnum } from "@repo/types";
 import { ZapCreateState } from "../../../RecoilState/store/zapCreate";
+import { zoomLevelAtom } from "@/RecoilState/store/zapCreate";
 export default function MovableCells({
   zapState,
   setZapState,
 }: {
-  zapState: ZapCreateState;
+  zapState: ZapCreateState; 
   setZapState: SetterOrUpdater<ZapCreateState>;
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
   const [currentOffset, setCurrentOffset] = useState({ x: 0, y: 0 });
-  const [zoomLevel, setZoomLevel] = useState(1);
+  const [zoomLevel, setZoomLevel] = useRecoilState(zoomLevelAtom);
   const containerRef = useRef<HTMLDivElement>(null);
   const [copiedItem, setCopiedItem] = useState<any>(null);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
@@ -124,7 +125,7 @@ export default function MovableCells({
       return { ...prev, selectedItems: updatedActions };
     });
   };
-
+   console.log(zoomLevel);
   return (
     <div className=" flex items-center justify-center w-full h-full">
       <div

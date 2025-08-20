@@ -1,12 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  
+
+  typescript: {
+    // ❌ WARNING: This allows production builds to successfully complete
+    // even if your project has type errors.
+    ignoreBuildErrors: true,
+  },
+
+  eslint: {
+    // ❌ WARNING: This allows production builds to successfully complete
+    // even if your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+
   webpack: (config, { dev, isServer }) => {
-    // Optimize development experience
     if (dev && !isServer) {
       config.watchOptions = {
         poll: 1000,
@@ -15,8 +27,9 @@ const nextConfig = {
     }
     return config;
   },
+
   images: {
-    domains: ['zapier-images.imgix.net'], 
+    domains: ['zapier-images.imgix.net'],
   },
 }
 

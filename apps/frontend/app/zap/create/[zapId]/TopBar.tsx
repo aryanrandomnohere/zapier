@@ -3,14 +3,18 @@ import { ChevronDown, AppWindow, Home, CircleHelp } from "lucide-react";
 import Link from "next/link";
 import { lazy, Suspense } from "react";
 const FolderPath = lazy(() => import("./FolderPath"));
-const CanvasActions = lazy(() => import("./CanvasActions"));
 const ServicesActions = lazy(() => import("./ServicesActions"));
 const HelpActions = lazy(() => import("./HelpActions"));
 // import HelpActions from "./HelpActions";
 import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 import { SkeletonPulse } from "@/app/components/ui/Skeleton";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { zoomLevelAtom } from "@/RecoilState/store/zapCreate";
+import CanvasActions from "./CanvasActions";
 
 export default function TopBar() {
+  const zoomLevel = useRecoilValue(zoomLevelAtom);
+  const setZoomLevel = useSetRecoilState(zoomLevelAtom);
   return (
     <div className=" min-h-8   w-full bg-[#413736]">
       <div className="flex justify-between items-center w-full h-full">
@@ -58,16 +62,19 @@ export default function TopBar() {
         </div>
 
         <div className="flex gap-3">
+          <RecoilContextProvider>
           <CanvasActions
             trigger={
               <div className="flex items-center justify-center text-sm text-white gap-1 px-2 py-3  hover:bg-white/20 hover:cursor-pointer">
-                <span className="flex font-bold">100%</span>
+                <span className="flex font-bold">{Math.round(zoomLevel * 100)}%</span>
                 <div className="text-white/50">
                   <ChevronDown size={16} />
                 </div>
               </div>
             }
+            setZoomLevel={setZoomLevel}
           />
+          </RecoilContextProvider>
           <Suspense
             fallback={
               <div className="w-full h-full mt-3 flex items-center justify-center">

@@ -13,7 +13,6 @@ export default function page() {
           <div>
             {" "}
             <div className="flex gap-2 items-center text-sm font-medium">
-              //@ts-ignore gemini
               <CheckCircle2 className="text-green-700 text-xl " /> Easy setup,
               no coding required
             </div>
@@ -21,7 +20,6 @@ export default function page() {
           <div>
             {" "}
             <div className="flex gap-2 items-center text-sm font-medium">
-              //@ts-ignore gemini
               <CheckCircle2 className="text-green-700 text-xl " /> Free forever
               for core features
             </div>
@@ -29,7 +27,6 @@ export default function page() {
           <div>
             {" "}
             <div className="flex gap-2 items-center text-sm font-medium">
-              //@ts-ignore gemini
               <CheckCircle2 className="text-green-700 text-xl " />
               14-day trial of premium features & apps
             </div>

@@ -18,3 +18,4 @@ export const zoomLevelAtom = atom<number>({
   key: "zoomLevel",
   default: 1,
 });
+

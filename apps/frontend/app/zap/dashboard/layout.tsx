@@ -1,8 +1,6 @@
 import { Metadata } from "next";
 import Navbar from "../../components/AppLayout/Navbar";
 import Sidebar from "../../ui/Sidebar";
-import ZapFilters from "@/app/components/ZapDashboard/ZapFilters";
-import QueryProvider from "@/app/RecoilState/QueryProvider";
 import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 export const metadata: Metadata = {
   title: "Dashboard | Zapier",
@@ -22,9 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Sidebar />
         <div className="flex justify-center w-full h-full">
           <div className="w-11/12 max-w-7xl mt-12 flex flex-col">
-            <QueryProvider>
               <RecoilContextProvider>{children}</RecoilContextProvider>
-            </QueryProvider>
           </div>
         </div>
       </div>

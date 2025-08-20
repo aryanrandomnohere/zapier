@@ -137,7 +137,6 @@ const ToastNotification: React.FC<ToastNotificationProps> = ({
                   }}
                   className={`w-5 h-5 ${config.iconBg} rounded-full flex items-center justify-center`}
                 >
-                  //@ts-ignore gemini
                   <IconComponent
                     className={`w-3 h-3 ${config.iconColor}`}
                     fill="currentColor"
@@ -179,7 +178,6 @@ const ToastNotification: React.FC<ToastNotificationProps> = ({
                 onClick={onClose}
                 className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-150"
               >
-                //@ts-ignore gemini
                 <X className="w-4 h-4" />
               </motion.button>
             </div>
