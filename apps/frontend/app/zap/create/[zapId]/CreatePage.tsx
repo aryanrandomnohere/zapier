@@ -157,9 +157,12 @@ export default function CreatePage() {
   async function handleTest() {
     console.log("Testing the zap");
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOOK_URL}/api/v1/zap/test/run`, {
-        zapId: Number(zapId),
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_HOOK_URL}/api/v1/zap/test/run`,
+        {
+          zapId: Number(zapId),
+        },
+      );
       console.log(response);
       if (response.data.success) {
         toast.custom((t) => (

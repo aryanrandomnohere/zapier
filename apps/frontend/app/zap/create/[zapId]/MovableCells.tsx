@@ -16,7 +16,7 @@ export default function MovableCells({
   zapState,
   setZapState,
 }: {
-  zapState: ZapCreateState; 
+  zapState: ZapCreateState;
   setZapState: SetterOrUpdater<ZapCreateState>;
 }) {
   const [isDragging, setIsDragging] = useState(false);
@@ -125,7 +125,7 @@ export default function MovableCells({
       return { ...prev, selectedItems: updatedActions };
     });
   };
-   console.log(zoomLevel);
+  console.log(zoomLevel);
   return (
     <div className=" flex items-center justify-center w-full h-full">
       <div

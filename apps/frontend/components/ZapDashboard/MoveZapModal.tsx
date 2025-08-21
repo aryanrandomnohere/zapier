@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Search, Folder, ChevronRight } from "lucide-react";
 import axios from "axios";
 import CancelButton from "../buttons/CancelButton";
-import SaveButton from "../buttons/SaveButton"; 
+import SaveButton from "../buttons/SaveButton";
 import ToastNotification from "@/ui/Notification";
 import toast from "react-hot-toast";
 import useZaps from "@/hooks/useZaps";
@@ -27,7 +27,7 @@ interface MoveZapModalProps {
   folders: folderInterface[];
   onClose: () => void;
   onMoveSuccess?: (folderId: number) => void;
-} 
+}
 
 export default function MoveZapModal({
   zapId,

@@ -15,11 +15,11 @@ export default function useFolders() {
       try {
         const response = await getFolders();
         //@ts-expect-error: Temporary fix for type error
-          setFolders(response as folderInterface[]);
+        setFolders(response as folderInterface[]);
       } catch (error) {
         //@ts-expect-error: Temporary fix for type error
         setError(error);
-      } finally { 
+      } finally {
         setLoading(false);
       }
     },

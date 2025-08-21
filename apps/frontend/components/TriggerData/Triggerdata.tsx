@@ -10,10 +10,7 @@ import { zapCreateState } from "@/RecoilState/store/zapCreate";
 import { configureStepDetails } from "@/RecoilState/currentZap";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import {
-  recordsAtom,
-  selectedRecord,
-} from "@/RecoilState/store/recordsAtom";
+import { recordsAtom, selectedRecord } from "@/RecoilState/store/recordsAtom";
 import ConfirmRecord from "./ConfirmRecord";
 import SkipTest from "./SkipTest";
 import { triggerTested } from "@/RecoilState/store/triggerAtom";

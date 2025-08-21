@@ -269,6 +269,7 @@ export default function SideModal({
         const newState = { ...prev };
         const newSelectedItems = [...newState.selectedItems];
         const existingItem = newSelectedItems[index];
+
         if (
           !existingItem ||
           !existingItem.metadata.optionConfiguration?.[configureId]
@@ -276,11 +277,17 @@ export default function SideModal({
           return prev;
         }
 
+        // Safely get testStep, default to empty object if undefined
+        const currentTestStep =
+          existingItem.metadata.optionConfiguration[configureId].testStep || {};
+
+        // Create new testStep
         const updatedTestStep = {
-          ...existingItem.metadata.optionConfiguration[configureId].testStep,
+          ...currentTestStep,
           completed: true,
         };
 
+        // Create new optionConfiguration
         const updatedOptionConfig = {
           ...existingItem.metadata.optionConfiguration,
           [configureId]: {
@@ -289,12 +296,21 @@ export default function SideModal({
           },
         };
 
-        existingItem.metadata = {
+        // Create new metadata object instead of mutating
+        const newMetadata = {
           ...existingItem.metadata,
           optionConfiguration: updatedOptionConfig,
         };
 
-        newSelectedItems[index] = existingItem;
+        // Create new item with updated metadata
+        const newItem = {
+          ...existingItem,
+          metadata: newMetadata,
+        };
+
+        // Replace in selectedItems
+        newSelectedItems[index] = newItem;
+
         return { ...newState, selectedItems: newSelectedItems };
       });
     } else if (panelIndex === onStepEnum.SETUP) {
@@ -303,7 +319,7 @@ export default function SideModal({
         const existingItem = newSelectedItems[index];
         if (!existingItem || !existingItem.metadata) return prev;
 
-        existingItem.metadata = { ...existingItem.metadata, completed: true };
+        // existingItem.metadata = { ...existingItem.metadata, completed: true };
         newSelectedItems[index] = existingItem;
         return { ...prev, selectedItems: newSelectedItems };
       });

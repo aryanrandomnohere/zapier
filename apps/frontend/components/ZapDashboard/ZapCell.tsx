@@ -47,7 +47,7 @@ export default function ZapCell({
             <div className="flex items-center justify-between gap-2 px-1.5 py-[1px] w-fit border border-black/20 bg-stone-200 rounded-md">
               {imagePath && !loading ? (
                 <Image
-                  src={imagePath} 
+                  src={imagePath}
                   alt="logo"
                   className="w-5 h-5 rounded-full object-cover"
                   width={20}

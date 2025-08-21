@@ -240,6 +240,7 @@ export const testRun = async (req: Request, res: Response) => {
       .json({ msg: "Test run completed", success: true, recordData, recordId });
     return;
   } catch (error) {
+    console.log(error);
     res.status(500).json({ msg: "Test run failed", error, success: false });
     return;
   }

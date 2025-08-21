@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch src/server.ts"
+    "dev": "node dist/server.js",
+    "start": "node dist/server.js"
   },
-  "keywords": [],
+"keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",

@@ -10,10 +10,7 @@ import {
 } from "@/RecoilState/currentZap";
 import { selectedRecord } from "@/RecoilState/store/recordsAtom";
 import axios from "axios";
-import {
-  actionTested,
-  skippedAction,
-} from "@/RecoilState/store/actionAtom";
+import { actionTested, skippedAction } from "@/RecoilState/store/actionAtom";
 import toast from "react-hot-toast";
 import ToastNotification from "@/ui/Notification";
 

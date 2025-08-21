@@ -71,9 +71,9 @@ export default async function Navbar() {
           </LinkButton>
 
           {isAuthenticated && (
-              <UserAction
-                  name={session?.user?.name?.[0]?.toLocaleUpperCase() || "UR"}
-              />
+            <UserAction
+              name={session?.user?.name?.[0]?.toLocaleUpperCase() || "UR"}
+            />
           )}
         </div>
       </div>

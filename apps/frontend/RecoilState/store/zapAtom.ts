@@ -31,8 +31,6 @@ interface zapInterface {
   folder: folderInterface; // to avoid circular dependency
 }
 
-const zapAtom = atom<zapInterface[]>({  key: "zapAtom",
-  default: [],
-});
+const zapAtom = atom<zapInterface[]>({ key: "zapAtom", default: [] });
 
 export default zapAtom;

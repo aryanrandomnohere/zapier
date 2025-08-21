@@ -239,13 +239,11 @@ zapRouter.get(
         },
       });
       if (requiredZap?.userId !== userId) {
-        res
-          .status(200)
-          .json({
-            msg: "You are not authorized to access this zap",
-            success: false,
-            unauthorized: true,
-          });
+        res.status(200).json({
+          msg: "You are not authorized to access this zap",
+          success: false,
+          unauthorized: true,
+        });
         return;
       }
       let finalZap = [];

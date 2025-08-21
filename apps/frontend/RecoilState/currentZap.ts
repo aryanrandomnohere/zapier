@@ -1,9 +1,5 @@
 import { atom } from "recoil";
-import {
-  ItemType,
-  onStepEnum,
-  selectedItemMetaDataType,
-} from "@repo/types";
+import { ItemType, onStepEnum, selectedItemMetaDataType } from "@repo/types";
 
 // export const selectedTrigger = atom<ItemType>({
 //   key: "selectedTrigger",

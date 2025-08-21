@@ -1,4 +1,4 @@
-  "use client";
+"use client";
 import { Row } from "./Row";
 import RecoilContextProvider from "@/RecoilState/RecoilContextProvider";
 import { InlineLoading } from "../ui/LoadingSpinner";

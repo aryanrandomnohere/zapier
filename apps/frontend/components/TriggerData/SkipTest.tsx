@@ -18,4 +18,4 @@ export default function SkipTest({ handleSkip }: { handleSkip: () => void }) {
       </Modal.Window>
     </Modal>
   );
-} 
+}

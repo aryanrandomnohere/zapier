@@ -158,7 +158,7 @@ export const updateTrigger = asyncHandler(
         console.log(
           (
             parsedBody?.triggerConfiguration as itemStepMetaData
-          )?.fields[0]?.options.find(
+          )?.fields[0]?.options?.find(
             (option: any) =>
               option.id ===
               (parsedBody.triggerConfiguration as itemStepMetaData)?.fields[0]
@@ -179,7 +179,7 @@ export const updateTrigger = asyncHandler(
             optionType:
               (
                 parsedBody?.triggerConfiguration as itemStepMetaData
-              )?.fields[0]?.options.find(
+              )?.fields[0]?.options?.find(
                 (option: any) =>
                   option.id ===
                   (parsedBody.triggerConfiguration as itemStepMetaData)
@@ -211,7 +211,7 @@ export const updateTrigger = asyncHandler(
             optionType:
               (
                 parsedBody?.triggerConfiguration as itemStepMetaData
-              )?.fields[0]?.options.find(
+              )?.fields[0]?.options?.find(
                 (option: any) =>
                   option.id ===
                   (parsedBody.triggerConfiguration as itemStepMetaData)

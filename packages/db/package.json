@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "scripts": {
+    "build": "tsc",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:backup": "node dist/backup-db.js",
@@ -16,5 +17,8 @@
     "prisma": "^5.22.0",
     "prisma-erd-generator": "^2.0.4",
     "typescript": "^5.3.3"
+  },
+  "exports": {
+    ".": "./dist/index.js"
   }
 }

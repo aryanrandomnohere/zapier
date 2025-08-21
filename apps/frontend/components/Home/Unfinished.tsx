@@ -41,9 +41,11 @@ export default function Unfinished() {
             name={zap.name}
             lastEdited={formatEditedTime(zap.lastEdited)}
             triggerImage={zap.trigger?.type?.imagePath}
-            actions={zap.actions.map((a: { actionDetails: { imagePath: string } }) => ({
-              imagePath: a.actionDetails?.imagePath,
-            }))}
+            actions={zap.actions.map(
+              (a: { actionDetails: { imagePath: string } }) => ({
+                imagePath: a.actionDetails?.imagePath,
+              }),
+            )}
           />
         ))}
       </CardScroller>

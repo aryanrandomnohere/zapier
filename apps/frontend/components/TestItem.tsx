@@ -1,5 +1,9 @@
 "use client";
-import { itemTestMetaData, onStepEnum, selectedItemMetaDataType } from "@repo/types";
+import {
+  itemTestMetaData,
+  onStepEnum,
+  selectedItemMetaDataType,
+} from "@repo/types";
 import React, { useEffect } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { onStep, selectedItemMetaData } from "../RecoilState/currentZap";
@@ -35,7 +39,7 @@ export default function TestItem({
 
   const handleNextStep = () => {
     console.log("handleNextStep");
-    setMetaData((prev:selectedItemMetaDataType) => ({
+    setMetaData((prev: selectedItemMetaDataType) => ({
       ...prev,
       index: (prev?.index || 0) + 1,
     }));

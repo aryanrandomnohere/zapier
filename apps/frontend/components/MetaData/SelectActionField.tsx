@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  recordsAtom,
-  selectedRecord,
-} from "@/RecoilState/store/recordsAtom";
+import { recordsAtom, selectedRecord } from "@/RecoilState/store/recordsAtom";
 import { onStepEnum } from "@repo/types";
 import SelectField from "./SelectField";
 import { ArrowRight, Square } from "lucide-react";

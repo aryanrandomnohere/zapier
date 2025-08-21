@@ -63,17 +63,19 @@ export default function TopBar() {
 
         <div className="flex gap-3">
           <RecoilContextProvider>
-          <CanvasActions
-            trigger={
-              <div className="flex items-center justify-center text-sm text-white gap-1 px-2 py-3  hover:bg-white/20 hover:cursor-pointer">
-                <span className="flex font-bold">{Math.round(zoomLevel * 100)}%</span>
-                <div className="text-white/50">
-                  <ChevronDown size={16} />
+            <CanvasActions
+              trigger={
+                <div className="flex items-center justify-center text-sm text-white gap-1 px-2 py-3  hover:bg-white/20 hover:cursor-pointer">
+                  <span className="flex font-bold">
+                    {Math.round(zoomLevel * 100)}%
+                  </span>
+                  <div className="text-white/50">
+                    <ChevronDown size={16} />
+                  </div>
                 </div>
-              </div>
-            }
-            setZoomLevel={setZoomLevel}
-          />
+              }
+              setZoomLevel={setZoomLevel}
+            />
           </RecoilContextProvider>
           <Suspense
             fallback={

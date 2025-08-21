@@ -58,7 +58,9 @@ export default function Task({
           return;
         }
         if (id === "webhook")
-          setFetchedUrl(`${process.env.NEXT_PUBLIC_HOOK_URL}/hooks/catch/${userId}/${zapId}`);
+          setFetchedUrl(
+            `${process.env.NEXT_PUBLIC_HOOK_URL}/hooks/catch/${userId}/${zapId}`,
+          );
         else if (id === "email")
           setFetchedUrl(
             zap.selectedItems[0].metadata.optionConfiguration[optionId]

@@ -12,11 +12,11 @@ import { authRouter } from "./router/authRouter.js";
 import { folderRouter } from "./router/folderRoutes.js";
 import openRouter from "./router/openRouter.js";
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true,
   }),
 );
@@ -32,6 +32,10 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/folders", authMiddleware, folderRouter);
 app.use("/api/v1/open", openRouter);
 app.use(errorMiddleware);
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
 app.listen(PORT, () => {
   console.log("Server is listening on port: ", PORT);
 });

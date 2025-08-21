@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
   "scripts": {
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,9 @@
   "dependencies": {
     "@repo/types": "*",
     "@repo/db": "*"
+  },
+  "exports": {
+    ".": "./dist/index.js"
   }
 }
 
