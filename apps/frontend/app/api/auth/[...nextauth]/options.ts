@@ -19,7 +19,7 @@ const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) return null;
 
         try {
-          const url = "http://localhost:3001/api/v1/auth/login";
+          const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`;
           console.log("Credentials login attempt for:", credentials.email);
 
           const response = await axios.post(
@@ -105,7 +105,7 @@ const authOptions: NextAuthOptions = {
             email: profile?.email,
           });
           const response = await axios.post(
-            `http://localhost:3001/api/v1/auth/google`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/google`,
             {
               //@ts-ignore gemini
               email_verified: profile?.email_verified,
