@@ -72,7 +72,7 @@ const TriggerData = ({
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/test/trigger/${zapId}`,
       {
         withCredentials: true,
-      },
+      }
     );
     return {
       records: response.data.records,
