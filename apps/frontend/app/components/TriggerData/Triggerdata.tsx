@@ -69,7 +69,7 @@ const TriggerData = ({
   };
   const testTrigger = async () => {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_HOOK_URL}/api/v1/zap/test/trigger/${zapId}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/test/trigger/${zapId}`,
       {
         withCredentials: true,
       },
