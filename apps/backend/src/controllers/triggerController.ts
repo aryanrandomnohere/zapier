@@ -1,8 +1,8 @@
 import { PasteToReplaceActionSchema } from "../types/index.js";
 import { extendedRequest } from "../types/types.js";
-import asyncHandler from "../utils/asyncFunction.js";
 import { validateOrRespond } from "../utils/validateOrRespond.js";
 import { prisma } from "../config/client.js";
+import { Response, Request } from "express";
 // export const pasteToReplaceAction = asyncHandler(
 //     async (req: extendedRequest, res) => {
 //       const parsedBody = validateOrRespond(
@@ -49,8 +49,8 @@ import { prisma } from "../config/client.js";
 //     },
 //   );
 
-export const pasteToReplaceTrigger = asyncHandler(
-  async (req: extendedRequest, res) => {
+export const pasteToReplaceTrigger = 
+  async (req: extendedRequest, res:Response) => {
     const parsedData = validateOrRespond(
       req.body,
       PasteToReplaceActionSchema,
@@ -96,5 +96,24 @@ export const pasteToReplaceTrigger = asyncHandler(
         msg: "Error pasting trigger",
       });
     }
-  },
-);
+  }
+
+
+export const getTriggers = async (req:Request, res: Response) => {
+  try {
+    const triggers = await prisma.availableTriggers.findMany({
+      where: {
+        id: {
+          not: "email",
+        },
+      },
+      orderBy: {
+        id: "desc",
+      },
+    });
+    res.status(200).json({ items: triggers });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: "Database fetching error" });
+  }
+}

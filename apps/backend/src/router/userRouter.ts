@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express";
 import { UserConnectionSchema } from "../types/index.js";
 import { prisma } from "../config/client.js";
+import asyncHandler from "../utils/asyncFunction.js";
 
 const userRouter = express.Router();
 
-userRouter.post("/createConnection/:zapId", async (req, res) => {
+userRouter.post("/createConnection/:zapId",asyncHandler(async (req, res) => {
   const parsedBody = UserConnectionSchema.safeParse(req.body);
   console.log("userConnection came");
   if (!parsedBody.success) {
@@ -74,6 +75,6 @@ userRouter.post("/createConnection/:zapId", async (req, res) => {
     });
   }
   res.status(200).json({ success: true });
-});
+}));
 
 export { userRouter };

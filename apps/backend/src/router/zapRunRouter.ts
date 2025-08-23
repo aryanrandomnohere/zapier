@@ -1,10 +1,11 @@
 import { prisma, ZapRunStatus } from "@repo/db";
 import Express from "express";
+import asyncHandler from "../utils/asyncFunction.js";
 
 const zapRunRouter = Express.Router();
 
 // GET Zap Runs with filters
-zapRunRouter.get("/:zapId", async (req, res) => {
+zapRunRouter.get("/:zapId", asyncHandler(async (req, res) => {
   try {
     const { zapId } = req.params;
     const { status, fromDate, toDate } = req.query;
@@ -49,6 +50,6 @@ zapRunRouter.get("/:zapId", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch Zap runs" });
   }
-});
+}));
 
 export default zapRunRouter;

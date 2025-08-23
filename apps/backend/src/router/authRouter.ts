@@ -73,7 +73,7 @@ authRouter.post(
 );
 
 // ---------- LOGIN ----------
-authRouter.post("/login", async (req, res) => {
+authRouter.post("/login",asyncHandler(async (req, res) => {
   console.log("Login renpoint hit");
   const parsedData = validateOrRespond(req.body, logInSchema, res);
   if (!parsedData) return;
@@ -103,7 +103,7 @@ authRouter.post("/login", async (req, res) => {
     console.error(err);
     res.status(500).json({ msg: "Login failed", error: err, success: false });
   }
-});
+}));   
 
 // ---------- GOOGLE ----------
 authRouter.post(
@@ -164,7 +164,7 @@ authRouter.post(
   }),
 );
 
-authRouter.post("/set-cookie", async (req, res) => {
+authRouter.post("/set-cookie",asyncHandler(async (req, res) => {
   try {
     const { token } = req.body;
 
@@ -179,9 +179,9 @@ authRouter.post("/set-cookie", async (req, res) => {
     console.error(error);
     res.status(500).json({ msg: "Cookie set failed", success: false });
   }
-});
+}));
 
-authRouter.post("/logout", async (req, res) => {
+authRouter.post("/logout",asyncHandler(async (req, res) => {
   try {
     console.log("Logging out");
     res.clearCookie("auth_token", {
@@ -197,6 +197,6 @@ authRouter.post("/logout", async (req, res) => {
     console.error(error);
     res.status(500).json({ msg: "Cookie clear failed", success: false });
   }
-});
+}));
 
 export { authRouter };
