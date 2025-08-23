@@ -214,9 +214,6 @@ export default function SideModal({
       { withCredentials: true },
     );
 
-    if (response.data.success) {
-      console.log("Step saved");
-    }
 
     if (panelIndex === onStepEnum.CONFIGURATION) {
       setZapState((prev) => {
