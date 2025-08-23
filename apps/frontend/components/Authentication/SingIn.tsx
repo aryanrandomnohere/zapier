@@ -3,7 +3,6 @@ import { FormEvent, useEffect, useState } from "react";
 import Input from "../InputBoxes/Input";
 import PrimaryButton from "../buttons/PrimaryButton";
 import { ArrowLeft, X, Check } from "lucide-react";
-// import axios from "axios";
 import { useRouter } from "next/navigation";
 import { getSession, signIn } from "next-auth/react";
 import axios from "axios";

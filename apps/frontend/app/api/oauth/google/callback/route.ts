@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENTID!,
     process.env.GOOGLE_SECRET!,
-    "http://localhost:3000/api/oauth/google/callback",
+    `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/oauth/google/callback`,
   );
 
   try {

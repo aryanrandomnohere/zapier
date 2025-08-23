@@ -204,7 +204,7 @@ export default function SideModal({
             sortingOrder: metaData.index,
           };
 
-    const response = await axios.post(
+    const response = axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/${
         zap.selectedItems[index].type === "trigger"
           ? "updatetrigger"
