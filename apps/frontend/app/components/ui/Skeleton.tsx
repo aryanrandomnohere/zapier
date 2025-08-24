@@ -163,3 +163,5 @@ export const GridSkeleton: React.FC<{ cols?: number; rows?: number }> = ({
 export const SkeletonPulse = ({ className }: { className: string }) => (
   <div className={`bg-gray-200 animate-pulse rounded ${className}`}></div>
 );
+
+export const IconSkeleton = () => <SkeletonPulse className="w-3 h-5" />;

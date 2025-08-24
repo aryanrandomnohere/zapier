@@ -2,52 +2,63 @@ import hero from "./homepage-hero.png";
 import { ArrowRight } from "lucide-react";
 import PrimaryButton from "../buttons/PrimaryButton";
 import Link from "next/link";
+
 export default function Hero() {
   return (
-    <div className="flex justify-center w-full pt-[100px] ">
-      {" "}
-      <div className="max-w-10/12">
-        <div className=" flex sm:flex-row flex-col justify-center ">
-          <div className="flex flex-col">
-            <div className="flex cursor-pointer items-center justify-between gap-0.5 text-sm bg-blue-100/50 p-1.5  w-64 rounded-full mb-5">
-              {" "}
-              <div className="py-0.5 px-2.5 rounded-2xl border border-black ">
+    <div className="flex justify-center w-full pt-16 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-6xl">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-10">
+          {/* Left Section */}
+          <div className="flex flex-col text-center lg:text-left">
+            {/* Badge */}
+            <div className="flex cursor-pointer items-center justify-between gap-1 text-sm bg-blue-100/50 px-3 py-2 w-fit rounded-full mb-5 mx-auto lg:mx-0">
+              <div className="py-0.5 px-2.5 rounded-2xl border border-black">
                 New
-              </div>{" "}
-              Zapier Enterpris is here <ArrowRight className="text-lg " />{" "}
+              </div>
+              Zapier Enterpris is here
+              <ArrowRight className="w-4 h-4" />
             </div>
-            <div className="text-6xl font-extrabold mr-6">
+
+            {/* Heading */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight max-w-2xl mx-auto lg:mx-0">
               Ops run on Zapier—seamless workflows, no IT bottlenecks.
-            </div>
-            <div className="text-xl font-medium leading-8 mt-5 mr-9">
+            </h1>
+
+            {/* Subheading */}
+            <p className="text-base sm:text-lg md:text-xl font-medium leading-7 sm:leading-8 mt-5 max-w-2xl mx-auto lg:mx-0">
               Ops wants speed. IT wants oversight. Zapier’s AI automation gives
               everyone the best of both worlds with one place to build, manage,
               and govern workflows that power your business.
-            </div>
-            <div className=" mt-10">
-              <div className="flex items-center w-full gap-5 ">
-                <div className="">
-                  <Link href="/sign-up">
-                    <PrimaryButton size="big">
-                      Start free with email
-                    </PrimaryButton>{" "}
-                  </Link>
-                </div>
-                <div
-                  className={`flex justify-center items-center "text-xl px-10 py-2.5 h-full gap-3  font-semibold  border text-black border-black/50 hover:cursor-pointer rounded-full hover:border-black hover:border-2 `}
-                >
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/300/300221.png "
-                    className="w-6 h-6"
-                  />{" "}
-                  Start free with Google
-                </div>
-              </div>{" "}
+            </p>
+
+            {/* Buttons */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <Link href="/sign-up">
+                <PrimaryButton size="big">Start free with email</PrimaryButton>
+              </Link>
+
+              <div className="flex justify-center items-center text-base sm:text-lg px-6 sm:px-8 py-2.5 gap-3 font-semibold border text-black border-black/50 hover:cursor-pointer rounded-full hover:border-black hover:border-2">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/300/300221.png"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
+                />
+                Start free with Google
+              </div>
             </div>
           </div>
-          <img className=" min-w-[400px] max-w-[540px] " src={hero.src} />
+
+          {/* Right Section (Image) */}
+          <img
+            className="w-full max-w-sm sm:max-w-md lg:max-w-[540px] mx-auto"
+            src={hero.src}
+            alt="Hero Image"
+          />
         </div>
-        <div className="text-center">WHAT WILL YOU AUTOMATE TODAY?</div>
+
+        {/* Bottom Text */}
+        <div className="text-center mt-10 text-sm sm:text-base font-medium tracking-wide">
+          WHAT WILL YOU AUTOMATE TODAY?
+        </div>
       </div>
     </div>
   );
