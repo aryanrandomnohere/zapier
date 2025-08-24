@@ -1,10 +1,8 @@
 "use client";
 import { FormEvent, useEffect, useState } from "react";
 import Input from "../InputBoxes/Input";
-import { FcGoogle } from "react-icons/fc";
 import PrimaryButton from "../buttons/PrimaryButton";
 import { ArrowLeft, X, Check } from "lucide-react";
-// import axios from "axios";
 import { useRouter } from "next/navigation";
 import { getSession, signIn } from "next-auth/react";
 import axios from "axios";
@@ -33,13 +31,12 @@ export default function SingIn() {
     lastname: "",
   });
 
-  // Email validation function
+  // --- Validation logic (same as your code) ---
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  // Validate password in real-time
   useEffect(() => {
     const validatePassword = (pwd: string) => {
       if (pwd.length === 0) {
@@ -50,17 +47,10 @@ export default function SingIn() {
         });
         return;
       }
-
-      // Check length (at least 12 characters)
       const lengthValid = pwd.length >= 12;
-
-      // Check if contains at least one letter
       const hasLetterValid = /[a-zA-Z]/.test(pwd);
-
-      // Check consecutive characters rule
       let consecutiveCharsValid = true;
       if (pwd.length < 20) {
-        // For passwords under 20 characters, check for more than 2 consecutive identical characters
         for (let i = 0; i < pwd.length - 2; i++) {
           if (pwd[i] === pwd[i + 1] && pwd[i + 1] === pwd[i + 2]) {
             consecutiveCharsValid = false;
@@ -68,44 +58,35 @@ export default function SingIn() {
           }
         }
       }
-
       setValidations({
         length: lengthValid,
         hasLetter: hasLetterValid,
         consecutiveChars: consecutiveCharsValid,
       });
     };
-
     validatePassword(password);
   }, [password]);
 
-  // Validate fields in real-time
   useEffect(() => {
     const newErrors = { email: "", firstname: "", lastname: "" };
-
     if (email && !validateEmail(email)) {
       newErrors.email = "Enter a valid email";
     }
-
     if (!login && firstname.trim() === "" && firstname !== "") {
       newErrors.firstname = "First name is required";
     }
-
     if (!login && lastname.trim() === "" && lastname !== "") {
       newErrors.lastname = "Last name is required";
     }
-
     setErrors(newErrors);
   }, [email, firstname, lastname, login]);
 
-  // Check if first step is valid
   const isFirstStepValid = () => {
     if (!email || !validateEmail(email)) return false;
     if (!login && (!firstname.trim() || !lastname.trim())) return false;
     return true;
   };
 
-  // Check if password step is valid
   const isPasswordStepValid = () => {
     if (!password.trim()) return false;
     if (
@@ -122,8 +103,8 @@ export default function SingIn() {
   async function handleOnSubmit(e: FormEvent) {
     e.preventDefault();
 
+    // ✅ First step validation
     if (!nextField) {
-      // Validate first step fields
       if (!email || !validateEmail(email)) {
         setErrors((prev) => ({ ...prev, email: "Enter a valid email" }));
         return;
@@ -147,103 +128,84 @@ export default function SingIn() {
       return;
     }
 
-    // Validate password step
-    if (!login) {
-      if (
-        !validations.length ||
-        !validations.hasLetter ||
-        !validations.consecutiveChars
-      ) {
-        return; // Don't proceed if password validation fails
-      }
-    }
-
+    // ✅ Password step validation
     if (!password.trim()) {
-      return; // Don't proceed if password is empty
+      setErrors((prev) => ({ ...prev, password: "Password is required" }));
+      return;
     }
 
-    if (!login) {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/signup`,
-        {
-          email: email,
-          firstname: firstname,
-          lastname: lastname,
-          password: password,
-        },
-        {
-          withCredentials: true,
-        },
-      );
-      if (response.data.success === false) {
-        toast.custom((t) => (
-          <ToastNotification type="error" t={t}>
-            <div className="text-red-500 flex items-center gap-2   ">
-              {response.data.msg}
-            </div>
-          </ToastNotification>
-        ));
-        return;
-      }
-      if (response.status !== 200) return;
-      if (!response.data.user) return;
-    }
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (result?.ok) {
-      const session = await getSession();
-      if (!session?.user.backendToken) return;
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/set-cookie`,
-        {
-          token: session.user.backendToken,
-        },
-        {
-          withCredentials: true,
-        },
-      );
-      if (response.status !== 200) return;
-      if (!response.data.msg) return;
-      console.log("Cookie set", response.data.msg);
-      router.push("/zap/dashboard");
+    if (
+      !login &&
+      (!validations.length ||
+        !validations.hasLetter ||
+        !validations.consecutiveChars)
+    ) {
+      setErrors((prev) => ({
+        ...prev,
+        password: "Password does not meet requirements",
+      }));
+      return;
     }
 
     try {
-      // Additional error handling if needed
-    } catch (error) {
-      console.error("Axios error:", error);
-    }
-  }
+      // ✅ Signup (only if not logging in)
+      if (!login) {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/signup`,
+          { email, firstname, lastname, password },
+          { withCredentials: true },
+        );
 
-  async function handleGoogleSignUp() {
-    const result = await signIn("google");
-    console.log("Google sign in result", result);
-    if (result?.ok) {
+        if (response.status !== 200 || !response.data.user) {
+          toast.custom((t) => (
+            <ToastNotification type="error" t={t}>
+              <div className="text-red-500 flex items-center gap-2">
+                {response.data.msg || "Signup failed"}
+              </div>
+            </ToastNotification>
+          ));
+          return;
+        }
+      }
+
+      // ✅ Login (with credentials)
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (!result?.ok) {
+        toast.error("Invalid credentials. Please try again.");
+        return;
+      }
+
+      // ✅ Fetch session and set cookie
       const session = await getSession();
       if (!session?.user.backendToken) return;
-      const response = await axios.post(
+
+      const cookieRes = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/set-cookie`,
-        {
-          token: session.user.backendToken,
-        },
-        {
-          withCredentials: true,
-        },
+        { token: session.user.backendToken },
+        { withCredentials: true },
       );
-      router.push("/zap/dashboard");
+
+      if (cookieRes.status === 200 && cookieRes.data.msg) {
+        console.log("Cookie set", cookieRes.data.msg);
+        router.push("/zap/dashboard");
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      toast.error("Something went wrong. Please try again.");
     }
   }
 
   return (
-    <div className="max-w-[450px] border border-black/10 p-6 transition-all duration-500">
-      <form className="max-w-[390px]" onSubmit={handleOnSubmit}>
+    <div className="w-full max-w-md border border-black/10 rounded-lg p-4 sm:p-6 mx-auto">
+      <form className="w-full" onSubmit={handleOnSubmit}>
         {!nextField ? (
           <div className="flex flex-col gap-4">
-            {/* Input Fields */}
+            {/* Email */}
             <Input
               value={email}
               onChange={setEmail}
@@ -254,175 +216,43 @@ export default function SingIn() {
               <div className="text-red-500 text-sm -mt-2">{errors.email}</div>
             )}
 
+            {/* Name fields only for signup */}
             {!login && (
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <Input
-                      value={firstname}
-                      onChange={setFirstname}
-                      label="* First name"
-                      placeholder=""
-                    />
-                    {errors.firstname && (
-                      <div className="text-red-500 text-sm mt-1">
-                        {errors.firstname}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <Input
-                      value={lastname}
-                      onChange={setLastname}
-                      label="* Last name"
-                      placeholder=""
-                    />
-                    {errors.lastname && (
-                      <div className="text-red-500 text-sm mt-1">
-                        {errors.lastname}
-                      </div>
-                    )}
-                  </div>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="w-full sm:w-1/2">
+                  <Input
+                    value={firstname}
+                    onChange={setFirstname}
+                    label="* First name"
+                    placeholder=""
+                  />
+                  {errors.firstname && (
+                    <div className="text-red-500 text-sm mt-1">
+                      {errors.firstname}
+                    </div>
+                  )}
+                </div>
+                <div className="w-full sm:w-1/2">
+                  <Input
+                    value={lastname}
+                    onChange={setLastname}
+                    label="* Last name"
+                    placeholder=""
+                  />
+                  {errors.lastname && (
+                    <div className="text-red-500 text-sm mt-1">
+                      {errors.lastname}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
 
             {/* Terms */}
             {!login && (
-              <div>
-                <div className="text-sm">* Indicates a required field.</div>
-                <div className="text-sm font-medium">
-                  By signing up, you agree to Zapier&apos;s{" "}
-                  <a
-                    className="text-blue-700 underline"
-                    href="https://zapier.com/legal"
-                  >
-                    terms of service and privacy policy.
-                  </a>
-                </div>
-              </div>
-            )}
-
-            {/* Button */}
-            <button type="submit" disabled={!isFirstStepValid()}>
-              <PrimaryButton
-                size="small"
-                // @ts-ignore
-                disabled={!isFirstStepValid()}
-              >
-                Get started for free
-              </PrimaryButton>
-            </button>
-
-            {/* Log In Link */}
-            <div className="text-sm font-medium text-center flex justify-center items-center gap-1">
-              {login ? "Don't have an account?" : "Already have an account?"}
-              {login ? (
-                <a
-                  className="text-blue-700 underline cursor-pointer"
-                  onClick={() => setLogin(false)}
-                >
-                  Sign up
-                </a>
-              ) : (
-                <a
-                  className="text-blue-700 underline cursor-pointer"
-                  onClick={() => setLogin(true)}
-                >
-                  Log in
-                </a>
-              )}
-            </div>
-          </div>
-        ) : (
-          // Show password field when nextField is true
-          <div className="flex flex-col gap-4">
-            <div
-              className="flex gap-1 items-center text-blue-700 hover:cursor-pointer"
-              onClick={() => {
-                setNextField(false);
-              }}
-            >
-              {/* @ts-ignore */}
-              <ArrowLeft /> Back
-            </div>
-            <div className="flex gap-0.5 text-sm">
-              {login
-                ? "You&apos;re logging in as"
-                : "You&apos;re signing up as"}{" "}
-              <div className="font-bold">{email}</div>
-            </div>
-            <Input
-              placeholder=""
-              value={password}
-              onChange={setPassword}
-              label="* Password"
-              type="password"
-            />
-            {!login && (
-              <div className="flex flex-col text-sm gap-2">
-                <div className="flex gap-2 items-center">
-                  <div
-                    className={`transition-colors duration-200 ${validations.length ? "text-green-600" : "text-red-500"}`}
-                  >
-                    {/* @ts-ignore */}
-                    {validations.length ? <Check size={16} /> : <X size={16} />}
-                  </div>
-                  <span
-                    className={
-                      validations.length ? "text-green-700" : "text-gray-700"
-                    }
-                  >
-                    Must be at least 12 characters
-                  </span>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <div
-                    className={`transition-colors duration-200 ${validations.hasLetter ? "text-green-600" : "text-red-500"}`}
-                  >
-                    {/* @ts-ignore */}
-                    {validations.hasLetter ? (
-                      <Check size={16} />
-                    ) : (
-                      <X size={16} />
-                    )}
-                  </div>
-                  <span
-                    className={
-                      validations.hasLetter ? "text-green-700" : "text-gray-700"
-                    }
-                  >
-                    Must contain at least one letter
-                  </span>
-                </div>
-                <div className="flex gap-2 items-start">
-                  <div
-                    className={`transition-colors duration-200 mt-0.5 ${validations.consecutiveChars ? "text-green-600" : "text-red-500"}`}
-                  >
-                    {/* @ts-ignore */}
-                    {validations.consecutiveChars ? (
-                      <Check size={16} />
-                    ) : (
-                      <X size={16} />
-                    )}
-                  </div>
-                  <span
-                    className={
-                      validations.consecutiveChars
-                        ? "text-green-700"
-                        : "text-gray-700"
-                    }
-                  >
-                    If under 20 characters, it can&apos;t have more than 2
-                    consecutive identical characters.
-                  </span>
-                </div>
-              </div>
-            )}
-            {!login && (
-              <div>
-                <div className="text-sm">* Indicates a required field.</div>
-                <div className="text-sm">
+              <div className="text-sm">
+                <p>* Indicates a required field.</p>
+                <p className="font-medium">
                   By signing up, you agree to Zapier&apos;s{" "}
                   <a
                     className="text-blue-700 underline"
@@ -435,27 +265,117 @@ export default function SingIn() {
                     className="text-blue-700 underline"
                     href="https://zapier.com/privacy"
                   >
-                    privacy policy.
+                    privacy policy
                   </a>
+                  .
+                </p>
+              </div>
+            )}
+
+            {/* Button */}
+            <button type="submit" disabled={!isFirstStepValid()}>
+              <PrimaryButton size="small" disabled={!isFirstStepValid()}>
+                {login ? "Login" : "Get started for free"}
+              </PrimaryButton>
+            </button>
+
+            {/* Log In / Sign Up Toggle */}
+            <div className="text-sm font-medium text-center flex justify-center items-center gap-1">
+              {login ? "Don't have an account?" : "Already have an account?"}
+              <a
+                className="text-blue-700 underline cursor-pointer"
+                onClick={() => setLogin(!login)}
+              >
+                {login ? "Sign up" : "Log in"}
+              </a>
+            </div>
+          </div>
+        ) : (
+          // Password step
+          <div className="flex flex-col gap-4">
+            <div
+              className="flex gap-1 items-center text-blue-700 hover:cursor-pointer"
+              onClick={() => setNextField(false)}
+            >
+              <ArrowLeft size={16} /> Back
+            </div>
+            <div className="flex gap-0.5 text-sm">
+              {login ? "You're logging in as" : "You're signing up as"}{" "}
+              <span className="font-bold">{email}</span>
+            </div>
+
+            <Input
+              placeholder=""
+              value={password}
+              onChange={setPassword}
+              label="* Password"
+              type="password"
+            />
+
+            {/* Password validation only for signup */}
+            {!login && (
+              <div className="flex flex-col text-sm gap-2">
+                <div className="flex gap-2 items-center">
+                  {validations.length ? (
+                    <Check size={16} className="text-green-600" />
+                  ) : (
+                    <X size={16} className="text-red-500" />
+                  )}
+                  <span
+                    className={
+                      validations.length ? "text-green-700" : "text-gray-700"
+                    }
+                  >
+                    Must be at least 12 characters
+                  </span>
+                </div>
+                <div className="flex gap-2 items-center">
+                  {validations.hasLetter ? (
+                    <Check size={16} className="text-green-600" />
+                  ) : (
+                    <X size={16} className="text-red-500" />
+                  )}
+                  <span
+                    className={
+                      validations.hasLetter ? "text-green-700" : "text-gray-700"
+                    }
+                  >
+                    Must contain at least one letter
+                  </span>
+                </div>
+                <div className="flex gap-2 items-start">
+                  {validations.consecutiveChars ? (
+                    <Check size={16} className="text-green-600 mt-0.5" />
+                  ) : (
+                    <X size={16} className="text-red-500 mt-0.5" />
+                  )}
+                  <span
+                    className={
+                      validations.consecutiveChars
+                        ? "text-green-700"
+                        : "text-gray-700"
+                    }
+                  >
+                    If under 20 characters, can’t have more than 2 consecutive
+                    identical characters.
+                  </span>
                 </div>
               </div>
             )}
+
             <button type="submit" disabled={!isPasswordStepValid()}>
-              <PrimaryButton
-                size="small"
-                // @ts-ignore
-                disabled={!isPasswordStepValid()}
-              >
-                Get Started For Free
+              <PrimaryButton size="small" disabled={!isPasswordStepValid()}>
+                {login ? "Login" : "Get Started For Free"}
               </PrimaryButton>
             </button>
+
             <div className="text-center text-sm">
-              Already have an account?{" "}
+              {login ? "Don't have an account?" : "Already have an account?"}{" "}
               <a
                 className="text-blue-700 underline cursor-pointer"
-                onClick={() => setLogin(true)}
+                onClick={() => setLogin(!login)}
               >
-                Log In
+                {login ? "Sign up" : "Log in"}
               </a>
             </div>
           </div>

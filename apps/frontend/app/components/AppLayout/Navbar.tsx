@@ -2,86 +2,67 @@ import { AppWindow } from "lucide-react";
 import LinkButton from "../buttons/LinkButton";
 import PrimaryButton from "../buttons/PrimaryButton";
 import zap from "./zap.png";
-import { ArrowDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "../../api/auth/[...nextauth]/auth";
 import UserAction from "../UserAction";
 import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
+import List from "../SideBarList";
 
 export default async function Navbar() {
   const session = await auth();
   const isAuthenticated = !!session;
+
   return (
     <div
-      className="w-full border-b bg-stone-50 border-b-black/10 pl-8 pr-10"
+      className="w-full border-b bg-stone-50 border-b-black/10 pl-4 pr-6 sm:pl-8 sm:pr-10"
       style={{ backgroundColor: "#FFFDF9" }}
     >
-      <div className="flex w-full justify-between items-center my-1.5">
+      <div className="flex w-full justify-between items-center my-2 sm:my-1.5">
+        {/* Left - Logo */}
         <div className="flex gap-3 justify-center items-center">
+          {isAuthenticated && <List />}
           <Link href={"/"}>
-            {" "}
             <Image
               width={100}
               height={100}
               src={zap.src}
               alt="LOGO"
-              className="max-w-32 hover:cursor-pointer"
+              className="max-w-28 sm:max-w-32 hover:cursor-pointer"
             />
           </Link>
-          {/* <LinkButton size="small">
-            Products{" "}
-            <div className="ml-1.5 text-xs">
-              <ArrowDown />
-            </div>
-          </LinkButton>
-          <LinkButton size="small">
-            Solutions{" "}
-            <div className="ml-1.5 text-xs">
-              {" "}
-              <ArrowDown />{" "}
-            </div>
-          </LinkButton>
-          <LinkButton size="small">
-            Resources{" "}
-            <div className="ml-1.5 text-xs">
-              {" "}
-              <ArrowDown />{" "}
-            </div>
-          </LinkButton>
-          <LinkButton size="small">Enterprise</LinkButton>
-          <LinkButton size="small">Pricing</LinkButton> */}
         </div>
-        <div className="flex items-center gap-4">
-          <LinkButton href="" size="small">
-            <div className="text-xl mr-1">
-              {" "}
-              {/* @ts-ignore */}
-              <AppWindow />
-            </div>
-            Explore Apps
-          </LinkButton>
-          {/* @ts-ignore */}
-          <LinkButton size="small">Contact sales</LinkButton>
+
+        {/* Right - Buttons */}
+        <div className="flex items-center gap-3 sm:gap-4">
+          {/* Hide these on small screens */}
+          <div className="hidden sm:flex items-center gap-4">
+            <LinkButton href="" size="small">
+              <div className="text-xl mr-1">
+                <AppWindow />
+              </div>
+              Explore Apps
+            </LinkButton>
+            <LinkButton size="small">Contact sales</LinkButton>
+          </div>
+
+          {/* Login / Signup */}
           {!isAuthenticated && (
             <LinkButton href={"/sign-up"} size="small">
               Log in
             </LinkButton>
           )}
-          <LinkButton href={"/sign-up"} size="small">
-            {/* @ts-ignore */}
+          <Link href={"/sign-up"}>
             {!isAuthenticated && (
               <PrimaryButton size="small">Sign up</PrimaryButton>
             )}
-          </LinkButton>
+          </Link>
 
+          {/* User Menu if logged in */}
           {isAuthenticated && (
-            <RecoilContextProvider>
-              <UserAction
-                // @ts-ignore
-                name={session?.user?.name[0].toLocaleUpperCase() || "UR"}
-              />
-            </RecoilContextProvider>
+            <UserAction
+              name={session?.user?.name[0].toLocaleUpperCase() || "UR"}
+            />
           )}
         </div>
       </div>
