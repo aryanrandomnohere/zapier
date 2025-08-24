@@ -5,7 +5,6 @@ import { prisma } from "../config/client.js";
 import { JWT_SECRET } from "../config/JWT_SECRET.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import errorResponse from "../utils/errorResponse.js";
 import asyncHandler from "../utils/asyncFunction.js";
 
 const authRouter = express.Router();
@@ -73,37 +72,40 @@ authRouter.post(
 );
 
 // ---------- LOGIN ----------
-authRouter.post("/login",asyncHandler(async (req, res) => {
-  console.log("Login renpoint hit");
-  const parsedData = validateOrRespond(req.body, logInSchema, res);
-  if (!parsedData) return;
-  const { email, password } = parsedData;
+authRouter.post(
+  "/login",
+  asyncHandler(async (req, res) => {
+    console.log("Login renpoint hit");
+    const parsedData = validateOrRespond(req.body, logInSchema, res);
+    if (!parsedData) return;
+    const { email, password } = parsedData;
 
-  try {
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user)
-      return res
-        .status(400)
-        .json({ msg: "Invalid email or password", success: false });
+    try {
+      const user = await prisma.user.findUnique({ where: { email } });
+      if (!user)
+        return res
+          .status(400)
+          .json({ msg: "Invalid email or password", success: false });
 
-    const validPassword = await bcrypt.compare(password, user.password!);
-    if (!validPassword)
-      return res
-        .status(400)
-        .json({ msg: "Invalid email or password", success: false });
+      const validPassword = await bcrypt.compare(password, user.password!);
+      if (!validPassword)
+        return res
+          .status(400)
+          .json({ msg: "Invalid email or password", success: false });
 
-    const token = signToken({
-      userId: user.id,
-      email: user.email,
-      zapmail: user.zapmail,
-    });
+      const token = signToken({
+        userId: user.id,
+        email: user.email,
+        zapmail: user.zapmail,
+      });
 
-    res.status(200).json({ token, user: user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Login failed", error: err, success: false });
-  }
-}));   
+      res.status(200).json({ token, user: user });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: "Login failed", error: err, success: false });
+    }
+  }),
+);
 
 // ---------- GOOGLE ----------
 authRouter.post(
@@ -163,40 +165,67 @@ authRouter.post(
     }
   }),
 );
+// Define consistent cookie options
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax" as const,
+  path: "/",
+};
 
-authRouter.post("/set-cookie",asyncHandler(async (req, res) => {
-  try {
-    const { token } = req.body;
+// Set-cookie route using consistent options
+authRouter.post(
+  "/set-cookie",
+  asyncHandler(async (req, res) => {
+    try {
+      const { token } = req.body;
 
-    console.log("Setting cookie", token);
-    res.cookie("auth_token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
-    res.status(200).json({ msg: "Cookie set", success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Cookie set failed", success: false });
-  }
-}));
+      console.log("Setting cookie", token);
+      console.log("Cookie options:", cookieOptions);
 
-authRouter.post("/logout",asyncHandler(async (req, res) => {
-  try {
-    console.log("Logging out");
-    res.clearCookie("auth_token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-    });
-    res.status(200).json({ msg: "Cookie cleared", success: true });
+      res.cookie("auth_token", token, cookieOptions);
+      res.status(200).json({ msg: "Cookie set", success: true });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ msg: "Cookie set failed", success: false });
+    }
+  }),
+);
 
-    res.status(200).json({ msg: "Cookie cleared", success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Cookie clear failed", success: false });
-  }
-}));
+// Logout route using identical options
+authRouter.post(
+  "/logout",
+  asyncHandler(async (req, res) => {
+    try {
+      console.log("Logging out");
+      console.log("Current cookies:", req.cookies);
+      console.log("Clearing with options:", cookieOptions);
 
+      res.clearCookie("auth_token", cookieOptions);
+
+      // Alternative: Also try setting an expired cookie as backup
+      res.cookie("auth_token", "", {
+        ...cookieOptions,
+        expires: new Date(0),
+      });
+
+      return res.status(200).json({ msg: "Cookie cleared", success: true });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ msg: "Cookie clear failed", success: false });
+    }
+  }),
+);
+
+// Debug route to check current cookies
+authRouter.get("/check-cookies", (req, res) => {
+  console.log("All cookies:", req.cookies);
+  console.log("Raw cookie header:", req.headers.cookie);
+  res.json({
+    cookies: req.cookies,
+    rawHeader: req.headers.cookie,
+  });
+});
 export { authRouter };

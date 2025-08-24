@@ -5,6 +5,6 @@ import { getServices } from "../controllers/openController.js";
 
 const openRouter = Router();
 
-openRouter.get("/getservices",asyncHandler(getServices));
+openRouter.get("/getservices", asyncHandler(getServices));
 
 export default openRouter;
