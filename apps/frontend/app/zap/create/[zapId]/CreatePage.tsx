@@ -48,6 +48,7 @@ export default function CreatePage() {
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
   const [reRender, setReRender] = useState<boolean>(false);
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const CheckStepValidity = (
     Index: onStepEnum,
@@ -203,77 +204,100 @@ export default function CreatePage() {
 
   useEffect(() => {
     async function handleLoadZap() {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/loadzap/${zapId}`,
-        {
-          withCredentials: true,
-        },
-      );
-      if (response.data.unauthorized) {
-        setUnauthorized(true);
-        return;
-      }
-      setSelectedRecordId(response.data.RecordId);
-      setRecords(response.data.records);
-      setZapState((prev) => {
-        let newZap = { ...prev };
-        let newItems = { ...newZap.selectedItems };
-        newItems = response.data.finalZap;
-        newZap = { ...newZap, selectedItems: newItems };
-        return newZap;
-      });
-      if (!user) {
-        const session = await getSession();
-        // @ts-ignore
-        setUser(session?.user);
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/loadzap/${zapId}`,
+          {
+            withCredentials: true,
+          },
+        );
+        if (response.data.unauthorized) {
+          setUnauthorized(true);
+          return;
+        }
+        setSelectedRecordId(response.data.RecordId);
+        setRecords(response.data.records);
+        setZapState((prev) => {
+          let newZap = { ...prev };
+          let newItems = { ...newZap.selectedItems };
+          newItems = response.data.finalZap;
+          newZap = { ...newZap, selectedItems: newItems };
+          return newZap;
+        });
+        if (!user) {
+          const session = await getSession();
+          // @ts-ignore
+          setUser(session?.user);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
     handleLoadZap();
   }, []);
-
-  if (unauthorized) {
-    return (
-      <div className=" fixed top-0 left-0 min-w-screen min-h-screen bg-black/50 flex z-[1000] justify-center items-center">
-        <div className="flex flex-col gap-4 items-center">
-          <div className="text-2xl font-bold text-white">
-            You are not authorized to access this zap
-          </div>
-          <div className="text-sm text-white">
-            Please contact the owner of the zap to get access
-          </div>
-          <div className="flex gap-2">
-            <CancelButton onClick={() => handleGoToDashboard()}>
-              Go To Dashboard
-            </CancelButton>{" "}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
-      <div
-        className="flex  w-full  bg-[#FFFDF9] border-b border-zinc-200 justify-end items-center"
-        id=" zap-create "
-      >
-        <ActionButton disabled={checkPublishability()} onClick={handleTest}>
-          <div className="flex gap-2">
-            {" "}
+      {unauthorized && (
+        <div className="fixed inset-0 bg-black/50 flex z-[1000] justify-center items-center p-4">
+          <div className="flex flex-col gap-4 items-center bg-[#1f1f1f] rounded p-6 text-center">
+            <div className="text-xl sm:text-2xl font-bold text-white">
+              You are not authorized to access this zap
+            </div>
+            <div className="text-sm text-white">
+              Please contact the owner of the zap to get access
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 mt-2">
+              <CancelButton onClick={handleGoToDashboard}>
+                Go To Dashboard
+              </CancelButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Top Action Bar */}
+      <div className="flex flex-row w-full bg-[#FFFDF9] border-b border-zinc-200 justify-end items-center gap-2 px-4 py-0.5 sm:py-2">
+        <ActionButton
+          disabled={checkPublishability()}
+          onClick={handleTest}
+          className="w-full sm:w-auto"
+        >
+          <div className="flex items-center justify-center gap-2">
             {/* @ts-ignore */}
-            <Play size={18} /> Test Run
+            <Play size={18} />
+            Test Run
           </div>
         </ActionButton>
-        <ActionButton disabled={checkPublishability()} onClick={handlePublish}>
+        <ActionButton
+          disabled={checkPublishability()}
+          onClick={handlePublish}
+          className="w-full sm:w-auto"
+        >
           Publish
         </ActionButton>
       </div>
-      <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-hidden  bg-[rgb(249,247,243)] dot-background-alt">
-        <MovableCells zapState={zapState} setZapState={setZapState} />
 
+      {/* Main Content */}
+      <div className="flex flex-col w-full h-[calc(100vh-5.6rem)] overflow-auto bg-[rgb(249,247,243)] dot-background-alt p-4 sm:p-6">
+        <MovableCells
+          setIsFullScreen={setIsFullScreen}
+          loading={loading}
+          zapState={zapState}
+          setZapState={setZapState}
+        />
+
+        {/* Side Modal */}
         {metaData.isOpen && (
           <div
-            className={` fixed flex max-w-[35rem] min-h-4/5 max-h-4/5 right-2 z-50  mt-4 ${isFullScreen ? "justify-center items-center min-h-1/3 min-w-1/3 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" : ""}`}
+            className={`fixed flex z-50 bg-transparent
+    ${
+      isFullScreen
+        ? "top-0 left-0 w-screen h-screen justify-center items-center"
+        : "right-2 mt-4 max-w-[35rem] min-h-[80%] max-h-[80%]"
+    }`}
           >
             <Suspense fallback={<SideModalSkeleton />}>
               <SideModal
@@ -288,26 +312,27 @@ export default function CreatePage() {
             </Suspense>
           </div>
         )}
-
+        {/* Loading Overlay */}
         {isPublishing && (
-          <div className="fixed top-0 left-0 w-screen h-screen bg-black/50 flex z-[1000] justify-center items-center">
+          <div className="fixed inset-0 bg-black/50 flex z-[1000] justify-center items-center p-4">
             <LoadingSpinner />
           </div>
         )}
 
+        {/* Published Overlay */}
         {isPublished && (
-          <div className=" fixed top-0 left-0 min-w-screen min-h-screen bg-black/50 flex z-[1000] justify-center items-center">
-            <div className="flex flex-col gap-4 items-center">
-              <div className="text-2xl font-bold text-white">
+          <div className="fixed inset-0 bg-black/50 flex z-[1000] justify-center items-center p-4">
+            <div className="flex flex-col gap-4 items-center bg-[#1f1f1f] rounded p-6 text-center w-full max-w-sm">
+              <div className="text-xl sm:text-2xl font-bold text-white">
                 Zap has been published
               </div>
               <div className="text-sm text-white">
                 You can now go to the dashboard to view your zap
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
                 <CancelButton onClick={() => setIsPublished(false)}>
                   Stay
-                </CancelButton>{" "}
+                </CancelButton>
                 <SaveButton onClick={handleGoToDashboard} disabled={false}>
                   Go to Dashboard
                 </SaveButton>

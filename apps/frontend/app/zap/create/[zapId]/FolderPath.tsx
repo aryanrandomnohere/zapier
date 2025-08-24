@@ -147,10 +147,10 @@ export default function ZapHeader() {
   return (
     <>
       <div
-        className={`flex items-center space-x-2 bg-[#413736] px-4 text-white text-sm ${isRenaming ? "hidden" : "block"}`}
+        className={`flex items-center  space-x-2 bg-[#413736] px-4 text-white text-sm ${isRenaming ? "hidden" : "block"}`}
       >
         {/* Folder */}
-        <div className="flex items-center space-x-1 text-gray-300">
+        <div className=" items-center hidden md:flex space-x-1 text-gray-300">
           <Folder className="w-4 h-4" />
           <span className="truncate max-w-[100px]">
             {requiredZap?.folder.name}
@@ -158,7 +158,7 @@ export default function ZapHeader() {
         </div>
 
         {/* Slash Separator */}
-        <span className="text-gray-400">/</span>
+        <span className="text-gray-400 hidden md:block">/</span>
 
         {/* Avatar */}
         <ZapActions

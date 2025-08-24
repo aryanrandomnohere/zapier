@@ -170,8 +170,8 @@ export default function ZapHistory() {
   }, []);
 
   return (
-    <div className="bg-opacity-50 flex items-start justify-center px-1 pl-3">
-      <div className="rounded-lg w-full min-w-xs max-h-[90vh] space-y-6">
+    <div className="bg-opacity-50 max-w-xs flex items-start justify-center px-1 pl-3">
+      <div className="rounded-lg w-full min-w-[18rem] max-h-[90vh] space-y-6">
         {/* Header */}
         <div className="px-1 py-4 border-b border-gray-200 relative">
           <div className="flex items-center justify-between">
