@@ -72,7 +72,7 @@ const TriggerData = ({
       `${process.env.NEXT_PUBLIC_HOOK_URL}/test/trigger/${zapId}`,
       {
         withCredentials: true,
-      }
+      },
     );
     return {
       records: response.data.records,
@@ -89,7 +89,8 @@ const TriggerData = ({
 
     try {
       // Make API call to xyz endpoint
-      const response = !appId ? await fetchRecords() : await testTrigger();
+      const response =
+        appId === "webhook" ? await fetchRecords() : await testTrigger();
 
       setRecords(response.records);
       setSelectedRecordId(response.records[response.records.length - 1].id);
@@ -241,7 +242,7 @@ const TriggerData = ({
           </div>
         )}
       </div>
-      <div className=" absolute w-full bottom-0">
+      <div className=" absolute max-w-[24rem] w-full bottom-0">
         {" "}
         {selectedRecordId ? (
           zapState.selectedItems.length === 1 ? (
@@ -253,13 +254,13 @@ const TriggerData = ({
             >
               <div className="flex gap-1 w-full my-4 px-2">
                 <button className="px-2 w-full bg-blue-700 text-white hover:bg-blue-800 cursor-not-allowed py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer">
-                  Continue with selected record
+                  Continue without selected record
                 </button>
               </div>
             </div>
           )
         ) : !loading ? (
-          <div className="w-full border-t border-black/10 self-start justify-start">
+          <div className="w-full border-t max-w-[24rem] border-black/10 self-start justify-start">
             <div className="flex gap-1 w-full my-4 px-2 ">
               <button
                 className={` ${!loading && filteredRecords.length >= 0 && triedFetching ? "w-1/2 bg-transparent text-black hover:bg-gray-500/50 border border-gray-400" : "w-full bg-blue-700 text-white hover:bg-blue-800"} py-2 rounded text-sm font-bold text-center transition-all duration-200 hover:cursor-pointer`}

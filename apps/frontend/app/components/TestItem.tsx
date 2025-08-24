@@ -128,7 +128,7 @@ export default function TestItem({
       {item.type == "trigger" ? (
         <div>
           <Triggerdata
-            appId={zap.selectedItems[metadata.index].appId || "google"}
+            appId={zap.selectedItems[metadata.index].appId}
             handleComplete={handleComplete}
             id={id}
             triggerName={zap.selectedItems[metadata.index].name}

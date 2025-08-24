@@ -135,46 +135,64 @@ const DataInForm: React.FC<DataInFormProps> = ({
   };
 
   const handleTestAction = async () => {
-    if (!selectedRecordId || (selectedRecordId && selectedRecordId === ""))
-      return;
-    if (metaData.index === null || metaData.index === undefined) return;
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/test`,
-      {
-        actionId: zapState.selectedItems[metaData.index].stepId,
-      },
-      {
-        withCredentials: true,
-      },
-    );
-    if (response.data.success) {
-      setTabId(tabIdEnum.DATA_OUT);
-      toast.custom((t) => (
-        <ToastNotification
-          t={t}
-          type="success"
-          actions={[]}
-          onClose={() => toast.dismiss(t.id)}
-        >
-          <div className="flex gap-1 items-center">Tested successfully</div>
-        </ToastNotification>
-      ));
-      setZapState({
-        ...zapState,
-        selectedItems: zapState.selectedItems.map((item) => {
-          if (
-            item.stepId ===
-            zapState.selectedItems[response.data.sortingOrder || metaData.index]
-              ?.stepId
-          ) {
-            return { ...item, dataOut: response.data.dataOut };
-          }
-          return item;
-        }),
-      });
+    try {
+      if (!selectedRecordId || (selectedRecordId && selectedRecordId === ""))
+        return;
+      if (metaData.index === null || metaData.index === undefined) return;
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/test`,
+        {
+          actionId: zapState.selectedItems[metaData.index].stepId,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+      if (response.data.success) {
+        setTabId(tabIdEnum.DATA_OUT);
+        toast.custom((t) => (
+          <ToastNotification
+            t={t}
+            type="success"
+            actions={[]}
+            onClose={() => toast.dismiss(t.id)}
+          >
+            <div className="flex gap-1 items-center">Tested successfully</div>
+          </ToastNotification>
+        ));
+        setZapState({
+          ...zapState,
+          selectedItems: zapState.selectedItems.map((item) => {
+            if (
+              item.stepId ===
+              zapState.selectedItems[
+                response.data.sortingOrder || metaData.index
+              ]?.stepId
+            ) {
+              return { ...item, dataOut: response.data.dataOut };
+            }
+            return item;
+          }),
+        });
+        setTested(true);
+      }
+      if (response.data.success === false) {
+        toast.custom((t) => (
+          <ToastNotification
+            t={t}
+            type="error"
+            actions={[]}
+            onClose={() => toast.dismiss(t.id)}
+          >
+            <div className="flex gap-1 items-center">Test failed</div>
+          </ToastNotification>
+        ));
+      }
+
       setTested(true);
-    }
-    if (response.data.success === false) {
+    } catch (err) {
+      console.log(err?.response?.data?.message);
+
       toast.custom((t) => (
         <ToastNotification
           t={t}
@@ -182,12 +200,12 @@ const DataInForm: React.FC<DataInFormProps> = ({
           actions={[]}
           onClose={() => toast.dismiss(t.id)}
         >
-          <div className="flex gap-1 items-center">Test failed</div>
+          <div className="flex gap-1 items-center">
+            Test failed: {err?.response?.data?.message || ""}
+          </div>
         </ToastNotification>
       ));
     }
-
-    setTested(true);
   };
   if (!metaData || metaData.index === null || metaData.index === undefined)
     return;
@@ -305,9 +323,9 @@ const DataInForm: React.FC<DataInFormProps> = ({
           </div>
         )}
 
-      <div className=" absolute w-full bottom-0">
+      <div className={` absolute w-full bottom-0`}>
         <div className="w-full border-t border-black/10 self-start justify-start">
-          <div className="flex gap-1 w-full my-4 px-2 ">
+          <div className="flex gap-1 w-full my-4 px-2 max-w-[24rem] ">
             {(tested || skipped) &&
             !zapState.selectedItems[metaData.index]?.dataOut ? (
               <button

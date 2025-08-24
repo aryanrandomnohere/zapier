@@ -43,11 +43,22 @@ export default function MetaDataField({
   const inputRef = useRef<HTMLInputElement>(null);
   const [configureStepIndex, setConfigureStepIndex] =
     useRecoilState(configureStepDetails);
-
   const setOptionChanged = useSetRecoilState(OptionChanged);
   const stepIndex = useRecoilValue(onStep);
   const [user, setUser] = useRecoilState(userAtom);
   const { zapId } = useParams();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768; // Tailwind md breakpoint
+      setIsMobile(mobile);
+    };
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [setIsMobile]);
   useEffect(() => {
     const handler = (event: MessageEvent) => {
       if (field.fieldNumber === 0) return;
@@ -136,7 +147,7 @@ export default function MetaDataField({
             </div>
           </div>
           {open && (
-            <FloatingModal ref={ref}>
+            <FloatingModal type={isMobile ? "below" : "shifted"} ref={ref}>
               <div className="p-2">
                 <div className="flex items-center gap-2 px-2 py-1.5 bg-white mb-3.5 border border-black/20 rounded focus:border focus:border-blue-600">
                   <div className="text-gray-500">
@@ -217,34 +228,61 @@ export default function MetaDataField({
           {field.fieldLabel}{" "}
           {field.required && <div className="text-red-400">*</div>}
         </div>
-        <input
-          ref={inputRef}
-          onClick={() => setEditingField("")}
-          type={field.fieldInputType}
-          placeholder={field.fieldPlaceholder}
-          value={field.fieldValue || ""}
-          onChange={(e) => {
-            if (stepIndex == onStepEnum.CONFIGURATION)
-              onFieldChange(
-                field.fieldNumber,
-                e.target.value,
-                onStepEnum.CONFIGURATION,
-              );
-            else
-              onFieldChange(
-                field.fieldNumber,
-                e.target.value,
-                onStepEnum.SETUP,
-              );
-          }}
-          className={`relative px-3 py-1.5 ${type != "action" ? "pr-9" : ""} border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none`}
-          required={field.required}
-        />
+        {type !== "action" ? (
+          <input
+            ref={inputRef}
+            onClick={() => setEditingField("")}
+            type={field.fieldInputType}
+            placeholder={field.fieldPlaceholder}
+            value={field.fieldValue || ""}
+            onChange={(e) => {
+              if (stepIndex == onStepEnum.CONFIGURATION)
+                onFieldChange(
+                  field.fieldNumber,
+                  e.target.value,
+                  onStepEnum.CONFIGURATION,
+                );
+              else
+                onFieldChange(
+                  field.fieldNumber,
+                  e.target.value,
+                  onStepEnum.SETUP,
+                );
+            }}
+            className={`relative px-3 py-1.5 ${type != "action" ? "pr-9" : ""} border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none`}
+            required={field.required}
+          />
+        ) : (
+          <textarea
+            onClick={() => setEditingField("")}
+            value={field.fieldValue || ""}
+            required={field.required}
+            className={`relative px-3 py-1.5 ${type != "action" ? "pr-9" : ""} border border-black/20 rounded w-full text-sm hover:border-blue-500 focus:border-blue-500 outline-none`}
+            placeholder={field.fieldPlaceholder}
+            onChange={(e) => {
+              if (stepIndex == onStepEnum.CONFIGURATION)
+                onFieldChange(
+                  field.fieldNumber,
+                  e.target.value,
+                  onStepEnum.CONFIGURATION,
+                );
+              else
+                onFieldChange(
+                  field.fieldNumber,
+                  e.target.value,
+                  onStepEnum.SETUP,
+                );
+            }}
+            className="border border-gray-300 min-h-fit max-h-44"
+          >
+            {field.fieldValue}
+          </textarea>
+        )}
         {selectedField === field.fieldLabel &&
           selectFieldIsOpen &&
           stepIndex !== onStepEnum.SETUP &&
           type === "action" && (
-            <FloatingModal>
+            <FloatingModal type={isMobile ? "below" : "shifted"}>
               <DittoComponent
                 setValue={setValue}
                 fieldLabel={field.fieldLabel}

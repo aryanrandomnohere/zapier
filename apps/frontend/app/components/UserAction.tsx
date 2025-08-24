@@ -82,10 +82,10 @@ export default function UserAction({ name }: { name: string }) {
               <Check className="w-4 h-4" />
             </div>
           </div>
-          <div className="flex gap-2 font-normal  items-center border-t border-black/10 pt-2 hover:cursor-pointer hover:bg-blue-500/10 rounded p-2">
+          {/* <div className="flex gap-2 font-normal  items-center border-t border-black/10 pt-2 hover:cursor-pointer hover:bg-blue-500/10 rounded p-2">
             {" "}
             <Settings /> Settings
-          </div>
+          </div> */}
           <div
             onClick={handleSignOut}
             className="flex gap-2 font-normal items-center hover:cursor-pointer hover:bg-red-500/10 rounded p-2"
