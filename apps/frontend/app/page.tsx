@@ -6,7 +6,7 @@ export default function page() {
   return (
     <main>
       <Navbar />
-      <div className="flex">
+      <div className="flex w-full h-full justify-center">
         <Hero />
       </div>
     </main>

@@ -1,18 +1,19 @@
 import Navbar from "../components/AppLayout/Navbar";
 import Sidebar from "../ui/Sidebar";
+import RecoilContextProvider from "../RecoilState/RecoilContextProvider";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col h-full w-full">
+    <RecoilContextProvider>
       {" "}
-      {/* This sets the entire page as a column flex container */}
-      <Navbar />
-      <div className="flex h-full w-full">
-        {" "}
-        {/* This div should contain the sidebar and main content */}
-        <Sidebar />
-        {children}
+      {/* Single wrapper for all Recoil state */}
+      <div className="flex flex-col h-full w-full">
+        <Navbar />
+        <div className="flex h-full w-full">
+          <Sidebar />
+          <div className="w-full min-h-full bg-[#F5F3EB]">{children}</div>
+        </div>
       </div>
-    </div>
+    </RecoilContextProvider>
   );
 }
