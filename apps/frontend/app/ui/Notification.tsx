@@ -43,7 +43,7 @@ const ToastNotification: React.FC<ToastNotificationProps> = ({
         };
       case "error":
         return {
-          stripColor: "bg-red-500",
+          stripColor: "bg-red-300",
           icon: XCircle,
           iconBg: "bg-red-500",
           iconColor: "text-white",

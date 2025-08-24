@@ -1,21 +1,53 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
 import { usePathname } from "next/navigation"; // Assuming App Router
 import { BoltIcon } from "../components/ZapDashboard/FolderIcon";
+import { useRecoilState } from "recoil";
+import { sidebarIsOpenAtom } from "../RecoilState/store/sidebarAtom";
+import { useEffect, useRef, useState } from "react";
+import useOutsideClick from "../hooks/useOutsideClick";
 
 const Sidebar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useRecoilState(sidebarIsOpenAtom);
   const pathname = usePathname();
+  const ref = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Don't close dropdown if clicking inside a modal
+      console.log("handleClickOutside");
+      const target = event.target as HTMLElement;
+      if (target && target.closest("[data-modal-backdrop]")) {
+        return;
+      }
 
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Detect mobile screen
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // Tailwind md breakpoint
+    };
+    handleResize(); // initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const isActive = (href: string) => pathname === href;
-
   return (
     <div
+      ref={ref}
       // Main Sidebar Container: Fixed height, controls its own width based on isOpen
       // This div itself is fixed and takes full height of its parent (which is the viewport in Layout.tsx)
-      className={`fixed h-full bg-[#FFFDF9]  z-50   ${
-        isOpen ? "w-64" : "w-12"
+      className={`fixed h-full bg-[#FFFDF9]  z-50 ${
+        isOpen ? "w-64" : "hidden md:block md:w-12"
       }`}
     >
       <div
@@ -23,11 +55,11 @@ const Sidebar: React.FC = () => {
         // This div is now truly 'h-full' without extra padding at the bottom,
         // relying on flex-grow and mt-auto for proper distribution
         className="flex flex-col h-full pb-12"
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
+        onMouseEnter={() => !isMobile && setIsOpen(true)}
+        onMouseLeave={() => !isMobile && setIsOpen(false)}
       >
         {/* Create Button */}
-        <div className={`flex py-3 px-2 w-full `}>
+        <div className={`flex  py-3 px-2 w-full `}>
           <div
             className={`bg-orange-500 hover:bg-orange-600 text-white rounded ${
               isOpen

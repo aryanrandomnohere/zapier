@@ -172,6 +172,7 @@ export default function SideModal({
   };
 
   const handleComplete = () => {
+    console.log("Going to the next step");
     setMetaData((prev) => ({ ...prev, index: 1 }));
     setSkippedTrigger(true);
     setOnStep(onStepEnum.SETUP);
@@ -214,11 +215,9 @@ export default function SideModal({
       { withCredentials: true },
     );
 
-
     if (panelIndex === onStepEnum.CONFIGURATION) {
       setZapState((prev) => {
-        const newState = { ...prev };
-        const newSelectedItems = [...newState.selectedItems];
+        const newSelectedItems = [...prev.selectedItems];
         const existingItem = newSelectedItems[index];
         if (
           !existingItem ||
@@ -241,14 +240,17 @@ export default function SideModal({
           },
         };
 
-        existingItem.metadata = {
-          ...existingItem.metadata,
-          //@ts-ignore
-          optionConfiguration: updatedOptionConfig,
+        // Create a completely new item instead of mutating existingItem
+        const updatedItem = {
+          ...existingItem,
+          metadata: {
+            ...existingItem.metadata,
+            optionConfiguration: updatedOptionConfig,
+          },
         };
 
-        newSelectedItems[index] = existingItem;
-        return { ...newState, selectedItems: newSelectedItems };
+        newSelectedItems[index] = updatedItem;
+        return { ...prev, selectedItems: newSelectedItems };
       });
     } else if (panelIndex === onStepEnum.TEST) {
       setZapState((prev) => {
@@ -289,8 +291,13 @@ export default function SideModal({
         const existingItem = newSelectedItems[index];
         if (!existingItem || !existingItem.metadata) return prev;
 
-        existingItem.metadata = { ...existingItem.metadata, completed: true };
-        newSelectedItems[index] = existingItem;
+        // Create a new object instead of mutating the existing one
+        const updatedItem = {
+          ...existingItem,
+          metadata: { ...existingItem.metadata, completed: true },
+        };
+
+        newSelectedItems[index] = updatedItem;
         return { ...prev, selectedItems: newSelectedItems };
       });
     }
@@ -349,9 +356,11 @@ export default function SideModal({
               </div>
             )}
             <div
-              onClick={() => {
+              onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                e.stopPropagation();
                 setMetaData({ index: null, isOpen: false });
                 setReRender(true);
+                console.log("Closing Modal");
               }}
               className="cursor-pointer"
             >
