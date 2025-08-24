@@ -76,7 +76,7 @@ export default function MoveZapModal({
           onClose={() => toast.dismiss(t.id)}
         >
           <div className="flex gap-1 items-center">
-            //@ts-ignore gemini Zap {zapName} has been moved from{" "}
+            Zap {zapName} has been moved from{" "}
             <div className="text-blue-500  underline min-w-fit ">
               {folderName}
             </div>{" "}
@@ -112,7 +112,7 @@ export default function MoveZapModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4">
       <div
         className="bg-white rounded-lg shadow-xl w-full max-w-md"
         onClick={(e) => e.stopPropagation()}

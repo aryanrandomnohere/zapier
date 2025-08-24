@@ -2,13 +2,9 @@ import { EllipsisVertical } from "lucide-react";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import Image from "next/image";
 import { ItemType } from "@repo/types";
-import dynamic from "next/dynamic";
-import { BoltIcon } from "./FolderIcon";
-
-const DropDownMenu = dynamic(() => import("@/app/ui/DropDownMenu"), {
-  ssr: false,
-});
-const CellActions = dynamic(() => import("./CellActions"), { ssr: false });
+import { IconSkeleton, Skeleton, SkeletonPulse } from "../ui/Skeleton";
+import CellActions from "./CellActions";
+import DropDownMenu from "@/app/ui/DropDownMenu";
 
 export default function ZapCell({
   title,
@@ -21,7 +17,7 @@ export default function ZapCell({
   setCopiedItem,
 }: {
   title: string;
-  subtitle: string;
+  subtitle?: string | null;
   order: number;
   imagePath?: string;
   SelectCell: (order: number) => void;
@@ -59,34 +55,50 @@ export default function ZapCell({
                 </div>
               ) : (
                 <div className="text-white rounded-full">
-                  <BoltIcon />
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path
+                      fill="#2D2E2E"
+                      d="M9 23.66 20.54 9.91H15V.16L3.46 13.91H9v9.75Z"
+                    />
+                  </svg>
                 </div>
               )}
               <div className="font-bold text-sm"> {title}</div>{" "}
             </div>
-            <DropDownMenu
-              type="bottom"
-              menuClassName="bg-white text-black"
-              trigger={
-                <div className="flex items-center justify-center hover:bg-gray-100 rounded p-1">
-                  {" "}
-                  <EllipsisVertical size={20} />
-                </div>
-              }
-            >
-              <CellActions
-                copiedItem={copiedItem}
-                setCopiedItem={setCopiedItem}
-                index={order}
-              />
-            </DropDownMenu>
+            {loading ? (
+              <IconSkeleton />
+            ) : (
+              <DropDownMenu
+                type="bottom"
+                menuClassName="bg-white text-black"
+                trigger={
+                  <div className="flex items-center justify-center hover:bg-gray-100 rounded p-1">
+                    {" "}
+                    <EllipsisVertical size={20} />
+                  </div>
+                }
+              >
+                <CellActions
+                  copiedItem={copiedItem}
+                  setCopiedItem={setCopiedItem}
+                  index={order}
+                />
+              </DropDownMenu>
+            )}
           </div>
           <div className="flex gap-1 font-bold text-xl">
             <div className="flex gap-1 items-center">
-              <div className="text-base"> {order}. </div>
-              <div className=" font-semibold  text-stone-500 text-sm">
-                {" " + subtitle}
-              </div>
+              {loading ? (
+                <SkeletonPulse className="h-4 w-44" />
+              ) : (
+                <>
+                  {" "}
+                  <div className="text-base"> {order}. </div>
+                  <div className=" font-semibold  text-stone-500 text-sm">
+                    {subtitle || "An event that starts your Zap"}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

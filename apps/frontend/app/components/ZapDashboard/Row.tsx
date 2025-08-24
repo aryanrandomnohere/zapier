@@ -16,18 +16,19 @@ import Avatar from "../Avatar";
 import useFolders from "@/app/hooks/useFolders";
 import ToastNotification from "@/app/ui/Notification";
 import toast from "react-hot-toast";
+
 export interface RowProps {
   zap: zapInterface;
   handleZapClick: (id: string) => void;
   refetchZaps: () => void;
 }
+
 export const Row: React.FC<RowProps> = ({
   zap,
   handleZapClick,
   refetchZaps,
 }) => {
   const { folders } = useFolders();
-  console.log(folders);
   const [activeZap, setActiveZap] = useState<boolean>(zap.published);
   const [user, setUser] = useRecoilState(userAtom);
   const [publishingLoading, setPublishingLoading] = useState(false);
@@ -35,6 +36,7 @@ export const Row: React.FC<RowProps> = ({
   const [pageLoading, setPageLoading] = useState(false);
   const pathname = usePathname();
   const isTrash = pathname.includes("trash");
+
   async function handlePublishing() {
     setPublishingLoading(true);
     let userId: string | undefined = user?.userId
@@ -60,42 +62,64 @@ export const Row: React.FC<RowProps> = ({
         const response = await axios.put(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/stop/${zap.id}`,
           {},
-          {
-            withCredentials: true,
-          },
+          { withCredentials: true },
         );
-        if (response.data.success) setActiveZap(false);
-        else
+        if (response.data.success) {
+          setActiveZap(false);
           toast.custom((t) => (
             <ToastNotification
               t={t}
-              type="error"
+              type="success"
               actions={[]}
               onClose={() => toast.dismiss(t.id)}
             >
               <div className="flex gap-1 items-center">
-                Error stopping zap {zap.name}
+                Zap stopped successfully
               </div>
             </ToastNotification>
           ));
+        }
       } else {
         const response = await axios.put(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/start/${zap.id}`,
           {},
-          {
-            withCredentials: true,
-          },
+          { withCredentials: true },
         );
-        if (response.data.success) setActiveZap(true);
+        if (response.data.success) {
+          setActiveZap(true);
+          toast.custom((t) => (
+            <ToastNotification
+              t={t}
+              type="success"
+              actions={[]}
+              onClose={() => toast.dismiss(t.id)}
+            >
+              <div className="flex gap-1 items-center">
+                Zap published successfully
+              </div>
+            </ToastNotification>
+          ));
+        }
       }
-    } catch (error) {
-      console.error("Error publishing/unpublishing zap:", error);
+    } catch (err: any) {
+      toast.custom((t) => (
+        <ToastNotification
+          t={t}
+          type="error"
+          actions={[]}
+          onClose={() => toast.dismiss(t.id)}
+        >
+          <div className="flex gap-1 items-center">
+            Test failed:{" "}
+            {err?.response?.data?.message || "Something went wrong"}
+          </div>
+        </ToastNotification>
+      ));
     } finally {
       setPublishingLoading(false);
     }
   }
 
-  // Sort actions by sortingOrder and get unique apps
   const sortedActions = [...zap.actions].sort(
     (a, b) => a.sortingOrder - b.sortingOrder,
   );
@@ -109,84 +133,69 @@ export const Row: React.FC<RowProps> = ({
     [] as (typeof sortedActions)[0]["actionDetails"][],
   );
 
-  if (pageLoading) {
-    return (
-      <div className="fixed bg-black/50 bg-blur-sm top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex  items-center justify-center h-screen z-[9999] w-screen gap-4 text-white text-2xl font-bold">
-        This May Take a While, Setting Up the Zap Creation Environment{" "}
-        <LoadingSpinner size="lg" color="primary" />
-      </div>
-    );
-  }
   return (
-    <tr className="border-b border-gray-100">
-      <td
-        onClick={() => {
-          setPageLoading(true);
-          router.push(`/zap/create/${zap.id}`);
-        }}
-        className="py-4 px-6 hover:cursor-pointer"
-      >
-        <div className="flex items-center gap-3">
+    <>
+      {pageLoading && (
+        <div className="fixed bg-black/50 bg-blur-sm top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col md:flex-row px-3  items-center justify-center  h-screen z-[9999] w-screen gap-4 text-white text-2xl font-bold">
+          This May Take a While, Setting Up the Zap Creation Environment{" "}
+          <LoadingSpinner size="lg" color="primary" />
+        </div>
+      )}
+      {/* ✅ Mobile card */}
+      <div className=" block md:hidden border-b border-gray-200 py-4 px-4 border rounded-md ">
+        <div
+          className="flex items-center gap-3 mb-2 cursor-pointer"
+          onClick={() => {
+            setPageLoading(true);
+            router.push(`/zap/create/${zap.id}`);
+          }}
+        >
           <BoltIcon />
           <span className="text-base text-gray-900 font-medium hover:underline">
             {zap.name}
           </span>
         </div>
-      </td>
 
-      <td className="py-4 px-6">
-        <div className="flex items-center">
-          {/* Trigger */}
+        <div className="flex items-center gap-2 mb-2">
           <AppIcon
             imagePath={zap?.trigger?.type.imagePath}
             name={zap.trigger?.type.name}
           />
-          {/* Actions */}
-          {uniqueApps.map((app, index) => (
+          {uniqueApps.map((app, i) => (
             <AppIcon
-              key={`${app.id}-${index}`}
+              key={`${app.id}-${i}`}
               imagePath={app.imagePath}
               name={app.name}
             />
           ))}
         </div>
-      </td>
 
-      <td className="py-4 px-6">
-        <div className="flex items-center gap-2">
-          <FolderIcon />
-          <span className="text-base text-gray-700">
-            {isTrash ? "Trash" : zap.folder.name + "(Personal)"}
+        <div className="flex justify-between text-sm text-gray-600 mb-2">
+          <span className="flex items-center gap-2">
+            <FolderIcon />
+            {isTrash ? "Trash" : zap.folder.name}
+            {/* <div className=" hidden lg:block">" (Personal)"</div> */}
           </span>
+          <span>{formatDate(zap.lastEdited)}</span>
         </div>
-      </td>
 
-      <td className="py-4 px-6">
-        <span className="text-base text-gray-600">
-          {formatDate(zap.lastEdited)}
-        </span>
-      </td>
-
-      <td className="py-4 items-center justify-center px-6">
-        {publishingLoading ? (
-          <div className="flex items-center justify-center">
-            <LoadingSpinner size="sm" color="primary" />
-          </div>
-        ) : (
-          <ToggleButton isChecked={activeZap} setIsChecked={handlePublishing} />
-        )}
-      </td>
-
-      <td className="py-4 px-6">
         <div className="flex items-center justify-between">
-          <Avatar
-            size="sm"
-            name={
-              zap.user.firstname[0].toLocaleUpperCase() +
-              zap.user.lastname[0].toLocaleUpperCase()
-            }
-          />
-          <button className="text-gray-400 hover:text-gray-600 ml-4">
+          {publishingLoading ? (
+            <LoadingSpinner size="sm" color="primary" />
+          ) : (
+            <ToggleButton
+              isChecked={activeZap}
+              setIsChecked={handlePublishing}
+            />
+          )}
+          <div className="flex items-center gap-2">
+            <Avatar
+              size="sm"
+              name={
+                zap.user.firstname[0].toUpperCase() +
+                zap.user.lastname[0].toUpperCase()
+              }
+            />
             <RowAction
               currentFolderId={zap.folder.id}
               folders={folders || []}
@@ -195,14 +204,100 @@ export const Row: React.FC<RowProps> = ({
               changeOwnerDisabled={true}
               refetchZaps={refetchZaps}
               trigger={
-                <span className="text-lg font-extrabold text-[#280200] hover:cursor-pointer p-1 transition-all rounded duration-150 hover:bg-black/5">
+                <span className="text-lg font-extrabold text-[#280200] p-1 rounded hover:bg-black/5 cursor-pointer">
                   ⋮
                 </span>
               }
             />
-          </button>
+          </div>
         </div>
-      </td>
-    </tr>
+      </div>
+
+      {/* ✅ Desktop row */}
+      <tr className="hidden md:table-row border-b border-gray-100">
+        <td
+          onClick={() => {
+            setPageLoading(true);
+            router.push(`/zap/create/${zap.id}`);
+          }}
+          className="py-4 px-6 hover:cursor-pointer"
+        >
+          <div className="flex items-center gap-3">
+            <BoltIcon />
+            <span className="text-base text-gray-900 font-medium hover:underline">
+              {zap.name}
+            </span>
+          </div>
+        </td>
+
+        <td className="py-4 px-6">
+          <div className="flex items-center">
+            <AppIcon
+              imagePath={zap?.trigger?.type.imagePath}
+              name={zap.trigger?.type.name}
+            />
+            {uniqueApps.map((app, i) => (
+              <AppIcon
+                key={`${app.id}-${i}`}
+                imagePath={app.imagePath}
+                name={app.name}
+              />
+            ))}
+          </div>
+        </td>
+
+        <td className="py-4 px-6 min-w-full">
+          <div className="flex items-center gap-2 ">
+            <FolderIcon />
+            <span className="flex text-base text-gray-700 gap-1 ">
+              {isTrash ? "Trash" : zap.folder.name}
+              {/* <div className=" hidden lg:block">(Personal)</div> */}
+            </span>
+          </div>
+        </td>
+
+        <td className="py-4 px-6">
+          <span className="text-base text-gray-600">
+            {formatDate(zap.lastEdited)}
+          </span>
+        </td>
+
+        <td className="py-4 items-center justify-center px-6">
+          {publishingLoading ? (
+            <LoadingSpinner size="sm" color="primary" />
+          ) : (
+            <ToggleButton
+              isChecked={activeZap}
+              setIsChecked={handlePublishing}
+            />
+          )}
+        </td>
+
+        <td className="py-4 px-6">
+          <div className="flex items-center justify-between">
+            <Avatar
+              size="sm"
+              name={
+                zap.user.firstname[0].toUpperCase() +
+                zap.user.lastname[0].toUpperCase()
+              }
+            />
+            <RowAction
+              currentFolderId={zap.folder.id}
+              folders={folders || []}
+              zapId={zap.id}
+              currentName={zap.name}
+              changeOwnerDisabled={true}
+              refetchZaps={refetchZaps}
+              trigger={
+                <span className="text-lg font-extrabold text-[#280200] p-1 rounded hover:bg-black/5 cursor-pointer">
+                  ⋮
+                </span>
+              }
+            />
+          </div>
+        </td>
+      </tr>
+    </>
   );
 };

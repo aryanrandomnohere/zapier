@@ -38,9 +38,8 @@ export function DeleteFolderWithZapsModal({
         </div>
 
         <p className="text-sm text-gray-600 mb-6 text-start">
-          //@ts-ignore gemini The folder "{folderName}" contains {zapCount} Zap
-          {zapCount > 1 ? "s" : ""}. //@ts-ignore gemini Please delete or move
-          the Zap
+          The folder "{folderName}" contains {zapCount} Zap
+          {zapCount > 1 ? "s" : ""}. Please delete or move the Zap
           {zapCount > 1 ? "s" : ""} to another folder before deleting this
           folder.
         </p>
@@ -90,11 +89,11 @@ export function DeleteEmptyFolderModal({
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg text-start font-semibold mb-2">
-          //@ts-ignore gemini Delete "{folderName}"
+          Delete "{folderName}"
         </h2>
         <p className="text-sm text-gray-600 mb-6 text-start">
-          //@ts-ignore gemini Are you sure you want to delete this folder? This
-          action cannot be undone.
+          Are you sure you want to delete this folder? This action cannot be
+          undone.
         </p>
         <div className="flex justify-end gap-2">
           <CancelButton onClick={onClose}>Cancel</CancelButton>

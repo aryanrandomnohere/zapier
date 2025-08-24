@@ -105,16 +105,18 @@ const ZapFilters: React.FC<{
   };
 
   return (
-    <div className="bg-[#FFFDF9] h-fit  flex flex-col ">
-      {/* Header with Zaps title and action buttons */}
-      <div className="flex items-center justify-between py-4 border-b border-gray-200">
+    <div className="bg-[#FFFDF9] h-fit flex flex-col p-3 sm:p-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 border-b border-gray-200 pb-3">
         <h1 className="text-2xl font-semibold text-gray-900">
           {type === "folders" ? "Folders" : "Zaps"}
         </h1>
-        <div className="flex items-center gap-3">
+
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
           <button
             onClick={() => router.push("/zap/dashboard/folders/trash")}
-            className="flex hover:cursor-pointer items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md border border-gray-200"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-blue-600 
+        border border-gray-200 rounded-md hover:bg-blue-50"
           >
             <Trash2 size={16} />
             Trash
@@ -125,17 +127,18 @@ const ZapFilters: React.FC<{
         </div>
       </div>
 
-      <div className="flex items-center justify-between py-4">
+      {/* Filters + Search */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3">
         {/* Left Controls */}
-        <div className="flex items-start gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
           {/* Tabs */}
-          <div className="flex border border-[#DAD6CE] rounded-md overflow-hidden">
+          <div className="flex border border-[#DAD6CE] rounded-md overflow-hidden w-full sm:w-auto">
             <Link
               href="/zap/dashboard"
-              className={`px-3 py-1.5 text-sm flex hover:cursor-pointer items-center gap-1.5 border-r border-[#DAD6CE] ${
+              className={`flex-1 sm:flex-none px-3 py-1.5 text-sm flex items-center gap-1.5 border-r border-[#DAD6CE] ${
                 selectedTab === "Zaps"
-                  ? "text-[#6E56CF] bg-[#F5F2FF]" // selected state
-                  : "text-[#3C3C3C] hover:bg-[#F9F7F3]" // default + hover
+                  ? "text-[#6E56CF] bg-[#F5F2FF]"
+                  : "text-[#3C3C3C] hover:bg-[#F9F7F3]"
               }`}
               onClick={() => setSelectedTab("Zaps")}
             >
@@ -144,7 +147,7 @@ const ZapFilters: React.FC<{
             </Link>
             <Link
               href="/zap/dashboard/folders"
-              className={`px-3 py-1.5 text-sm flex hover:cursor-pointer items-center gap-1.5 ${
+              className={`flex-1 sm:flex-none px-3 py-1.5 text-sm flex items-center gap-1.5 ${
                 selectedTab === "folders"
                   ? "text-[#6E56CF] bg-[#F5F2FF]"
                   : "text-[#3C3C3C] hover:bg-[#F9F7F3]"
@@ -155,50 +158,11 @@ const ZapFilters: React.FC<{
             </Link>
           </div>
 
-          {/* Dropdown */}
-          {/* <DropDownMenu
-            type="normal"
-            menuClassName="bg-[#FFFDF9]"
-            trigger={
-              <div className="flex items-center gap-2 border border-[#DAD6CE] rounded px-3 min-w-20 justify-between py-1.5 bg-[#FFFCF7] text-sm text-[#3C3C3C]">
-                All
-                <ChevronDown size={14} className="text-gray-500" />
-              </div>
-            }
-          >
-            <div className="flex flex-col gap-2 items-center w-full text-xl py-2">
-              <label className="text-sm font-medium px-4 hover:cursor-pointer hover:bg-blue-300/20 cursor-not-allowed text-start hover:text-blue-700  p-1 min-w-full">
-                All
-              </label>
-              <label className="text-sm font-medium px-4 hover:cursor-pointer hover:bg-blue-300/20 cursor-not-allowed text-start hover:text-blue-700  p-1 min-w-full">
-                Onwed by me
-              </label>
-              <label className="text-sm font-medium px-4 hover:cursor-pointer hover:bg-blue-300/20 cursor-not-allowed text-start hover:text-blue-700  p-1 min-w-full">
-                Shared with me
-              </label>
-            </div>
-          </DropDownMenu> */}
-
-          {/* Filters */}
-          {/* {type !== "folders" && <button
-            onClick={() => setFilterIsOpen(!filterIsOpen)}
-            className={`flex hover:cursor-pointer items-center gap-2 border border-[#DAD6CE] rounded px-3 py-1.5 text-sm text-[#3C3C3C] hover:bg-[#F9F7F3] bg-[#FFFCF7] ${filterIsOpen ? "bg-blue-300/20 text-blue-700" : "bg-[#FFFCF7]"}`}
-          >
-            <Filter size={14} />
-            Filters
-          </button>} */}
-
           {/* Action buttons */}
-          <div className="flex gap-1 bg-[#ECE9DF] rounded p-1">
-            {/* <button
-              onClick={handleSetDefaultFilters}
-              className="p-1 hover:bg-[#E1DED3] rounded hover:cursor-pointer"
-            >
-              <BookmarkIcon />
-            </button> */}
+          <div className="flex gap-1 bg-[#ECE9DF] rounded p-1 w-fit">
             <button
               onClick={() => refetchZaps()}
-              className="p-1 hover:bg-[#E1DED3] rounded hover:cursor-pointer"
+              className="p-1 hover:bg-[#E1DED3] rounded"
             >
               <RefreshIcon />
             </button>
@@ -206,20 +170,22 @@ const ZapFilters: React.FC<{
         </div>
 
         {/* Search */}
-        <div className="relative">
+        <div className="relative w-full sm:w-72">
           <Search
             size={14}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
           />
           <input
             type="text"
             placeholder="Search by name or webhook"
-            className="pl-8 pr-3 py-1.5 border border-[#DAD6CE] rounded-md w-72 text-sm focus:outline-none focus:ring-2 focus:ring-[#6E56CF] bg-[#FFFCF7] placeholder-gray-500"
+            className="pl-8 pr-3 py-1.5 border border-[#DAD6CE] rounded-md w-full text-sm 
+        focus:outline-none focus:ring-2 focus:ring-[#6E56CF] bg-[#FFFCF7] placeholder-gray-500"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>
+
       {/* 
       {filterIsOpen && type !== "folders" && (
         <div className="flex gap-2">

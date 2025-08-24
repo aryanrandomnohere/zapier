@@ -23,7 +23,6 @@ export const ZapRows: React.FC<ZapRowsProps> = ({
   const zaps = propZaps;
   const statusFilter = useRecoilValue(statusFilterAtom);
   const appFilter = useRecoilValue(appFilterAtom);
-  console.log("Filters Updated", statusFilter, appFilter, zaps);
 
   const filteredZaps = zaps
     ?.filter(
@@ -38,40 +37,22 @@ export const ZapRows: React.FC<ZapRowsProps> = ({
         zap.published === (statusFilter == "ON" ? true : false),
     );
 
-  console.log(filteredZaps);
-  const handleZapClick = (id: string): void => {
+  const handleZapClick = (id: string) => {
     console.log(`Clicked zap with id: ${id}`);
   };
 
   if (loading) {
     return (
-      <tbody>
-        <tr>
-          <td colSpan={6} className="py-8">
-            <div className="flex justify-center">
-              <InlineLoading text="Loading Zaps..." />
-            </div>
-          </td>
-        </tr>
-      </tbody>
+      <div className="flex justify-center w-full py-8">
+        <InlineLoading text="Loading Zaps..." />
+      </div>
     );
   }
 
-  // Commented out skeleton loading
-  // return (
-  //   <tbody>
-  //     <tr>
-  //       <td colSpan={6} className="py-8">
-  //         <TableLoading rows={4} />
-  //       </td>
-  //     </tr>
-  //   </tbody>
-  // );
-
   return (
-    <tbody>
-      <RecoilContextProvider>
-        {" "}
+    <RecoilContextProvider>
+      {/* ✅ Mobile Cards */}
+      <div className=" md:hidden overflow-y-auto  flex flex-col gap-4">
         {filteredZaps?.map((zap) => (
           <Row
             key={zap.id}
@@ -80,7 +61,19 @@ export const ZapRows: React.FC<ZapRowsProps> = ({
             refetchZaps={refetchZaps}
           />
         ))}
-      </RecoilContextProvider>
-    </tbody>
+      </div>
+
+      {/* ✅ Desktop Table Rows */}
+      <tbody className="hidden md:table-row-group gap-y-2 md:gap-y-0">
+        {filteredZaps?.map((zap) => (
+          <Row
+            key={zap.id}
+            zap={zap}
+            handleZapClick={handleZapClick}
+            refetchZaps={refetchZaps}
+          />
+        ))}
+      </tbody>
+    </RecoilContextProvider>
   );
 };
