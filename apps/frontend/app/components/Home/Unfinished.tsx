@@ -3,10 +3,39 @@ import useZaps from "../../hooks/useZaps";
 import CardScroller from "./CardScroller";
 import { ZapCard } from "./ZapCard";
 import { InlineLoading, CardLoading } from "../ui/LoadingSpinner";
-
+import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
+import CreateButton from "@/app/zap/dashboard/CreateButton";
+import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { userAtom } from "@/app/RecoilState/store/userAtom";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 export default function Unfinished() {
   const { zaps, loading, error } = useZaps();
-  console.log(zaps);
+  const [isCreating, setIsCreating] = useState(false);
+  const [user, setUser] = useRecoilState(userAtom);
+  const router = useRouter();
+  async function handleCreateZap() {
+    if (isCreating) return;
+    setIsCreating(true);
+    try {
+      console.log(user?.userId);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/zap/draft`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+      console.log(response);
+      router.push(`/zap/create/${response.data.zapId}`);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsCreating(false);
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -27,44 +56,36 @@ export default function Unfinished() {
   // );
 
   return (
-    <div className="space-y-10">
-      {/* Get Started */}
-      {/* ... Your existing get started card ... */}
-
+    <div className="space-y-10 max-h-80">
       {/* Unfinished Zaps */}
       <CardScroller title="Unfinished Zaps">
-        {zaps.map((zap) => (
-          <ZapCard
-            msg={zap.published ? "Published" : "Not published"}
-            id={Number(zap.id)}
-            key={zap.id}
-            name={zap.name}
-            lastEdited={formatEditedTime(zap.lastEdited)}
-            triggerImage={zap.trigger?.type?.imagePath}
-            actions={zap.actions.map((a) => ({
-              imagePath: a.actionDetails?.imagePath,
-            }))}
-          />
-        ))}
+        {zaps.length > 0 ? (
+          zaps.map((zap) => (
+            <ZapCard
+              msg={zap.published ? "Published" : "Not published"}
+              id={Number(zap.id)}
+              key={zap.id}
+              name={zap.name}
+              lastEdited={formatEditedTime(zap.lastEdited)}
+              triggerImage={zap.trigger?.type?.imagePath}
+              actions={zap.actions.map((a) => ({
+                imagePath: a.actionDetails?.imagePath,
+              }))}
+            />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center w-full py-8 text-gray-500">
+            <p className="text-lg font-medium">No Zaps Created Yet</p>
+            <button
+              onClick={handleCreateZap}
+              disabled={isCreating}
+              className="mt-3 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+            >
+              {isCreating ? "Creating..." : "Create your first Zap"}
+            </button>
+          </div>
+        )}
       </CardScroller>
-
-      {/* Popular Templates */}
-      {/* <CardScroller
-        title="Popular templates"
-        rightSlot={<a className="text-sm text-indigo-600" href="#">Browse all templates</a>}
-      >
-        <TemplateCard
-          icon="/icons/slack.svg"
-          title="Send Slack notifications if your Zaps run into errors"
-          badgeText="🔥 New to trending"
-        />
-        <TemplateCard
-          icon="/icons/wave.svg"
-          title="Add new Wave invoices to Google Sheets rows"
-          badgeText="🔥 New to trending"
-        />
-        {/* ...more cards */}
-      {/* </CardScroller> */}
     </div>
   );
 }

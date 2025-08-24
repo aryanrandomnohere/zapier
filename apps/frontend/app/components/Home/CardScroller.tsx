@@ -12,15 +12,18 @@ export default function CardScroller({
   rightSlot,
 }: CardScrollerProps) {
   return (
-    <div className="bg-[#FDFCFB] p-4 shadow-md rounded min-w-xl min-h-80 max-h-80 space-y-4">
+    <div className="bg-[#FDFCFB] p-4 shadow-md rounded-lg space-y-4 max-w-2xl">
+      {/* Header */}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl w-full pb-4 border-b border-black/20 font-bold  text-gray-900">
+        <h2 className="text-lg sm:text-2xl font-bold text-gray-900 border-b border-black/20 pb-2 flex-1">
           {title}
         </h2>
-        {rightSlot}
+        {rightSlot && <div className="ml-2">{rightSlot}</div>}
       </div>
-      <div className=" h-full overflow-x-auto max-w-[39rem] ">
-        <div className="flex gap-2 py-8 items-center w-max">{children}</div>
+
+      {/* Scroll container */}
+      <div className="overflow-x-auto">
+        <div className="flex gap-3 py-6 items-stretch w-max">{children}</div>
       </div>
     </div>
   );

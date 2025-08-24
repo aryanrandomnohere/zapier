@@ -4,9 +4,7 @@ import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 import { getSession } from "next-auth/react";
 import axios from "axios";
 import { useEffect } from "react";
-import dynamic from "next/dynamic";
-
-const Unfinished = dynamic(() => import("./Unfinished"), { ssr: false });
+import Unfinished from "./Unfinished";
 
 export default function ZapInfo() {
   useEffect(() => {
@@ -18,7 +16,7 @@ export default function ZapInfo() {
         console.log("No token found");
         return;
       }
-      const response = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/set-cookie`,
         {
           token: session.user.backendToken,
@@ -30,8 +28,11 @@ export default function ZapInfo() {
     };
     setCookieInCase();
   }, []);
+
   return (
-    <div className="flex w-full justify-between gap-6">
+    <div className="flex flex-col w-full md:justify-center gap-6 md:flex-row">
+      {/* On mobile: stacked column 
+          On md+ screens: side by side row */}
       <ZapierIntroCard />
       <RecoilContextProvider>
         <Unfinished />
