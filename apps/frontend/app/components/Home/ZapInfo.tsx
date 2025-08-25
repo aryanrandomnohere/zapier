@@ -30,7 +30,7 @@ export default function ZapInfo() {
   }, []);
 
   return (
-    <div className="flex flex-col w-full md:justify-center gap-6 md:flex-row">
+    <div className="flex flex-col w-full md:justify-center gap-6 md:flex-row mb-4">
       {/* On mobile: stacked column 
           On md+ screens: side by side row */}
       <ZapierIntroCard />
