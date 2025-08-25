@@ -33,7 +33,7 @@ export const ServiceCard = ({
           <h3 className="font-semibold text-gray-900 text-sm sm:text-base group-hover:text-orange-600 transition-colors">
             {title}
           </h3>
-          <p className="text-gray-600 text-xs sm:text-sm leading-tight">
+          <p className="text-gray-600 text-xs sm:text-sm min-w-fit leading-tight">
             {description}
           </p>
         </div>
