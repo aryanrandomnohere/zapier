@@ -21,10 +21,16 @@ Create “Zaps” to connect apps, trigger workflows, and automate tasks — all
 
 ---
 
-## 📸 Demo
+## 📸 Db Schema
 
 <p align="center">
   <img src="./public/zap-creation.gif" alt="Zap Creation Flow" width="800"/>
+</p>
+
+<p align="center">
+  <video src="./public/REC-20250807153129.mp4" width="800" controls autoplay muted loop>
+    Your browser does not support the video tag.
+  </video>
 </p>
 
 ---
