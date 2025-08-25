@@ -17,7 +17,6 @@ interface ZapRowsProps {
 
 export const ZapRows: React.FC<ZapRowsProps> = ({
   zaps: propZaps,
-  loading,
   refetchZaps,
 }) => {
   const zaps = propZaps;
@@ -41,13 +40,7 @@ export const ZapRows: React.FC<ZapRowsProps> = ({
     console.log(`Clicked zap with id: ${id}`);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center w-full py-8">
-        <InlineLoading text="Loading Zaps..." />
-      </div>
-    );
-  }
+
 
   return (
     <RecoilContextProvider>

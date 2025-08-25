@@ -74,7 +74,7 @@ export default function Unfinished() {
             />
           ))
         ) : (
-          <div className="flex flex-col items-center justify-center w-full py-8 text-gray-500">
+          <div className="flex flex-col items-center justify-center w-full py-8 max-w-xs px-16 text-gray-500">
             <p className="text-lg font-medium">No Zaps Created Yet</p>
             <button
               onClick={handleCreateZap}

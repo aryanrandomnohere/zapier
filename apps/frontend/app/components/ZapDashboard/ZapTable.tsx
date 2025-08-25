@@ -2,6 +2,7 @@ import { ChevronDown } from "lucide-react";
 import { ZapRows } from "./ZapRow";
 import { zapInterface } from "@repo/types";
 import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
+import { InlineLoading } from "../ui/LoadingSpinner";
 
 export default function ZapTable({
   zaps,
@@ -12,10 +13,19 @@ export default function ZapTable({
   loading: boolean;
   refetchZaps: () => void;
 }) {
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[200px] w-full">
+      <InlineLoading text="Loading Zaps..." />
+    </div>
+    
+    );
+  }
   return (
     <div className="">
       {/* Mobile → cards, Desktop → table */}
-      <div className="block md:hidden">
+      <div className="block md:hidden w-full">
         <RecoilContextProvider>
           <ZapRows zaps={zaps} loading={loading} refetchZaps={refetchZaps} />
         </RecoilContextProvider>
@@ -52,7 +62,7 @@ export default function ZapTable({
           </tr>
         </thead>
         <RecoilContextProvider>
-          <ZapRows zaps={zaps} loading={loading} refetchZaps={refetchZaps} />
+         <ZapRows zaps={zaps} loading={loading} refetchZaps={refetchZaps} />
         </RecoilContextProvider>
       </table>
     </div>
