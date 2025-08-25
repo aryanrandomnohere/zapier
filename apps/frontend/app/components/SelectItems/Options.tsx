@@ -21,9 +21,11 @@ export default function Options({
 
   const Items = [...builtInItems, ...extendedItems];
   const Apps = [...apps, ...topApps];
+
   return (
-    <div className="flex h-full mt-5">
-      <div className="w-1/2">
+    <div className="flex flex-col sm:flex-row h-full mt-5 gap-4">
+      {/* Top Apps */}
+      <div className="w-full sm:w-1/2">
         <OptionList
           title="Your top apps"
           items={Apps}
@@ -31,25 +33,23 @@ export default function Options({
           insertingOrNew={insertingOrNew}
         />
       </div>
-      <div className="flex flex-col w-1/2">
-        <div className="min-h-2/3">
-          <OptionList
-            title="Popular built-in tools (Working)"
-            items={Items}
-            onClose={onClose}
-            index={index}
-            insertingOrNew={insertingOrNew}
-          />
-        </div>
-        <div>
-          <OptionList
-            title="New Zapier products"
-            items={products}
-            onClose={onClose}
-            index={index}
-            insertingOrNew={insertingOrNew}
-          />
-        </div>
+
+      {/* Built-in Tools + New Products */}
+      <div className="flex flex-col w-full sm:w-1/2 gap-4">
+        <OptionList
+          title="Popular built-in tools (Working)"
+          items={Items}
+          onClose={onClose}
+          index={index}
+          insertingOrNew={insertingOrNew}
+        />
+        <OptionList
+          title="New Zapier products"
+          items={products}
+          onClose={onClose}
+          index={index}
+          insertingOrNew={insertingOrNew}
+        />
       </div>
     </div>
   );

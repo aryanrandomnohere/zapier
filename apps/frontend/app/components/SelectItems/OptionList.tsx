@@ -167,45 +167,38 @@ export default function OptionList({
   }
 
   return (
-    <div className="flex flex-col gap-1 w-full">
-      <div className="font-semibold text-sm text-stone-500">{title}</div>
-      {items?.map((item: ItemType | MockItem, index: number) => (
+    <div className="flex flex-col gap-1 w-full overflow-auto max-h-[240px] sm:max-h-full">
+    <div className="font-semibold text-sm text-stone-500">{title}</div>
+    {items?.map((item: ItemType | MockItem, idx: number) => {
+      const isDisabled =
+        updatingStep === item.id || !("metadata" in item) || !item.metadata;
+  
+      return (
         <div
+          key={item.id}
           onClick={() => {
-            if (
-              updatingStep === item.id ||
-              !("metadata" in item) ||
-              !item.metadata
-            )
-              return;
+            if (isDisabled) return;
             handleClick(item);
           }}
-          key={item.id}
-          className={`flex p-1.5 hover:cursor-pointer transform transition-all duration-300 ease-in-out rounded group hover:bg-blue-500/10 min-w items-center gap-2 text-sm font-semibold justify-start hover:justify-between group-hover:justify-between hover:scale-105 ${
-            updatingStep === item.id || !("metadata" in item) || !item.metadata
-              ? "opacity-50 hover:cursor-not-allowed "
-              : ""
-          }`}
+          className={`flex p-1.5 items-center gap-2 text-sm font-semibold rounded transform transition-all duration-300 ease-in-out
+            ${isDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-500/10 hover:cursor-pointer hover:scale-105"}
+          `}
         >
-          <div className="flex gap-1.5 items-center">
-            {updatingStep === item.id ? (
-              <LoadingSpinner size="sm" color="primary" />
-            ) : (
-              <img
-                src={item.imagePath}
-                alt="LOGO"
-                className="w-5 h-5 hover:cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-110"
-              />
-            )}
-            <span className={updatingStep === item.id ? "text-gray-400" : ""}>
-              {item.name}
-            </span>
-          </div>
-          <div className="hidden group-hover:flex text-blue-400 transform transition-all duration-300 ease-in-out">
-            <Pin size={16} />
-          </div>
+          {updatingStep === item.id ? (
+            <LoadingSpinner size="sm" color="primary" />
+          ) : (
+            <img
+              src={item.imagePath}
+              alt="logo"
+              className="w-5 h-5 hover:cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-110"
+            />
+          )}
+          <span className={isDisabled ? "text-gray-400" : ""}>{item.name}</span>
         </div>
-      ))}
-    </div>
+      );
+    })}
+  </div>
+  
+
   );
 }

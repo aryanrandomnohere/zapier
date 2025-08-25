@@ -16,7 +16,7 @@ export default function SelectItem({
   const { close } = useModal();
 
   return (
-    <div className="flex flex-col w-[520px] h-[540px]">
+    <div className="flex flex-col w-full sm:w-[520px] h-screen sm:h-[540px] p-2 sm:p-1 sm:overflow-hidden overflow-auto ">
       <Search />
       <FilterItems />
       <Options

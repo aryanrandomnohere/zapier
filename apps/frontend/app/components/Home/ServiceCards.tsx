@@ -150,14 +150,15 @@ const ServiceCards = () => {
       {/* Mobile: stack vertically, Tablet+: wrap in row */}
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 justify-center">
         {services.map((service, index) => (
-          <ServiceCard
-            key={index}
-            working={service.working}
-            icon={<div className="w-4 h-4 bg-orange-500 rounded-sm" />} // placeholder icon
-            title={service.title}
-            description={service.description}
-            href={service.href}
-          />
+         <ServiceCard
+         key={index}
+         working={service.working}
+         icon={service.icon} // ✅ use the actual icon
+         title={service.title}
+         description={service.description}
+         href={service.href}
+       />
+       
         ))}
       </div>
     </div>

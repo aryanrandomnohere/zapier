@@ -63,37 +63,37 @@ function Modal({ children }: { children: ReactNode }) {
 function Window({ children, name, portTo }: WindowProps) {
   const { openName, close } = useModal();
 
-  // Using framer-motion's AnimatePresence for smooth enter/exit animations
   return createPortal(
     <AnimatePresence mode="wait">
       {openName === name && (
         <>
           <motion.div
-            className="fixed inset-0 w-full h-screen bg-black/60 bg-opacity-5 z-[9999] flex items-center justify-center p-1"
+            className="fixed inset-0 w-full h-screen bg-black/50 z-[9999] flex items-center justify-center p-2 sm:p-4"
             data-modal-backdrop
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
+            //@ts-ignore
             onClick={(e) => {
               e.stopPropagation();
               close();
             }}
           >
             <motion.div
-              className="flex flex-col w-auto h-auto max-w-full max-h-full bg-zinc-100 rounded-lg shadow-xl overflow-auto"
-              initial={{ scale: 0.9, opacity: 0 }}
+              className="flex flex-col w-full h-full sm:w-auto sm:h-auto max-w-sm sm:max-w-[600px] max-h-[90vh] bg-zinc-100 rounded-lg shadow-xl overflow-auto"
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.95, opacity: 0 }}
               transition={{
                 duration: 0.4,
-                ease: [0.16, 1, 0.3, 1], // Custom bezier curve for a smoother feel
+                ease: [0.16, 1, 0.3, 1],
               }}
               onClick={(e: React.MouseEvent<HTMLDivElement>) =>
                 e.stopPropagation()
               }
             >
-              <div className="px-5 py-4">{children}</div>
+              <div className="px-4 py-3 sm:px-5 sm:py-4">{children}</div>
             </motion.div>
           </motion.div>
         </>
@@ -102,6 +102,7 @@ function Window({ children, name, portTo }: WindowProps) {
     document.body || portTo,
   );
 }
+
 
 function Open({ children, opens }: OpenProps) {
   const { open } = useModal();

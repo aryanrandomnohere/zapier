@@ -12,10 +12,10 @@ export default function CardScroller({
   rightSlot,
 }: CardScrollerProps) {
   return (
-    <div className="bg-[#FDFCFB] p-4 shadow-md rounded-lg space-y-4 max-w-2xl">
+    <div className="bg-[#FDFCFB] p-4 shadow-md rounded-lg space-y-10 max-w-2xl">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h2 className="text-lg sm:text-2xl font-bold text-gray-900 border-b border-black/20 pb-2 flex-1">
+        <h2 className="text-lg sm:text-2xl font-bold text-gray-900 border-b border-black/20 pb-4 flex-1">
           {title}
         </h2>
         {rightSlot && <div className="ml-2">{rightSlot}</div>}
