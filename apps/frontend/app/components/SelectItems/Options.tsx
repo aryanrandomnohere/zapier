@@ -43,13 +43,13 @@ export default function Options({
           index={index}
           insertingOrNew={insertingOrNew}
         />
-        <OptionList
+        {/* <OptionList
           title="New Zapier products"
           items={products}
           onClose={onClose}
           index={index}
           insertingOrNew={insertingOrNew}
-        />
+        /> */}
       </div>
     </div>
   );

@@ -49,56 +49,56 @@ import { Response, Request } from "express";
 //     },
 //   );
 
-export const pasteToReplaceTrigger = async (
-  req: extendedRequest,
-  res: Response,
-) => {
-  const parsedData = validateOrRespond(
-    req.body,
-    PasteToReplaceActionSchema,
-    res,
-  );
-  const userId = req.userId;
-  if (!parsedData || !userId) return;
-  const {
-    zapId,
-    actionId: triggerId,
-    index,
-    actionToReplaceWithId: triggerToReplaceWithId,
-  } = parsedData;
-  try {
-    const triggerToReplace = await prisma.trigger.findUnique({
-      where: {
-        id: triggerToReplaceWithId,
-      },
-    });
-    if (!triggerToReplace) return;
-    const deletedTrigger = await prisma.trigger.delete({
-      where: {
-        id: triggerId,
-      },
-    });
-    const pastedTrigger = await prisma.trigger.create({
-      data: {
-        triggerId: triggerToReplace.triggerId,
-        zapId: triggerToReplace.zapId,
-        configuration: triggerToReplace.configuration || {},
-        optionId: triggerToReplace.optionId,
-      },
-    });
-    res.status(200).json({
-      success: true,
-      msg: "Trigger pasted to replace",
-      triggerId: pastedTrigger.id,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      success: false,
-      msg: "Error pasting trigger",
-    });
-  }
-};
+// export const pasteToReplaceTrigger = async (
+//   req: extendedRequest,
+//   res: Response,
+// ) => {
+//   const parsedData = validateOrRespond(
+//     req.body,
+//     PasteToReplaceActionSchema,
+//     res,
+//   );
+//   const userId = req.userId;
+//   if (!parsedData || !userId) return;
+//   const {
+//     zapId,
+//     actionId: triggerId,
+//     index,
+//     actionToReplaceWithId: triggerToReplaceWithId,
+//   } = parsedData;
+//   try {
+//     const triggerToReplace = await prisma.trigger.findUnique({
+//       where: {
+//         id: triggerToReplaceWithId,
+//       },
+//     });
+//     if (!triggerToReplace) return;
+//     const deletedTrigger = await prisma.trigger.delete({
+//       where: {
+//         id: triggerId,
+//       },
+//     });
+//     const pastedTrigger = await prisma.trigger.create({
+//       data: {
+//         triggerId: triggerToReplace.triggerId,
+//         zapId: triggerToReplace.zapId,
+//         configuration: triggerToReplace.configuration || {},
+//         optionId: triggerToReplace.optionId,
+//       },
+//     });
+//     res.status(200).json({
+//       success: true,
+//       msg: "Trigger pasted to replace",
+//       triggerId: pastedTrigger.id,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(400).json({
+//       success: false,
+//       msg: "Error pasting trigger",
+//     });
+//   }
+// };
 
 export const getTriggers = async (req: Request, res: Response) => {
   try {
@@ -118,3 +118,7 @@ export const getTriggers = async (req: Request, res: Response) => {
     res.status(400).json({ error: "Database fetching error" });
   }
 };
+
+export const deleteTrigger = async (req: Request, res:Response) => {
+ 
+}

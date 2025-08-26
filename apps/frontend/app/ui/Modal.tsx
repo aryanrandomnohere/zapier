@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 
 interface ModalContextType {
   close: () => void;
@@ -68,7 +69,7 @@ function Window({ children, name, portTo }: WindowProps) {
       {openName === name && (
         <>
           <motion.div
-            className="fixed inset-0 w-full h-screen bg-black/50 z-[9999] flex items-center justify-center p-2 sm:p-4"
+            className="fixed inset-0 w-full h-screen bg-black/50 z-[9999] flex items-center justify-center p-4 sm:p-4"
             data-modal-backdrop
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -81,7 +82,7 @@ function Window({ children, name, portTo }: WindowProps) {
             }}
           >
             <motion.div
-              className="flex flex-col w-full h-full sm:w-auto sm:h-auto max-w-sm sm:max-w-[600px] max-h-[90vh] bg-zinc-100 rounded-lg shadow-xl overflow-auto"
+              className="relative flex flex-col p-2 w-full h-full sm:w-auto sm:h-auto max-w-sm sm:max-w-[600px] max-h-[90vh] bg-zinc-100 rounded-lg shadow-xl overflow-auto"
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -93,7 +94,7 @@ function Window({ children, name, portTo }: WindowProps) {
                 e.stopPropagation()
               }
             >
-              <div className="px-4 py-3 sm:px-5 sm:py-4">{children}</div>
+              <div className="px-4 py-3 sm:px-5 sm:py-4">{children} <X onClick={close} className="absolute top-0 right-0  text-stone-400 cursor-pointer "/></div>
             </motion.div>
           </motion.div>
         </>

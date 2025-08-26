@@ -76,7 +76,7 @@ export default function RowAction({
   return (
     <>
       <DropDownOptions trigger={trigger}>
-        <div className="absolute right-0 mt-2 w-48 rounded-md border border-gray-200 bg-white shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-48 rounded-md border border-gray-200 bg-white shadow-lg z-[999]">
           <div className="py-1 text-sm">
             {/* Rename */}
             <button

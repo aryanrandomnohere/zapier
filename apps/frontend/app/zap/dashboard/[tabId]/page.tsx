@@ -6,9 +6,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import RecoilContextProvider from "@/app/RecoilState/RecoilContextProvider";
 import ZapFilters from "@/app/components/ZapDashboard/ZapFilters";
+import { InlineLoading } from "@/app/components/ui/LoadingSpinner";
 
 export default function Page() {
-  const { folders, refetchFolders } = useFolders();
+  const { folders, refetchFolders, loading } = useFolders();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
   const totalPages = Math.ceil((folders?.length || 0) / itemsPerPage);
@@ -35,6 +36,7 @@ export default function Page() {
     return numbers;
   };
 
+ 
   return (
     <>
       <div className="flex gap-2 mb-4 items-center">
@@ -56,8 +58,8 @@ export default function Page() {
       <RecoilContextProvider>
         <ZapFilters type="folders" refetchZaps={refetchFolders} />
       </RecoilContextProvider>
-
-      <div className=" bg-[#FFFDF9] border border-[#F3F0E8] rounded-lg">
+       
+      {!loading ? <> <div className=" bg-[#FFFDF9] border border-[#F3F0E8] rounded-lg">
         <table className="w-full min-w-[320px] text-sm md:text-base">
           <thead className="border-b border-gray-200">
             <tr>
@@ -109,7 +111,10 @@ export default function Page() {
             </div>
           )}
         </div>
-      </div>
+      </div></> : 
+       <div className="flex justify-center items-center min-h-[200px] w-full">
+       <InlineLoading text="Loading Zaps..." />
+     </div>}
     </>
   );
 }

@@ -301,6 +301,7 @@ export default function CreatePage() {
           >
             <Suspense fallback={<SideModalSkeleton />}>
               <SideModal
+                render={reRender}
                 metaData={metaData}
                 setMetaData={setMetaData}
                 CheckStepValidity={CheckStepValidity}

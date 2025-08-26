@@ -38,13 +38,41 @@ export default function CellActions({
       e.stopPropagation();
       setReallyDelete(true);
     } else {
+      let success; 
       try {
-        const response = await axios.delete(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/actions/delete/${zapState.selectedItems[index - 1].stepId}`,
+        if(!zapState.selectedItems[index-1].stepId && index !== 1){
+          success = true
+        }else {
+          const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${index === 1 ? "triggers" : "actions"}/delete/${zapState.selectedItems[index - 1].stepId}`,
           { withCredentials: true },
         );
-
-        if (response.data.success) {
+        success = response.data.success;
+        // if(index === 1){
+        //    if(success === true){
+        //        setZapState((zap)=>{
+        //         const updatedItems = [...zap.selectedItems]
+        //         updatedItems[0] = null;
+        //         const updatedZap = {...zap, selectedItems:updatedItems}
+        //         return updatedZap;
+        //        })
+        //    }else {
+        //        toast.custom((t) => (
+        //   <ToastNotification
+        //     t={t}
+        //     type="error"
+        //     actions={[]}
+        //     onClose={() => toast.dismiss(t.id)}
+        //   >
+        //     <div className="flex gap-1 items-center">
+        //       Error deleting Cell {zapState.selectedItems[index - 1].name}
+        //     </div>
+        //   </ToastNotification>
+        // ));
+        //    }
+        // }
+      }
+        if(success) {
           setZapState((prev) => {
             const updatedItems = [...prev.selectedItems];
             updatedItems.splice(index - 1, 1); // remove the item at index - 1
@@ -143,7 +171,7 @@ export default function CellActions({
   };
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      <button
+      { index != 1 && <button
         onClick={() => handleDuplicate()}
         className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
           index === 1
@@ -153,10 +181,10 @@ export default function CellActions({
       >
         <Copy size={16} />
         Duplicate
-      </button>
+      </button>}
 
       {/* Change owner */}
-      <button
+    { index != 1 && <button
         onClick={() => {
           toast.custom((t) => (
             <ToastNotification
@@ -181,7 +209,7 @@ export default function CellActions({
       >
         <Copy size={16} />
         Copy
-      </button>
+      </button>}
       <button
         onClick={async () => {
           if (copiedItem) {
@@ -232,7 +260,7 @@ export default function CellActions({
       </button>
 
       {/* Change owner */}
-      <button
+      { index != 1 &&  <button
         onClick={async () => {
           if (copiedItem) {
             try {
@@ -306,7 +334,7 @@ export default function CellActions({
       >
         <Link size={16} />
         Paste to replace
-      </button>
+      </button>}
 
       {/* Divider */}
       <div className="my-1 border-t min-w-full border-gray-200"></div>
@@ -332,7 +360,7 @@ export default function CellActions({
       </button>
 
       {/* Delete */}
-      <button
+      { index !== 1 && <button
         onClick={(e) => handleDelete(e)}
         disabled={false}
         className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
@@ -343,7 +371,7 @@ export default function CellActions({
       >
         <Trash size={16} />
         {reallyDelete ? "Really Delete ?" : "Delete"}
-      </button>
+      </button>}
     </div>
   );
 }

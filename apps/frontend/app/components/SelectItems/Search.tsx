@@ -12,7 +12,7 @@ export default function Search() {
           className="text-xs flex-1 outline-none border-0 text-black placeholder:text-black"
           placeholder="Search 7,000+ apps and tools"
         />
-        <X size={16} className="text-sm text-stone-400 cursor-pointer" />
+        <X size={16} className="text-sm hidden md:block text-stone-400 cursor-pointer" />
       </div>
       <a
         href=""

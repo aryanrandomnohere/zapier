@@ -7,7 +7,7 @@ import {
   OptionChanged,
 } from "@/app/RecoilState/currentZap";
 import { Maximize, Minimize, Zap, X, ChevronRight, Timer } from "lucide-react";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, SetStateAction, Dispatch } from "react";
 import { onStepEnum, selectedItemMetaDataType } from "@repo/types";
 import { recordsAtom, selectedRecord } from "../RecoilState/store/recordsAtom";
 import { userAtom } from "../RecoilState/store/userAtom";
@@ -32,6 +32,7 @@ export default function SideModal({
   isFullScreen,
   setIsFullScreen,
   setReRender,
+  render
 }: {
   metaData: selectedItemMetaDataType;
   setMetaData: React.Dispatch<React.SetStateAction<selectedItemMetaDataType>>;
@@ -42,7 +43,8 @@ export default function SideModal({
   ) => boolean;
   isFullScreen: boolean;
   setIsFullScreen: (isFullScreen: boolean) => void;
-  setReRender: (reRender: boolean) => void;
+  setReRender: Dispatch<SetStateAction<boolean>>;
+  render:boolean
 }) {
   const [zap, setZapState] = useRecoilState(zapCreateState);
   const [selectedStep, setSelectedStep] = useState<onStepEnum>(
@@ -78,7 +80,6 @@ export default function SideModal({
         : zap.selectedItems[index]?.metadata;
 
     if (!currentStep?.fields) {
-      console.log("Field does not exist returning");
       return false;
     }
 
@@ -356,11 +357,10 @@ export default function SideModal({
               </div>
             )}
             <div
+              data-close-modal
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                e.stopPropagation();
-                setMetaData({ index: null, isOpen: false });
-                setReRender(true);
-                console.log("Closing Modal");
+                setMetaData(()=>{ return { index: null, isOpen: false } });
+                setReRender(()=>!setReRender);
               }}
               className="cursor-pointer"
             >
