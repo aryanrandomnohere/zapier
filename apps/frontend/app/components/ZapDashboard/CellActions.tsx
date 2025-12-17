@@ -30,6 +30,9 @@ export default function CellActions({
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [expandedStep, setExpandedStep] = useRecoilState(extendedStepNotesAtom);
   const [selectedItems, setSelectedItems] = useRecoilState(selectedNotesAtom);
+  const {pageType } = useParams();
+  const disabled = pageType !== "create" ? true : false;
+  console.log(pageType, disabled)
   const setIsOpen = useSetRecoilState(leftbarIsOpenAtom);
   const setCurrentOperation = useSetRecoilState(currentOperationAtom);
   const { zapId } = useParams();
@@ -174,7 +177,7 @@ export default function CellActions({
       { index != 1 && <button
         onClick={() => handleDuplicate()}
         className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
-          index === 1
+          index === 1 || disabled
             ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
             : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
         }`}
@@ -202,7 +205,7 @@ export default function CellActions({
           console.log(zapState.selectedItems[index - 1], index - 1);
         }}
         className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
-          false
+          false || disabled
             ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
             : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
         }`}
@@ -248,9 +251,9 @@ export default function CellActions({
             setCopiedItem(null);
           }
         }}
-        disabled={!copiedItem || copiedItem.type === "trigger"}
+        disabled={!copiedItem || copiedItem.type === "trigger" || disabled}
         className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
-          !copiedItem || copiedItem.type === "trigger"
+          !copiedItem || copiedItem.type === "trigger" || disabled
             ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
             : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
         }`}
@@ -322,7 +325,8 @@ export default function CellActions({
         disabled={
           !copiedItem ||
           (copiedItem.type === "action" && index === 1) ||
-          (copiedItem.type === "trigger" && index !== 1)
+          (copiedItem.type === "trigger" && index !== 1) ||
+          disabled
         }
         className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
           !copiedItem ||
@@ -362,9 +366,9 @@ export default function CellActions({
       {/* Delete */}
       { index !== 1 && <button
         onClick={(e) => handleDelete(e)}
-        disabled={false}
+        disabled={false || disabled}
         className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
-          false
+          false || disabled
             ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
             : "hover:bg-red-50 text-red-600 hover:text-red-600 hover:cursor-pointer"
         }`}

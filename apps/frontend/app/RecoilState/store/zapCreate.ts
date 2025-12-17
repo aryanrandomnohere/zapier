@@ -32,3 +32,8 @@ export const zapPositionAtom = atom<{ x: number; y: number }>({
   key: "zapPositionAtom",
   default: { x: 0, y: 0 },
 });
+
+export const zapRunViewAtom = atom<string | null>({
+  key:"zapRunView",
+  default:null,
+})

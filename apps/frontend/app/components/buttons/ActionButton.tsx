@@ -9,6 +9,7 @@ export default function ActionButton({
   onClick?: () => void;
   children: React.ReactNode;
   disabled: boolean;
+  className:string;
 }) {
   return (
     <button

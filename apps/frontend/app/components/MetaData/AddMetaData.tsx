@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import ChangeItem from "./ChangeItem";
 import MetaDataField from "./MetaDataField";
+import { useParams } from "next/navigation";
 
 export default function AddMetaData({
   item,
@@ -21,6 +22,7 @@ export default function AddMetaData({
   const [configureId, setConfiguredStepDetails] =
     useRecoilState(configureStepDetails);
   const [editingField, setEditingField] = useState("");
+  const {pageType} = useParams()
   const metaData =
     index === onStepEnum.SETUP && item.metadata
       ? item.metadata
@@ -31,7 +33,7 @@ export default function AddMetaData({
 
   return (
     <div className="flex flex-col justify-between  mb-8 w-full">
-      {index === 0 && (
+      {index === 0 && pageType !== "view" && (
         <div className="flex flex-col w-full text-xs">
           <div className="flex gap-0.5 text-xs font-bold pb-1">
             App<div className="text-red-400">*</div>

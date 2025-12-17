@@ -19,3 +19,7 @@ export async function fetchDeletedZaps() {
   );
   return response.data.data;
 }
+
+export async function stopZap() {
+
+}

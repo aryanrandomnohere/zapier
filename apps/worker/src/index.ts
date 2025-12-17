@@ -1,13 +1,25 @@
 import { prisma } from "@repo/db";
 import dotenv from "dotenv";
+import fs from "fs";
 dotenv.config();
 import { Kafka } from "kafkajs";
 import { Field } from "@repo/types";
 import { RunAction } from "@repo/apps/src/index.js";
 const TOPIC_NAME = "zapier-events";
+// const kafka = new Kafka({
+//   clientId: "outbox-processor",
+//   brokers: ["localhost:9092"],
+// });
 const kafka = new Kafka({
-  clientId: "outbox-processor",
-  brokers: ["localhost:9092"],
+  clientId: process.env.KAFKA_CLIENT_ID,
+  brokers: [process.env.KAFKA_BROKER_URL!],
+  ssl: {
+    rejectUnauthorized: true,
+    ca: [fs.readFileSync(process.env.KAFKA_SSL_CA_PATH!, "utf-8")],
+    key: fs.readFileSync(process.env.KAFKA_SSL_KEY_PATH!, "utf-8"),
+    cert: fs.readFileSync(process.env.KAFKA_SSL_CERT_PATH!, "utf-8"),
+  },
+  sasl: undefined, // If later you add SASL, we will update here
 });
 
 async function main() {
@@ -56,7 +68,7 @@ async function main() {
         console.log(
           Number(x.sortingOrder) === Number(stage),
           x.sortingOrder,
-          stage,
+          stage
         );
         return Number(x.sortingOrder) === Number(stage);
       });
@@ -77,7 +89,7 @@ async function main() {
       console.log(currentAction, zapRunDetails.metaData);
       const RunDetails = await RunAction(
         currentAction,
-        zapRunDetails?.metaData,
+        zapRunDetails?.metaData
       );
       if (RunDetails?.success) {
         if (zapRunDetails?.zap.actions.length !== stage) {

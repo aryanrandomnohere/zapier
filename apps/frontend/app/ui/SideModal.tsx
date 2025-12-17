@@ -61,7 +61,7 @@ export default function SideModal({
   const setConfigurationId = useSetRecoilState(configureStepDetails);
   const setTestedTrigger = useSetRecoilState(triggerTested);
   const setSkippedTrigger = useSetRecoilState(skippedTrigger);
-  const { zapId } = useParams();
+  const { zapId, pageType } = useParams();
   if (index == null) return null;
 
   useEffect(() => {

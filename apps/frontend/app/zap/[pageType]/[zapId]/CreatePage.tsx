@@ -1,7 +1,6 @@
 "use client";
 import { lazy, Suspense, useEffect, useState } from "react";
 import SideModal from "@/app/ui/SideModal";
-// const SideModal = lazy(() => import("@/app/ui/SideModal"));
 const ActionButton = lazy(
   () => import("@/app/components/buttons/ActionButton"),
 );
@@ -11,7 +10,7 @@ const CancelButton = lazy(
 const SaveButton = lazy(() => import("@/app/components/buttons/SaveButton"));
 const ToastNotification = lazy(() => import("@/app/ui/Notification"));
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { zapCreateState } from "../../../RecoilState/store/zapCreate";
+import { zapCreateState, zapRunViewAtom } from "../../../RecoilState/store/zapCreate";
 import axios from "axios";
 import { ItemType, onStepEnum, RecordMetadata } from "@repo/types";
 import {
@@ -26,7 +25,7 @@ import {
   selectedRecord,
 } from "@/app/RecoilState/store/recordsAtom";
 import { useRouter } from "next/navigation";
-import { Play } from "lucide-react";
+import { Pencil, Play, StepBackIcon } from "lucide-react";
 import { userAtom } from "@/app/RecoilState/store/userAtom";
 import toast from "react-hot-toast";
 import { LoadingSpinner } from "@/app/components/ui/LoadingSpinner";
@@ -34,7 +33,8 @@ import { SideModalSkeleton } from "@/app/components/ui/SuspenseLoaders/SideModal
 const MovableCells = lazy(() => import("./MovableCells"));
 export default function CreatePage() {
   const [zapState, setZapState] = useRecoilState(zapCreateState);
-
+  const {pageType} = useParams()
+  const [zapRunViewId, setZapRunViewId] = useRecoilState(zapRunViewAtom)
   const setRecords = useSetRecoilState<RecordMetadata[]>(recordsAtom);
   const setSelectedRecordId = useSetRecoilState(selectedRecord);
   const configureId = useRecoilValue(configureStepDetails);
@@ -44,6 +44,7 @@ export default function CreatePage() {
   const { zapId } = useParams();
   const [isPublishing, setIsPublishing] = useState<boolean>(false);
   const [isPublished, setIsPublished] = useState<boolean>(false);
+  const [wantToEdit, setWantToEdit] = useState(false);
   const [unauthorized, setUnauthorized] = useState<boolean>(false);
   const [metaData, setMetaData] = useRecoilState(selectedItemMetaData);
   const [reRender, setReRender] = useState<boolean>(false);
@@ -259,8 +260,28 @@ export default function CreatePage() {
       )}
 
       {/* Top Action Bar */}
-      <div className="flex flex-row w-full bg-[#FFFDF9] border-b border-zinc-200 justify-end items-center gap-2 px-4 py-0.5 sm:py-2">
-        <ActionButton
+ <div className="flex flex-row w-full bg-[#FFFDF9] border-b border-zinc-200 justify-end items-center gap-2 px-4 py-0.5 sm:py-2">
+        { zapRunViewId  ? <ActionButton
+          onClick={()=>{setZapRunViewId("")}}
+          disabled={zapRunViewId ? false : true}
+          className="w-full sm:w-auto"
+        >
+          <div className="flex items-center justify-center gap-2">
+            {/* @ts-ignore */}
+            <StepBackIcon size={16}/>
+             Exit Run View
+          </div>
+        </ActionButton>  : pageType === "view"  ? <ActionButton
+          onClick={()=>{setWantToEdit(true)}}
+          disabled={true}
+          className="w-full sm:w-auto"
+        >
+          <div className="flex items-center justify-center gap-2">
+            {/* @ts-ignore */}
+            <Pencil size={16}/>
+            Edit Zap
+          </div>
+        </ActionButton>  :<><ActionButton
           disabled={checkPublishability()}
           onClick={handleTest}
           className="w-full sm:w-auto"
@@ -277,7 +298,7 @@ export default function CreatePage() {
           className="w-full sm:w-auto"
         >
           Publish
-        </ActionButton>
+        </ActionButton></>}
       </div>
 
       {/* Main Content */}
@@ -336,6 +357,33 @@ export default function CreatePage() {
                 </CancelButton>
                 <SaveButton onClick={handleGoToDashboard} disabled={false}>
                   Go to Dashboard
+                </SaveButton>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+          {wantToEdit && (
+          <div className="fixed inset-0 bg-black/50 flex z-[1000] justify-center items-center p-4">
+            <div className="flex flex-col gap-4 items-center bg-[#1f1f1f] rounded p-6 text-center w-full max-w-sm">
+              <div className="text-xl sm:text-2xl font-bold text-white">
+                Please Confirm 
+              </div>
+              <div className="text-sm text-white">
+                Editing your zap means your zap will be paused.
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                <CancelButton onClick={() =>{ 
+                  setWantToEdit(false)
+                }}>
+                  Stay
+                </CancelButton>
+                <SaveButton onClick={()=>{
+                  router.push(`/zap/create/${zapId}`)
+                  setWantToEdit(false);
+                }} disabled={false}>
+                  Go To Edit
                 </SaveButton>
               </div>
             </div>

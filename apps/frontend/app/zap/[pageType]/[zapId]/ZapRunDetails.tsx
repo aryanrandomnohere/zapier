@@ -16,6 +16,8 @@ import { InlineLoading } from "@/app/components/ui/LoadingSpinner";
 import ZapRunIcons from "./ZapRunIcons";
 import OptionDropdown from "./OptionDropdown";
 import { DatePickerModal } from "./DatePickerModal";
+import { useRecoilState } from "recoil";
+import { zapRunViewAtom } from "@/app/RecoilState/store/zapCreate";
 
 interface ZapRun {
   id: string;
@@ -38,7 +40,7 @@ export default function ZapRunList() {
   const { zapId } = useParams();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
-  const [zapRunEdit, setZapRunEdit] = useState<string | null>(null);
+  const [zapRunView, setZapRunView] = useRecoilState<string | null>(zapRunViewAtom);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const runsPerPage = 4;
@@ -395,19 +397,19 @@ export default function ZapRunList() {
 
                   return (
                     <div className="flex flex-col" key={run.id}>
-                      {zapRunEdit === run.id && (
+                      {zapRunView === run.id && (
                         <div
-                          onClick={() => setZapRunEdit(null)}
+                          onClick={() => setZapRunView(null)}
                           className="text-blue-600 underline text-xs self-end hover:cursor-pointer"
                         >
                           Exit Run View
                         </div>
                       )}
                       <div
-                        onClick={() => setZapRunEdit(run.id)}
+                        onClick={() => setZapRunView(run.id)}
                         className={`border-2 rounded-md p-3 flex items-center gap-3 
                           hover:cursor-pointer hover:bg-[#F7F6FD]   ${
-                            zapRunEdit === run.id
+                            zapRunView === run.id
                               ? "border-blue-700"
                               : "border-gray-200"
                           } hover:border-blue-700 
