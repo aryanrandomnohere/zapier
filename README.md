@@ -113,11 +113,6 @@ NEXT_PUBLIC_HOOK_URL="http://localhost:3002"
 GOOGLE_CLIENTID="your-google-client-id"
 GOOGLE_SECRET="your-google-client-secret"
 
-# SMTP Configuration
-SMTP_HOST="smtp-relay.brevo.com"
-SMTP_PORT=587
-SMTP_USERNAME="your-smtp-username"
-SMTP_SECRET="your-smtp-password"
 ```
 
 #### **Backend App (`apps/backend/.env`)**
@@ -134,9 +129,6 @@ SMTP_PORT=587
 SMTP_USERNAME="your-smtp-username"
 SMTP_SECRET="your-smtp-password"
 
-# Google OAuth
-GOOGLE_CLIENTID="your-google-client-id"
-GOOGLE_SECRET="your-google-client-secret"
 ```
 
 #### **Worker App (`apps/worker/.env`)**
