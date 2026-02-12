@@ -17,8 +17,6 @@ export default function authMiddleware(
       return res.status(401).json({ msg: "You are not logged in" });
     }
 
-    console.log("🔐 Raw token from cookie:", token);
-
     // ✅ Verify token
     const decoded = jwt.verify(token, JWT_SECRET) as {
       userId: number;

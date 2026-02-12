@@ -191,20 +191,39 @@ export const deleteAction = asyncHandler(async (req: extendedRequest, res) => {
   const { actionId } = req.params;
   const userId = req.userId;
   if (!actionId || !userId) return;
-  console.log(actionId);
-  const deletedAction = await prisma.action.delete({
+  const action = await prisma.action.findUnique({
     where: {
       id: actionId,
     },
   });
-  await prisma.action.updateMany({
-    where: {
-      zapId: deletedAction.zapId,
-      sortingOrder: { gt: deletedAction.sortingOrder },
-    },
-    data: {
-      sortingOrder: { decrement: 1 },
-    },
+  console.log("Aciton Found", action);
+  const deletedAction = await prisma.$transaction(async (tx) => {
+    await tx.actionStepTest.deleteMany({
+      where: { actionId },
+    });
+    await tx.zapNote.deleteMany({
+      where: { stepId: actionId },
+    });
+    await tx.zapRun.updateMany({
+      where: { failedActionId: actionId },
+      data: { failedActionId: null },
+    });
+
+    const deleted = await tx.action.delete({
+      where: { id: actionId },
+    });
+
+    await tx.action.updateMany({
+      where: {
+        zapId: deleted.zapId,
+        sortingOrder: { gt: deleted.sortingOrder },
+      },
+      data: {
+        sortingOrder: { decrement: 1 },
+      },
+    });
+
+    return deleted;
   });
   res.status(200).json({ success: true, msg: "Action deleted" });
 });
