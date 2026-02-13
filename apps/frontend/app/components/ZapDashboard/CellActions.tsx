@@ -30,9 +30,9 @@ export default function CellActions({
   const [zapState, setZapState] = useRecoilState(zapCreateState);
   const [expandedStep, setExpandedStep] = useRecoilState(extendedStepNotesAtom);
   const [selectedItems, setSelectedItems] = useRecoilState(selectedNotesAtom);
-  const {pageType } = useParams();
+  const { pageType } = useParams();
   const disabled = pageType !== "create" ? true : false;
-  console.log(pageType, disabled)
+  console.log(pageType, disabled);
   const setIsOpen = useSetRecoilState(leftbarIsOpenAtom);
   const setCurrentOperation = useSetRecoilState(currentOperationAtom);
   const { zapId } = useParams();
@@ -41,41 +41,41 @@ export default function CellActions({
       e.stopPropagation();
       setReallyDelete(true);
     } else {
-      let success; 
+      let success;
       try {
-        if(!zapState.selectedItems[index-1].stepId && index !== 1){
-          success = true
-        }else {
+        if (!zapState.selectedItems[index - 1].stepId && index !== 1) {
+          success = true;
+        } else {
           const response = await axios.delete(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${index === 1 ? "triggers" : "actions"}/delete/${zapState.selectedItems[index - 1].stepId}`,
-          { withCredentials: true },
-        );
-        success = response.data.success;
-        // if(index === 1){
-        //    if(success === true){
-        //        setZapState((zap)=>{
-        //         const updatedItems = [...zap.selectedItems]
-        //         updatedItems[0] = null;
-        //         const updatedZap = {...zap, selectedItems:updatedItems}
-        //         return updatedZap;
-        //        })
-        //    }else {
-        //        toast.custom((t) => (
-        //   <ToastNotification
-        //     t={t}
-        //     type="error"
-        //     actions={[]}
-        //     onClose={() => toast.dismiss(t.id)}
-        //   >
-        //     <div className="flex gap-1 items-center">
-        //       Error deleting Cell {zapState.selectedItems[index - 1].name}
-        //     </div>
-        //   </ToastNotification>
-        // ));
-        //    }
-        // }
-      }
-        if(success) {
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${index === 1 ? "triggers" : "actions"}/delete/${zapState.selectedItems[index - 1].stepId}`,
+            { withCredentials: true },
+          );
+          success = response.data.success;
+          // if(index === 1){
+          //    if(success === true){
+          //        setZapState((zap)=>{
+          //         const updatedItems = [...zap.selectedItems]
+          //         updatedItems[0] = null;
+          //         const updatedZap = {...zap, selectedItems:updatedItems}
+          //         return updatedZap;
+          //        })
+          //    }else {
+          //        toast.custom((t) => (
+          //   <ToastNotification
+          //     t={t}
+          //     type="error"
+          //     actions={[]}
+          //     onClose={() => toast.dismiss(t.id)}
+          //   >
+          //     <div className="flex gap-1 items-center">
+          //       Error deleting Cell {zapState.selectedItems[index - 1].name}
+          //     </div>
+          //   </ToastNotification>
+          // ));
+          //    }
+          // }
+        }
+        if (success) {
           setZapState((prev) => {
             const updatedItems = [...prev.selectedItems];
             updatedItems.splice(index - 1, 1); // remove the item at index - 1
@@ -89,7 +89,7 @@ export default function CellActions({
               onClose={() => toast.dismiss(t.id)}
             >
               <div className="flex gap-1 items-center">
-                Zap has been deleted
+                Action has been deleted
               </div>
             </ToastNotification>
           ));
@@ -174,45 +174,49 @@ export default function CellActions({
   };
   return (
     <div className="flex flex-col w-full justify-center items-center">
-      { index != 1 && <button
-        onClick={() => handleDuplicate()}
-        className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
-          index === 1 || disabled
-            ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
-            : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
-        }`}
-      >
-        <Copy size={16} />
-        Duplicate
-      </button>}
+      {index != 1 && (
+        <button
+          onClick={() => handleDuplicate()}
+          className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
+            index === 1 || disabled
+              ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
+              : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
+          }`}
+        >
+          <Copy size={16} />
+          Duplicate
+        </button>
+      )}
 
       {/* Change owner */}
-    { index != 1 && <button
-        onClick={() => {
-          toast.custom((t) => (
-            <ToastNotification
-              t={t}
-              type="success"
-              actions={[]}
-              onClose={() => toast.dismiss(t.id)}
-            >
-              <div className="flex gap-1 items-center">
-                Zap Has Been Copied To Clipboard
-              </div>
-            </ToastNotification>
-          ));
-          setCopiedItem(zapState.selectedItems[index - 1]);
-          console.log(zapState.selectedItems[index - 1], index - 1);
-        }}
-        className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
-          false || disabled
-            ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
-            : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
-        }`}
-      >
-        <Copy size={16} />
-        Copy
-      </button>}
+      {index != 1 && (
+        <button
+          onClick={() => {
+            toast.custom((t) => (
+              <ToastNotification
+                t={t}
+                type="success"
+                actions={[]}
+                onClose={() => toast.dismiss(t.id)}
+              >
+                <div className="flex gap-1 items-center">
+                  Zap Has Been Copied To Clipboard
+                </div>
+              </ToastNotification>
+            ));
+            setCopiedItem(zapState.selectedItems[index - 1]);
+            console.log(zapState.selectedItems[index - 1], index - 1);
+          }}
+          className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
+            false || disabled
+              ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
+              : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
+          }`}
+        >
+          <Copy size={16} />
+          Copy
+        </button>
+      )}
       <button
         onClick={async () => {
           if (copiedItem) {
@@ -263,82 +267,84 @@ export default function CellActions({
       </button>
 
       {/* Change owner */}
-      { index != 1 &&  <button
-        onClick={async () => {
-          if (copiedItem) {
-            try {
-              const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${index === 1 ? "triggers" : "actions"}/paste-to-replace`,
-                {
-                  zapId: Number(zapId),
-                  actionId: zapState.selectedItems[index - 1].stepId,
-                  index: index - 1,
-                  actionToReplaceWithId: copiedItem.stepId,
-                },
-                { withCredentials: true },
-              );
-              if (response.data.success) {
+      {index != 1 && (
+        <button
+          onClick={async () => {
+            if (copiedItem) {
+              try {
+                const response = await axios.post(
+                  `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/${index === 1 ? "triggers" : "actions"}/paste-to-replace`,
+                  {
+                    zapId: Number(zapId),
+                    actionId: zapState.selectedItems[index - 1].stepId,
+                    index: index - 1,
+                    actionToReplaceWithId: copiedItem.stepId,
+                  },
+                  { withCredentials: true },
+                );
+                if (response.data.success) {
+                  toast.custom((t) => (
+                    <ToastNotification
+                      t={t}
+                      type="success"
+                      actions={[]}
+                      onClose={() => toast.dismiss(t.id)}
+                    >
+                      <div className="flex gap-1 items-center">
+                        Zap has been pasted to replace
+                      </div>
+                    </ToastNotification>
+                  ));
+                  setZapState((prev) => {
+                    const updatedItems = [...prev.selectedItems];
+                    updatedItems[index - 1] = {
+                      ...copiedItem,
+                      stepId: response.data.stepId,
+                    };
+                    console.log(updatedItems);
+                    return { ...prev, selectedItems: updatedItems };
+                  });
+                }
+                setCopiedItem(null);
+              } catch (err: any) {
+                console.error(
+                  "Paste to replace error:",
+                  err.response.data.message,
+                );
                 toast.custom((t) => (
                   <ToastNotification
                     t={t}
-                    type="success"
+                    type="error"
                     actions={[]}
                     onClose={() => toast.dismiss(t.id)}
                   >
                     <div className="flex gap-1 items-center">
-                      Zap has been pasted to replace
+                      Error pasting to replace{" "}
+                      {zapState.selectedItems[index - 1].name}
                     </div>
                   </ToastNotification>
                 ));
-                setZapState((prev) => {
-                  const updatedItems = [...prev.selectedItems];
-                  updatedItems[index - 1] = {
-                    ...copiedItem,
-                    stepId: response.data.stepId,
-                  };
-                  console.log(updatedItems);
-                  return { ...prev, selectedItems: updatedItems };
-                });
               }
-              setCopiedItem(null);
-            } catch (err: any) {
-              console.error(
-                "Paste to replace error:",
-                err.response.data.message,
-              );
-              toast.custom((t) => (
-                <ToastNotification
-                  t={t}
-                  type="error"
-                  actions={[]}
-                  onClose={() => toast.dismiss(t.id)}
-                >
-                  <div className="flex gap-1 items-center">
-                    Error pasting to replace{" "}
-                    {zapState.selectedItems[index - 1].name}
-                  </div>
-                </ToastNotification>
-              ));
             }
+          }}
+          disabled={
+            !copiedItem ||
+            (copiedItem.type === "action" && index === 1) ||
+            (copiedItem.type === "trigger" && index !== 1) ||
+            disabled
           }
-        }}
-        disabled={
-          !copiedItem ||
-          (copiedItem.type === "action" && index === 1) ||
-          (copiedItem.type === "trigger" && index !== 1) ||
-          disabled
-        }
-        className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
-          !copiedItem ||
-          (copiedItem.type === "action" && index === 1) ||
-          (copiedItem.type === "trigger" && index !== 1)
-            ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
-            : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
-        }`}
-      >
-        <Link size={16} />
-        Paste to replace
-      </button>}
+          className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
+            !copiedItem ||
+            (copiedItem.type === "action" && index === 1) ||
+            (copiedItem.type === "trigger" && index !== 1)
+              ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
+              : "hover:bg-gray-100 text-gray-700 hover:cursor-pointer"
+          }`}
+        >
+          <Link size={16} />
+          Paste to replace
+        </button>
+      )}
 
       {/* Divider */}
       <div className="my-1 border-t min-w-full border-gray-200"></div>
@@ -364,18 +370,20 @@ export default function CellActions({
       </button>
 
       {/* Delete */}
-      { index !== 1 && <button
-        onClick={(e) => handleDelete(e)}
-        disabled={false || disabled}
-        className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
-          false || disabled
-            ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
-            : "hover:bg-red-50 text-red-600 hover:text-red-600 hover:cursor-pointer"
-        }`}
-      >
-        <Trash size={16} />
-        {reallyDelete ? "Really Delete ?" : "Delete"}
-      </button>}
+      {index !== 1 && (
+        <button
+          onClick={(e) => handleDelete(e)}
+          disabled={false || disabled}
+          className={`flex items-center gap-2 w-full p-1.5 transition-all duration-150 ${
+            false || disabled
+              ? "cursor-not-allowed text-gray-400 hover:bg-transparent"
+              : "hover:bg-red-50 text-red-600 hover:text-red-600 hover:cursor-pointer"
+          }`}
+        >
+          <Trash size={16} />
+          {reallyDelete ? "Really Delete ?" : "Delete"}
+        </button>
+      )}
     </div>
   );
 }

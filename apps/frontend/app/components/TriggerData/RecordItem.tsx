@@ -3,10 +3,12 @@ import { ChevronRight, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import FloatingModal from "../../ui/FloatingModal";
 import RecordJsonData from "./RecordJsonData";
+import useMobile from "@/app/hooks/useMobile";
 
 // Individual Record Item Component
 interface RecordItemProps {
   record: RecordMetadata;
+  index: number;
   onRecordClick: (record: RecordMetadata) => void;
   selectedRecord: string;
   setSelectedRecord: (id: string) => void;
@@ -16,12 +18,14 @@ interface RecordItemProps {
 
 export const RecordItem: React.FC<RecordItemProps> = ({
   record,
+  index,
   onRecordClick,
   setSelectedRecord,
   selectedRecord,
   isOpen,
   setIsOpen,
 }) => {
+  const isMobile = useMobile();
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -62,7 +66,9 @@ export const RecordItem: React.FC<RecordItemProps> = ({
               </button>
             )}
             {isOpen === record.id && (
-              <FloatingModal>
+              <FloatingModal
+                type={isMobile ? (index > 1 ? "top" : "below") : "shifted"}
+              >
                 <div className="overflow-y-auto max-h-96">
                   <RecordJsonData data={record.JsonData} />
                 </div>

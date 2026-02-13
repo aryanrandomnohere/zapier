@@ -218,8 +218,9 @@ const TriggerData = ({
                   </div>
                 ) : (
                   <div className="max-h-96">
-                    {filteredRecords.slice(0, 4).map((record) => (
+                    {filteredRecords.slice(0, 4).map((record, index) => (
                       <RecordItem
+                        index={index}
                         setIsOpen={setRecordIsOpenId}
                         isOpen={recordIsOpenId}
                         setSelectedRecord={setSelectedRecordId}

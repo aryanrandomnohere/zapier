@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   recordsAtom,
   selectedRecord,
@@ -214,7 +214,6 @@ const DittoComponent: React.FC<DittoComponentProps> = ({
                   Selected Record :
                 </h4>
                 {filteredFields.map(([fieldName, fieldValue]) => {
-                  console.log(typeof fieldValue);
                   return (
                     <SelectField
                       key={fieldName}

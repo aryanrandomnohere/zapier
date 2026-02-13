@@ -41,7 +41,7 @@ export const onStep = atom({
 });
 
 export const selectedItemMetaData = atom<selectedItemMetaDataType>({
-  key: "",
+  key: "selectedItemMetaData",
   default: {
     index: null,
     isOpen: false,

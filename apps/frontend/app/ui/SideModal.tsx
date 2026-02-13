@@ -31,8 +31,6 @@ export default function SideModal({
   CheckStepValidity,
   isFullScreen,
   setIsFullScreen,
-  setReRender,
-  render
 }: {
   metaData: selectedItemMetaDataType;
   setMetaData: React.Dispatch<React.SetStateAction<selectedItemMetaDataType>>;
@@ -43,8 +41,6 @@ export default function SideModal({
   ) => boolean;
   isFullScreen: boolean;
   setIsFullScreen: (isFullScreen: boolean) => void;
-  setReRender: Dispatch<SetStateAction<boolean>>;
-  render:boolean
 }) {
   const [zap, setZapState] = useRecoilState(zapCreateState);
   const [selectedStep, setSelectedStep] = useState<onStepEnum>(
@@ -359,8 +355,10 @@ export default function SideModal({
             <div
               data-close-modal
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                setMetaData(()=>{ return { index: null, isOpen: false } });
-                setReRender(()=>!setReRender);
+                e.stopPropagation();
+                setMetaData(() => {
+                  return { index: null, isOpen: false };
+                });
               }}
               className="cursor-pointer"
             >

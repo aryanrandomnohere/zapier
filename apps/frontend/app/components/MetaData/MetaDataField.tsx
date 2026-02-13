@@ -15,6 +15,7 @@ import { getSession } from "next-auth/react";
 import useOutsideClick from "@/app/hooks/useOutsideClick";
 import DittoComponent from "./SelectActionField";
 import FloatingModal from "@/app/ui/FloatingModal";
+import useMobile from "@/app/hooks/useMobile";
 
 interface MetaDataFieldProps {
   field: Field;
@@ -41,26 +42,16 @@ export default function MetaDataField({
   const [searchTerm, setSearchTerm] = useState("");
   const [value, setValue] = useState(field.fieldValue);
   const inputRef = useRef<HTMLInputElement>(null);
-  const {pageType} = useParams();
-  const disabled = pageType !== "create" ? true :  false
+  const { pageType } = useParams();
+  const disabled = pageType !== "create" ? true : false;
   const [configureStepIndex, setConfigureStepIndex] =
     useRecoilState(configureStepDetails);
   const setOptionChanged = useSetRecoilState(OptionChanged);
   const stepIndex = useRecoilValue(onStep);
   const [user, setUser] = useRecoilState(userAtom);
   const { zapId } = useParams();
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useMobile();
 
-  useEffect(() => {
-    const handleResize = () => {
-      const mobile = window.innerWidth < 768; // Tailwind md breakpoint
-      setIsMobile(mobile);
-    };
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, [setIsMobile]);
   useEffect(() => {
     const handler = (event: MessageEvent) => {
       if (field.fieldNumber === 0) return;
@@ -138,9 +129,10 @@ export default function MetaDataField({
           {field.required && <div className="text-red-400">*</div>}
         </div>
         <div
-          onClick={() =>{ 
-            if(disabled) return;
-            setOpen(!open)}}
+          onClick={() => {
+            if (disabled) return;
+            setOpen(!open);
+          }}
           className="relative flex justify-between items-center px-3 py-2 border border-black/20 rounded hover:border-blue-500 cursor-pointer"
         >
           <div className="flex items-center gap-2 text-xs font-medium">
@@ -313,7 +305,7 @@ export default function MetaDataField({
           type === "action" && (
             <div
               onClick={() => {
-                if(disabled) return
+                if (disabled) return;
                 if (selectedField === field.fieldLabel) setEditingField("");
                 else setEditingField(field.fieldLabel);
               }}
@@ -441,7 +433,7 @@ export default function MetaDataField({
         {field.fieldLabel} <div className="text-red-400">*</div>
       </div>
       <input
-      disabled={disabled}
+        disabled={disabled}
         type={field.fieldInputType}
         placeholder={field.fieldPlaceholder}
         // defaultValue={field.fieldValue || undefined}
