@@ -1,6 +1,7 @@
 import { RunTrigger } from "@repo/apps";
 import { prisma } from "@repo/db";
 import { Kafka } from "kafkajs";
+import fs from "fs";
 import { refreshAccessToken } from "./auth/refreshAccessToken.js";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -14,6 +15,18 @@ const kafka = new Kafka({
   brokers: [process.env.KAFKA_BROKER_URL],
 });
 
+// const kafka = new Kafka({
+//   clientId: process.env.KAFKA_CLIENT_ID,
+//   brokers: [process.env.KAFKA_BROKER_URL!],
+//   ssl: {
+//     rejectUnauthorized: true,
+//     ca: [fs.readFileSync(process.env.KAFKA_SSL_CA_PATH!, "utf-8")],
+//     key: fs.readFileSync(process.env.KAFKA_SSL_KEY_PATH!, "utf-8"),
+//     cert: fs.readFileSync(process.env.KAFKA_SSL_CERT_PATH!, "utf-8"),
+//   },
+//   sasl: undefined, // If later you add SASL, we will update here
+// });
+
 async function main() {
   const producer = kafka.producer();
   producer.connect();
@@ -22,7 +35,7 @@ async function main() {
       const pollingTriggers = await prisma.trigger.findMany({
         where: {
           published: true,
-          optionType: "polling",
+          optionType: "Polling",
           OR: [
             { lastPolledAt: null },
             {
@@ -38,6 +51,7 @@ async function main() {
           type: true,
         },
       });
+      console.log(pollingTriggers);
       if (pollingTriggers.length != 0)
         for (const trigger of pollingTriggers) {
           try {

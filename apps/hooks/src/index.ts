@@ -245,5 +245,5 @@ export const testRun = async (req: Request, res: Response) => {
     return;
   }
 };
-app.post("/test/run", testRun);
+app.post("/api/v1/zap/test/run", testRun);
 app.listen(3002);

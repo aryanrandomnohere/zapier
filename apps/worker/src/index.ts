@@ -1,25 +1,16 @@
 import { prisma } from "@repo/db";
 import dotenv from "dotenv";
-import fs from "fs";
 dotenv.config();
 import { Kafka } from "kafkajs";
 import { Field } from "@repo/types";
-import { RunAction } from "@repo/apps/src/index.js";
+import { RunAction } from "@repo/apps";
+
 const TOPIC_NAME = "zapier-events";
-// const kafka = new Kafka({
-//   clientId: "outbox-processor",
-//   brokers: ["localhost:9092"],
-// });
+
+// Local Docker Kafka - no SSL/TLS
 const kafka = new Kafka({
-  clientId: process.env.KAFKA_CLIENT_ID,
-  brokers: [process.env.KAFKA_BROKER_URL!],
-  ssl: {
-    rejectUnauthorized: true,
-    ca: [fs.readFileSync(process.env.KAFKA_SSL_CA_PATH!, "utf-8")],
-    key: fs.readFileSync(process.env.KAFKA_SSL_KEY_PATH!, "utf-8"),
-    cert: fs.readFileSync(process.env.KAFKA_SSL_CERT_PATH!, "utf-8"),
-  },
-  sasl: undefined, // If later you add SASL, we will update here
+  clientId: process.env.KAFKA_CLIENT_ID || "outbox-processor",
+  brokers: [process.env.KAFKA_BROKER_URL || "localhost:9092"],
 });
 
 async function main() {
